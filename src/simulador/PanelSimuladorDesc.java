@@ -69,6 +69,10 @@ public class PanelSimuladorDesc {
                 PanelNuevaSimDescPaso4 paso4 = new PanelNuevaSimDescPaso4(this);
                 nuevoPaso.setContent(paso4.getRoot());
                 break;
+            case 5:
+                PanelNuevaSimDescPaso5 paso5 = new PanelNuevaSimDescPaso5(this);
+                nuevoPaso.setContent(paso5.getRoot());
+                break;
             /*default:
                 nuevoPaso.setContent(new AnchorPane()); // Paso no definido
                 break;*/

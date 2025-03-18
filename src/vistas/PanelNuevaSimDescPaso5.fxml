@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml">
+    <children>
+        <Label fx:id="labelTitulo" layoutX="20.0" layoutY="20.0" text="Incluir Funciones de Error" styleClass="title-label"/>
+        <Label layoutX="20.0" layoutY="60.0" text="Pulse en la tabla para insertar la función de error:"/>
+        <ComboBox fx:id="comboBoxFuncionesError" layoutX="250.0" layoutY="60.0"/>
+        <TableView fx:id="tableViewFuncionesError" layoutX="20.0" layoutY="100.0" prefHeight="300.0" prefWidth="600.0">
+            <columns>
+                <TableColumn fx:id="columnSimbolo" text="Símbolo"/>
+                <TableColumn fx:id="columnAccion" text="Acción"/>
+            </columns>
+        </TableView>
+        <Button fx:id="buttonGramatica" layoutX="20.0" layoutY="420.0" text="Gramática" onAction="#handleGramatica"/>
+        <Button fx:id="buttonEliminar" layoutX="120.0" layoutY="420.0" text="Eliminar Función de Error" onAction="#handleEliminar"/>
+        <Button fx:id="buttonRellenar" layoutX="300.0" layoutY="420.0" text="Rellenar con producciones épsilon" onAction="#handleRellenar"/>
+        <Button fx:id="buttonCancelar" layoutX="500.0" layoutY="420.0" text="Cancelar" onAction="#handleCancelar"/>
+        <Button fx:id="buttonAnterior" layoutX="20.0" layoutY="460.0" text="Anterior" onAction="#handleAnterior"/>
+        <Button fx:id="buttonSiguiente" layoutX="100.0" layoutY="460.0" text="Siguiente" onAction="#handleSiguiente"/>
+    </children>
+</AnchorPane>
