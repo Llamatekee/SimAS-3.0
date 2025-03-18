@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Ayuda de SimAS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google Fonts para tipografía moderna -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Open+Sans&display=swap" rel="stylesheet">
+    <style>
+        /* Estilos Globales */
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        a {
+            color: #007BFF;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        a:hover {
+            color: #0056b3;
+        }
+
+        /* Encabezado */
+        header {
+            background-color: #0E4123;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header .logos {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 50px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        header .logos img {
+            max-width: 140px;
+            height: auto;
+        }
+
+        header h1, header h2 {
+            margin: 5px 0;
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        /* Contenido Principal */
+        main {
+            padding: 40px 20px;
+            max-width: 900px;
+            margin: 20px auto;
+            background-color: #fff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+
+        main h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+            text-align: center;
+            color: #0E4123;
+        }
+
+        main h2 {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #333;
+        }
+
+        main .simas-logo {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0;
+        }
+
+        main .simas-logo img {
+            max-width: 214px;
+            height: auto;
+        }
+
+        main .tutorials {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        main .tutorials a {
+            display: block;
+            padding: 10px 15px;
+            background-color: #e9f7ef;
+            border: 1px solid #0E4123;
+            border-radius: 5px;
+            font-size: 1.2em;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        main .tutorials a:hover {
+            background-color: #c3e6cb;
+            transform: translateY(-2px);
+        }
+
+        /* Pie de Página */
+        footer {
+            background-color: #0E4123;
+            color: #fff;
+            text-align: center;
+            padding: 20px 0;
+            font-size: 0.9em;
+        }
+
+        footer p {
+            margin: 5px 0;
+        }
+
+        /* Diseño Responsivo */
+        @media (max-width: 768px) {
+            header .logos {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            main {
+                padding: 20px 10px;
+            }
+
+            main h1 {
+                font-size: 1.8em;
+            }
+
+            main h2 {
+                font-size: 1.3em;
+            }
+
+            main .tutorials a {
+                font-size: 1em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header .logos {
+                gap: 10px;
+            }
+
+            header .logos img {
+                max-width: 100px;
+            }
+
+            main .tutorials a {
+                font-size: 0.9em;
+                padding: 8px 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logos">
+            <img src="imagenes/logo_uco.jpg" alt="Logo Universidad de Córdoba">
+            <div>
+                <h1>Universidad de Córdoba</h1>
+                <h2>Escuela Politécnica Superior</h2>
+            </div>
+            <img src="imagenes/informatica.jpg" alt="Logo Ingeniería Informática">
+        </div>
+    </header>
+
+    <main>
+        <h1>Centro de Tutorial</h1>
+        <h2>SimAS - Simulador de Análisis Sintácticos</h2>
+        <div class="simas-logo">
+            <img src="imagenes/logo2Antes.png" alt="SimAS Logo">
+        </div>
+        <section class="tutorials">
+            <a href="Tema_1.pdf">Tema 1: Introducción</a>
+            <a href="Tema_2.pdf">Tema 2: Análisis Léxico</a>
+            <a href="Tema_3.pdf">Tema 3: Fundamentos Teóricos del Análisis Sintáctico</a>
+            <a href="Tema_4.pdf">Tema 4: Análisis Sintáctico Descendente</a>
+            <a href="Tema_5.pdf">Tema 5: Análisis Sintáctico Ascendente</a>
+        </section>
+    </main>
+
+    <footer>
+        <p>Titulación: Ingeniería Informática</p>
+        <p>Desarrollado por: Antonio Llamas García</p>
+        <p>Dirigido por: Dr. Nicolás Luis Fernández García</p>
+        <p>Septiembre 2024</p>
+    </footer>
+</body>
+</html>

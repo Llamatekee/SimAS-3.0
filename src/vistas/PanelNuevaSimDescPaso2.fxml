@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<BorderPane xmlns:fx="http://javafx.com/fxml/1">
+
+    <top>
+        <Label fx:id="lblTitulo" text="Conjunto Primero y Siguiente" styleClass="title-label" BorderPane.alignment="CENTER"/>
+    </top>
+
+    <center>
+        <VBox spacing="10" alignment="CENTER">
+            <TableView fx:id="tablaConjuntos" prefHeight="300" prefWidth="600">
+                <columns>
+                    <TableColumn fx:id="colSimbolo" text="Símbolo" prefWidth="100">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="simbolo"/>
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn fx:id="colPrimero" text="Conjunto Primero" prefWidth="250">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="conjuntoPrimero"/>
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn fx:id="colSiguiente" text="Conjunto Siguiente" prefWidth="250">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="conjuntoSiguiente"/>
+                        </cellValueFactory>
+                    </TableColumn>
+                </columns>
+            </TableView>
+        </VBox>
+    </center>
+
+    <bottom>
+        <HBox spacing="15" alignment="CENTER" styleClass="button-container">
+            <Button fx:id="btnCancelar" text="Cancelar" styleClass="button" onAction="#cancelarSimulacion"/>
+            <Button fx:id="btnAnterior" text="Anterior" styleClass="button" onAction="#retrocederPaso"/>
+            <Button fx:id="btnSiguiente" text="Siguiente" styleClass="button" onAction="#avanzarPaso"/>
+            <Button fx:id="btnVisualizarGramatica" text="Ver Gramática" styleClass="button" onAction="#visualizarGramatica"/>
+        </HBox>
+    </bottom>
+</BorderPane>

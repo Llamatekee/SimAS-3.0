@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="simulador.Simulador" stylesheets="@styles.css">
+    <top>
+        <Label text="Simulador Descendente" styleClass="title-label" BorderPane.alignment="CENTER"/>
+    </top>
+
+    <center>
+        <VBox spacing="10" alignment="CENTER">
+            <Label text="Tabla Predictiva" styleClass="label"/>
+            <TableView fx:id="tablePredictiva" prefHeight="200" prefWidth="500"/>
+
+            <Label text="Producciones" styleClass="label"/>
+            <ListView fx:id="listProducciones" prefHeight="150"/>
+
+            <Label text="Funciones de Error" styleClass="label"/>
+            <ListView fx:id="listFuncionesError" prefHeight="100"/>
+        </VBox>
+    </center>
+
+    <bottom>
+        <HBox spacing="15" alignment="CENTER" styleClass="button-container">
+            <Button fx:id="btnSimular" text="Iniciar Simulación" styleClass="button" onAction="#iniciarSimulacion"/>
+            <Button fx:id="btnModificarErrores" text="Modificar Errores" styleClass="button" onAction="#modificarErrores"/>
+            <Button fx:id="btnGenerarInforme" text="Generar Informe" styleClass="button" onAction="#generarInforme"/>
+        </HBox>
+    </bottom>
+</BorderPane>

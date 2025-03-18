@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" styleClass="simulacion-container">
+    <top>
+        <Label text="Producciones para la Simulación Descendente" styleClass="title-label" BorderPane.alignment="CENTER"/>
+    </top>
+
+    <center>
+        <VBox spacing="10" alignment="CENTER" styleClass="simulacion-content">
+            <Label fx:id="lblEstadoGramatica" text="Estado de la Gramática" styleClass="status-label"/>
+            <Label fx:id="lblRecursividad" text="" styleClass="warning-label"/>
+            <Label fx:id="lblFactorizacion" text="" styleClass="warning-label"/>
+            <ListView fx:id="listProducciones" prefHeight="250" prefWidth="600" styleClass="producciones-list"/>
+        </VBox>
+    </center>
+
+    <bottom>
+        <HBox spacing="15" alignment="CENTER" styleClass="button-container">
+            <Button fx:id="btnCancelar" text="Cancelar" styleClass="button-exit" onAction="#cancelarSimulacion"/>
+            <Button fx:id="btnVisualizarGramatica" text="Ver Gramática" styleClass="button" onAction="#visualizarGramatica"/>
+            <Button fx:id="btnSiguiente" text="Siguiente" styleClass="button-next" onAction="#avanzarPaso"/>
+        </HBox>
+    </bottom>
+</BorderPane>

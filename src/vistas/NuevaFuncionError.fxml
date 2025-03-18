@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml">
+    <children>
+        <Label fx:id="labelTitulo" layoutX="20.0" layoutY="20.0" text="Nueva Función de Error" styleClass="title-label"/>
+        <Label fx:id="labelIdentificador" layoutX="20.0" layoutY="60.0" text="Identificador"/>
+        <TextField fx:id="textFieldIdentificador" layoutX="150.0" layoutY="60.0" editable="false"/>
+        <Label fx:id="labelAccion" layoutX="20.0" layoutY="100.0" text="Acción"/>
+        <ComboBox fx:id="comboBoxAccion" layoutX="150.0" layoutY="100.0"/>
+        <Label fx:id="labelSimbolo" layoutX="20.0" layoutY="140.0" text="Símbolo"/>
+        <ComboBox fx:id="comboBoxSimbolo" layoutX="150.0" layoutY="140.0"/>
+        <Label fx:id="labelMensaje" layoutX="20.0" layoutY="180.0" text="Mensaje"/>
+        <TextField fx:id="textFieldMensaje" layoutX="150.0" layoutY="180.0"/>
+        <Button fx:id="buttonAceptar" layoutX="150.0" layoutY="220.0" text="Aceptar" onAction="#handleAceptar"/>
+        <Button fx:id="buttonCancelar" layoutX="250.0" layoutY="220.0" text="Cancelar" onAction="#handleCancelar"/>
+    </children>
+</AnchorPane>

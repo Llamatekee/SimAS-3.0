@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import java.net.URL?>
+<BorderPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+
+    <stylesheets>
+        <URL value="@styles.css"/>
+    </stylesheets>
+
+    <!-- Barra de herramientas superior -->
+    <top>
+        <ToolBar styleClass="toolbar">
+            <Button fx:id="btnAñadir" text="Añadir" onAction="#onBtnAnadirAction" styleClass="toolbar-button"/>
+            <Button fx:id="btnAbrir" text="Abrir" onAction="#onBtnAbrirAction" styleClass="toolbar-button"/>
+            <Button fx:id="btnGuardar" text="Guardar" onAction="#onBtnGuardarAction" styleClass="toolbar-button"/>
+            <Separator orientation="VERTICAL"/>
+            <Button fx:id="btnEditar" text="Editar" onAction="#onBtnEditarAction" styleClass="toolbar-button"/>
+            <Button fx:id="btnEliminar" text="Eliminar" onAction="#onBtnEliminarAction" styleClass="toolbar-button"/>
+            <Separator orientation="VERTICAL"/>
+            <Button fx:id="btnValidar" text="Validar" onAction="#onBtnValidarAction" styleClass="toolbar-button"/>
+            <Button fx:id="btnPdf" text="Informe PDF" onAction="#onBtnPdfAction" styleClass="toolbar-button"/>
+            <Separator orientation="VERTICAL"/>
+            <Button fx:id="btnSimDesc" text="Sim Desc" onAction="#onBtnSimDescAction" styleClass="toolbar-button"/>
+            <Button fx:id="btnSalir" text="Salir" onAction="#onBtnSalirAction" styleClass="toolbar-button-exit"/>
+        </ToolBar>
+    </top>
+
+    <!-- Contenido central -->
+    <center>
+        <VBox spacing="15" styleClass="editor-content">
+            <HBox spacing="10">
+                <Label text="Nombre:" styleClass="label"/>
+                <TextArea fx:id="txtNombre" editable="false" styleClass="text-area-large"/>
+            </HBox>
+
+            <VBox spacing="5">
+                <Label text="Descripción:" styleClass="label"/>
+                <TextArea fx:id="txtAreaDesc" wrapText="true" editable="false" styleClass="text-area-large"/>
+            </VBox>
+
+            <HBox spacing="20">
+                <VBox spacing="5">
+                    <Label text="Símbolos No Terminales:" styleClass="label"/>
+                    <ListView fx:id="listNoTerminales" prefHeight="180" prefWidth="180" styleClass="list-view"/>
+                </VBox>
+                <VBox spacing="5">
+                    <Label text="Símbolos Terminales:" styleClass="label"/>
+                    <ListView fx:id="listTerminales" prefHeight="180" prefWidth="180" styleClass="list-view"/>
+                </VBox>
+            </HBox>
+
+            <HBox spacing="10">
+                <Label text="Símbolo inicial:" styleClass="label"/>
+                <TextArea fx:id="txtSimInicial" editable="false" prefWidth="120" styleClass="text-area"/>
+            </HBox>
+
+            <VBox spacing="5">
+                <Label text="Producciones:" styleClass="label"/>
+                <ListView fx:id="listProducciones" prefHeight="180" styleClass="list-view"/>
+            </VBox>
+        </VBox>
+    </center>
+</BorderPane>

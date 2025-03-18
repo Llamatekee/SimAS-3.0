@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
+      spacing="15" styleClass="creation-step">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20" />
+    </padding>
+    <!-- Título -->
+    <!-- Nombre -->
+    <Label text="Nombre de la Gramática:" styleClass="label"/>
+    <TextField fx:id="txtNombre" promptText="Ingrese el nombre de la gramática" styleClass="text-field"/>
+
+    <!-- Descripción -->
+    <Label text="Descripción:" styleClass="label"/>
+    <TextArea fx:id="txtDescripcion" wrapText="true" promptText="Ingrese la descripción" styleClass="text-area"/>
+
+    <!-- Contenedor de botones -->
+    <HBox spacing="15" styleClass="button-container">
+        <Button fx:id="btnCancelar" text="Cancelar" onAction="#onBtnCancelarAction" styleClass="button"/>
+        <Button fx:id="btnAnterior" text="Anterior" disable="true" styleClass="button"/>
+        <Button fx:id="btnSiguiente" text="Siguiente" onAction="#onBtnSiguienteAction" styleClass="button"/>
+        <Button fx:id="btnUltimo" text="Último" onAction="#onBtnUltimoAction" styleClass="button"/>
+    </HBox>
+</VBox>

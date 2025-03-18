@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
+            style="-fx-background-color: linear-gradient(to right, #2c3e50, #4ca1af); -fx-padding: 20;">
+
+    <!-- Contenedor de símbolos predefinidos -->
+    <top>
+        <FlowPane fx:id="symbolButtonsPane" hgap="8" vgap="8" style="-fx-padding: 10px; -fx-alignment: center;"/>
+    </top>
+
+    <!-- Contenido central -->
+    <center>
+        <VBox spacing="15" style="-fx-background-color: rgba(255, 255, 255, 0.15); -fx-background-radius: 10px; -fx-padding: 15px;">
+            <Label text="Símbolos Terminales" style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;"/>
+
+            <!-- Campo de texto y botones -->
+            <HBox spacing="10">
+                <TextField fx:id="txtSimboloTerminal" promptText="Ingrese un símbolo"
+                           style="-fx-font-size: 14px; -fx-background-radius: 5px;"/>
+                <Button fx:id="btnInsertar" text="Insertar"
+                        style="-fx-background-color: #16a085; -fx-text-fill: white; -fx-font-size: 14px;" onAction="#onInsertarAction"/>
+                <Button fx:id="btnEliminar" text="Eliminar"
+                        style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-size: 14px;" onAction="#onEliminarAction"/>
+                <Button text="Modificar" onAction="#onModificarAction"/>
+            </HBox>
+
+            <!-- Lista de símbolos terminales -->
+            <ListView fx:id="listSimbolosTerminales" prefHeight="200" style="-fx-background-radius: 5px;"/>
+        </VBox>
+    </center>
+
+    <!-- Barra inferior de botones -->
+    <bottom>
+        <HBox alignment="CENTER_RIGHT" spacing="10" style="-fx-padding: 10;">
+            <Button fx:id="btnCancelar" text="Cancelar"
+                    style="-fx-background-color: #c0392b; -fx-text-fill: white;" onAction="#onCancelarAction"/>
+            <Button fx:id="btnAceptar" text="Aceptar"
+                    style="-fx-background-color: #2ecc71; -fx-text-fill: white;" onAction="#onAceptarAction"/>
+        </HBox>
+    </bottom>
+</BorderPane>

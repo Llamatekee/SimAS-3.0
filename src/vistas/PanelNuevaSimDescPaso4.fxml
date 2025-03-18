@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" stylesheets="@styles.css">
+    <children>
+        <Label fx:id="labelTitulo" layoutX="20.0" layoutY="20.0" text="Funciones de Error" styleClass="title-label"/>
+        <Button fx:id="buttonCancelar" layoutX="20.0" layoutY="400.0" text="Cancelar" onAction="#handleCancelar" styleClass="action-button"/>
+        <Button fx:id="buttonUltimo" layoutX="500.0" layoutY="400.0" text="Último" onAction="#handleUltimo" styleClass="navigation-button"/>
+        <Button fx:id="buttonSiguiente" layoutX="450.0" layoutY="400.0" text="Siguiente" onAction="#handleSiguiente" styleClass="navigation-button"/>
+        <Button fx:id="buttonAnterior" layoutX="400.0" layoutY="400.0" text="Anterior" onAction="#handleAnterior" styleClass="navigation-button"/>
+        <Button fx:id="buttonPrimero" layoutX="350.0" layoutY="400.0" text="Primero" onAction="#handlePrimero" styleClass="navigation-button"/>
+        <ScrollPane layoutX="20.0" layoutY="60.0" prefHeight="300.0" prefWidth="300.0">
+            <content>
+                <ListView fx:id="listViewFuncionesError" styleClass="list-view"/>
+            </content>
+        </ScrollPane>
+        <CheckBox fx:id="checkBoxNoFuncionesError" layoutX="20.0" layoutY="370.0" text="No utilizar Funciones de error" onAction="#handleNoFuncionesError" styleClass="checkbox"/>
+        <Button fx:id="buttonNueva" layoutX="350.0" layoutY="60.0" text="Nueva Función Error" onAction="#handleNueva" styleClass="action-button"/>
+        <Button fx:id="buttonEliminar" layoutX="350.0" layoutY="100.0" text="Eliminar Función Error" onAction="#handleEliminar" styleClass="action-button"/>
+        <Button fx:id="buttonFinalizar" layoutX="550.0" layoutY="400.0" text="Finalizar" onAction="#handleFinalizar" styleClass="action-button"/>
+        <Button fx:id="buttonVisualizarGramatica" layoutX="100.0" layoutY="400.0" text="Visualizar Gramática" onAction="#handleVisualizarGramatica" styleClass="action-button"/>
+    </children>
+</AnchorPane>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="bienvenida.MenuPrincipal"
+            stylesheets="@styles.css">
+
+    <center>
+        <TabPane fx:id="tabPane" tabClosingPolicy="SELECTED_TAB" styleClass="tab-pane">
+            <tabs>
+                <Tab text="✖" closable="false">
+                    <tooltip>
+                        <Tooltip text="Cerrar todas las pestañas menos la principal"/>
+                    </tooltip>
+                </Tab>
+                <Tab text="Menú Principal" closable="false">
+                    <content>
+                        <VBox fx:id="menuPanel" spacing="20" alignment="CENTER" styleClass="menu-panel">
+                            <Button fx:id="btnEditor" text="Editor" onAction="#onBtnEditorAction" styleClass="menu-button"/>
+                            <Button fx:id="btnSimulador" text="Simulador" disable="true" styleClass="menu-button-disabled"/>
+                            <Button fx:id="btnAyuda" text="Ayuda" onAction="#onBtnAyudaAction" styleClass="menu-button"/>
+                            <Button fx:id="btnTutorial" text="Tutorial" onAction="#onBtnTutorialAction" styleClass="menu-button"/>
+                            <Button fx:id="btnSalir" text="Salir" onAction="#onBtnSalirAction" styleClass="menu-button-exit"/>
+                        </VBox>
+                    </content>
+                </Tab>
+            </tabs>
+        </TabPane>
+    </center>
+</BorderPane>

@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Ayuda de SimAS</title>
+<style type="text/css">
+.verde {
+	color: #0E4123;
+}
+</style>
+</head>
+
+<body>
+<center>
+<p>
+<p>
+
+
+<table width="900" border="0">
+  <tr>
+    <td width="190"><img src="imagenes/logo_uco.jpg" width="140" height="160" /></td>
+    <td width="418"><center><h1><strong> Universidad de Córdoba </strong></h1><h1><strong>Escuela Politécnica Superior </strong></h1></center></td>
+    <td width="198"><center><img src="imagenes/informatica.jpg" width="160" height="160"/></center></td>
+  </tr>
+</table>
+
+ <p>
+  <p>
+
+ <h1><strong> Centro de Ayuda </strong>  </h1>
+ <p>
+  <h2><strong> SimAS - Simulador de Análisis Sintácticos </strong></h2>
+  
+  <p>
+  <p>
+	<img src="imagenes/logo2Antes.png" width="214" height="117" alt="SimAS" />
+ 
+  <p>
+ 
+
+ <h1><a href="ayuda.html"><strong>Acceder</strong></a></h1><br />
+
+  <p>
+
+   <h3> Titulación: ingeniería informática</h3>
+  <h3> Desarrollado por: Vanesa González Pérez</h3>
+  <h3> Dirigido por: Dr.Nicolás Luis Fernández García</h3>
+   <h3> Junio 2015</h3>
+  
+</center>
+
+
+
+
+
+
+</body>
+</html>
