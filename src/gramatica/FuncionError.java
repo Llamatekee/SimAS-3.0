@@ -60,6 +60,27 @@ public class FuncionError {
         this.simbolo = simbolo;
     }
 
+    private String getNombreAccion() {
+        switch (accion) {
+            case INSERTAR_ENTRADA:
+                return "Insertar en entrada";
+            case BORRAR_ENTRADA:
+                return "Borrar de entrada";
+            case MODIFICAR_ENTRADA:
+                return "Modificar entrada";
+            case INSERTAR_PILA:
+                return "Insertar en pila";
+            case BORRAR_PILA:
+                return "Borrar de pila";
+            case MODIFICAR_PILA:
+                return "Modificar pila";
+            case TERMINAR_ANALISIS:
+                return "Terminar análisis";
+            default:
+                return "Acción desconocida";
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -76,11 +97,15 @@ public class FuncionError {
 
     @Override
     public String toString() {
-        return "FuncionError{" +
-                "identificador=" + identificador +
-                ", accion=" + accion +
-                ", mensaje='" + mensaje + '\'' +
-                ", simbolo=" + simbolo +
-                '}';
+        StringBuilder sb = new StringBuilder();
+        sb.append(identificador).append(". ");
+        sb.append(getNombreAccion());
+        if (simbolo != null) {
+            sb.append(" - Símbolo: ").append(simbolo.getNombre());
+        }
+        if (mensaje != null && !mensaje.isEmpty()) {
+            sb.append(" (").append(mensaje).append(")");
+        }
+        return sb.toString();
     }
 }

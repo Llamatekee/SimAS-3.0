@@ -5,6 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TableCell;
 import javafx.util.Callback;
 
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ import java.util.Map;
 public class TablaPredictiva {
 
     private final TableView<FilaTablaPredictiva> tablaPredictiva;
-    private Gramatica gramatica;
+    protected Gramatica gramatica;
     private final Map<String, Integer> indiceColumnas;
     private List<FuncionError> funcionesError;
 
@@ -72,14 +73,10 @@ public class TablaPredictiva {
             tablaPredictiva.getColumns().add(colT);
         }
 
-        for (NoTerminal nt : gramatica.getNoTerminales()) {
-            System.out.println("Follow(" + nt.getNombre() + "): " + gramatica.getFollow(nt.getNombre()));
-        }
-
         cargarDatos();
     }
 
-    private void cargarDatos() {
+    protected void cargarDatos() {
         ObservableList<FilaTablaPredictiva> filas = FXCollections.observableArrayList();
 
         for (NoTerminal nt : gramatica.getNoTerminales()) {
@@ -94,7 +91,7 @@ public class TablaPredictiva {
                 }
             }
 
-            filas.add(fila); 
+            filas.add(fila);
         }
 
         tablaPredictiva.setItems(filas);

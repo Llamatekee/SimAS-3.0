@@ -18,6 +18,9 @@ import gramatica.FilaTablaPredictiva;
 import gramatica.FuncionError;
 import gramatica.Gramatica;
 import gramatica.TablaPredictiva;
+import gramatica.TablaPredictivaPaso5;
+import gramatica.NoTerminal;
+import gramatica.Produccion;
 
 public class PanelNuevaSimDescPaso5 {
 
@@ -74,16 +77,19 @@ public class PanelNuevaSimDescPaso5 {
         if (gramatica.getProducciones().get(0).getNumero() == 0) {
             gramatica.numerarProducciones();
         }
-        gramatica.generarTPredictiva();
-        TablaPredictiva tpredictiva = new TablaPredictiva(tablaPredictiva); // 🔥 Ahora pasa la tabla del FXML
+        
+        // Usar la versión específica para el paso 5
+        TablaPredictivaPaso5 tpredictiva = new TablaPredictivaPaso5(tablaPredictiva);
+        tpredictiva.setPanelPaso5(this);
         tpredictiva.construir(gramatica);
-
-        if (!tablaPredictiva.getColumns().contains("$")) {
-            TableColumn<FilaTablaPredictiva, String> columnaFinCadena = new TableColumn<>("$");
-            tablaPredictiva.getColumns().add(columnaFinCadena);
-        }
-
+        gramatica.setTPredictiva(tpredictiva); // Guardar la instancia en la gramática
+        
+        // Refrescar la vista
         tablaPredictiva.refresh();
+    }
+
+    public String getFuncionErrorSeleccionada() {
+        return comboBoxFuncionesError.getSelectionModel().getSelectedItem();
     }
 
     @FXML
@@ -118,25 +124,42 @@ public class PanelNuevaSimDescPaso5 {
 
     @FXML
     private void handleEliminar() {
-        /*String[] seleccionada = tablaPredictiva.getSelectionModel().getSelectedItem();
-        if (seleccionada != null) {
-            gramatica.getTPredictiva().eliminarFuncionError(seleccionada[0], seleccionada[1]);
-            tablaPredictiva.getItems().remove(seleccionada);
-            comboBoxFuncionesError.getItems().remove(seleccionada[1]);
-        }*/
+        // Obtener la celda seleccionada
+        TableColumn<FilaTablaPredictiva, ?> column = tablaPredictiva.getFocusModel().getFocusedCell().getTableColumn();
+        if (column != null && !column.getText().equals("No Terminal")) {
+            FilaTablaPredictiva fila = tablaPredictiva.getSelectionModel().getSelectedItem();
+            if (fila != null) {
+                String valorCelda = fila.getValor(column.getText()).get();
+                
+                // Verificar si la celda tiene una función de error o una producción épsilon añadida
+                if (valorCelda != null && (valorCelda.startsWith("E") || valorCelda.startsWith("ε_"))) {
+                    // Eliminar la función de error o la producción épsilon (dejar la celda vacía)
+                    fila.setValor(column.getText(), "");
+                    tablaPredictiva.refresh();
+                } else {
+                    // Mostrar alerta si la celda no tiene una función de error o una producción épsilon añadida
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText("Celda no válida");
+                    alert.setContentText("Esta celda no contiene una función de error o una producción épsilon añadida para eliminar.");
+                    alert.showAndWait();
+                }
+            }
+        }
     }
 
     @FXML
     private void handleRellenar() {
-        // Lógica para rellenar la tabla con producciones épsilon
-        /*List<FuncionError> produccionesEpsilon = obtenerProduccionesEpsilon();
-        for (FuncionError funcionError : produccionesEpsilon) {
-            if (!tablaPredictiva.getItems().contains(funcionError)) {
-                tablaPredictiva.getItems().add(new String[]{funcionError.getSimbolo().getNombre(), funcionError.getAccion()});
-                gramatica.getTPredictiva().getFuncionesError().add(funcionError);
-                comboBoxFuncionesError.getItems().add(funcionError.toString());
-            }
-        }*/
+        // Usar la instancia existente de TablaPredictivaPaso5
+        TablaPredictivaPaso5 tpredictiva = (TablaPredictivaPaso5) gramatica.getTPredictiva();
+        if (tpredictiva != null) {
+            tpredictiva.rellenarProduccionesEpsilon();
+        } else {
+            // Si no hay tabla, crear una nueva
+            construirTablaPredictiva();
+            tpredictiva = (TablaPredictivaPaso5) gramatica.getTPredictiva();
+            tpredictiva.rellenarProduccionesEpsilon();
+        }
     }
     
     private List<FuncionError> obtenerProduccionesEpsilon() {

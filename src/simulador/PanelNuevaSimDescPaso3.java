@@ -48,11 +48,6 @@ public class PanelNuevaSimDescPaso3 {
     }
 
     private void construirTablaPredictiva() {
-
-        for (NoTerminal nt : gramatica.getNoTerminales()) {
-            System.out.println("Follow(" + nt.getNombre() + "): " + gramatica.getFollow(nt.getNombre()));
-        }
-
         if (gramatica.getProducciones().get(0).getNumero() == 0) { // Evitar numerar si ya están numeradas
             gramatica.numerarProducciones();
         }
@@ -60,7 +55,6 @@ public class PanelNuevaSimDescPaso3 {
         TablaPredictiva tpredictiva = new TablaPredictiva(tablaPredictiva); // Pasar la tabla del FXML
         tpredictiva.construir(gramatica);
 
-        System.out.println("Tabla predictiva construida con éxito.");
         tablaPredictiva.refresh(); // Refrescar la UI
     }
 
