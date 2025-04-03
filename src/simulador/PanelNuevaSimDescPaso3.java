@@ -2,7 +2,10 @@ package simulador;
 
 import gramatica.FilaTablaPredictiva;
 import gramatica.Gramatica;
+import gramatica.NoTerminal;
 import gramatica.TablaPredictiva;
+import gramatica.Terminal;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,6 +14,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Controlador para el Paso 3 de la Simulación Descendente.
@@ -23,7 +28,7 @@ public class PanelNuevaSimDescPaso3 {
 
     private final PanelSimuladorDesc panelPadre;
     private final Gramatica gramatica;
-    private ObservableList<FilaTablaPredictiva> datosTabla;
+    //private ObservableList<FilaTablaPredictiva> datosTabla;
 
     public PanelNuevaSimDescPaso3(PanelSimuladorDesc panelPadre) {
         this.panelPadre = panelPadre;
@@ -43,21 +48,21 @@ public class PanelNuevaSimDescPaso3 {
     }
 
     private void construirTablaPredictiva() {
-        if (gramatica.getProducciones().get(0).getNumero() == 0) { // 🔥 Evitar numerar si ya están numeradas
+
+        for (NoTerminal nt : gramatica.getNoTerminales()) {
+            System.out.println("Follow(" + nt.getNombre() + "): " + gramatica.getFollow(nt.getNombre()));
+        }
+
+        if (gramatica.getProducciones().get(0).getNumero() == 0) { // Evitar numerar si ya están numeradas
             gramatica.numerarProducciones();
         }
         gramatica.generarTPredictiva(); // Generar tabla predictiva
-        TablaPredictiva tpredictiva = new TablaPredictiva(tablaPredictiva); // 🔥 Ahora pasa la tabla del FXML
+        TablaPredictiva tpredictiva = new TablaPredictiva(tablaPredictiva); // Pasar la tabla del FXML
         tpredictiva.construir(gramatica);
 
-        if (!tablaPredictiva.getColumns().contains("$")) {
-            TableColumn<FilaTablaPredictiva, String> columnaFinCadena = new TableColumn<>("$");
-            tablaPredictiva.getColumns().add(columnaFinCadena);
-        }
-
+        System.out.println("Tabla predictiva construida con éxito.");
         tablaPredictiva.refresh(); // Refrescar la UI
     }
-
 
     @FXML
     private void cancelarSimulacion() {

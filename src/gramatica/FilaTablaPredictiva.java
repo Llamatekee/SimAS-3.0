@@ -39,4 +39,12 @@ public class FilaTablaPredictiva {
     public ObservableValue<String> simboloProperty() {
         return simbolo;
     }
+
+    public String getNoTerminal() {
+        return simbolo.getName();
+    }
+
+    public String getAccion(int j) {
+        return valoresColumnas.getOrDefault(j, new SimpleStringProperty("")).get();
+    }
 }

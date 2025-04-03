@@ -9,15 +9,15 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import gramatica.FilaTablaPredictiva;
 import gramatica.FuncionError;
 import gramatica.Gramatica;
-import gramatica.Terminal;
+import gramatica.TablaPredictiva;
 
 public class PanelNuevaSimDescPaso5 {
 
@@ -29,18 +29,17 @@ public class PanelNuevaSimDescPaso5 {
     @FXML private Button buttonRellenar;
     @FXML private Button buttonGramatica;
     @FXML private ComboBox<String> comboBoxFuncionesError;
-    @FXML private TableView<FuncionError> tableViewFuncionesError;
-    @FXML private TableColumn<FuncionError, String> columnSimbolo;
-    @FXML private TableColumn<FuncionError, String> columnAccion;
+    @FXML private TableView<FilaTablaPredictiva> tablaPredictiva;
+    @FXML private TableColumn<String[], String> columnSimbolo;
+    @FXML private TableColumn<String[], String> columnAccion;
 
     private Parent root;
     private PanelSimuladorDesc panelPadre;
     private Gramatica gramatica;
-    private List<Integer> filasInvalidas = new ArrayList<>();
 
     public PanelNuevaSimDescPaso5(PanelSimuladorDesc panelPadre) {
         this.panelPadre = panelPadre;
-        this.gramatica = panelPadre.getGramatica();
+        this.gramatica = panelPadre.gramatica;
         cargarFXML();
         initialize();
     }
@@ -60,10 +59,6 @@ public class PanelNuevaSimDescPaso5 {
     }
 
     private void initialize() {
-        // Inicializar columnas de la tabla
-        columnSimbolo.setCellValueFactory(new PropertyValueFactory<>("simbolo"));
-        columnAccion.setCellValueFactory(new PropertyValueFactory<>("accion"));
-
         // Inicializar comboBoxFuncionesError con valores
         List<String> funcionesError = new ArrayList<>();
         for (FuncionError funcionError : gramatica.getTPredictiva().getFuncionesError()) {
@@ -71,17 +66,24 @@ public class PanelNuevaSimDescPaso5 {
         }
         comboBoxFuncionesError.getItems().addAll(funcionesError);
 
-        // Inicializar tabla con funciones de error
-        tableViewFuncionesError.getItems().addAll(gramatica.getTPredictiva().getFuncionesError());
+        // Mostrar tabla predictiva
+        construirTablaPredictiva();
+    }
 
-        // Añadir terminales y símbolo $ como nuevas filas
-        List<Terminal> terminales = new ArrayList<>(gramatica.getTerminales());
-        terminales.add(new Terminal("$", "$"));
-        for (Terminal terminal : terminales) {
-            FuncionError fila = new FuncionError();
-            fila.setSimbolo(terminal);
-            tableViewFuncionesError.getItems().add(fila);
+    private void construirTablaPredictiva() {
+        if (gramatica.getProducciones().get(0).getNumero() == 0) {
+            gramatica.numerarProducciones();
         }
+        gramatica.generarTPredictiva();
+        TablaPredictiva tpredictiva = new TablaPredictiva(tablaPredictiva); // 🔥 Ahora pasa la tabla del FXML
+        tpredictiva.construir(gramatica);
+
+        if (!tablaPredictiva.getColumns().contains("$")) {
+            TableColumn<FilaTablaPredictiva, String> columnaFinCadena = new TableColumn<>("$");
+            tablaPredictiva.getColumns().add(columnaFinCadena);
+        }
+
+        tablaPredictiva.refresh();
     }
 
     @FXML
@@ -116,25 +118,25 @@ public class PanelNuevaSimDescPaso5 {
 
     @FXML
     private void handleEliminar() {
-        FuncionError seleccionada = tableViewFuncionesError.getSelectionModel().getSelectedItem();
+        /*String[] seleccionada = tablaPredictiva.getSelectionModel().getSelectedItem();
         if (seleccionada != null) {
-            gramatica.getTPredictiva().getFuncionesError().remove(seleccionada);
-            tableViewFuncionesError.getItems().remove(seleccionada);
-            comboBoxFuncionesError.getItems().remove(seleccionada.toString());
-        }
+            gramatica.getTPredictiva().eliminarFuncionError(seleccionada[0], seleccionada[1]);
+            tablaPredictiva.getItems().remove(seleccionada);
+            comboBoxFuncionesError.getItems().remove(seleccionada[1]);
+        }*/
     }
 
     @FXML
     private void handleRellenar() {
         // Lógica para rellenar la tabla con producciones épsilon
-        List<FuncionError> produccionesEpsilon = obtenerProduccionesEpsilon();
+        /*List<FuncionError> produccionesEpsilon = obtenerProduccionesEpsilon();
         for (FuncionError funcionError : produccionesEpsilon) {
-            if (!tableViewFuncionesError.getItems().contains(funcionError)) {
-                tableViewFuncionesError.getItems().add(funcionError);
+            if (!tablaPredictiva.getItems().contains(funcionError)) {
+                tablaPredictiva.getItems().add(new String[]{funcionError.getSimbolo().getNombre(), funcionError.getAccion()});
                 gramatica.getTPredictiva().getFuncionesError().add(funcionError);
                 comboBoxFuncionesError.getItems().add(funcionError.toString());
             }
-        }
+        }*/
     }
     
     private List<FuncionError> obtenerProduccionesEpsilon() {

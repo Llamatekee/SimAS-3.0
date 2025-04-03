@@ -1138,11 +1138,26 @@ public class Gramatica {
 
                 Simbolo primerSimbolo = pr.getConsec().get(0);
 
-                if (primerSimbolo.getNombre().equals(t.getNombre()) ||
-                        (primerSimbolo.getNombre().equals("ε") && nt.getSiguientes().stream().anyMatch(s -> s.getNombre().equals(t.getNombre()))) ||
-                        nt.getPrimeros().stream().anyMatch(s -> s.getNombre().equals(t.getNombre()))) {
-
+                // 1. Si el primer símbolo es el terminal que buscamos
+                if (primerSimbolo.getNombre().equals(t.getNombre())) {
                     reglas.add(pr.toString());
+                }
+                // 2. Si el primer símbolo es épsilon y el terminal está en SIGUIENTE
+                else if (primerSimbolo.getNombre().equals("ε") && 
+                         nt.getSiguientes().stream().anyMatch(s -> s.getNombre().equals(t.getNombre()))) {
+                    reglas.add(pr.toString());
+                }
+                // 3. Si el primer símbolo es un no terminal y el terminal está en su conjunto PRIMERO
+                else if (isNoTerminal(primerSimbolo.getNombre())) {
+                    NoTerminal primerNT = this.noTerminales.stream()
+                        .filter(n -> n.getNombre().equals(primerSimbolo.getNombre()))
+                        .findFirst()
+                        .orElse(null);
+                    
+                    if (primerNT != null && primerNT.getPrimeros().stream()
+                            .anyMatch(term -> term.getNombre().equals(t.getNombre()))) {
+                        reglas.add(pr.toString());
+                    }
                 }
             }
         }
@@ -1150,5 +1165,38 @@ public class Gramatica {
         return reglas;
     }
 
+    public List<String> getProduccionesPorNoTerminalYTerminal(String noTerminal, String terminal) {
+        // Buscar el no terminal y el terminal en las listas correspondientes
+        NoTerminal nt = this.noTerminales.stream()
+                         .filter(n -> n.getNombre().equals(noTerminal))
+                         .findFirst()
+                         .orElse(null);
+    
+        Terminal t = this.terminales.stream()
+                         .filter(term -> term.getNombre().equals(terminal))
+                         .findFirst()
+                         .orElse(null);
+    
+        // Si no se encuentran, devolver una lista vacía
+        if (nt == null || t == null) {
+            return Collections.emptyList();
+        }
+    
+        // Llamar al método existente con los objetos encontrados
+        return getProduccionesPorNoTerminalYTerminal(nt, t);
+    }
+
+    public Set<String> getFollow(String noTerminal) {
+        // Buscar el no terminal en la lista de no terminales
+        for (NoTerminal nt : this.getNoTerminales()) {
+            if (nt.getNombre().equals(noTerminal)) {
+                // Convertir ObservableList<Terminal> a Set<String>
+                return nt.getSiguientes().stream()
+                         .map(Terminal::getNombre) // Obtener el nombre de cada terminal
+                         .collect(Collectors.toSet()); // Convertir a Set<String>
+            }
+        }
+        return Collections.emptySet(); // Devuelve un conjunto vacío si no se encuentra el no terminal
+    }
 
 }

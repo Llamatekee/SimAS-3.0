@@ -44,6 +44,19 @@ public class TablaPredictiva {
         colNT.setCellValueFactory(cellData -> cellData.getValue().simboloProperty());
         tablaPredictiva.getColumns().add(colNT);
 
+        // Agregar el símbolo $ a los terminales si no existe
+        boolean tieneDolar = false;
+        for (Terminal t : gramatica.getTerminales()) {
+            if (t.getNombre().equals("$")) {
+                tieneDolar = true;
+                break;
+            }
+        }
+        if (!tieneDolar) {
+            Terminal dolar = new Terminal("$", "$");
+            gramatica.getTerminales().add(dolar);
+        }
+
         // Crear columnas dinámicas para los terminales
         for (Terminal t : gramatica.getTerminales()) {
             TableColumn<FilaTablaPredictiva, String> colT = new TableColumn<>(t.getNombre());
@@ -57,6 +70,10 @@ public class TablaPredictiva {
             });
 
             tablaPredictiva.getColumns().add(colT);
+        }
+
+        for (NoTerminal nt : gramatica.getNoTerminales()) {
+            System.out.println("Follow(" + nt.getNombre() + "): " + gramatica.getFollow(nt.getNombre()));
         }
 
         cargarDatos();
@@ -77,7 +94,7 @@ public class TablaPredictiva {
                 }
             }
 
-            filas.add(fila); // ✅ Solo esta línea es correcta
+            filas.add(fila); 
         }
 
         tablaPredictiva.setItems(filas);
@@ -117,5 +134,8 @@ public class TablaPredictiva {
 
     public List<FilaTablaPredictiva> getFilas() {
         return tablaPredictiva.getItems();
+    }
+    public int getColumnas() {
+        return tablaPredictiva.getColumns().size();
     }
 }
