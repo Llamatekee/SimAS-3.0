@@ -17,10 +17,7 @@ import java.util.List;
 import gramatica.FilaTablaPredictiva;
 import gramatica.FuncionError;
 import gramatica.Gramatica;
-import gramatica.TablaPredictiva;
 import gramatica.TablaPredictivaPaso5;
-import gramatica.NoTerminal;
-import gramatica.Produccion;
 
 public class PanelNuevaSimDescPaso5 {
 
@@ -84,7 +81,9 @@ public class PanelNuevaSimDescPaso5 {
         tpredictiva.construir(gramatica);
         gramatica.setTPredictiva(tpredictiva); // Guardar la instancia en la gramática
         
-        // Refrescar la vista
+        // Configurar la tabla
+        tablaPredictiva.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        tablaPredictiva.setTableMenuButtonVisible(false);
         tablaPredictiva.refresh();
     }
 

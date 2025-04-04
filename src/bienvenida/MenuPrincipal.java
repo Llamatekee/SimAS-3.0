@@ -13,8 +13,9 @@ import java.io.IOException;
 
 public class MenuPrincipal {
 
-    @FXML
-    private TabPane tabPane;
+    @FXML private TabPane tabPane;
+    @FXML private Button btnCerrarTabs;
+    private Tab lastSelectedTab;
 
     public void start(Stage primaryStage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/MenuPrincipal.fxml"));
@@ -37,23 +38,32 @@ public class MenuPrincipal {
 
     @FXML
     private void initialize() {
-        Tab closeTab = tabPane.getTabs().get(0);
-        Tab mainMenuTab = tabPane.getTabs().get(1);
-
+        // Guardar la última pestaña seleccionada
         tabPane.getSelectionModel().selectedItemProperty().addListener((obs, oldTab, newTab) -> {
-            if (newTab == closeTab) {
-                Alert confirm = new Alert(Alert.AlertType.CONFIRMATION,
-                        "¿Seguro que quieres cerrar todas las pestañas menos la principal?",
-                        ButtonType.YES, ButtonType.NO);
-                confirm.setTitle("Confirmación");
-                confirm.showAndWait().ifPresent(response -> {
-                    if (response == ButtonType.YES) {
-                        tabPane.getSelectionModel().select(mainMenuTab);
-                        onBtnCerrarPestanasAction();
-                    } else {
-                        tabPane.getSelectionModel().select(oldTab);
-                    }
-                });
+            if (newTab != null) {
+                lastSelectedTab = newTab;
+            }
+        });
+    }
+
+    @FXML
+    private void onBtnCerrarTabsAction() {
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION,
+                "¿Seguro que quieres cerrar todas las pestañas menos la principal?",
+                ButtonType.YES, ButtonType.NO);
+        confirm.setTitle("Confirmación");
+        
+        confirm.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.YES) {
+                // Seleccionar la pestaña del menú principal
+                tabPane.getSelectionModel().selectFirst();
+                // Cerrar todas las pestañas excepto la principal
+                tabPane.getTabs().removeIf(Tab::isClosable);
+            } else {
+                // Volver a la pestaña anterior
+                if (lastSelectedTab != null) {
+                    tabPane.getSelectionModel().select(lastSelectedTab);
+                }
             }
         });
     }
@@ -122,11 +132,6 @@ public class MenuPrincipal {
                 System.exit(0);
             }
         });
-    }
-
-    @FXML
-    private void onBtnCerrarPestanasAction() {
-        tabPane.getTabs().removeIf(Tab::isClosable);
     }
 
     @FXML

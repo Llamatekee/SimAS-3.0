@@ -55,6 +55,9 @@ public class PanelNuevaSimDescPaso3 {
         TablaPredictiva tpredictiva = new TablaPredictiva(tablaPredictiva); // Pasar la tabla del FXML
         tpredictiva.construir(gramatica);
 
+        // Configurar la tabla
+        tablaPredictiva.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        tablaPredictiva.setTableMenuButtonVisible(false);
         tablaPredictiva.refresh(); // Refrescar la UI
     }
 

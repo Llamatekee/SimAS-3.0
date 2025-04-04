@@ -45,23 +45,37 @@ public class TablaPredictiva {
         colNT.setCellValueFactory(cellData -> cellData.getValue().simboloProperty());
         tablaPredictiva.getColumns().add(colNT);
 
-        // Agregar el símbolo $ a los terminales si no existe
-        boolean tieneDolar = false;
-        for (Terminal t : gramatica.getTerminales()) {
-            if (t.getNombre().equals("$")) {
-                tieneDolar = true;
+        // Verificar si el símbolo $ es necesario para las producciones existentes
+        boolean necesitaDolar = false;
+        for (NoTerminal nt : gramatica.getNoTerminales()) {
+            if (nt.getSiguientes().stream().anyMatch(t -> t.getNombre().equals("$"))) {
+                necesitaDolar = true;
                 break;
             }
         }
-        if (!tieneDolar) {
-            Terminal dolar = new Terminal("$", "$");
-            gramatica.getTerminales().add(dolar);
+
+        // Agregar el símbolo $ solo si es necesario
+        if (necesitaDolar) {
+            boolean tieneDolar = false;
+            for (Terminal t : gramatica.getTerminales()) {
+                if (t.getNombre().equals("$")) {
+                    tieneDolar = true;
+                    break;
+                }
+            }
+            if (!tieneDolar) {
+                Terminal dolar = new Terminal("$", "$");
+                gramatica.getTerminales().add(dolar);
+            }
         }
 
         // Crear columnas dinámicas para los terminales
         for (Terminal t : gramatica.getTerminales()) {
+            if (t.getNombre() == null || t.getNombre().isEmpty()) continue;
+            
             TableColumn<FilaTablaPredictiva, String> colT = new TableColumn<>(t.getNombre());
-
+            colT.setPrefWidth(100); // Establecer un ancho predeterminado
+            
             // Usamos un Callback para acceder a los valores en el Map de `FilaTablaPredictiva`
             colT.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<FilaTablaPredictiva, String>, ObservableValue<String>>() {
                 @Override
@@ -72,6 +86,10 @@ public class TablaPredictiva {
 
             tablaPredictiva.getColumns().add(colT);
         }
+
+        // Deshabilitar la creación automática de columnas
+        tablaPredictiva.setTableMenuButtonVisible(false);
+        tablaPredictiva.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         cargarDatos();
     }

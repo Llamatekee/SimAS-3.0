@@ -60,7 +60,11 @@ public class PanelNuevaSimDescPaso2 {
             String siguientes = String.join(" ", nt.getSiguientes().stream().map(Terminal::getNombre).toList());
             datosConjuntos.add(new NoTerminalData(nt.getNombre(), primeros, siguientes));
         }
+        
+        // Configurar la tabla
         tablaConjuntos.setItems(datosConjuntos);
+        tablaConjuntos.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        tablaConjuntos.setTableMenuButtonVisible(false);
     }
 
     @FXML
