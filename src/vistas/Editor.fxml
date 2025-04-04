@@ -3,9 +3,11 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
 
 <?import java.net.URL?>
-<BorderPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
+            prefWidth="1000" prefHeight="700">
 
     <stylesheets>
         <URL value="@styles.css"/>
@@ -13,54 +15,134 @@
 
     <!-- Barra de herramientas superior -->
     <top>
-        <ToolBar styleClass="toolbar">
-            <Button fx:id="btnAñadir" text="Añadir" onAction="#onBtnAnadirAction" styleClass="toolbar-button"/>
-            <Button fx:id="btnAbrir" text="Abrir" onAction="#onBtnAbrirAction" styleClass="toolbar-button"/>
-            <Button fx:id="btnGuardar" text="Guardar" onAction="#onBtnGuardarAction" styleClass="toolbar-button"/>
-            <Separator orientation="VERTICAL"/>
-            <Button fx:id="btnEditar" text="Editar" onAction="#onBtnEditarAction" styleClass="toolbar-button"/>
-            <Button fx:id="btnEliminar" text="Eliminar" onAction="#onBtnEliminarAction" styleClass="toolbar-button"/>
-            <Separator orientation="VERTICAL"/>
-            <Button fx:id="btnValidar" text="Validar" onAction="#onBtnValidarAction" styleClass="toolbar-button"/>
-            <Button fx:id="btnPdf" text="Informe PDF" onAction="#onBtnPdfAction" styleClass="toolbar-button"/>
-            <Separator orientation="VERTICAL"/>
-            <Button fx:id="btnSimDesc" text="Sim Desc" onAction="#onBtnSimDescAction" styleClass="toolbar-button"/>
-            <Button fx:id="btnSalir" text="Salir" onAction="#onBtnSalirAction" styleClass="toolbar-button-exit"/>
-        </ToolBar>
+        <VBox spacing="0">
+            <!-- Título del editor -->
+            <HBox styleClass="editor-header" alignment="CENTER_LEFT">
+                <padding>
+                    <Insets top="10" right="10" bottom="10" left="10"/>
+                </padding>
+                <Label text="Editor de Gramáticas" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+            </HBox>
+            
+            <!-- Barra de herramientas -->
+            <ToolBar styleClass="toolbar">
+                <HBox spacing="5">
+                    <Button fx:id="btnAñadir" text="Añadir" onAction="#onBtnAnadirAction" styleClass="toolbar-button">
+                        <graphic>
+                            <ImageView fitHeight="16" fitWidth="16">
+                                <Image url="@images/add-icon.png"/>
+                            </ImageView>
+                        </graphic>
+                    </Button>
+                    <Button fx:id="btnAbrir" text="Abrir" onAction="#onBtnAbrirAction" styleClass="toolbar-button">
+                        <graphic>
+                            <ImageView fitHeight="16" fitWidth="16">
+                                <Image url="@images/open-icon.png"/>
+                            </ImageView>
+                        </graphic>
+                    </Button>
+                    <Button fx:id="btnGuardar" text="Guardar" onAction="#onBtnGuardarAction" styleClass="toolbar-button">
+                        <graphic>
+                            <ImageView fitHeight="16" fitWidth="16">
+                                <Image url="@images/save-icon.png"/>
+                            </ImageView>
+                        </graphic>
+                    </Button>
+                    <Separator orientation="VERTICAL"/>
+                    <Button fx:id="btnEditar" text="Editar" onAction="#onBtnEditarAction" styleClass="toolbar-button">
+                        <graphic>
+                            <ImageView fitHeight="16" fitWidth="16">
+                                <Image url="@images/edit-icon.png"/>
+                            </ImageView>
+                        </graphic>
+                    </Button>
+                    <Button fx:id="btnEliminar" text="Eliminar" onAction="#onBtnEliminarAction" styleClass="toolbar-button">
+                        <graphic>
+                            <ImageView fitHeight="16" fitWidth="16">
+                                <Image url="@images/delete-icon.png"/>
+                            </ImageView>
+                        </graphic>
+                    </Button>
+                    <Separator orientation="VERTICAL"/>
+                    <Button fx:id="btnValidar" text="Validar" onAction="#onBtnValidarAction" styleClass="toolbar-button">
+                        <graphic>
+                            <ImageView fitHeight="16" fitWidth="16">
+                                <Image url="@images/validate-icon.png"/>
+                            </ImageView>
+                        </graphic>
+                    </Button>
+                    <Button fx:id="btnPdf" text="Informe" onAction="#onBtnPdfAction" styleClass="toolbar-button">
+                        <graphic>
+                            <ImageView fitHeight="16" fitWidth="16">
+                                <Image url="@images/pdf-icon.png"/>
+                            </ImageView>
+                        </graphic>
+                    </Button>
+                    <Separator orientation="VERTICAL"/>
+                    <Button fx:id="btnSimDesc" text="Simular" onAction="#onBtnSimDescAction" styleClass="toolbar-button">
+                        <graphic>
+                            <ImageView fitHeight="16" fitWidth="16">
+                                <Image url="@images/simulator-icon.png"/>
+                            </ImageView>
+                        </graphic>
+                    </Button>
+                </HBox>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button fx:id="btnSalir" text="Salir" onAction="#onBtnSalirAction" styleClass="toolbar-button-exit">
+                    <graphic>
+                        <ImageView fitHeight="16" fitWidth="16">
+                            <Image url="@images/exit-icon.png"/>
+                        </ImageView>
+                    </graphic>
+                </Button>
+            </ToolBar>
+        </VBox>
     </top>
 
     <!-- Contenido central -->
     <center>
         <VBox spacing="15" styleClass="editor-content">
-            <HBox spacing="10">
-                <Label text="Nombre:" styleClass="label"/>
-                <TextArea fx:id="txtNombre" editable="false" styleClass="text-area-large"/>
-            </HBox>
+            <!-- Información básica de la gramática -->
+            <VBox spacing="5" styleClass="info-section">
+                <Label text="Información de la Gramática" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: white; -fx-padding: 0 0 5 0;"/>
+                
+                <GridPane hgap="10" vgap="10">
+                    <columnConstraints>
+                        <ColumnConstraints minWidth="100" />
+                        <ColumnConstraints hgrow="ALWAYS" />
+                        <ColumnConstraints minWidth="100" />
+                        <ColumnConstraints minWidth="60" />
+                    </columnConstraints>
 
-            <VBox spacing="5">
-                <Label text="Descripción:" styleClass="label"/>
-                <TextArea fx:id="txtAreaDesc" wrapText="true" editable="false" styleClass="text-area-large"/>
+                    <Label text="Nombre:" styleClass="label" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                    <TextField fx:id="txtNombre" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                    
+                    <Label text="Símbolo inicial:" styleClass="label" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                    <TextField fx:id="txtSimInicial" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="0" />
+
+                    <Label text="Descripción:" styleClass="label" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                    <TextField fx:id="txtAreaDesc" editable="false" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="1" />
+                </GridPane>
             </VBox>
-
-            <HBox spacing="20">
-                <VBox spacing="5">
-                    <Label text="Símbolos No Terminales:" styleClass="label"/>
-                    <ListView fx:id="listNoTerminales" prefHeight="180" prefWidth="180" styleClass="list-view"/>
+            
+            <!-- Símbolos y producciones -->
+            <HBox spacing="20" VBox.vgrow="ALWAYS">
+                <!-- Símbolos -->
+                <VBox spacing="10" HBox.hgrow="ALWAYS">
+                    <Label text="Símbolos No Terminales" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+                    <ListView fx:id="listNoTerminales" prefHeight="180" styleClass="list-view" VBox.vgrow="ALWAYS"/>
                 </VBox>
-                <VBox spacing="5">
-                    <Label text="Símbolos Terminales:" styleClass="label"/>
-                    <ListView fx:id="listTerminales" prefHeight="180" prefWidth="180" styleClass="list-view"/>
+                
+                <VBox spacing="10" HBox.hgrow="ALWAYS">
+                    <Label text="Símbolos Terminales" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+                    <ListView fx:id="listTerminales" prefHeight="180" styleClass="list-view" VBox.vgrow="ALWAYS"/>
                 </VBox>
             </HBox>
 
-            <HBox spacing="10">
-                <Label text="Símbolo inicial:" styleClass="label"/>
-                <TextArea fx:id="txtSimInicial" editable="false" prefWidth="120" styleClass="text-area"/>
-            </HBox>
-
-            <VBox spacing="5">
-                <Label text="Producciones:" styleClass="label"/>
-                <ListView fx:id="listProducciones" prefHeight="180" styleClass="list-view"/>
+            <!-- Producciones -->
+            <VBox spacing="5" VBox.vgrow="ALWAYS">
+                <Label text="Producciones" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+                <ListView fx:id="listProducciones" prefHeight="200" styleClass="list-view" VBox.vgrow="ALWAYS"/>
             </VBox>
         </VBox>
     </center>

@@ -49,11 +49,11 @@ public class Editor extends VBox {
     @FXML
     private Button btnSimDesc;
     @FXML
-    private TextArea txtNombre;
+    private TextField txtNombre;
     @FXML
-    private TextArea txtAreaDesc;
+    private TextField txtAreaDesc;
     @FXML
-    private TextArea txtSimInicial;
+    private TextField txtSimInicial;
     @FXML
     private ListView<String> listNoTerminales;
     @FXML

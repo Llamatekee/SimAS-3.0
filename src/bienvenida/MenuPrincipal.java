@@ -24,12 +24,12 @@ public class MenuPrincipal {
         primaryStage.setTitle("SimAS 3.0");
 
         // 🔹 Establecer tamaño inicial
-        primaryStage.setWidth(800);
-        primaryStage.setHeight(800);
+        primaryStage.setWidth(1000);
+        primaryStage.setHeight(1200);
 
         // 🔹 Evitar que la ventana se reduzca más allá de estos valores
-        primaryStage.setMinWidth(600);
-        primaryStage.setMinHeight(400);
+        primaryStage.setMinWidth(800);
+        primaryStage.setMinHeight(1000);
 
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);

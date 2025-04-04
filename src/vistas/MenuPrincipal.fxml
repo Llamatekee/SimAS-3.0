@@ -2,6 +2,8 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.Insets?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="bienvenida.MenuPrincipal"
             stylesheets="@styles.css">
@@ -12,12 +14,56 @@
                 <tabs>
                     <Tab text="Menú Principal" closable="false">
                         <content>
-                            <VBox fx:id="menuPanel" spacing="20" alignment="CENTER" styleClass="menu-panel">
-                                <Button fx:id="btnEditor" text="Editor" onAction="#onBtnEditorAction" styleClass="menu-button"/>
-                                <Button fx:id="btnSimulador" text="Simulador" disable="true" styleClass="menu-button-disabled"/>
-                                <Button fx:id="btnAyuda" text="Ayuda" onAction="#onBtnAyudaAction" styleClass="menu-button"/>
-                                <Button fx:id="btnTutorial" text="Tutorial" onAction="#onBtnTutorialAction" styleClass="menu-button"/>
-                                <Button fx:id="btnSalir" text="Salir" onAction="#onBtnSalirAction" styleClass="menu-button-exit"/>
+                            <VBox fx:id="menuPanel" spacing="25" alignment="CENTER" styleClass="menu-panel">
+                                <!-- Título de la aplicación -->
+                                <Label text="SimAS 3.0" style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: white; -fx-padding: 0 0 20 0;"/>
+                                
+                                <!-- Subtítulo -->
+                                <Label text="Simulador de Análisis Sintáctico" style="-fx-font-size: 18px; -fx-text-fill: #bdc3c7; -fx-padding: 0 0 30 0;"/>
+                                
+                                <!-- Botones del menú -->
+                                <Button fx:id="btnEditor" text="Editor de Gramáticas" onAction="#onBtnEditorAction" styleClass="menu-button">
+                                    <graphic>
+                                        <ImageView fitHeight="24" fitWidth="24">
+                                            <Image url="@images/editor-icon.png"/>
+                                        </ImageView>
+                                    </graphic>
+                                </Button>
+                                
+                                <Button fx:id="btnSimulador" text="Simulador Descendente" disable="true" styleClass="menu-button-disabled">
+                                    <graphic>
+                                        <ImageView fitHeight="24" fitWidth="24">
+                                            <Image url="@images/simulator-icon.png"/>
+                                        </ImageView>
+                                    </graphic>
+                                </Button>
+                                
+                                <Button fx:id="btnAyuda" text="Manual de Usuario" onAction="#onBtnAyudaAction" styleClass="menu-button">
+                                    <graphic>
+                                        <ImageView fitHeight="24" fitWidth="24">
+                                            <Image url="@images/help-icon.png"/>
+                                        </ImageView>
+                                    </graphic>
+                                </Button>
+                                
+                                <Button fx:id="btnTutorial" text="Tutorial Interactivo" onAction="#onBtnTutorialAction" styleClass="menu-button">
+                                    <graphic>
+                                        <ImageView fitHeight="24" fitWidth="24">
+                                            <Image url="@images/tutorial-icon.png"/>
+                                        </ImageView>
+                                    </graphic>
+                                </Button>
+                                
+                                <Button fx:id="btnSalir" text="Salir" onAction="#onBtnSalirAction" styleClass="menu-button-exit">
+                                    <graphic>
+                                        <ImageView fitHeight="24" fitWidth="24">
+                                            <Image url="@images/exit-icon.png"/>
+                                        </ImageView>
+                                    </graphic>
+                                </Button>
+                                
+                                <!-- Pie de página -->
+                                <Label text="Desarrollado por Antonio" style="-fx-font-size: 14px; -fx-text-fill: #95a5a6; -fx-padding: 30 0 0 0;"/>
                             </VBox>
                         </content>
                     </Tab>
