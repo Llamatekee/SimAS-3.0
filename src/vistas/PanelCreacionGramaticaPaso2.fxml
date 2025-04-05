@@ -1,38 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.geometry.Insets?>
 
-<VBox xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
-      spacing="15" styleClass="creation-step">
+<GridPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
+         styleClass="wizard-step" vgap="0" VBox.vgrow="ALWAYS">
+    
+    <columnConstraints>
+        <ColumnConstraints hgrow="ALWAYS"/>
+    </columnConstraints>
+    
+    <rowConstraints>
+        <RowConstraints valignment="TOP" minHeight="80" maxHeight="80" fillHeight="false"/> <!-- Header -->
+        <RowConstraints vgrow="ALWAYS" valignment="TOP" fillHeight="true"/> <!-- Content -->
+        <RowConstraints valignment="BOTTOM" minHeight="60" maxHeight="60" fillHeight="false"/> <!-- Navigation -->
+    </rowConstraints>
+
     <padding>
-        <Insets top="20" right="20" bottom="20" left="20"/>
+        <Insets top="30" right="40" bottom="30" left="40"/>
     </padding>
 
-    <!-- Título -->
-    <Label text="Paso 2: Configuración de la Gramática" styleClass="title-label"/>
+    <!-- Header -->
+    <Label text="Vocabulario de la Gramática" styleClass="wizard-header"
+           GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.halignment="CENTER"/>
 
-    <HBox spacing="15">
-        <VBox spacing="10">
-            <Label text="Símbolos No Terminales" styleClass="label"/>
-            <ListView fx:id="listNoTerminales" prefHeight="200" styleClass="list-view"/>
-            <Button fx:id="btnModificarNoTerminales" text="Modificar No Terminales" onAction="#onBtnModificarNoTerminalesAction" styleClass="button"/>
+    <!-- Content -->
+    <VBox spacing="30" GridPane.columnIndex="0" GridPane.rowIndex="1" 
+          styleClass="wizard-content" GridPane.vgrow="ALWAYS">
+        
+        <!-- No Terminales Section -->
+        <VBox spacing="15" VBox.vgrow="ALWAYS">
+            <Label text="Símbolos No Terminales" styleClass="wizard-section-header"/>
+            <ListView fx:id="listNoTerminales" VBox.vgrow="ALWAYS"/>
+            <Button fx:id="btnModificarNoTerminales" text="Modificar No Terminales" 
+                    maxWidth="Infinity" onAction="#onBtnModificarNoTerminalesAction"/>
         </VBox>
 
-        <VBox spacing="10">
-            <Label text="Símbolos Terminales" styleClass="label"/>
-            <ListView fx:id="listTerminales" prefHeight="200" styleClass="list-view"/>
-            <Button fx:id="btnModificarTerminales" text="Modificar Terminales" onAction="#onBtnModificarTerminalesAction" styleClass="button"/>
+        <!-- Terminales Section -->
+        <VBox spacing="15" VBox.vgrow="ALWAYS">
+            <Label text="Símbolos Terminales" styleClass="wizard-section-header"/>
+            <ListView fx:id="listTerminales" VBox.vgrow="ALWAYS"/>
+            <Button fx:id="btnModificarTerminales" text="Modificar Terminales" 
+                    maxWidth="Infinity" onAction="#onBtnModificarTerminalesAction"/>
         </VBox>
+    </VBox>
+
+    <!-- Navigation -->
+    <HBox styleClass="wizard-navigation" GridPane.columnIndex="0" GridPane.rowIndex="2" 
+          GridPane.valignment="BOTTOM">
+        <Button fx:id="btnCancelar" text="Cancelar" styleClass="button-cancel" 
+                onAction="#onBtnCancelarAction"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button fx:id="btnPrimero" text="Primero" styleClass="button-next" 
+                onAction="#onBtnPrimeroAction"/>
+        <Button fx:id="btnAnterior" text="Anterior" styleClass="button-next" 
+                onAction="#onBtnAnteriorAction"/>
+        <Button fx:id="btnSiguiente" text="Siguiente" styleClass="button-next" 
+                onAction="#onBtnSiguienteAction"/>
+        <Button fx:id="btnUltimo" text="Último" styleClass="button-next" 
+                onAction="#onBtnUltimoAction"/>
     </HBox>
 
-    <!-- Contenedor de botones -->
-    <HBox spacing="15" alignment="CENTER" styleClass="button-container">
-        <Button fx:id="btnPrimero" text="Primero" onAction="#onBtnPrimeroAction" styleClass="button"/>
-        <Button fx:id="btnAnterior" text="Anterior" onAction="#onBtnAnteriorAction" styleClass="button"/>
-        <Button fx:id="btnSiguiente" text="Siguiente" onAction="#onBtnSiguienteAction" styleClass="button"/>
-        <Button fx:id="btnUltimo" text="Último" onAction="#onBtnUltimoAction" styleClass="button"/>
-        <Button fx:id="btnCancelar" text="Cancelar" onAction="#onBtnCancelarAction" styleClass="button"/>
-    </HBox>
-</VBox>
+</GridPane>

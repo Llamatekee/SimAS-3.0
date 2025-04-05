@@ -29,41 +29,27 @@ public class Editor extends VBox {
     // Modelo
     private Gramatica gramatica = crearGramatica();
 
-    // Dependencias del sistema (por ejemplo, la pestaña y el menú principal)
+    // Dependencias del sistema
     public TabPane tabPane;
     public MenuPrincipal menuPane;
 
     // Componentes inyectados desde el FXML
-    @FXML
-    private BorderPane rootPane;
-    @FXML
-    private Button btnGuardar;
-    @FXML
-    private Button btnEditar;
-    @FXML
-    private Button btnEliminar;
-    @FXML
-    private Button btnValidar;
-    @FXML
-    private Button btnPdf;
-    @FXML
-    private Button btnSimDesc;
-    @FXML
-    private TextField txtNombre;
-    @FXML
-    private TextField txtAreaDesc;
-    @FXML
-    private TextField txtSimInicial;
-    @FXML
-    private ListView<String> listNoTerminales;
-    @FXML
-    private ListView<String> listTerminales;
-    @FXML
-    private ListView<String> listProducciones;
-
-    // ==========================
-    // CONSTRUCTORES
-    // ==========================
+    @FXML private BorderPane rootPane;
+    @FXML private Button btnAnadir;
+    @FXML private Button btnAbrir;
+    @FXML private Button btnGuardar;
+    @FXML private Button btnEditar;
+    @FXML private Button btnEliminar;
+    @FXML private Button btnValidar;
+    @FXML private Button btnInforme;
+    @FXML private Button btnSimular;
+    @FXML private Button btnSalir;
+    @FXML private TextField txtNombre;
+    @FXML private TextField txtAreaDesc;
+    @FXML private TextField txtSimInicial;
+    @FXML private ListView<String> listNoTerminales;
+    @FXML private ListView<String> listTerminales;
+    @FXML private ListView<String> listProducciones;
 
     // ==========================
     // CONSTRUCTORES
@@ -109,12 +95,14 @@ public class Editor extends VBox {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/Editor.fxml"));
             loader.setController(this);
-            rootPane = loader.load();
+            Parent root = loader.load();
+            this.getChildren().clear();
+            this.getChildren().add(root);
         } catch (IOException e) {
             e.printStackTrace();
+            mostrarError("Error al cargar la interfaz", e.getMessage());
         }
     }
-
 
     public Gramatica getGramatica() {
         return this.gramatica;
@@ -132,8 +120,8 @@ public class Editor extends VBox {
         btnEliminar.setDisable(true);
         btnGuardar.setDisable(true);
         btnValidar.setDisable(true);
-        btnPdf.setDisable(true);
-        btnSimDesc.setDisable(true);
+        btnInforme.setDisable(true);
+        btnSimular.setDisable(true);
     }
 
     // Métodos para inyectar dependencias (si se crean desde MenuPrincipal)
@@ -161,41 +149,7 @@ public class Editor extends VBox {
 
     @FXML
     private void onBtnAnadirAction() {
-        // Se abre el panel de creación de gramática sin una gramática existente (nueva gramática)
         new PanelCreacionGramatica(this, tabPane, null, menuPane);
-    }
-
-    @FXML
-    private void onBtnEditarAction() {
-        if (this.tabPane == null || this.menuPane == null) {
-            System.err.println("Error: tabPane o menuPane no están inicializados.");
-            return;
-        }
-
-        // Se abre el panel de creación de gramática con la gramática actual (edición)
-        new PanelCreacionGramatica(this, tabPane, this.gramatica, menuPane);
-    }
-
-
-    @FXML
-    private void onBtnSimDescAction() {
-        // Ejecutar la simulación descendente.
-        new PanelSimuladorDesc(gramatica, tabPane);
-    }
-
-    @FXML
-    private void onBtnSalirAction() {
-        Alert confirm = new Alert(AlertType.CONFIRMATION, "¿Desea salir de SimAS?", ButtonType.YES, ButtonType.NO);
-        confirm.setTitle("Salir");
-        Optional<ButtonType> result = confirm.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.YES) {
-            System.exit(0);
-        }
-    }
-
-    @FXML
-    private void onBtnGuardarAction() {
-        grabarGramatica();
     }
 
     @FXML
@@ -204,52 +158,59 @@ public class Editor extends VBox {
     }
 
     @FXML
-    private void onBtnEliminarAction() {
-        if (gramatica == null || gramatica.getNombre() == null || gramatica.getNombre().isEmpty()) {
-            Alert alert = new Alert(AlertType.WARNING, "No hay ninguna gramática abierta para cerrar.", ButtonType.OK);
-            alert.setTitle("Aviso");
-            alert.showAndWait();
+    private void onBtnGuardarAction() {
+        grabarGramatica();
+    }
+
+    @FXML
+    private void onBtnEditarAction() {
+        if (this.tabPane == null || this.menuPane == null) {
+            mostrarError("Error", "No se pueden iniciar la edición en este momento.");
             return;
         }
+        new PanelCreacionGramatica(this, tabPane, this.gramatica, menuPane);
+    }
 
-        Alert confirm = new Alert(AlertType.CONFIRMATION, "¿Desea cerrar la gramática '" + gramatica.getNombre() + "'?", ButtonType.YES, ButtonType.NO);
-        confirm.setTitle("Cerrar Gramática");
+    @FXML
+    private void onBtnEliminarAction() {
+        Alert confirm = new Alert(AlertType.CONFIRMATION, 
+            "¿Está seguro de que desea eliminar esta gramática?", 
+            ButtonType.YES, ButtonType.NO);
+        confirm.setTitle("Eliminar Gramática");
         Optional<ButtonType> result = confirm.showAndWait();
-
         if (result.isPresent() && result.get() == ButtonType.YES) {
-            Alert info = new Alert(AlertType.INFORMATION, "La gramática '" + gramatica.getNombre() + "' ha sido cerrada.", ButtonType.OK);
-            info.setTitle("Gramática Cerrada");
-            info.showAndWait();
-
-            // Resetear el modelo de gramática sin cerrar la pestaña
-            gramatica = null; // 🔹 Asignamos null en lugar de crear una nueva gramática
-            actualizarVisualizacion(); // 🔹 Actualizar la vista y desactivar los botones
+            this.gramatica = new Gramatica();
+            actualizarVisualizacion();
         }
     }
 
     @FXML
     private void onBtnValidarAction() {
-        if (gramatica != null) {
-            validarGramatica(gramatica);
-        }
+        validarGramatica(this.gramatica);
     }
 
     @FXML
-    private void onBtnPdfAction() {
-        // Generar informe PDF usando FileChooser de JavaFX
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Informes de gramática (.pdf)", "*.pdf"));
-        fileChooser.setTitle("Guardar Informe Gramática");
-        File file = fileChooser.showSaveDialog(null);
-        if (file != null) {
-            try {
-                boolean resultado = gramatica.generarInforme(file.getAbsolutePath());
-                if (!resultado) {
-                    Alert alert = new Alert(AlertType.ERROR, "No se pudo generar el informe de la gramática.", ButtonType.OK);
-                    alert.showAndWait();
-                }
-            } catch (DocumentException ex) {
-                Logger.getLogger(Editor.class.getName()).log(Level.SEVERE, null, ex);
+    private void onBtnInformeAction() {
+        generarInformePDF();
+    }
+
+    @FXML
+    private void onBtnSimularAction() {
+        new PanelSimuladorDesc(gramatica, tabPane);
+    }
+
+    @FXML
+    private void onBtnSalirAction() {
+        Alert confirm = new Alert(AlertType.CONFIRMATION, 
+            "¿Está seguro de que desea salir del editor?", 
+            ButtonType.YES, ButtonType.NO);
+        confirm.setTitle("Salir del Editor");
+        Optional<ButtonType> result = confirm.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.YES) {
+            // Cerrar la pestaña actual
+            Tab currentTab = tabPane.getSelectionModel().getSelectedItem();
+            if (currentTab != null) {
+                tabPane.getTabs().remove(currentTab);
             }
         }
     }
@@ -275,7 +236,6 @@ public class Editor extends VBox {
         }
     }
 
-
     public void grabarGramatica() {
         int i = gramatica.guardarGramatica(null); // Pasar null como ownerWindow
         if (i == 1) {
@@ -292,10 +252,9 @@ public class Editor extends VBox {
         btnEliminar.setDisable(!hayGramatica);
         btnGuardar.setDisable(!hayGramatica);
         btnValidar.setDisable(!hayGramatica);
-        btnPdf.setDisable(!hayGramatica);
-        btnSimDesc.setDisable(!hayGramatica);
+        btnInforme.setDisable(!hayGramatica);
+        btnSimular.setDisable(!hayGramatica);
     }
-
 
     public void actualizarVisualizacion() {
         if (this.gramatica != null) {
@@ -360,5 +319,17 @@ public class Editor extends VBox {
             alert.getDialogPane().setExpandableContent(gridPane);
             alert.showAndWait();
         }
+    }
+
+    private void mostrarError(String titulo, String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
+    }
+
+    private void generarInformePDF() {
+        // Implementar la generación del informe PDF
     }
 }

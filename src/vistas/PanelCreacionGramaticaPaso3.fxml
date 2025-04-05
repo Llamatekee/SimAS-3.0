@@ -4,27 +4,53 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
-      style="-fx-background-color: linear-gradient(to right, #2c3e50, #4ca1af); -fx-padding: 20;">
+<GridPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
+         styleClass="wizard-step" vgap="0" VBox.vgrow="ALWAYS">
+    
+    <columnConstraints>
+        <ColumnConstraints hgrow="ALWAYS"/>
+    </columnConstraints>
+    
+    <rowConstraints>
+        <RowConstraints valignment="TOP" minHeight="80" maxHeight="80" fillHeight="false"/> <!-- Header -->
+        <RowConstraints vgrow="ALWAYS" valignment="TOP" fillHeight="true"/> <!-- Content -->
+        <RowConstraints valignment="BOTTOM" minHeight="60" maxHeight="60" fillHeight="false"/> <!-- Navigation -->
+    </rowConstraints>
 
-    <Label text="Producciones de la gramática" style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;"/>
+    <padding>
+        <Insets top="30" right="40" bottom="30" left="40"/>
+    </padding>
 
-    <ListView fx:id="listProducciones" prefHeight="200" style="-fx-background-radius: 5px;"/>
+    <!-- Header -->
+    <Label text="Producciones de la Gramática" styleClass="wizard-header"
+           GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.halignment="CENTER"/>
 
-    <Button fx:id="btnModificar" text="Modificar Producciones"
-            style="-fx-background-color: #f39c12; -fx-text-fill: white; -fx-font-size: 14px;" onAction="#onBtnModificarProduccionesAction"/>
+    <!-- Content -->
+    <VBox spacing="20" GridPane.columnIndex="0" GridPane.rowIndex="1" 
+          styleClass="wizard-content" GridPane.vgrow="ALWAYS">
+        
+        <Label text="Lista de Producciones" styleClass="wizard-section-header"/>
+        
+        <ListView fx:id="listProducciones" VBox.vgrow="ALWAYS"/>
+        
+        <Button fx:id="btnModificarProducciones" text="Modificar Producciones" 
+                maxWidth="Infinity" onAction="#onBtnModificarProduccionesAction"/>
+    </VBox>
 
-    <HBox spacing="10" alignment="CENTER">
-        <Button fx:id="btnPrimero" text="Primero" onAction="#onBtnPrimeroAction"
-                style="-fx-background-color: #3498db; -fx-text-fill: white;"/>
-        <Button fx:id="btnAnterior" text="Anterior" onAction="#onBtnAnteriorAction"
-                style="-fx-background-color: #3498db; -fx-text-fill: white;"/>
-        <Button fx:id="btnCancelar" text="Cancelar" onAction="#onBtnCancelarAction"
-                style="-fx-background-color: #e74c3c; -fx-text-fill: white;"/>
-        <Button fx:id="btnSiguiente" text="Siguiente" onAction="#onBtnSiguienteAction"
-                style="-fx-background-color: #2ecc71; -fx-text-fill: white;"/>
-        <Button fx:id="btnUltimo" text="Último" onAction="#onBtnUltimoAction"
-                style="-fx-background-color: #3498db; -fx-text-fill: white;"/>
+    <!-- Navigation -->
+    <HBox styleClass="wizard-navigation" GridPane.columnIndex="0" GridPane.rowIndex="2" 
+          GridPane.valignment="BOTTOM">
+        <Button fx:id="btnCancelar" text="Cancelar" styleClass="button-cancel" 
+                onAction="#onBtnCancelarAction"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button fx:id="btnPrimero" text="Primero" styleClass="button-next" 
+                onAction="#onBtnPrimeroAction"/>
+        <Button fx:id="btnAnterior" text="Anterior" styleClass="button-next" 
+                onAction="#onBtnAnteriorAction"/>
+        <Button fx:id="btnSiguiente" text="Siguiente" styleClass="button-next" 
+                onAction="#onBtnSiguienteAction"/>
+        <Button fx:id="btnUltimo" text="Último" styleClass="button-next" 
+                onAction="#onBtnUltimoAction"/>
     </HBox>
 
-</VBox>
+</GridPane>

@@ -4,70 +4,104 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
-            style="-fx-background-color: linear-gradient(to right, #2c3e50, #4ca1af); -fx-padding: 20;">
+<GridPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
+         styleClass="wizard-step" vgap="0" VBox.vgrow="ALWAYS">
+    
+    <columnConstraints>
+        <ColumnConstraints hgrow="ALWAYS"/>
+    </columnConstraints>
+    
+    <rowConstraints>
+        <RowConstraints valignment="TOP" minHeight="80" maxHeight="80" fillHeight="false"/> <!-- Header -->
+        <RowConstraints vgrow="ALWAYS" valignment="TOP" fillHeight="true"/> <!-- Content -->
+        <RowConstraints valignment="BOTTOM" minHeight="60" maxHeight="60" fillHeight="false"/> <!-- Navigation -->
+    </rowConstraints>
 
-    <!-- Contenido central -->
-    <center>
-        <VBox spacing="15" style="-fx-background-color: rgba(255, 255, 255, 0.15); -fx-background-radius: 10px; -fx-padding: 15px;">
-            <Label text="Modificar Producciones" style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;"/>
+    <padding>
+        <Insets top="30" right="40" bottom="30" left="40"/>
+    </padding>
 
-            <!-- Selección de Antecedente -->
-            <HBox spacing="10">
-                <Label text="Antecedente:" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
-                <ComboBox fx:id="comboBoxAntecedente" prefWidth="200"/>
-            </HBox>
+    <!-- Header -->
+    <Label text="Edición de Producciones" styleClass="wizard-header"
+           GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.halignment="CENTER"/>
 
-            <!-- Campo para el Consecuente -->
-            <HBox spacing="10">
-                <Label text="Consecuente:" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
-                <TextField fx:id="txtConsecuente" promptText="Ingrese los símbolos del consecuente" prefWidth="300"/>
-                <Button fx:id="btnBorrar" text="Borrar" onAction="#onBtnBorrarAction"
-                        style="-fx-background-color: #e74c3c; -fx-text-fill: white;"/>
-            </HBox>
-
-            <!-- Sección para añadir símbolos -->
-            <Label text="Añadir símbolo al consecuente:" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
-            <HBox spacing="10">
-                <VBox>
-                    <Label text="No Terminales" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
-                    <ListView fx:id="listNoTerminales" prefHeight="100" onMouseClicked="#onListNoTerminalesClicked"/>
-                </VBox>
-                <VBox>
-                    <Label text="Terminales" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
-                    <ListView fx:id="listTerminales" prefHeight="100" onMouseClicked="#onListTerminalesClicked"/>
-                </VBox>
-                <VBox>
-                    <Label text="Epsilon (ε)" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
-                    <Button fx:id="btnEpsilon" text="ε" onAction="#onBtnEpsilonAction"
-                            style="-fx-background-color: #3498db; -fx-text-fill: white;"/>
-                </VBox>
-            </HBox>
-
-            <!-- Botones de acciones principales -->
-            <HBox spacing="10">
-                <Button fx:id="btnInsertar" text="Insertar Producción" onAction="#onBtnInsertarAction"
-                        style="-fx-background-color: #16a085; -fx-text-fill: white;"/>
-                <Button fx:id="btnModificar" text="Modificar Producción" onAction="#onBtnModificarAction"
-                        style="-fx-background-color: #f39c12; -fx-text-fill: white;"/>
-                <Button fx:id="btnEliminar" text="Eliminar Producción" onAction="#onBtnEliminarAction"
-                        style="-fx-background-color: #e74c3c; -fx-text-fill: white;"/>
-            </HBox>
-
-            <!-- Lista de Producciones -->
-            <Label text="Lista de Producciones" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
-            <ListView fx:id="listProducciones" prefHeight="150"/>
+    <!-- Content -->
+    <VBox spacing="20" GridPane.columnIndex="0" GridPane.rowIndex="1" 
+          styleClass="wizard-content">
+        
+        <!-- Antecedente Section -->
+        <VBox spacing="10">
+            <Label text="Antecedente" styleClass="wizard-section-header"/>
+            <ComboBox fx:id="comboBoxAntecedente" styleClass="wizard-combo-box" 
+                     maxWidth="Infinity"/>
         </VBox>
-    </center>
 
-    <!-- Barra inferior de botones -->
-    <bottom>
-        <HBox alignment="CENTER_RIGHT" spacing="10" style="-fx-padding: 10;">
-            <Button fx:id="btnCancelar" text="Cancelar" onAction="#onBtnCancelarAction"
-                    style="-fx-background-color: #c0392b; -fx-text-fill: white;"/>
-            <Button fx:id="btnAceptar" text="Aceptar" onAction="#onBtnAceptarAction"
-                    style="-fx-background-color: #2ecc71; -fx-text-fill: white;"/>
+        <!-- Consecuente Section -->
+        <VBox spacing="10">
+            <Label text="Consecuente" styleClass="wizard-section-header"/>
+            <HBox spacing="10">
+                <TextField fx:id="txtConsecuente" styleClass="wizard-field"
+                          promptText="Ingrese los símbolos del consecuente" HBox.hgrow="ALWAYS"/>
+                <Button fx:id="btnBorrar" text="Borrar" styleClass="button-cancel"
+                        onAction="#onBtnBorrarAction"/>
+            </HBox>
+        </VBox>
+
+        <!-- Símbolos Section -->
+        <VBox spacing="15">
+            <Label text="Añadir Símbolos al Consecuente" styleClass="wizard-section-header"/>
+            <HBox spacing="20">
+                <!-- No Terminales -->
+                <VBox spacing="10" HBox.hgrow="ALWAYS">
+                    <Label text="No Terminales" styleClass="wizard-subsection-header"/>
+                    <ListView fx:id="listNoTerminales" VBox.vgrow="ALWAYS" 
+                             onMouseClicked="#onListNoTerminalesClicked"/>
+                </VBox>
+                
+                <!-- Terminales -->
+                <VBox spacing="10" HBox.hgrow="ALWAYS">
+                    <Label text="Terminales" styleClass="wizard-subsection-header"/>
+                    <ListView fx:id="listTerminales" VBox.vgrow="ALWAYS"
+                             onMouseClicked="#onListTerminalesClicked"/>
+                </VBox>
+                
+                <!-- Epsilon -->
+                <VBox spacing="10">
+                    <Label text="Epsilon (ε)" styleClass="wizard-subsection-header"/>
+                    <Button fx:id="btnEpsilon" text="ε" styleClass="button-next"
+                            onAction="#onBtnEpsilonAction"/>
+                </VBox>
+            </HBox>
+        </VBox>
+
+        <!-- Acciones Section -->
+        <HBox spacing="10">
+            <Button fx:id="btnInsertar" text="Insertar Producción" 
+                    styleClass="button-next" maxWidth="Infinity" HBox.hgrow="ALWAYS"
+                    onAction="#onBtnInsertarAction"/>
+            <Button fx:id="btnModificar" text="Modificar Producción" 
+                    styleClass="button-next" maxWidth="Infinity" HBox.hgrow="ALWAYS"
+                    onAction="#onBtnModificarAction"/>
+            <Button fx:id="btnEliminar" text="Eliminar Producción" 
+                    styleClass="button-cancel" maxWidth="Infinity" HBox.hgrow="ALWAYS"
+                    onAction="#onBtnEliminarAction"/>
         </HBox>
-    </bottom>
 
-</BorderPane>
+        <!-- Lista de Producciones -->
+        <VBox spacing="10" VBox.vgrow="ALWAYS">
+            <Label text="Lista de Producciones" styleClass="wizard-section-header"/>
+            <ListView fx:id="listProducciones" VBox.vgrow="ALWAYS"/>
+        </VBox>
+    </VBox>
+
+    <!-- Navigation -->
+    <HBox styleClass="wizard-navigation" GridPane.columnIndex="0" GridPane.rowIndex="2" 
+          GridPane.valignment="BOTTOM">
+        <Button fx:id="btnCancelar" text="Cancelar" styleClass="button-cancel" 
+                onAction="#onBtnCancelarAction"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button fx:id="btnAceptar" text="Aceptar" styleClass="button-finish" 
+                onAction="#onBtnAceptarAction"/>
+    </HBox>
+
+</GridPane>

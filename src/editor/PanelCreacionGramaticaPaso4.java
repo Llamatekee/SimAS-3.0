@@ -15,11 +15,11 @@ import java.io.IOException;
 public class PanelCreacionGramaticaPaso4 extends VBox {
 
     @FXML private ComboBox<NoTerminal> comboBoxSimboloInicial;
+    @FXML private Button btnFinalizar;
 
     private final PanelCreacionGramatica panelPadre;
     private final TabPane tabPane;
     private final ObservableList<NoTerminal> noTerminales;
-    private NoTerminal simboloInicialSeleccionado;
 
     public PanelCreacionGramaticaPaso4(PanelCreacionGramatica panelPadre, TabPane tabPane) {
         this.panelPadre = panelPadre;
@@ -46,37 +46,45 @@ public class PanelCreacionGramaticaPaso4 extends VBox {
 
         // Seleccionar el símbolo inicial actual si ya está definido
         String simboloInicial = panelPadre.getGramatica().getSimbInicial();
-        if (simboloInicial != null) {
+        if (simboloInicial != null && !simboloInicial.isEmpty()) {
             for (NoTerminal nt : noTerminales) {
                 if (nt.getNombre().equals(simboloInicial)) {
                     comboBoxSimboloInicial.setValue(nt);
                     break;
                 }
             }
+        } else if (!noTerminales.isEmpty()) {
+            // Si no hay símbolo inicial definido pero hay no terminales, seleccionar el primero
+            comboBoxSimboloInicial.setValue(noTerminales.get(0));
+        }
+
+        // Actualizar el símbolo inicial en la gramática con el valor inicial
+        if (comboBoxSimboloInicial.getValue() != null) {
+            panelPadre.getGramatica().setSimbInicial(comboBoxSimboloInicial.getValue().getNombre());
         }
 
         // Manejo de selección en ComboBox
-        comboBoxSimboloInicial.setOnAction(event -> simboloInicialSeleccionado = comboBoxSimboloInicial.getValue());
+        comboBoxSimboloInicial.setOnAction(event -> {
+            NoTerminal seleccionado = comboBoxSimboloInicial.getValue();
+            if (seleccionado != null) {
+                panelPadre.getGramatica().setSimbInicial(seleccionado.getNombre());
+            }
+        });
     }
 
     @FXML
     private void onBtnFinalizarAction() {
-        if (simboloInicialSeleccionado == null) {
+        NoTerminal simboloInicial = comboBoxSimboloInicial.getValue();
+        if (simboloInicial != null) {
+            // Asignar el símbolo inicial a la gramática temporal
+            panelPadre.getGramatica().setSimbInicial(simboloInicial.getNombre());
+            panelPadre.getPanelPadre().setGramatica(panelPadre.getGramatica());
+            panelPadre.getPanelPadre().actualizarVisualizacion();
+            cerrarAsistente();
+        } else {
             mostrarAlerta();
-            return;
         }
-
-        // Asignar el símbolo inicial a la gramática temporal
-        panelPadre.getGramatica().setSimbInicial(simboloInicialSeleccionado.getNombre());
-
-        panelPadre.getPanelPadre().setGramatica(panelPadre.getGramatica());
-
-        panelPadre.getPanelPadre().actualizarVisualizacion();
-
-        // Cerrar la pestaña de edición
-        cerrarAsistente();
     }
-
 
     @FXML
     private void onBtnCancelarAction() {
@@ -102,7 +110,6 @@ public class PanelCreacionGramaticaPaso4 extends VBox {
         tabPane.getTabs().stream()
                 .filter(tab -> tab.getContent() == this)
                 .findFirst().ifPresent(tabActual -> tabPane.getTabs().remove(tabActual));
-
     }
 
     private void mostrarAlerta() {

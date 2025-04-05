@@ -4,25 +4,63 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
-      spacing="15" styleClass="creation-step">
+<GridPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
+         styleClass="wizard-step" vgap="0" VBox.vgrow="ALWAYS">
+    
+    <columnConstraints>
+        <ColumnConstraints hgrow="ALWAYS"/>
+    </columnConstraints>
+    
+    <rowConstraints>
+        <RowConstraints valignment="TOP" minHeight="80" maxHeight="80" fillHeight="false"/> <!-- Header -->
+        <RowConstraints vgrow="ALWAYS" valignment="TOP" fillHeight="true"/> <!-- Content -->
+        <RowConstraints valignment="BOTTOM" minHeight="60" maxHeight="60" fillHeight="false"/> <!-- Navigation -->
+    </rowConstraints>
+
     <padding>
-        <Insets top="20" right="20" bottom="20" left="20" />
+        <Insets top="30" right="40" bottom="30" left="40"/>
     </padding>
-    <!-- Título -->
-    <!-- Nombre -->
-    <Label text="Nombre de la Gramática:" styleClass="label"/>
-    <TextField fx:id="txtNombre" promptText="Ingrese el nombre de la gramática" styleClass="text-field"/>
 
-    <!-- Descripción -->
-    <Label text="Descripción:" styleClass="label"/>
-    <TextArea fx:id="txtDescripcion" wrapText="true" promptText="Ingrese la descripción" styleClass="text-area"/>
+    <!-- Header -->
+    <Label text="Datos de la Gramática" styleClass="wizard-header"
+           GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.halignment="CENTER"/>
 
-    <!-- Contenedor de botones -->
-    <HBox spacing="15" styleClass="button-container">
-        <Button fx:id="btnCancelar" text="Cancelar" onAction="#onBtnCancelarAction" styleClass="button"/>
-        <Button fx:id="btnAnterior" text="Anterior" disable="true" styleClass="button"/>
-        <Button fx:id="btnSiguiente" text="Siguiente" onAction="#onBtnSiguienteAction" styleClass="button"/>
-        <Button fx:id="btnUltimo" text="Último" onAction="#onBtnUltimoAction" styleClass="button"/>
+    <!-- Content -->
+    <VBox spacing="40" GridPane.columnIndex="0" GridPane.rowIndex="1" 
+          styleClass="wizard-content" maxHeight="-Infinity">
+        
+        <!-- Nombre Section -->
+        <VBox spacing="15">
+            <Label text="Nombre de la Gramática" styleClass="wizard-section-header"/>
+            <TextField fx:id="txtNombre" styleClass="wizard-field"/>
+            <Label fx:id="lblNombreError" styleClass="error-label" 
+                   managed="false" visible="false"/>
+        </VBox>
+
+        <!-- Descripción Section -->
+        <VBox spacing="15">
+            <Label text="Descripción" styleClass="wizard-section-header"/>
+            <TextArea fx:id="txtDescripcion" styleClass="wizard-field" 
+                     wrapText="true" prefRowCount="6"/>
+            <Label fx:id="lblDescripcionError" styleClass="error-label" 
+                   managed="false" visible="false"/>
+        </VBox>
+    </VBox>
+
+    <!-- Navigation -->
+    <HBox styleClass="wizard-navigation" GridPane.columnIndex="0" GridPane.rowIndex="2" 
+          GridPane.valignment="BOTTOM">
+        <Button fx:id="btnCancelar" text="Cancelar" styleClass="button-cancel" 
+                onAction="#onBtnCancelarAction"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button fx:id="btnPrimero" text="Primero" styleClass="button-next" 
+                disable="true"/>
+        <Button fx:id="btnAnterior" text="Anterior" styleClass="button-next" 
+                disable="true"/>
+        <Button fx:id="btnSiguiente" text="Siguiente" styleClass="button-next" 
+                onAction="#onBtnSiguienteAction"/>
+        <Button fx:id="btnUltimo" text="Último" styleClass="button-next" 
+                onAction="#onBtnUltimoAction"/>
     </HBox>
-</VBox>
+
+</GridPane>

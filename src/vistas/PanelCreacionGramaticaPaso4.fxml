@@ -1,38 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
-            style="-fx-background-color: linear-gradient(to right, #2c3e50, #4ca1af); -fx-padding: 20;">
+<GridPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
+         styleClass="wizard-step" vgap="0" VBox.vgrow="ALWAYS">
+    
+    <columnConstraints>
+        <ColumnConstraints hgrow="ALWAYS"/>
+    </columnConstraints>
+    
+    <rowConstraints>
+        <RowConstraints valignment="TOP" minHeight="80" maxHeight="80" fillHeight="false"/> <!-- Header -->
+        <RowConstraints vgrow="ALWAYS" valignment="TOP" fillHeight="true"/> <!-- Content -->
+        <RowConstraints valignment="BOTTOM" minHeight="60" maxHeight="60" fillHeight="false"/> <!-- Navigation -->
+    </rowConstraints>
 
-    <!-- Contenido central -->
-    <center>
-        <VBox spacing="15" style="-fx-background-color: rgba(255, 255, 255, 0.15); -fx-background-radius: 10px; -fx-padding: 15px;">
-            <Label text="Seleccione el Símbolo Inicial de la Gramática"
-                   style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;"/>
+    <padding>
+        <Insets top="30" right="40" bottom="30" left="40"/>
+    </padding>
 
-            <HBox spacing="10">
-                <Label text="Símbolo Inicial:" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
-                <ComboBox fx:id="comboBoxSimboloInicial" prefWidth="200"/>
-            </HBox>
-        </VBox>
-    </center>
+    <!-- Header -->
+    <Label text="Símbolo Inicial de la Gramática" styleClass="wizard-header"
+           GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.halignment="CENTER"/>
 
-    <!-- Barra de botones -->
-    <bottom>
-        <HBox alignment="CENTER" spacing="15" style="-fx-padding: 15;">
-            <Button fx:id="btnCancelar" text="Cancelar" onAction="#onBtnCancelarAction"
-                    style="-fx-background-color: #c0392b; -fx-text-fill: white;"/>
-            <Region prefWidth="10"/>
-            <Button fx:id="btnPrimero" text="Primero" onAction="#onBtnPrimeroAction"
-                    style="-fx-background-color: #2980b9; -fx-text-fill: white;"/>
-            <Button fx:id="btnAnterior" text="Anterior" onAction="#onBtnAnteriorAction"
-                    style="-fx-background-color: #2980b9; -fx-text-fill: white;"/>
-            <Region prefWidth="10"/>
-            <Button fx:id="btnFinalizar" text="Finalizar" onAction="#onBtnFinalizarAction"
-                    style="-fx-background-color: #27ae60; -fx-text-fill: white;"/>
-        </HBox>
-    </bottom>
+    <!-- Content -->
+    <VBox spacing="30" GridPane.columnIndex="0" GridPane.rowIndex="1" 
+          styleClass="wizard-content">
+        
+        <padding>
+            <Insets top="40" />
+        </padding>
+        
+        <Label text="Seleccione el Símbolo Inicial" styleClass="wizard-section-header"/>
+        
+        <ComboBox fx:id="comboBoxSimboloInicial" styleClass="wizard-combo-box" 
+                  prefWidth="300" style="-fx-text-fill: white; -fx-background-color: #2c3e50;"/>
+    </VBox>
 
-</BorderPane>
+    <!-- Navigation -->
+    <HBox styleClass="wizard-navigation" GridPane.columnIndex="0" GridPane.rowIndex="2" 
+          GridPane.valignment="BOTTOM">
+        <Button fx:id="btnCancelar" text="Cancelar" styleClass="button-cancel" 
+                onAction="#onBtnCancelarAction"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button fx:id="btnPrimero" text="Primero" styleClass="button-next" 
+                onAction="#onBtnPrimeroAction"/>
+        <Button fx:id="btnAnterior" text="Anterior" styleClass="button-next" 
+                onAction="#onBtnAnteriorAction"/>
+        <Button fx:id="btnFinalizar" text="Finalizar" styleClass="button-finish" 
+                onAction="#onBtnFinalizarAction"/>
+    </HBox>
+
+</GridPane>
