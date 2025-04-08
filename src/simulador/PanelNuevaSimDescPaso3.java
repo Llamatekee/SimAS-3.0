@@ -10,6 +10,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
@@ -17,13 +18,17 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
+import gramatica.FuncionError;
+
 /**
  * Controlador para el Paso 3 de la Simulación Descendente.
  * Genera y muestra la Tabla Predictiva.
  */
-public class PanelNuevaSimDescPaso3 {
+public class PanelNuevaSimDescPaso3 implements PanelNuevaSimDescPaso {
 
     @FXML private TableView<FilaTablaPredictiva> tablaPredictiva;
+    @FXML private Button btnPrimero;
+    @FXML private Button btnUltimo;
     private Parent root;
 
     private final PanelSimuladorDesc panelPadre;
@@ -68,17 +73,27 @@ public class PanelNuevaSimDescPaso3 {
 
     @FXML
     private void avanzarPaso() {
-        panelPadre.cambiarPaso(4);
+        panelPadre.cambiarPaso(3);
     }
 
     @FXML
     private void retrocederPaso() {
-        panelPadre.cambiarPaso(2);
+        panelPadre.cambiarPaso(1);
     }
 
     @FXML
     private void visualizarGramatica() {
         panelPadre.mostrarGramaticaOriginal();
+    }
+
+    @FXML
+    private void handlePrimero() {
+        panelPadre.cambiarPaso(0);
+    }
+
+    @FXML
+    private void handleUltimo() {
+        panelPadre.cambiarPaso(3);
     }
 
     public Parent getRoot() {

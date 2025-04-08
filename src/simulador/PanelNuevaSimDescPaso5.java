@@ -19,7 +19,7 @@ import gramatica.FuncionError;
 import gramatica.Gramatica;
 import gramatica.TablaPredictivaPaso5;
 
-public class PanelNuevaSimDescPaso5 {
+public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
 
     @FXML private Label labelTitulo;
     @FXML private Button buttonAnterior;
@@ -28,6 +28,8 @@ public class PanelNuevaSimDescPaso5 {
     @FXML private Button buttonEliminar;
     @FXML private Button buttonRellenar;
     @FXML private Button buttonGramatica;
+    @FXML private Button buttonPrimero;
+    @FXML private Button buttonUltimo;
     @FXML private ComboBox<String> comboBoxFuncionesError;
     @FXML private TableView<FilaTablaPredictiva> tablaPredictiva;
     @FXML private TableColumn<String[], String> columnSimbolo;
@@ -58,16 +60,34 @@ public class PanelNuevaSimDescPaso5 {
         return root;
     }
 
+    @FXML
     private void initialize() {
-        // Inicializar comboBoxFuncionesError con valores
-        List<String> funcionesError = new ArrayList<>();
-        for (FuncionError funcionError : gramatica.getTPredictiva().getFuncionesError()) {
-            funcionesError.add(funcionError.toString());
-        }
-        comboBoxFuncionesError.getItems().addAll(funcionesError);
+        // Deshabilitar los botones Siguiente y Último en el paso 5
+        buttonSiguiente.setDisable(true);
+        buttonUltimo.setDisable(true);
 
-        // Mostrar tabla predictiva
+        // Construir la tabla predictiva
         construirTablaPredictiva();
+
+        // Llenar el ComboBox con las funciones de error
+        List<FuncionError> funcionesError = gramatica.getTPredictiva().getFuncionesError();
+        for (FuncionError funcion : funcionesError) {
+            StringBuilder descripcion = new StringBuilder();
+            descripcion.append(funcion.getIdentificador()).append(" - ");
+            switch (funcion.getAccion()) {
+                case 1 -> descripcion.append("Insertar un Símbolo en la Entrada: ");
+                case 2 -> descripcion.append("Borrar un Símbolo de la Entrada");
+                case 3 -> descripcion.append("Modificar un Símbolo de la Entrada: ");
+                case 4 -> descripcion.append("Insertar un Símbolo de la Pila: ");
+                case 5 -> descripcion.append("Borrar un Símbolo de la Pila");
+                case 6 -> descripcion.append("Modificar un Símbolo de la Pila: ");
+                case 7 -> descripcion.append("Terminar el análisis");
+            }
+            if (funcion.getAccion() == 1 || funcion.getAccion() == 3 || funcion.getAccion() == 4 || funcion.getAccion() == 6) {
+                descripcion.append(funcion.getSimbolo().getNombre());
+            }
+            comboBoxFuncionesError.getItems().add(descripcion.toString());
+        }
     }
 
     private void construirTablaPredictiva() {
@@ -93,14 +113,14 @@ public class PanelNuevaSimDescPaso5 {
 
     @FXML
     private void handleAnterior() {
-        panelPadre.cambiarPaso(4);
+        panelPadre.cambiarPaso(3);
     }
 
     @FXML
     private void handleSiguiente() { //Finalizar
         // Validar las funciones de error
         if (validarFuncionesError()) {
-            panelPadre.cambiarPaso(6); // Cambiar al siguiente paso SIMULADOR
+            panelPadre.cambiarPaso(4); // Cambiar al siguiente paso SIMULADOR
         } else {
             // Mostrar un mensaje de error si la validación falla
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -149,18 +169,41 @@ public class PanelNuevaSimDescPaso5 {
 
     @FXML
     private void handleRellenar() {
-        // Usar la instancia existente de TablaPredictivaPaso5
-        TablaPredictivaPaso5 tpredictiva = (TablaPredictivaPaso5) gramatica.getTPredictiva();
-        if (tpredictiva != null) {
-            tpredictiva.rellenarProduccionesEpsilon();
-        } else {
-            // Si no hay tabla, crear una nueva
-            construirTablaPredictiva();
-            tpredictiva = (TablaPredictivaPaso5) gramatica.getTPredictiva();
-            tpredictiva.rellenarProduccionesEpsilon();
+        // Obtener la celda seleccionada
+        TableColumn<FilaTablaPredictiva, ?> column = tablaPredictiva.getFocusModel().getFocusedCell().getTableColumn();
+        if (column != null && !column.getText().equals("No Terminal")) {
+            FilaTablaPredictiva fila = tablaPredictiva.getSelectionModel().getSelectedItem();
+            if (fila != null) {
+                String valorCelda = fila.getValor(column.getText()).get();
+                
+                // Verificar si la celda está vacía
+                if (valorCelda == null || valorCelda.isEmpty()) {
+                    // Obtener la función de error seleccionada
+                    String funcionErrorSeleccionada = getFuncionErrorSeleccionada();
+                    if (funcionErrorSeleccionada != null) {
+                        // Añadir la función de error a la celda
+                        fila.setValor(column.getText(), funcionErrorSeleccionada);
+                        tablaPredictiva.refresh();
+                    } else {
+                        // Mostrar alerta si no se ha seleccionado una función de error
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Error");
+                        alert.setHeaderText("No se ha seleccionado una función de error");
+                        alert.setContentText("Por favor, seleccione una función de error antes de rellenar la celda.");
+                        alert.showAndWait();
+                    }
+                } else {
+                    // Mostrar alerta si la celda ya tiene un valor
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText("Celda no vacía");
+                    alert.setContentText("Esta celda ya tiene un valor. Por favor, seleccione una celda vacía.");
+                    alert.showAndWait();
+                }
+            }
         }
     }
-    
+
     private List<FuncionError> obtenerProduccionesEpsilon() {
         // Implementar la lógica para obtener las producciones épsilon
         return new ArrayList<>();
@@ -169,5 +212,15 @@ public class PanelNuevaSimDescPaso5 {
     @FXML
     private void handleGramatica() {
         panelPadre.mostrarGramaticaOriginal();
+    }
+
+    @FXML
+    private void handlePrimero() {
+        panelPadre.cambiarPaso(0);
+    }
+
+    @FXML
+    private void handleUltimo() {
+        // Ya estamos en el último paso, no hacer nada
     }
 }

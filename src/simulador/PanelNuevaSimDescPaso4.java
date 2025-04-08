@@ -1,5 +1,6 @@
 package simulador;
 
+import gramatica.FilaTablaPredictiva;
 import gramatica.FuncionError;
 import gramatica.Gramatica;
 import gramatica.TablaPredictiva;
@@ -17,7 +18,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.List;
 
-public class PanelNuevaSimDescPaso4 {
+public class PanelNuevaSimDescPaso4 implements PanelNuevaSimDescPaso {
 
     @FXML private Label labelTitulo;
     @FXML private Button buttonCancelar;
@@ -58,14 +59,28 @@ public class PanelNuevaSimDescPaso4 {
         return root;
     }
 
+    @FXML
     private void initialize() {
+        // Inicializar funciones de error si no existen
+        inicializarFuncionesError();
+        // Mostrar las funciones de error existentes
+        funcionError();
+    }
+
+    private void inicializarFuncionesError() {
         if (this.gramatica.getTPredictiva().getFuncionesError().isEmpty()) {
             ObservableList<String> simbolosTerminales = this.gramatica.getTerminalesModel();
             TablaPredictiva tPredictiva = this.gramatica.getTPredictiva();
+            
+            // Función de error inicial
             FuncionError funErrorInicial = new FuncionError(0, 7, "");
             tPredictiva.crearFunError(funErrorInicial);
+            
+            // Función de error inicial 2
             FuncionError funErrorInicial2 = new FuncionError(1, 2, "");
             tPredictiva.crearFunError(funErrorInicial2);
+            
+            // Funciones de error para cada terminal
             int x = 2;
             for (int w = 0; w < simbolosTerminales.size(); w++) {
                 FuncionError funError = new FuncionError(x, 1, "");
@@ -74,18 +89,8 @@ public class PanelNuevaSimDescPaso4 {
                 tPredictiva.crearFunError(funError);
                 x++;
             }
+            
             this.gramatica.setTPredictiva(tPredictiva);
-        }
-
-        if (!this.gramatica.getTPredictiva().getFuncionesError().isEmpty()) {
-            funcionError();
-            this.funError = 1;
-        }
-        if (funError == 0) {
-            this.buttonFinalizar.setVisible(true);
-            this.buttonUltimo.setVisible(false);
-            this.buttonSiguiente.setDisable(true);
-            this.buttonEliminar.setDisable(true);
         }
     }
 
@@ -137,22 +142,22 @@ public class PanelNuevaSimDescPaso4 {
 
     @FXML
     private void handleUltimo() {
-        panelPadre.cambiarPaso(5);
+        panelPadre.cambiarPaso(4);
     }
 
     @FXML
     private void handleSiguiente() {
-        panelPadre.cambiarPaso(5);
+        panelPadre.cambiarPaso(4);
     }
 
     @FXML
     private void handleAnterior() {
-        panelPadre.cambiarPaso(3);
+        panelPadre.cambiarPaso(2);
     }
 
     @FXML
     private void handlePrimero() {
-        panelPadre.cambiarPaso(1);
+        panelPadre.cambiarPaso(0);
     }
 
     @FXML
@@ -161,12 +166,12 @@ public class PanelNuevaSimDescPaso4 {
             this.buttonNueva.setDisable(true);
             this.buttonEliminar.setDisable(true);
             this.buttonFinalizar.setVisible(true);
-            this.buttonUltimo.setVisible(false);
+            this.buttonUltimo.setDisable(true);
             this.buttonSiguiente.setDisable(true);
         } else {
             if (!this.listViewFuncionesError.getItems().isEmpty()) {
                 this.buttonFinalizar.setVisible(false);
-                this.buttonUltimo.setVisible(true);
+                this.buttonUltimo.setDisable(false);
                 this.buttonSiguiente.setDisable(false);
                 this.buttonNueva.setDisable(false);
                 this.buttonEliminar.setDisable(false);
@@ -174,7 +179,7 @@ public class PanelNuevaSimDescPaso4 {
                 this.buttonNueva.setDisable(false);
                 this.buttonEliminar.setDisable(true);
                 this.buttonFinalizar.setVisible(true);
-                this.buttonUltimo.setVisible(false);
+                this.buttonUltimo.setDisable(true);
                 this.buttonSiguiente.setDisable(true);
             }
         }
@@ -198,32 +203,20 @@ public class PanelNuevaSimDescPaso4 {
             String id = funcion.substring(0, funcion.indexOf(" - "));
             int num = Integer.parseInt(id);
             int i = 0;
-    
             while (i < funError.size()) {
                 if (funError.get(i).getIdentificador() == num) {
                     funError.remove(i);
-                } else {
-                    i++;
+                    break;
                 }
+                i++;
             }
-    
-            // Actualizar identificadores
-            for (int j = 0; j < funError.size(); j++) {
-                funError.get(j).setIdentificador(j + 1);
-            }
-    
-            // Actualizar la lista de funciones de error en la vista
             funcionError();
-    
-            // Actualizar el estado del ComboBox
-            new NuevaFuncionError(this.gramatica, this);
-            //nuevaFuncionError.initialize();
         }
     }
 
     @FXML
     private void handleFinalizar() {
-        panelPadre.cancelarSimulacion();
+        panelPadre.cambiarPaso(5);
     }
 
     @FXML

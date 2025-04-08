@@ -2,6 +2,7 @@ package simulador;
 
 import gramatica.Gramatica;
 import gramatica.NoTerminal;
+import gramatica.TablaPredictiva;
 import gramatica.Terminal;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,12 +14,15 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Controlador para el Paso 2 de la Simulación Descendente.
  * Muestra los Conjuntos Primero y Siguiente de cada No Terminal.
  */
-public class PanelNuevaSimDescPaso2 {
+public class PanelNuevaSimDescPaso2 implements PanelNuevaSimDescPaso {
 
     @FXML private TableView<NoTerminalData> tablaConjuntos;
     @FXML private TableColumn<NoTerminalData, String> colSimbolo;
@@ -27,6 +31,9 @@ public class PanelNuevaSimDescPaso2 {
     @FXML private Button btnCancelar;
     @FXML private Button btnAnterior;
     @FXML private Button btnSiguiente;
+    @FXML private Button btnPrimero;
+    @FXML private Button btnUltimo;
+    @FXML private Button btnVisualizarGramatica;
     private Parent root;
 
     private final PanelSimuladorDesc panelPadre;
@@ -74,17 +81,27 @@ public class PanelNuevaSimDescPaso2 {
 
     @FXML
     private void avanzarPaso() {
-        panelPadre.cambiarPaso(3);
+        panelPadre.cambiarPaso(2);
     }
 
     @FXML
     private void retrocederPaso() {
-        panelPadre.cambiarPaso(1);
+        panelPadre.cambiarPaso(0);
     }
 
     @FXML
     private void visualizarGramatica() {
         panelPadre.mostrarGramaticaOriginal();
+    }
+
+    @FXML
+    private void handlePrimero() {
+        panelPadre.cambiarPaso(0);
+    }
+
+    @FXML
+    private void handleUltimo() {
+        panelPadre.cambiarPaso(3);
     }
 
     public Parent getRoot() {

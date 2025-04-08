@@ -1,26 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" styleClass="simulacion-container">
-    <top>
-        <Label text="Producciones para la Simulación Descendente" styleClass="title-label" BorderPane.alignment="CENTER"/>
-    </top>
+<GridPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
+         styleClass="wizard-step" vgap="0" VBox.vgrow="ALWAYS">
+    
+    <columnConstraints>
+        <ColumnConstraints hgrow="ALWAYS"/>
+    </columnConstraints>
+    
+    <rowConstraints>
+        <RowConstraints valignment="TOP" minHeight="80" maxHeight="80" fillHeight="false"/> <!-- Header -->
+        <RowConstraints vgrow="ALWAYS" valignment="TOP" fillHeight="true"/> <!-- Content -->
+        <RowConstraints valignment="BOTTOM" minHeight="60" maxHeight="60" fillHeight="false"/> <!-- Navigation -->
+    </rowConstraints>
 
-    <center>
-        <VBox spacing="10" alignment="CENTER" styleClass="simulacion-content">
-            <Label fx:id="lblEstadoGramatica" text="Estado de la Gramática" styleClass="status-label"/>
-            <Label fx:id="lblRecursividad" text="" styleClass="warning-label"/>
-            <Label fx:id="lblFactorizacion" text="" styleClass="warning-label"/>
-            <ListView fx:id="listProducciones" prefHeight="250" prefWidth="600" styleClass="producciones-list"/>
+    <padding>
+        <Insets top="30" right="40" bottom="30" left="40"/>
+    </padding>
+
+    <!-- Header -->
+    <Label text="Producciones para la Simulación Descendente" styleClass="wizard-header"
+           GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.halignment="CENTER"/>
+
+    <!-- Content -->
+    <VBox spacing="20" GridPane.columnIndex="0" GridPane.rowIndex="1" 
+          styleClass="wizard-content">
+        
+        <!-- Estado Section -->
+        <VBox spacing="15">
+            <Label text="Estado de la Gramática" styleClass="wizard-section-header"/>
+            <Label fx:id="lblEstadoGramatica" styleClass="wizard-label"/>
+            <Label fx:id="lblRecursividad" styleClass="error-label"/>
+            <Label fx:id="lblFactorizacion" styleClass="error-label"/>
         </VBox>
-    </center>
 
-    <bottom>
-        <HBox spacing="15" alignment="CENTER" styleClass="button-container">
-            <Button fx:id="btnCancelar" text="Cancelar" styleClass="button-exit" onAction="#cancelarSimulacion"/>
-            <Button fx:id="btnVisualizarGramatica" text="Ver Gramática" styleClass="button" onAction="#visualizarGramatica"/>
-            <Button fx:id="btnSiguiente" text="Siguiente" styleClass="button-next" onAction="#avanzarPaso"/>
-        </HBox>
-    </bottom>
-</BorderPane>
+        <!-- Producciones Section -->
+        <VBox spacing="10" VBox.vgrow="ALWAYS">
+            <Label text="Lista de Producciones" styleClass="wizard-section-header"/>
+            <ListView fx:id="listProducciones" VBox.vgrow="ALWAYS" styleClass="wizard-list"/>
+        </VBox>
+    </VBox>
+
+    <!-- Navigation -->
+    <HBox styleClass="wizard-navigation" GridPane.columnIndex="0" GridPane.rowIndex="2" 
+          GridPane.valignment="BOTTOM">
+        <Button fx:id="btnCancelar" text="Cancelar" styleClass="button-cancel" 
+                onAction="#cancelarSimulacion"/>
+        <Button fx:id="btnVisualizarGramatica" text="Gramática" styleClass="button-grammar" 
+                onAction="#visualizarGramatica"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button fx:id="btnPrimero" text="Primero" styleClass="button-first-last" 
+                onAction="#handlePrimero" disable="true"/>
+        <Button fx:id="btnAnterior" text="Anterior" styleClass="button-prev-next" 
+                onAction="#handleAnterior" disable="true"/>
+        <Button fx:id="btnSiguiente" text="Siguiente" styleClass="button-prev-next" 
+                onAction="#avanzarPaso"/>
+        <Button fx:id="btnUltimo" text="Último" styleClass="button-first-last" 
+                onAction="#handleUltimo"/>
+    </HBox>
+
+</GridPane>

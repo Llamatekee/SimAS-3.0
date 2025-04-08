@@ -1,25 +1,76 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml" stylesheets="@styles.css">
-    <children>
-        <Label fx:id="labelTitulo" layoutX="20.0" layoutY="20.0" text="Funciones de Error" styleClass="title-label"/>
-        <Button fx:id="buttonCancelar" layoutX="20.0" layoutY="400.0" text="Cancelar" onAction="#handleCancelar" styleClass="action-button"/>
-        <Button fx:id="buttonUltimo" layoutX="500.0" layoutY="400.0" text="Último" onAction="#handleUltimo" styleClass="navigation-button"/>
-        <Button fx:id="buttonSiguiente" layoutX="450.0" layoutY="400.0" text="Siguiente" onAction="#handleSiguiente" styleClass="navigation-button"/>
-        <Button fx:id="buttonAnterior" layoutX="400.0" layoutY="400.0" text="Anterior" onAction="#handleAnterior" styleClass="navigation-button"/>
-        <Button fx:id="buttonPrimero" layoutX="350.0" layoutY="400.0" text="Primero" onAction="#handlePrimero" styleClass="navigation-button"/>
-        <ScrollPane layoutX="20.0" layoutY="60.0" prefHeight="300.0" prefWidth="300.0">
-            <content>
-                <ListView fx:id="listViewFuncionesError" styleClass="list-view"/>
-            </content>
-        </ScrollPane>
-        <CheckBox fx:id="checkBoxNoFuncionesError" layoutX="20.0" layoutY="370.0" text="No utilizar Funciones de error" onAction="#handleNoFuncionesError" styleClass="checkbox"/>
-        <Button fx:id="buttonNueva" layoutX="350.0" layoutY="60.0" text="Nueva Función Error" onAction="#handleNueva" styleClass="action-button"/>
-        <Button fx:id="buttonEliminar" layoutX="350.0" layoutY="100.0" text="Eliminar Función Error" onAction="#handleEliminar" styleClass="action-button"/>
-        <Button fx:id="buttonFinalizar" layoutX="550.0" layoutY="400.0" text="Finalizar" onAction="#handleFinalizar" styleClass="action-button"/>
-        <Button fx:id="buttonVisualizarGramatica" layoutX="100.0" layoutY="400.0" text="Visualizar Gramática" onAction="#handleVisualizarGramatica" styleClass="action-button"/>
-    </children>
-</AnchorPane>
+<GridPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
+         styleClass="wizard-step" vgap="0" VBox.vgrow="ALWAYS">
+    
+    <columnConstraints>
+        <ColumnConstraints hgrow="ALWAYS"/>
+    </columnConstraints>
+    
+    <rowConstraints>
+        <RowConstraints valignment="TOP" minHeight="80" maxHeight="80" fillHeight="false"/> <!-- Header -->
+        <RowConstraints vgrow="ALWAYS" valignment="TOP" fillHeight="true"/> <!-- Content -->
+        <RowConstraints valignment="BOTTOM" minHeight="60" maxHeight="60" fillHeight="false"/> <!-- Navigation -->
+    </rowConstraints>
+
+    <padding>
+        <Insets top="30" right="40" bottom="30" left="40"/>
+    </padding>
+
+    <!-- Header -->
+    <Label text="Funciones de Error" styleClass="wizard-header"
+           GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.halignment="CENTER"/>
+
+    <!-- Content -->
+    <VBox spacing="20" GridPane.columnIndex="0" GridPane.rowIndex="1" 
+          styleClass="wizard-content">
+        
+        <!-- Lista de Funciones Section -->
+        <VBox spacing="10" VBox.vgrow="ALWAYS">
+            <Label text="Funciones de Error Definidas" styleClass="wizard-section-header"/>
+            <ScrollPane VBox.vgrow="ALWAYS" styleClass="wizard-scroll" prefHeight="400" fitToWidth="true">
+                <content>
+                    <ListView fx:id="listViewFuncionesError" styleClass="wizard-list" prefHeight="400" prefWidth="600"/>
+                </content>
+            </ScrollPane>
+        </VBox>
+
+        <!-- Opciones Section -->
+        <VBox spacing="10">
+            <CheckBox fx:id="checkBoxNoFuncionesError" text="No utilizar Funciones de error" 
+                     styleClass="wizard-checkbox" onAction="#handleNoFuncionesError"/>
+            
+            <HBox spacing="10">
+                <Button fx:id="buttonNueva" text="Nueva Función Error" styleClass="button-grammar" 
+                        onAction="#handleNueva"/>
+                <Button fx:id="buttonEliminar" text="Eliminar Función Error" styleClass="button-cancel" 
+                        onAction="#handleEliminar"/>
+                <Button fx:id="buttonFinalizar" text="Finalizar" styleClass="button-finish" 
+                        onAction="#handleFinalizar" visible="false"/>
+            </HBox>
+        </VBox>
+    </VBox>
+
+    <!-- Navigation -->
+    <HBox styleClass="wizard-navigation" GridPane.columnIndex="0" GridPane.rowIndex="2" 
+          GridPane.valignment="BOTTOM">
+        <Button fx:id="buttonCancelar" text="Cancelar" styleClass="button-cancel" 
+                onAction="#handleCancelar"/>
+        <Button fx:id="buttonVisualizarGramatica" text="Gramática" styleClass="button-grammar" 
+                onAction="#handleVisualizarGramatica"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button fx:id="buttonPrimero" text="Primero" styleClass="button-first-last" 
+                onAction="#handlePrimero"/>
+        <Button fx:id="buttonAnterior" text="Anterior" styleClass="button-prev-next" 
+                onAction="#handleAnterior"/>
+        <Button fx:id="buttonSiguiente" text="Siguiente" styleClass="button-prev-next" 
+                onAction="#handleSiguiente"/>
+        <Button fx:id="buttonUltimo" text="Último" styleClass="button-first-last" 
+                onAction="#handleUltimo"/>
+    </HBox>
+
+</GridPane>

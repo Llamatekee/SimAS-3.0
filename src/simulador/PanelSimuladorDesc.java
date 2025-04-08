@@ -1,14 +1,22 @@
 package simulador;
 
 import gramatica.Gramatica;
-import gramatica.NoTerminal;
-import gramatica.Produccion;
+import gramatica.FuncionError;
+import gramatica.TablaPredictiva;
+import gramatica.Terminal;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.geometry.HPos;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -25,118 +33,124 @@ public class PanelSimuladorDesc {
     public Gramatica gramatica;
     private final Gramatica gramaticaOriginal;
     private Stage ventanaGramatica;
+    private Tab pestañaSimulacion;
+    private int pasoActual;
+    private ArrayList<PanelNuevaSimDescPaso> pasos;
 
     public PanelSimuladorDesc(Gramatica gramatica, TabPane tabPane) {
         this.gramatica = gramatica;
-        this.gramaticaOriginal = new Gramatica();
-        this.gramaticaOriginal.copiarDesde(gramatica);
+        this.gramaticaOriginal = gramatica;
         this.tabPane = tabPane;
-        ArrayList<NoTerminal> noTerminales = new ArrayList<>();
-        ArrayList<Produccion> pr = new ArrayList<>();
-        cargarPaso1();
+        
+        // Inicializar pasos
+        pasos = new ArrayList<>();
+        pasos.add(new PanelNuevaSimDescPaso1(this));
+        pasos.add(new PanelNuevaSimDescPaso2(this));
+        pasos.add(new PanelNuevaSimDescPaso3(this));
+        pasos.add(new PanelNuevaSimDescPaso4(this));
+        pasos.add(new PanelNuevaSimDescPaso5(this));
+        
+        // Mostrar el primer paso
+        mostrarPasoActual();
     }
 
-    private void cargarPaso1() {
-        // Crear instancia del controlador (esto ya carga su propio FXML internamente)
-        PanelNuevaSimDescPaso1 paso1 = new PanelNuevaSimDescPaso1(this);
-
-        // Crear una nueva pestaña y asignar el contenido del controlador
-        Tab paso1tab = new Tab("Simulación: Paso 1", paso1.getRoot());
-
-        // Agregar la pestaña al TabPane y seleccionarla
-        tabPane.getTabs().add(paso1tab);
-        tabPane.getSelectionModel().select(paso1tab);
-    }
-
-    public void cambiarPaso(int paso) {
-        tabPane.getTabs().removeIf(tab -> tab.getText().startsWith("Simulación: Paso"));
-        Tab nuevoPaso = new Tab("Simulación: Paso " + paso);
-
-        switch (paso) {
-            case 1:
-                PanelNuevaSimDescPaso1 paso1 = new PanelNuevaSimDescPaso1(this);
-                nuevoPaso.setContent(paso1.getRoot());
-                break;
-            case 2:
-                PanelNuevaSimDescPaso2 paso2 = new PanelNuevaSimDescPaso2(this);
-                nuevoPaso.setContent(paso2.getRoot());
-                break;
-            case 3:
-                PanelNuevaSimDescPaso3 paso3 = new PanelNuevaSimDescPaso3(this);
-                nuevoPaso.setContent(paso3.getRoot());
-                break;
-            case 4:
-                PanelNuevaSimDescPaso4 paso4 = new PanelNuevaSimDescPaso4(this);
-                nuevoPaso.setContent(paso4.getRoot());
-                break;
-            case 5:
-                PanelNuevaSimDescPaso5 paso5 = new PanelNuevaSimDescPaso5(this);
-                nuevoPaso.setContent(paso5.getRoot());
-                break;
-            /*default:
-                nuevoPaso.setContent(new AnchorPane()); // Paso no definido
-                break;*/
+    /**
+     * Inicializa las funciones de error al principio de la simulación
+     */
+    private void inicializarFuncionesError() {
+        if (this.gramatica.getTPredictiva().getFuncionesError().isEmpty()) {
+            ObservableList<String> simbolosTerminales = this.gramatica.getTerminalesModel();
+            TablaPredictiva tPredictiva = this.gramatica.getTPredictiva();
+            
+            // Función de error inicial
+            FuncionError funErrorInicial = new FuncionError(0, 7, "");
+            tPredictiva.crearFunError(funErrorInicial);
+            
+            // Función de error inicial 2
+            FuncionError funErrorInicial2 = new FuncionError(1, 2, "");
+            tPredictiva.crearFunError(funErrorInicial2);
+            
+            // Funciones de error para cada terminal
+            int x = 2;
+            for (int w = 0; w < simbolosTerminales.size(); w++) {
+                FuncionError funError = new FuncionError(x, 1, "");
+                Terminal term = new Terminal(simbolosTerminales.get(w).toString(), simbolosTerminales.get(w).toString());
+                funError.setSimbolo(term);
+                tPredictiva.crearFunError(funError);
+                x++;
+            }
+            
+            this.gramatica.setTPredictiva(tPredictiva);
         }
-
-        tabPane.getTabs().add(nuevoPaso);
-        tabPane.getSelectionModel().select(nuevoPaso);
     }
 
+    private void mostrarPasoActual() {
+        pestañaSimulacion = new Tab("Simulación: Paso " + (pasoActual + 1));
+        pestañaSimulacion.setClosable(false);
+        pestañaSimulacion.setContent(pasos.get(pasoActual).getRoot());
+
+        tabPane.getTabs().add(pestañaSimulacion);
+        tabPane.getSelectionModel().select(pestañaSimulacion);
+    }
 
     /**
      * Ventana emergente para visualizar la gramática original.
      */
     public void mostrarGramaticaOriginal() {
-        if (ventanaGramatica != null) { // Si ya está abierta, traerla al frente
+        if (ventanaGramatica != null) {
             ventanaGramatica.toFront();
             return;
         }
-
-        ventanaGramatica = new Stage(); // Guardamos la ventana
-        ventanaGramatica.initModality(Modality.NONE);
-        ventanaGramatica.setTitle("Gramática Original");
-
-        Label titulo = new Label("Producciones Originales:");
-        titulo.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
-
-        ObservableList<String> producciones = FXCollections.observableArrayList(gramaticaOriginal.getProduccionesModel());
-        ListView<String> listView = new ListView<>(producciones);
-        listView.setPrefSize(400, 300);
-
-        Button cerrar = new Button("Cerrar");
-        cerrar.setOnAction(e -> {
-            ventanaGramatica.close();
-            ventanaGramatica = null; // Liberar la referencia al cerrarse
-        });
-        cerrar.setStyle("-fx-background-color: #bf616a; -fx-text-fill: white; -fx-font-weight: bold;");
-
-        VBox layout = new VBox(10, titulo, listView, cerrar);
-        layout.setStyle("-fx-padding: 15px; -fx-background-color: #2e3440;");
-
-        Scene escena = new Scene(layout);
-        ventanaGramatica.setScene(escena);
-        ventanaGramatica.setOnCloseRequest(e -> ventanaGramatica = null); // Liberar la referencia al cerrarse
-        ventanaGramatica.show();
+        
+        try {
+            ventanaGramatica = new Stage();
+            ventanaGramatica.initModality(Modality.NONE);
+            ventanaGramatica.setTitle("Gramática Original");
+            
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/VentanaGramaticaOriginal.fxml"));
+            Scene scene = new Scene(loader.load());
+            scene.getStylesheets().add(getClass().getResource("/vistas/styles.css").toExternalForm());
+            
+            // Obtener los elementos del FXML
+            ListView<String> listView = (ListView<String>) scene.lookup("#listViewProducciones");
+            Button btnCerrar = (Button) scene.lookup(".button-cancel");
+            
+            // Configurar la lista de producciones
+            listView.setItems(FXCollections.observableArrayList(gramaticaOriginal.getProduccionesModel()));
+            
+            // Configurar el botón de cerrar
+            btnCerrar.setOnAction(e -> {
+                ventanaGramatica.close();
+                ventanaGramatica = null;
+            });
+            
+            ventanaGramatica.setScene(scene);
+            ventanaGramatica.setOnCloseRequest(e -> ventanaGramatica = null);
+            ventanaGramatica.show();
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void cancelarSimulacion() {
-        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION,
-                "¿Desea salir del asistente de simulación?",
-                ButtonType.YES, ButtonType.NO);
-
-        confirm.showAndWait().ifPresent(response -> {
-            if (response == ButtonType.YES) {
-                // 🔹 Cerrar la ventana de la gramática si está abierta
-                if (ventanaGramatica != null) {
-                    ventanaGramatica.close();
-                    ventanaGramatica = null; // 🔹 Liberar referencia
-                }
-
-                // Cerrar todas las pestañas de la simulación
-                tabPane.getTabs().removeIf(tab -> tab.getText().startsWith("Simulación: Paso"));
-                tabPane.getTabs().removeIf(tab -> tab.getText().equals("Simulador"));
-            }
-        });
+        // Cerrar la pestaña de simulación si existe
+        if (pestañaSimulacion != null) {
+            tabPane.getTabs().remove(pestañaSimulacion);
+            pestañaSimulacion = null;
+        }
+        // Seleccionar la primera pestaña
+        tabPane.getSelectionModel().select(0);
     }
 
+    public void cambiarPaso(int paso) {
+        // Actualizar el título de la pestaña
+        pestañaSimulacion.setText("Simulación: Paso " + (paso + 1));
+
+        // Actualizar el contenido según el paso
+        pestañaSimulacion.setContent(pasos.get(paso).getRoot());
+
+        // Asegurarse de que la pestaña esté seleccionada
+        tabPane.getSelectionModel().select(pestañaSimulacion);
+    }
 }

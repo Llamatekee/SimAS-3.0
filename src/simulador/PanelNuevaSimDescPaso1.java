@@ -1,6 +1,10 @@
 package simulador;
 
 import gramatica.Gramatica;
+import gramatica.FuncionError;
+import gramatica.TablaPredictiva;
+import gramatica.Terminal;
+import gramatica.FilaTablaPredictiva;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -8,19 +12,29 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Button;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 /**
- * Primer paso en la simulación descendente.
- * Verifica si la gramática tiene recursividad por la izquierda o necesita factorización.
+ * Controlador para el Paso 1 de la Simulación Descendente.
+ * Muestra la gramática original.
  */
-public class PanelNuevaSimDescPaso1 {
+public class PanelNuevaSimDescPaso1 implements PanelNuevaSimDescPaso {
 
     @FXML private Label lblEstadoGramatica;
     @FXML private Label lblRecursividad;
     @FXML private Label lblFactorizacion;
     @FXML private ListView<String> listProducciones;
+    @FXML private Button btnPrimero;
+    @FXML private Button btnAnterior;
+    @FXML private Button btnUltimo;
 
     private final PanelSimuladorDesc panelPadre;
     private final Gramatica gramatica;
@@ -32,6 +46,7 @@ public class PanelNuevaSimDescPaso1 {
         this.gramatica = panelPadre.gramatica;
         this.producciones = FXCollections.observableArrayList();
         cargarFXML();
+        inicializarBotones();
         verificarEstadoGramatica();
     }
 
@@ -43,6 +58,12 @@ public class PanelNuevaSimDescPaso1 {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void inicializarBotones() {
+        // En el paso 1, los botones Primero y Anterior están deshabilitados
+        btnPrimero.setDisable(true);
+        btnAnterior.setDisable(true);
     }
 
     private void verificarEstadoGramatica() {
@@ -71,7 +92,12 @@ public class PanelNuevaSimDescPaso1 {
 
     @FXML
     private void avanzarPaso() {
-        panelPadre.cambiarPaso(2);
+        panelPadre.cambiarPaso(1);
+    }
+
+    @FXML
+    private void retrocederPaso() {
+        // No hay paso anterior
     }
 
     @FXML
@@ -79,8 +105,23 @@ public class PanelNuevaSimDescPaso1 {
         panelPadre.mostrarGramaticaOriginal();
     }
 
+    @FXML
+    private void handlePrimero() {
+        panelPadre.cambiarPaso(0);
+    }
+
+    @FXML
+    private void handleAnterior() {
+        // No hay paso anterior, este es el primer paso
+    }
+
+    @FXML
+    private void handleUltimo() {
+        panelPadre.cambiarPaso(3);
+    }
+
+    @Override
     public Parent getRoot() {
         return root;
     }
-
 }

@@ -1,19 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<BorderPane xmlns:fx="http://javafx.com/fxml/1">
+<?import javafx.scene.layout.*?>
 
-    <top>
-        <Label fx:id="lblTitulo" text="Conjunto Primero y Siguiente" styleClass="title-label" BorderPane.alignment="CENTER"/>
-    </top>
+<GridPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
+         styleClass="wizard-step" vgap="0" VBox.vgrow="ALWAYS">
+    
+    <columnConstraints>
+        <ColumnConstraints hgrow="ALWAYS"/>
+    </columnConstraints>
+    
+    <rowConstraints>
+        <RowConstraints valignment="TOP" minHeight="80" maxHeight="80" fillHeight="false"/> <!-- Header -->
+        <RowConstraints vgrow="ALWAYS" valignment="TOP" fillHeight="true"/> <!-- Content -->
+        <RowConstraints valignment="BOTTOM" minHeight="60" maxHeight="60" fillHeight="false"/> <!-- Navigation -->
+    </rowConstraints>
 
-    <center>
-        <VBox spacing="10" alignment="CENTER">
-            <TableView fx:id="tablaConjuntos" prefHeight="300" prefWidth="600">
+    <padding>
+        <Insets top="30" right="40" bottom="30" left="40"/>
+    </padding>
+
+    <!-- Header -->
+    <Label text="Conjunto Primero y Siguiente" styleClass="wizard-header"
+           GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.halignment="CENTER"/>
+
+    <!-- Content -->
+    <VBox spacing="20" GridPane.columnIndex="0" GridPane.rowIndex="1" 
+          styleClass="wizard-content">
+        
+        <!-- Tabla Section -->
+        <VBox spacing="10" VBox.vgrow="ALWAYS">
+            <Label text="Conjuntos de Símbolos" styleClass="wizard-section-header"/>
+            <TableView fx:id="tablaConjuntos" VBox.vgrow="ALWAYS" styleClass="wizard-table">
                 <columns>
                     <TableColumn fx:id="colSimbolo" text="Símbolo" prefWidth="100">
                         <cellValueFactory>
@@ -33,14 +53,24 @@
                 </columns>
             </TableView>
         </VBox>
-    </center>
+    </VBox>
 
-    <bottom>
-        <HBox spacing="15" alignment="CENTER" styleClass="button-container">
-            <Button fx:id="btnCancelar" text="Cancelar" styleClass="button" onAction="#cancelarSimulacion"/>
-            <Button fx:id="btnAnterior" text="Anterior" styleClass="button" onAction="#retrocederPaso"/>
-            <Button fx:id="btnSiguiente" text="Siguiente" styleClass="button" onAction="#avanzarPaso"/>
-            <Button fx:id="btnVisualizarGramatica" text="Ver Gramática" styleClass="button" onAction="#visualizarGramatica"/>
-        </HBox>
-    </bottom>
-</BorderPane>
+    <!-- Navigation -->
+    <HBox styleClass="wizard-navigation" GridPane.columnIndex="0" GridPane.rowIndex="2" 
+          GridPane.valignment="BOTTOM">
+        <Button fx:id="btnCancelar" text="Cancelar" styleClass="button-cancel" 
+                onAction="#cancelarSimulacion"/>
+        <Button fx:id="btnVisualizarGramatica" text="Gramática" styleClass="button-grammar" 
+                onAction="#visualizarGramatica"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button fx:id="btnPrimero" text="Primero" styleClass="button-first-last" 
+                onAction="#handlePrimero"/>
+        <Button fx:id="btnAnterior" text="Anterior" styleClass="button-prev-next" 
+                onAction="#retrocederPaso"/>
+        <Button fx:id="btnSiguiente" text="Siguiente" styleClass="button-prev-next" 
+                onAction="#avanzarPaso"/>
+        <Button fx:id="btnUltimo" text="Último" styleClass="button-first-last" 
+                onAction="#handleUltimo"/>
+    </HBox>
+
+</GridPane>
