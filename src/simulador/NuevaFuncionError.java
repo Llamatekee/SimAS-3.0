@@ -80,7 +80,7 @@ public class NuevaFuncionError {
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
                 setText(item);
-                if (item != null && (item.contains("Terminar el análisis (Definida)") || item.contains("Borrar un Símbolo de la Entrada (Definida)"))) {
+                if (item != null && (item.contains("Terminar el análisis (Definida)") || item.contains("Borrar un Símbolo de la Entrada (Definida)") || item.contains("Borrar un Símbolo de la Pila (Definida)"))) {
                     setDisable(true);
                     setStyle("-fx-text-fill: gray; -fx-opacity: 0.5;");
                 } else {
@@ -105,16 +105,22 @@ public class NuevaFuncionError {
     @FXML
     private void handleAceptar() {
         try {
+            // Validar que se haya seleccionado una acción
+            if (comboBoxAccion.getSelectionModel().isEmpty()) {
+                throw new IllegalArgumentException("Debe seleccionar una acción.");
+            }
+
             int id = obtenerNuevoIdentificador();
             int accion = comboBoxAccion.getSelectionModel().getSelectedIndex() + 1;
             String mensaje = textFieldMensaje.getText();
             String simbolo = comboBoxSimbolo.getSelectionModel().getSelectedItem();
     
-            if ((accion != 7 && accion != 2) && (simbolo == null || simbolo.isEmpty())) {
-                throw new IllegalArgumentException("Debe seleccionar un símbolo.");
+            // Validar que se haya seleccionado un símbolo cuando es necesario
+            if ((accion != 7 && accion != 2 && accion != 5) && (simbolo == null || simbolo.isEmpty())) {
+                throw new IllegalArgumentException("Debe seleccionar un símbolo para esta acción.");
             }
     
-            Terminal term = (accion == 7 || accion == 2) ? null : new Terminal(simbolo, simbolo);
+            Terminal term = (accion == 7 || accion == 2 || accion == 5) ? null : new Terminal(simbolo, simbolo);
             FuncionError nuevaFuncionError = new FuncionError(id, accion, mensaje);
             nuevaFuncionError.setSimbolo(term);
     
@@ -124,13 +130,25 @@ public class NuevaFuncionError {
             // Verificar si la función de error ya está definida
             for (FuncionError funcionError : funcionesError) {
                 if (funcionError.getAccion() == nuevaFuncionError.getAccion() &&
-                    (funcionError.getSimbolo() == null || funcionError.getSimbolo().getNombre().equals(nuevaFuncionError.getSimbolo().getNombre()))) {
+                    (funcionError.getSimbolo() == null || 
+                     (nuevaFuncionError.getSimbolo() != null && 
+                      funcionError.getSimbolo().getNombre().equals(nuevaFuncionError.getSimbolo().getNombre())))) {
                     throw new IllegalArgumentException("Esta función de error ya está definida.");
                 }
             }
     
+            // Verificar que no se esté sobrescribiendo una función predefinida
+            if (id == 0 || id == 1) {
+                throw new IllegalArgumentException("No se puede sobrescribir una función predefinida.");
+            }
+    
             // Agregar la nueva función de error
             gramatica.getTPredictiva().crearFunError(nuevaFuncionError);
+            
+            // Reordenar los índices de las funciones de error
+            paso4.reordenarIndicesFuncionesError();
+            
+            // Actualizar la lista de funciones de error
             paso4.funcionError();
     
             // Cerrar solo la pestaña actual
@@ -165,11 +183,45 @@ public class NuevaFuncionError {
     private int obtenerNuevoIdentificador() {
         List<FuncionError> funcionesError = gramatica.getTPredictiva().getFuncionesError();
         int maxId = 0;
+        
+        // Encontrar el identificador máximo actual
         for (FuncionError funcion : funcionesError) {
             if (funcion.getIdentificador() > maxId) {
                 maxId = funcion.getIdentificador();
             }
         }
+        
+        // Asegurarse de que no sobrescribimos las funciones predefinidas (0 y 1)
+        // Si no hay funciones o el máximo es menor que 1, empezamos desde 2
+        if (maxId < 1) {
+            return 2;
+        }
+        
+        // Verificar si ya existe una función con el siguiente ID
+        boolean idExiste = false;
+        for (FuncionError funcion : funcionesError) {
+            if (funcion.getIdentificador() == maxId + 1) {
+                idExiste = true;
+                break;
+            }
+        }
+        
+        // Si el ID ya existe, buscar el siguiente ID disponible
+        if (idExiste) {
+            int id = maxId + 1;
+            while (idExiste) {
+                id++;
+                idExiste = false;
+                for (FuncionError funcion : funcionesError) {
+                    if (funcion.getIdentificador() == id) {
+                        idExiste = true;
+                        break;
+                    }
+                }
+            }
+            return id;
+        }
+        
         return maxId + 1;
     }
 

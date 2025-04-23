@@ -17,12 +17,14 @@ public class FilaTablaPredictiva {
     private final StringProperty prediccion;
     private final Map<String, StringProperty> valoresColumnas; // 🔥 Mapa dinámico para las columnas
     private final BooleanProperty esTerminal; // Para distinguir entre filas de terminales y no terminales
+    private Map<String, Boolean> celdasConProduccion;  // Nuevo campo
 
     public FilaTablaPredictiva(String simbolo, String prediccion, boolean esTerminal) {
         this.simbolo = new SimpleStringProperty(simbolo);
         this.prediccion = new SimpleStringProperty(prediccion);
         this.valoresColumnas = new HashMap<>();
         this.esTerminal = new SimpleBooleanProperty(esTerminal);
+        this.celdasConProduccion = new HashMap<>();  // Inicializar el nuevo mapa
     }
 
     // Constructor original para mantener compatibilidad
@@ -38,11 +40,28 @@ public class FilaTablaPredictiva {
 
     // 🔥 Métodos para manejar las columnas dinámicas
     public void setValor(String columna, String valor) {
-        valoresColumnas.put(columna, new SimpleStringProperty(valor));
+        String columnaNormalizada = normalizarNombreColumna(columna);
+        if (!valoresColumnas.containsKey(columnaNormalizada)) {
+            valoresColumnas.put(columnaNormalizada, new SimpleStringProperty());
+        }
+        valoresColumnas.get(columnaNormalizada).set(valor);
+        
+        // Si el valor es una producción (contiene →), marcar la celda
+        if (valor != null && valor.contains("→")) {
+            setProduccionEnCelda(columnaNormalizada, true);
+        }
+    }
+
+    private String normalizarNombreColumna(String columna) {
+        return columna != null ? columna.trim() : "";
     }
 
     public StringProperty getValor(String columna) {
-        return valoresColumnas.getOrDefault(columna, new SimpleStringProperty(""));
+        String columnaNormalizada = normalizarNombreColumna(columna);
+        if (!valoresColumnas.containsKey(columnaNormalizada)) {
+            valoresColumnas.put(columnaNormalizada, new SimpleStringProperty());
+        }
+        return valoresColumnas.get(columnaNormalizada);
     }
 
     public ObservableValue<String> simboloProperty() {
@@ -69,5 +88,15 @@ public class FilaTablaPredictiva {
 
     public String getAccion(int j) {
         return valoresColumnas.getOrDefault(String.valueOf(j), new SimpleStringProperty("")).get();
+    }
+
+    public void setProduccionEnCelda(String columna, boolean tieneProduccion) {
+        String columnaNormalizada = normalizarNombreColumna(columna);
+        celdasConProduccion.put(columnaNormalizada, tieneProduccion);
+    }
+
+    public boolean tieneProduccionEnCelda(String columna) {
+        String columnaNormalizada = normalizarNombreColumna(columna);
+        return celdasConProduccion.getOrDefault(columnaNormalizada, false);
     }
 }

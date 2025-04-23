@@ -9,6 +9,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TablePosition;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -66,14 +67,103 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
         buttonSiguiente.setDisable(true);
         buttonUltimo.setDisable(true);
 
-        // Construir la tabla predictiva
+        // Verificar que tenemos una tabla predictiva válida
+        if (gramatica.getTPredictiva() == null) {
+            System.out.println("Error: No hay tabla predictiva inicializada");
+            return;
+        }
+
+        // Verificar las funciones de error antes de construir
+        List<FuncionError> funcionesError = gramatica.getTPredictiva().getFuncionesError();
+        if (funcionesError == null || funcionesError.isEmpty()) {
+            System.out.println("Error: No hay funciones de error disponibles antes de construir");
+            return;
+        }
+        System.out.println("Funciones de error disponibles antes de construir: " + funcionesError.size());
+
+        // Construir la tabla predictiva manteniendo las funciones de error existentes
         construirTablaPredictiva();
 
+        // Verificar las funciones de error después de construir
+        funcionesError = gramatica.getTPredictiva().getFuncionesError();
+        if (funcionesError == null || funcionesError.isEmpty()) {
+            System.out.println("Error: Se perdieron las funciones de error después de construir");
+            return;
+        }
+        System.out.println("Funciones de error disponibles después de construir: " + funcionesError.size());
+
         // Llenar el ComboBox con las funciones de error
+        actualizarComboBoxFuncionesError();
+
+        // Configurar el manejador de clics en la tabla
+        tablaPredictiva.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 1) {
+                TablePosition<?, ?> pos = tablaPredictiva.getFocusModel().getFocusedCell();
+                if (pos != null && pos.getColumn() > 0) { // Ignorar la columna "No Terminal"
+                    // Obtener la función de error seleccionada
+                    String funcionSeleccionada = comboBoxFuncionesError.getSelectionModel().getSelectedItem();
+                    if (funcionSeleccionada != null) {
+                        // Extraer el número de la función de error (E0, E1, etc.)
+                        String numeroFuncion = funcionSeleccionada.split(" ")[0];
+                        
+                        // Obtener la fila y columna seleccionadas
+                        FilaTablaPredictiva fila = tablaPredictiva.getItems().get(pos.getRow());
+                        String columna = tablaPredictiva.getColumns().get(pos.getColumn()).getText();
+                        
+                        // Actualizar el valor en la tabla
+                        if (!fila.getEsTerminal()) {
+                            fila.setValor(columna, numeroFuncion);
+                            tablaPredictiva.refresh();
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    private void construirTablaPredictiva() {
+        if (gramatica.getProducciones().get(0).getNumero() == 0) {
+            gramatica.numerarProducciones();
+        }
+        
+        // Guardar las funciones de error existentes
+        List<FuncionError> funcionesErrorExistentes = new ArrayList<>(gramatica.getTPredictiva().getFuncionesError());
+        System.out.println("Número de funciones de error existentes: " + funcionesErrorExistentes.size());
+        
+        // Usar la versión específica para el paso 5
+        TablaPredictivaPaso5 tpredictiva = new TablaPredictivaPaso5(tablaPredictiva);
+        tpredictiva.setPanelPaso5(this);
+        
+        // Establecer las funciones de error ANTES de construir
+        tpredictiva.setFuncionesError(funcionesErrorExistentes);
+        
+        // Construir la tabla
+        tpredictiva.construir(gramatica);
+        
+        // Verificar que las funciones de error se mantuvieron
+        System.out.println("Número de funciones de error después de construir: " + tpredictiva.getFuncionesError().size());
+        
+        // Guardar la instancia en la gramática
+        gramatica.setTPredictiva(tpredictiva);
+        
+        // Configurar la tabla
+        tablaPredictiva.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        tablaPredictiva.setTableMenuButtonVisible(false);
+        tablaPredictiva.refresh();
+    }
+
+    private void actualizarComboBoxFuncionesError() {
+        // Limpiar el ComboBox antes de llenarlo
+        comboBoxFuncionesError.getItems().clear();
+        
+        // Obtener las funciones de error
         List<FuncionError> funcionesError = gramatica.getTPredictiva().getFuncionesError();
+        System.out.println("Actualizando ComboBox con " + funcionesError.size() + " funciones de error");
+        
+        // Llenar el ComboBox con las funciones de error
         for (FuncionError funcion : funcionesError) {
             StringBuilder descripcion = new StringBuilder();
-            descripcion.append(funcion.getIdentificador()).append(" - ");
+            descripcion.append("E").append(funcion.getIdentificador()).append(" - ");
             switch (funcion.getAccion()) {
                 case 1 -> descripcion.append("Insertar un Símbolo en la Entrada: ");
                 case 2 -> descripcion.append("Borrar un Símbolo de la Entrada");
@@ -84,27 +174,19 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
                 case 7 -> descripcion.append("Terminar el análisis");
             }
             if (funcion.getAccion() == 1 || funcion.getAccion() == 3 || funcion.getAccion() == 4 || funcion.getAccion() == 6) {
-                descripcion.append(funcion.getSimbolo().getNombre());
+                if (funcion.getSimbolo() != null) {
+                    descripcion.append(funcion.getSimbolo().getNombre());
+                }
             }
             comboBoxFuncionesError.getItems().add(descripcion.toString());
         }
-    }
-
-    private void construirTablaPredictiva() {
-        if (gramatica.getProducciones().get(0).getNumero() == 0) {
-            gramatica.numerarProducciones();
+        
+        // Seleccionar el primer elemento si hay elementos disponibles
+        if (!comboBoxFuncionesError.getItems().isEmpty()) {
+            comboBoxFuncionesError.getSelectionModel().selectFirst();
+        } else {
+            System.out.println("No se encontraron funciones de error para mostrar en el ComboBox");
         }
-        
-        // Usar la versión específica para el paso 5
-        TablaPredictivaPaso5 tpredictiva = new TablaPredictivaPaso5(tablaPredictiva);
-        tpredictiva.setPanelPaso5(this);
-        tpredictiva.construir(gramatica);
-        gramatica.setTPredictiva(tpredictiva); // Guardar la instancia en la gramática
-        
-        // Configurar la tabla
-        tablaPredictiva.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        tablaPredictiva.setTableMenuButtonVisible(false);
-        tablaPredictiva.refresh();
     }
 
     public String getFuncionErrorSeleccionada() {

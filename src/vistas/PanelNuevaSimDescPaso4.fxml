@@ -32,9 +32,9 @@
         <!-- Lista de Funciones Section -->
         <VBox spacing="10" VBox.vgrow="ALWAYS">
             <Label text="Funciones de Error Definidas" styleClass="wizard-section-header"/>
-            <ScrollPane VBox.vgrow="ALWAYS" styleClass="wizard-scroll" prefHeight="400" fitToWidth="true">
+            <ScrollPane VBox.vgrow="ALWAYS" styleClass="wizard-scroll" prefHeight="800" fitToWidth="true">
                 <content>
-                    <ListView fx:id="listViewFuncionesError" styleClass="wizard-list" prefHeight="400" prefWidth="600"/>
+                    <ListView fx:id="listViewFuncionesError" styleClass="wizard-list" prefHeight="800" prefWidth="600"/>
                 </content>
             </ScrollPane>
         </VBox>

@@ -42,6 +42,9 @@ public class PanelSimuladorDesc {
         this.gramaticaOriginal = gramatica;
         this.tabPane = tabPane;
         
+        // Inicializar funciones de error al principio
+        inicializarFuncionesError();
+        
         // Inicializar pasos
         pasos = new ArrayList<>();
         pasos.add(new PanelNuevaSimDescPaso1(this));
