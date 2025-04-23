@@ -79,7 +79,6 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
             System.out.println("Error: No hay funciones de error disponibles antes de construir");
             return;
         }
-        System.out.println("Funciones de error disponibles antes de construir: " + funcionesError.size());
 
         // Construir la tabla predictiva manteniendo las funciones de error existentes
         construirTablaPredictiva();
@@ -90,7 +89,6 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
             System.out.println("Error: Se perdieron las funciones de error después de construir");
             return;
         }
-        System.out.println("Funciones de error disponibles después de construir: " + funcionesError.size());
 
         // Llenar el ComboBox con las funciones de error
         actualizarComboBoxFuncionesError();
@@ -128,7 +126,6 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
         
         // Guardar las funciones de error existentes
         List<FuncionError> funcionesErrorExistentes = new ArrayList<>(gramatica.getTPredictiva().getFuncionesError());
-        System.out.println("Número de funciones de error existentes: " + funcionesErrorExistentes.size());
         
         // Usar la versión específica para el paso 5
         TablaPredictivaPaso5 tpredictiva = new TablaPredictivaPaso5(tablaPredictiva);
@@ -139,9 +136,6 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
         
         // Construir la tabla
         tpredictiva.construir(gramatica);
-        
-        // Verificar que las funciones de error se mantuvieron
-        System.out.println("Número de funciones de error después de construir: " + tpredictiva.getFuncionesError().size());
         
         // Guardar la instancia en la gramática
         gramatica.setTPredictiva(tpredictiva);
@@ -158,7 +152,6 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
         
         // Obtener las funciones de error
         List<FuncionError> funcionesError = gramatica.getTPredictiva().getFuncionesError();
-        System.out.println("Actualizando ComboBox con " + funcionesError.size() + " funciones de error");
         
         // Llenar el ComboBox con las funciones de error
         for (FuncionError funcion : funcionesError) {

@@ -13,10 +13,11 @@ import javafx.scene.control.SelectionMode;
 import java.util.ArrayList;
 import javafx.scene.control.TableRow;
 import javafx.scene.input.MouseEvent;
+import javafx.util.Callback;
 
 /**
  * Versión extendida de TablaPredictiva específica para el paso 5,
- * que incluye filas para terminales con fondo rojo para las funciones de error.
+ * que incluye filas para terminales y manejo de funciones de error.
  */
 public class TablaPredictivaPaso5 extends TablaPredictiva {
 
@@ -40,50 +41,42 @@ public class TablaPredictivaPaso5 extends TablaPredictiva {
     private boolean apareceSoloPrimeraPos(Terminal terminal) {
         boolean apareceEnPrimera = false;
         
-        // Verificar todas las apariciones del terminal
         for (Produccion p : gramatica.getProducciones()) {
             List<Simbolo> consecuente = p.getConsec();
             if (consecuente.isEmpty()) continue;
             
-            // Verificar primera posición
             if (consecuente.get(0).getNombre().equals(terminal.getNombre())) {
                 apareceEnPrimera = true;
             }
             
-            // Verificar otras posiciones
             for (int i = 1; i < consecuente.size(); i++) {
                 if (consecuente.get(i).getNombre().equals(terminal.getNombre())) {
-                    return false; // Si aparece en otra posición, no cumple la condición
+                    return false;
                 }
             }
         }
         
-        return apareceEnPrimera; // Solo retorna true si aparece en primera posición y nunca en otras
+        return apareceEnPrimera;
     }
 
     public void rellenarProduccionesEpsilon() {
         for (FilaTablaPredictiva fila : getTablaPredictiva().getItems()) {
             if (!fila.getEsTerminal()) {
-                // Buscar el no terminal correspondiente
                 NoTerminal nt = gramatica.getNoTerminales().stream()
                     .filter(n -> n.getNombre().equals(fila.getSimbolo()))
                     .findFirst()
                     .orElse(null);
 
                 if (nt != null) {
-                    // Verificar si el no terminal tiene una producción épsilon
                     boolean tieneEpsilon = gramatica.getProducciones().stream()
                         .anyMatch(p -> p.getAntec().getSimboloNT().getNombre().equals(nt.getNombre()) && 
                                      (p.getConsec().isEmpty() || 
                                       (p.getConsec().size() == 1 && p.getConsec().get(0).getNombre().equals("ε"))));
 
                     if (tieneEpsilon) {
-                        // Para cada terminal en la fila
                         for (Terminal t : gramatica.getTerminales()) {
                             String valorCelda = fila.getValor(t.getNombre()).get();
-                            // Solo rellenar si la celda está vacía y no tiene una función de error
-                            if (valorCelda == null || valorCelda.isEmpty() || valorCelda.startsWith("E")) {
-                                // Buscar la producción épsilon específica
+                            if (valorCelda == null || valorCelda.isEmpty()) {
                                 Produccion prodEpsilon = gramatica.getProducciones().stream()
                                     .filter(p -> p.getAntec().getSimboloNT().getNombre().equals(nt.getNombre()) && 
                                                 (p.getConsec().isEmpty() || 
@@ -92,7 +85,6 @@ public class TablaPredictivaPaso5 extends TablaPredictiva {
                                     .orElse(null);
                                 
                                 if (prodEpsilon != null) {
-                                    // Añadir un prefijo especial para identificar que es una producción épsilon añadida
                                     fila.setValor(t.getNombre(), "ε_" + prodEpsilon.toString());
                                 }
                             }
@@ -108,120 +100,180 @@ public class TablaPredictivaPaso5 extends TablaPredictiva {
     protected void cargarDatos() {
         ObservableList<FilaTablaPredictiva> filas = FXCollections.observableArrayList();
 
-        // Primero añadimos las filas de no terminales
+        // Cargar no terminales con sus producciones
         for (NoTerminal nt : gramatica.getNoTerminales()) {
             FilaTablaPredictiva fila = new FilaTablaPredictiva(nt.getNombre(), "", false);
-
             for (Terminal t : gramatica.getTerminales()) {
                 List<String> producciones = gramatica.getProduccionesPorNoTerminalYTerminal(nt, t);
                 if (!producciones.isEmpty()) {
-                    String primeraProduccion = producciones.get(0);
-                    fila.setValor(t.getNombre(), primeraProduccion);
+                    fila.setValor(t.getNombre(), producciones.get(0));
                 }
             }
-
             filas.add(fila);
         }
 
-        // Luego añadimos las filas de terminales
+        // Cargar terminales
         for (Terminal t : gramatica.getTerminales()) {
             FilaTablaPredictiva fila = new FilaTablaPredictiva(t.getNombre(), "", true);
             filas.add(fila);
         }
 
         getTablaPredictiva().setItems(filas);
+        configurarColumnas();
+        configurarSeleccion();
+        configurarManejadorClics();
+    }
 
-        // Aplicar el estilo a las celdas según si son terminales o no
+    private void configurarColumnas() {
         for (TableColumn<FilaTablaPredictiva, ?> column : getTablaPredictiva().getColumns()) {
-            if (column.getText().equals("No Terminal")) continue;
+            if (column instanceof TableColumn) {
+                @SuppressWarnings("unchecked")
+                TableColumn<FilaTablaPredictiva, String> stringColumn = (TableColumn<FilaTablaPredictiva, String>) column;
 
-            @SuppressWarnings("unchecked")
-            TableColumn<FilaTablaPredictiva, String> stringColumn = (TableColumn<FilaTablaPredictiva, String>) column;
+                stringColumn.setCellFactory(column1 -> {
+                    TableCell<FilaTablaPredictiva, String> cell = new TableCell<>() {
+                        @Override
+                        protected void updateItem(String item, boolean empty) {
+                            super.updateItem(item, empty);
+                            
+                            if (empty) {
+                                setText(null);
+                                setStyle("");
+                                return;
+                            }
 
-            stringColumn.setCellFactory(col -> new TableCell<FilaTablaPredictiva, String>() {
-                @Override
-                protected void updateItem(String item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (empty) {
-                        setText(null);
-                        setStyle("");
-                        return;
-                    }
+                            // Configurar el texto
+                            if (item != null) {
+                                if (item.startsWith("ε_")) {
+                                    setText(item.substring(2));
+                                } else {
+                                    setText(item);
+                                }
+                            } else {
+                                setText("");
+                            }
 
-                    setText(item);
-                    FilaTablaPredictiva fila = getTableRow().getItem();
-                    if (fila == null) return;
+                            // Configurar el estilo
+                            FilaTablaPredictiva fila = getTableRow().getItem();
+                            if (fila == null) return;
 
-                    // Verificar si esta celda está seleccionada
-                    boolean isSelected = getTableRow().getIndex() == getTablaPredictiva().getFocusModel().getFocusedCell().getRow() 
-                                      && getTableColumn() == getTablaPredictiva().getFocusModel().getFocusedCell().getTableColumn();
+                            StringBuilder style = new StringBuilder();
 
-                    StringBuilder style = new StringBuilder();
+                            // Estilo para terminales en primera posición
+                            if (fila.getEsTerminal()) {
+                                Terminal terminalFila = gramatica.getTerminales().stream()
+                                    .filter(t -> t.getNombre().equals(fila.getSimbolo()))
+                                    .findFirst()
+                                    .orElse(null);
 
-                    // Aplicar colores de fondo según el tipo de celda
-                    if (fila.getEsTerminal()) {
-                        Terminal terminalFila = gramatica.getTerminales().stream()
-                            .filter(t -> t.getNombre().equals(fila.getSimbolo()))
-                            .findFirst()
-                            .orElse(null);
+                                if (terminalFila != null && apareceSoloPrimeraPos(terminalFila)) {
+                                    style.append("-fx-background-color: #ffcccc;"); // Rojo claro
+                                }
+                            }
 
-                        if (terminalFila != null && apareceSoloPrimeraPos(terminalFila)) {
-                            style.append("-fx-background-color: #ffcccc;"); // Color rojo claro
+                            // Estilo para épsilon
+                            if (item != null && item.startsWith("ε_")) {
+                                if (style.length() > 0) style.append("; ");
+                                style.append("-fx-background-color: #e6f3ff;"); // Azul claro
+                            }
+
+                            // Estilo para producciones (no editables)
+                            if (item != null && !item.isEmpty() && Character.isDigit(item.charAt(0))) {
+                                if (style.length() > 0) style.append("; ");
+                                style.append("-fx-background-color: #f0f0f0;"); // Gris claro
+                                style.append("; -fx-opacity: 0.9;");
+                            }
+
+                            // Estilo para celda seleccionada
+                            if (isCellSelected()) {
+                                if (style.length() > 0) style.append("; ");
+                                style.append("-fx-border-color: #0096c9; -fx-border-width: 1px;");
+                            }
+
+                            setStyle(style.toString());
                         }
-                    } else if (item != null && item.startsWith("ε_")) {
-                        style.append("-fx-background-color: #e6f3ff;"); // Color azul claro para épsilon
-                        setText(item.substring(2));
-                    }
 
-                    // Si la celda está seleccionada, añadir borde azul
-                    if (isSelected) {
-                        if (style.length() > 0) {
-                            style.append("; ");
+                        private boolean isCellSelected() {
+                            return getTableRow().getIndex() == getTablaPredictiva().getFocusModel().getFocusedCell().getRow() 
+                                   && getTableColumn() == getTablaPredictiva().getFocusModel().getFocusedCell().getTableColumn();
                         }
-                        style.append("-fx-border-color: #0096c9; -fx-border-width: 1px;");
-                    }
-
-                    setStyle(style.toString());
-
-                    // Hacer la celda no editable si contiene una producción
-                    if (item != null && !item.isEmpty() && Character.isDigit(item.charAt(0))) {
-                        setEditable(false);
-                    } else {
-                        setEditable(true);
-                    }
-                }
-            });
+                    };
+                    return cell;
+                });
+            }
         }
+    }
 
-        // Configurar el comportamiento de selección
+    private void configurarSeleccion() {
         getTablaPredictiva().getSelectionModel().setCellSelectionEnabled(true);
         getTablaPredictiva().getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         
-        // Desactivar la selección de filas completas
         getTablaPredictiva().setRowFactory(tv -> {
             TableRow<FilaTablaPredictiva> row = new TableRow<>();
             row.setStyle("-fx-selection-bar: transparent; -fx-selection-bar-non-focused: transparent;");
             return row;
         });
+    }
 
-        // Añadir manejador de clics para la tabla
-        getTablaPredictiva().setOnMouseClicked(this::handleTableClick);
+    private void configurarManejadorClics() {
+        getTablaPredictiva().addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
+            System.out.println("[DEBUG] Clic detectado en la tabla");
+            TablePosition<FilaTablaPredictiva, ?> pos = getTablaPredictiva().getFocusModel().getFocusedCell();
+            if (pos != null && pos.getColumn() > 0) {
+                FilaTablaPredictiva fila = getTablaPredictiva().getItems().get(pos.getRow());
+                String columna = getTablaPredictiva().getColumns().get(pos.getColumn()).getText();
+                String valorCelda = fila.getValor(columna).get();
 
-        getTablaPredictiva().refresh();
+                System.out.println("[DEBUG] Celda seleccionada - Fila: " + fila.getSimbolo() + 
+                                 ", Columna: " + columna + 
+                                 ", Valor: " + valorCelda);
+
+                // No permitir modificar celdas con producciones
+                if (valorCelda != null && !valorCelda.isEmpty() && Character.isDigit(valorCelda.charAt(0))) {
+                    System.out.println("[DEBUG] Intento de modificar celda con producción");
+                    mostrarError("No se puede modificar esta celda",
+                               "Esta celda contiene una producción de la gramática",
+                               "Las producciones son necesarias para el análisis sintáctico y no pueden ser modificadas.");
+                    event.consume();
+                    return;
+                }
+
+                // No permitir funciones de error en terminales de primera posición
+                if (fila.getEsTerminal()) {
+                    Terminal terminalFila = gramatica.getTerminales().stream()
+                        .filter(t -> t.getNombre().equals(fila.getSimbolo()))
+                        .findFirst()
+                        .orElse(null);
+
+                    if (terminalFila != null && apareceSoloPrimeraPos(terminalFila)) {
+                        System.out.println("[DEBUG] Intento de modificar terminal de primera posición");
+                        mostrarError("No se permiten funciones de error",
+                                   "No se pueden añadir funciones de error para este terminal",
+                                   "Este terminal solo aparece en primera posición de las producciones.");
+                        event.consume();
+                        return;
+                    }
+                }
+
+                // Procesar función de error seleccionada
+                String funcionErrorSeleccionada = panelPaso5.getFuncionErrorSeleccionada();
+                if (funcionErrorSeleccionada != null) {
+                    System.out.println("[DEBUG] Aplicando función de error: " + funcionErrorSeleccionada);
+                    String numeroFuncion = funcionErrorSeleccionada.substring(0, funcionErrorSeleccionada.indexOf(" "));
+                    fila.setValor(columna, "E" + numeroFuncion);
+                    getTablaPredictiva().refresh();
+                } else {
+                    System.out.println("[DEBUG] No hay función de error seleccionada");
+                }
+            }
+        });
     }
 
     @Override
     public void construir(Gramatica gramatica) {
-        // Guardar las funciones de error antes de construir
         List<FuncionError> funcionesErrorExistentes = this.funcionesError;
-        
-        // Construir la tabla
         super.construir(gramatica);
-        
-        // Restaurar las funciones de error después de construir
         this.funcionesError = funcionesErrorExistentes;
-        
-        // Cargar los datos específicos del paso 5
         cargarDatos();
     }
 
@@ -235,51 +287,11 @@ public class TablaPredictivaPaso5 extends TablaPredictiva {
         this.funcionesError = new ArrayList<>(funcionesError);
     }
 
-    private void handleTableClick(MouseEvent event) {
-        if (event.getClickCount() == 1) {
-            TablePosition<FilaTablaPredictiva, ?> pos = getTablaPredictiva().getFocusModel().getFocusedCell();
-            if (pos != null && pos.getColumn() > 0) { // Ignorar la columna "No Terminal"
-                FilaTablaPredictiva fila = getTablaPredictiva().getItems().get(pos.getRow());
-                String columna = getTablaPredictiva().getColumns().get(pos.getColumn()).getText();
-                
-                // Verificar primero si es una celda de terminal que aparece solo en primera posición
-                if (fila.getEsTerminal()) {
-                    Terminal terminalFila = gramatica.getTerminales().stream()
-                        .filter(t -> t.getNombre().equals(fila.getSimbolo()))
-                        .findFirst()
-                        .orElse(null);
-
-                    if (terminalFila != null && apareceSoloPrimeraPos(terminalFila)) {
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Error");
-                        alert.setHeaderText("Celda no válida");
-                        alert.setContentText("No se puede añadir una función de error en una celda de terminal que aparece solo en primera posición.");
-                        alert.showAndWait();
-                        return;
-                    }
-                }
-
-                String funcionErrorSeleccionada = panelPaso5.getFuncionErrorSeleccionada();
-                if (funcionErrorSeleccionada != null) {
-                    // Verificar si la celda contiene una producción (empieza por un número)
-                    String valorCelda = fila.getValor(columna).get();
-                    if (valorCelda != null && !valorCelda.isEmpty() && Character.isDigit(valorCelda.charAt(0))) {
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Error");
-                        alert.setHeaderText("Celda no válida");
-                        alert.setContentText("No se puede añadir una función de error en una celda que contiene una producción.");
-                        alert.showAndWait();
-                        return;
-                    }
-
-                    // Extraer el número de la función de error
-                    String numeroFuncion = funcionErrorSeleccionada.substring(0, funcionErrorSeleccionada.indexOf(" "));
-                    
-                    // Añadir o actualizar la función de error
-                    fila.setValor(columna, "E" + numeroFuncion);
-                    getTablaPredictiva().refresh();
-                }
-            }
-        }
+    private void mostrarError(String titulo, String header, String contenido) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(titulo);
+        alert.setHeaderText(header);
+        alert.setContentText(contenido);
+        alert.showAndWait();
     }
 } 
