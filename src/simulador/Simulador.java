@@ -5,55 +5,83 @@ import gramatica.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
-
+import javafx.scene.layout.*;
+import java.util.List;
 import java.io.File;
+import java.io.IOException;
 
 /**
  * Controlador para la simulación descendente en JavaFX.
  */
-public class Simulador {
+public class Simulador extends BorderPane {
 
-    @FXML private Label lblSimulador;
-    @FXML private Label lblTabla;
+    @FXML private TableView<FilaTablaPredictiva> tablePredictiva;
     @FXML private ListView<String> listProducciones;
     @FXML private ListView<String> listFuncionesError;
-    @FXML private TableView<FilaTablaPredictiva> tablePredictiva;
-    @FXML private Button btnGenerarInforme;
-    @FXML private Button btnModificarErrores;
     @FXML private Button btnSimular;
+    @FXML private Button btnModificarErrores;
+    @FXML private Button btnGenerarInforme;
 
     private Gramatica gramatica;
-    private ObservableList<String> producciones;
-    private ObservableList<String> funcionesError;
     private TablaPredictiva tablaPredictiva;
+    private List<FuncionError> funcionesError;
+    private ObservableList<String> producciones;
     private ObservableList<Terminal> cadenaEntrada;
 
-    public void inicializar(Gramatica gramatica) {
+    public Simulador(Gramatica gramatica) {
         this.gramatica = gramatica;
-        this.producciones = FXCollections.observableArrayList();
-        this.funcionesError = FXCollections.observableArrayList();
         this.tablaPredictiva = gramatica.getTPredictiva();
+        this.funcionesError = tablaPredictiva.getFuncionesError();
+        this.producciones = FXCollections.observableArrayList();
         this.cadenaEntrada = FXCollections.observableArrayList();
-        //cargarDatos();
+        cargarFXML();
+        cargarDatos();
     }
 
-    /*private void cargarDatos() {
-        producciones.clear();
-        for (String prod : gramatica.getProduccionesModel()) {
-            producciones.add(prod);
+    private void cargarFXML() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/Simulador.fxml"));
+            loader.setController(this);
+            BorderPane root = loader.load();
+            this.setTop(root.getTop());
+            this.setCenter(root.getCenter());
+            this.setBottom(root.getBottom());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+    }
+
+    private void cargarDatos() {
+        // Cargar producciones
+        producciones.setAll(gramatica.getProduccionesModel());
         listProducciones.setItems(producciones);
 
-        funcionesError.clear();
-        for (FuncionError error : tablaPredictiva.getFuncionesError()) {
-            funcionesError.add(error.getIdentificador() + " - " + error.getMensaje());
+        // Cargar funciones de error
+        ObservableList<String> errores = FXCollections.observableArrayList();
+        if (funcionesError != null && !funcionesError.isEmpty()) {
+            for (FuncionError fe : funcionesError) {
+                String desc = fe.getMensaje();
+                if (desc == null || desc.trim().isEmpty()) {
+                    desc = "Función de error sin descripción";
+                }
+                errores.add(fe.getIdentificador() + " - " + desc);
+            }
+        } else {
+            errores.add("No se están usando funciones de error");
         }
-        listFuncionesError.setItems(funcionesError);
+        listFuncionesError.setItems(errores);
 
-        tablePredictiva.setItems(tablaPredictiva.getTablaPredictiva().getItems());
-    }*/
+        // Cargar tabla predictiva si tienes un modelo para ello
+        if (tablaPredictiva instanceof TablaPredictivaPaso5) {
+            TableView<FilaTablaPredictiva> tabla = ((TablaPredictivaPaso5) tablaPredictiva).getTablaPredictiva();
+            tablePredictiva.getColumns().setAll(tabla.getColumns());
+            tablePredictiva.setItems(tabla.getItems());
+        }
+    }
 
     @FXML
     private void generarInforme() {
@@ -76,18 +104,12 @@ public class Simulador {
 
     @FXML
     private void iniciarSimulacion() {
-        // Método que debería iniciar la simulación descendente
-        // Dependerá de la implementación de NuevaSimulacionDesc
-        // NuevaSimulacionDesc simDesc = new NuevaSimulacionDesc(this.gramatica, this);
-        // simDesc.ejecutar();
+        // Implementa la lógica para iniciar la simulación descendente
     }
 
     @FXML
     private void modificarErrores() {
-        // Método para modificar funciones de error
-        // Dependerá de la implementación de PanelSimuladorDesc
-        // PanelSimuladorDesc panelErrores = new PanelSimuladorDesc(this.gramatica);
-        // panelErrores.mostrar();
+        // Implementa la lógica para modificar funciones de error
     }
 
     public String actualizarVisualizacion() {
@@ -105,5 +127,5 @@ public class Simulador {
         alert.setContentText(mensaje);
         alert.showAndWait();
     }
-
 }
+

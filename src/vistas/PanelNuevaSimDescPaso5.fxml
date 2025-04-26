@@ -61,6 +61,7 @@
                 onAction="#handleSiguiente"/>
         <Button fx:id="buttonUltimo" text="Último" styleClass="button-first-last" 
                 onAction="#handleUltimo"/>
+        <Button fx:id="buttonSimulacion" text="Simulación" styleClass="button-grammar" />
     </HBox>
 
 </GridPane>

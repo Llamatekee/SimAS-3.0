@@ -10,6 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TablePosition;
+import javafx.scene.control.Tab;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -31,6 +32,7 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
     @FXML private Button buttonGramatica;
     @FXML private Button buttonPrimero;
     @FXML private Button buttonUltimo;
+    @FXML private Button buttonSimulacion;
     @FXML private ComboBox<String> comboBoxFuncionesError;
     @FXML private TableView<FilaTablaPredictiva> tablaPredictiva;
     @FXML private TableColumn<String[], String> columnSimbolo;
@@ -66,6 +68,9 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
         // Deshabilitar los botones Siguiente y Último en el paso 5
         buttonSiguiente.setDisable(true);
         buttonUltimo.setDisable(true);
+        
+        // Configurar el botón de simulación
+        buttonSimulacion.setOnAction(e -> iniciarSimulacion());
 
         // Verificar que tenemos una tabla predictiva válida
         if (gramatica.getTPredictiva() == null) {
@@ -117,6 +122,17 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
                 }
             }
         });
+    }
+
+    private void iniciarSimulacion() {
+        // Crear una nueva pestaña para la simulación
+        Tab pestañaSimulacion = new Tab("Simulación");
+        Simulador simulador = new Simulador(gramatica);
+        pestañaSimulacion.setContent(simulador);
+        
+        // Añadir la pestaña y seleccionarla
+        panelPadre.tabPane.getTabs().add(pestañaSimulacion);
+        panelPadre.tabPane.getSelectionModel().select(pestañaSimulacion);
     }
 
     private void construirTablaPredictiva() {

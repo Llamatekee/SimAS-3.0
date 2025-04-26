@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox fx:id="root" spacing="10" xmlns:fx="http://javafx.com/fxml">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+    
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Cadena de entrada:"/>
+        <TextField fx:id="inputField" HBox.hgrow="ALWAYS"/>
+        <Button fx:id="buttonEditar" text="Editar" onAction="#handleEditar"/>
+    </HBox>
+    
+    <HBox spacing="20" VBox.vgrow="ALWAYS">
+        <VBox spacing="10" HBox.hgrow="ALWAYS">
+            <Label text="Pila"/>
+            <TableView fx:id="pilaTableView" VBox.vgrow="ALWAYS"/>
+        </VBox>
+        
+        <VBox spacing="10" HBox.hgrow="ALWAYS">
+            <Label text="Entrada"/>
+            <TableView fx:id="entradaTableView" VBox.vgrow="ALWAYS"/>
+        </VBox>
+    </HBox>
+    
+    <Label fx:id="estadoLabel" text="Estado: Inicial"/>
+    
+    <TextArea fx:id="outputArea" VBox.vgrow="ALWAYS" editable="false"/>
+</VBox> 

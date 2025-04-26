@@ -13,7 +13,6 @@ import javafx.scene.control.SelectionMode;
 import java.util.ArrayList;
 import javafx.scene.control.TableRow;
 import javafx.scene.input.MouseEvent;
-import javafx.util.Callback;
 
 /**
  * Versión extendida de TablaPredictiva específica para el paso 5,
@@ -68,24 +67,28 @@ public class TablaPredictivaPaso5 extends TablaPredictiva {
                     .orElse(null);
 
                 if (nt != null) {
-                    boolean tieneEpsilon = gramatica.getProducciones().stream()
-                        .anyMatch(p -> p.getAntec().getSimboloNT().getNombre().equals(nt.getNombre()) && 
-                                     (p.getConsec().isEmpty() || 
-                                      (p.getConsec().size() == 1 && p.getConsec().get(0).getNombre().equals("ε"))));
+                    // Buscar la producción épsilon para este no terminal
+                    Produccion prodEpsilon = gramatica.getProducciones().stream()
+                        .filter(p -> p.getAntec().getSimboloNT().getNombre().equals(nt.getNombre()) && 
+                                   (p.getConsec().isEmpty() || 
+                                    (p.getConsec().size() == 1 && p.getConsec().get(0).getNombre().equals("ε"))))
+                        .findFirst()
+                        .orElse(null);
 
-                    if (tieneEpsilon) {
-                        for (Terminal t : gramatica.getTerminales()) {
-                            String valorCelda = fila.getValor(t.getNombre()).get();
-                            if (valorCelda == null || valorCelda.isEmpty()) {
-                                Produccion prodEpsilon = gramatica.getProducciones().stream()
-                                    .filter(p -> p.getAntec().getSimboloNT().getNombre().equals(nt.getNombre()) && 
-                                                (p.getConsec().isEmpty() || 
-                                                 (p.getConsec().size() == 1 && p.getConsec().get(0).getNombre().equals("ε"))))
-                                    .findFirst()
-                                    .orElse(null);
-                                
-                                if (prodEpsilon != null) {
-                                    fila.setValor(t.getNombre(), "ε_" + prodEpsilon.toString());
+                    if (prodEpsilon != null) {
+                        // Recorrer todas las columnas de terminales
+                        for (TableColumn<FilaTablaPredictiva, ?> column : getTablaPredictiva().getColumns()) {
+                            String columnName = column.getText();
+                            if (!columnName.equals("Símbolo")) {  // Ignorar la columna de símbolos
+                                String valorCelda = fila.getValor(columnName).get();
+                                // Solo rellenar si la celda está vacía y no tiene producción
+                                if ((valorCelda == null || valorCelda.isEmpty()) && 
+                                    !gramatica.getProduccionesPorNoTerminalYTerminal(nt, 
+                                        gramatica.getTerminales().stream()
+                                            .filter(t -> t.getNombre().equals(columnName))
+                                            .findFirst()
+                                            .orElse(null)).isEmpty()) {
+                                    fila.setValor(columnName, "ε_" + prodEpsilon.toString());
                                 }
                             }
                         }
@@ -125,6 +128,12 @@ public class TablaPredictivaPaso5 extends TablaPredictiva {
     }
 
     private void configurarColumnas() {
+        // Cambiar el título de la primera columna
+        getTablaPredictiva().getColumns().get(0).setText("Símbolo");
+
+        // Configurar el estilo base de la tabla
+        getTablaPredictiva().setStyle("-fx-background-color: white; -fx-table-cell-border-color: black;");
+
         for (TableColumn<FilaTablaPredictiva, ?> column : getTablaPredictiva().getColumns()) {
             if (column instanceof TableColumn) {
                 @SuppressWarnings("unchecked")
@@ -158,8 +167,15 @@ public class TablaPredictivaPaso5 extends TablaPredictiva {
                             if (fila == null) return;
 
                             StringBuilder style = new StringBuilder();
+                            StringBuilder textStyle = new StringBuilder();
 
-                            // Estilo para terminales en primera posición
+                            // Color base para la columna y fila de símbolos
+                            if (getTableColumn().getText().equals("Símbolo") || fila.getSimbolo().equals(getTableColumn().getText())) {
+                                style.append("-fx-background-color: #F8F9FA;"); // Gris muy claro
+                                textStyle.append("-fx-text-fill: black;");
+                            }
+
+                            // Color para celdas de terminales que solo aparecen en primera posición
                             if (fila.getEsTerminal()) {
                                 Terminal terminalFila = gramatica.getTerminales().stream()
                                     .filter(t -> t.getNombre().equals(fila.getSimbolo()))
@@ -167,30 +183,41 @@ public class TablaPredictivaPaso5 extends TablaPredictiva {
                                     .orElse(null);
 
                                 if (terminalFila != null && apareceSoloPrimeraPos(terminalFila)) {
-                                    style.append("-fx-background-color: #ffcccc;"); // Rojo claro
+                                    if (!getTableColumn().getText().equals("Símbolo")) {
+                                        style.append("-fx-background-color: #E9ECEF;"); // Gris más oscuro
+                                        textStyle.append("-fx-text-fill: black;");
+                                    }
                                 }
                             }
 
                             // Estilo para épsilon
                             if (item != null && item.startsWith("ε_")) {
-                                if (style.length() > 0) style.append("; ");
-                                style.append("-fx-background-color: #e6f3ff;"); // Azul claro
+                                style.setLength(0);
+                                style.append("-fx-background-color: white;");
+                                textStyle.append("-fx-text-fill: #0D47A1;"); // Azul oscuro para épsilon
                             }
 
                             // Estilo para producciones (no editables)
                             if (item != null && !item.isEmpty() && Character.isDigit(item.charAt(0))) {
-                                if (style.length() > 0) style.append("; ");
-                                style.append("-fx-background-color: #f0f0f0;"); // Gris claro
-                                style.append("; -fx-opacity: 0.9;");
+                                style.setLength(0);
+                                style.append("-fx-background-color: white;");
+                                textStyle.append("-fx-text-fill: black;");
+                            }
+
+                            // Estilo para funciones de error
+                            if (item != null && !item.isEmpty() && item.startsWith("E")) {
+                                style.setLength(0);
+                                style.append("-fx-background-color: white;");
+                                textStyle.append("-fx-text-fill: #1976D2;"); // Azul para funciones de error
                             }
 
                             // Estilo para celda seleccionada
                             if (isCellSelected()) {
-                                if (style.length() > 0) style.append("; ");
-                                style.append("-fx-border-color: #0096c9; -fx-border-width: 1px;");
+                                style.append("; -fx-border-color: #1976D2; -fx-border-width: 2px;");
                             }
 
-                            setStyle(style.toString());
+                            // Aplicar estilos
+                            setStyle(style.toString() + "; " + textStyle.toString() + "; -fx-font-weight: bold;");
                         }
 
                         private boolean isCellSelected() {
@@ -217,6 +244,8 @@ public class TablaPredictivaPaso5 extends TablaPredictiva {
 
     private void configurarManejadorClics() {
         getTablaPredictiva().addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
+            if (event.isConsumed()) return; // Evitar procesamiento múltiple
+            
             System.out.println("[DEBUG] Clic detectado en la tabla");
             TablePosition<FilaTablaPredictiva, ?> pos = getTablaPredictiva().getFocusModel().getFocusedCell();
             if (pos != null && pos.getColumn() > 0) {
@@ -260,8 +289,9 @@ public class TablaPredictivaPaso5 extends TablaPredictiva {
                 if (funcionErrorSeleccionada != null) {
                     System.out.println("[DEBUG] Aplicando función de error: " + funcionErrorSeleccionada);
                     String numeroFuncion = funcionErrorSeleccionada.substring(0, funcionErrorSeleccionada.indexOf(" "));
-                    fila.setValor(columna, "E" + numeroFuncion);
+                    fila.setValor(columna, numeroFuncion);
                     getTablaPredictiva().refresh();
+                    event.consume();
                 } else {
                     System.out.println("[DEBUG] No hay función de error seleccionada");
                 }
