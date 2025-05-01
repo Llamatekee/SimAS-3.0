@@ -11,6 +11,9 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TablePosition;
 import javafx.scene.control.Tab;
+import javafx.collections.ObservableList;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,6 +23,7 @@ import gramatica.FilaTablaPredictiva;
 import gramatica.FuncionError;
 import gramatica.Gramatica;
 import gramatica.TablaPredictivaPaso5;
+import gramatica.Terminal;
 
 public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
 
@@ -72,34 +76,40 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
         // Configurar el botón de simulación
         buttonSimulacion.setOnAction(e -> iniciarSimulacion());
 
-        // Verificar que tenemos una tabla predictiva válida
+        // Verificar si hay una tabla predictiva básica en la gramática
         if (gramatica.getTPredictiva() == null) {
-            System.out.println("Error: No hay tabla predictiva inicializada");
+            System.out.println("Error: No hay tabla predictiva básica inicializada en la gramática");
             return;
         }
 
-        // Verificar las funciones de error antes de construir
+        // Verificar las funciones de error
         List<FuncionError> funcionesError = gramatica.getTPredictiva().getFuncionesError();
         if (funcionesError == null || funcionesError.isEmpty()) {
-            System.out.println("Error: No hay funciones de error disponibles antes de construir");
+            System.out.println("Error: No hay funciones de error disponibles");
             return;
         }
 
-        // Construir la tabla predictiva manteniendo las funciones de error existentes
+        // Construir la tabla predictiva usando la global o creando una nueva
         construirTablaPredictiva();
-
-        // Verificar las funciones de error después de construir
-        funcionesError = gramatica.getTPredictiva().getFuncionesError();
-        if (funcionesError == null || funcionesError.isEmpty()) {
-            System.out.println("Error: Se perdieron las funciones de error después de construir");
-            return;
-        }
 
         // Llenar el ComboBox con las funciones de error
         actualizarComboBoxFuncionesError();
+        
+        // Configurar handlers para cada cambio en la tabla
+        tablaPredictiva.setOnMouseClicked(event -> {
+            // Guardar al hacer clic para capturar cambios inmediatamente
+            if (event.getClickCount() == 2) {
+                System.out.println("Guardando cambios en doble clic");
+                guardarTablaEnGlobal();
+            }
+        });
     }
 
     private void iniciarSimulacion() {
+        // Guardar la tabla local en la global antes de pasar al paso 6
+        guardarTablaEnGlobal();
+        
+        // Avanzar al paso 6
         panelPadre.cambiarPaso(5);
     }
 
@@ -108,26 +118,191 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
             gramatica.numerarProducciones();
         }
         
-        // Guardar las funciones de error existentes
-        List<FuncionError> funcionesErrorExistentes = new ArrayList<>(gramatica.getTPredictiva().getFuncionesError());
+        // Verificar si ya existe una tabla predictiva extendida global
+        TablaPredictivaPaso5 tablaGlobal = panelPadre.getTablaPredictivaExtendidaGlobal();
         
-        // Usar la versión específica para el paso 5
-        TablaPredictivaPaso5 tpredictiva = new TablaPredictivaPaso5(tablaPredictiva);
-        tpredictiva.setPanelPaso5(this);
+        if (tablaGlobal == null) {
+            System.out.println("Creando una nueva tabla predictiva extendida desde cero");
+            
+            // Crear una nueva tabla predictiva extendida
+            tablaGlobal = new TablaPredictivaPaso5(tablaPredictiva);
+            tablaGlobal.setPanelPaso5(this);
+            
+            // Usar las funciones de error de la tabla básica
+            tablaGlobal.setFuncionesError(gramatica.getTPredictiva().getFuncionesError());
+            
+            // Construir la tabla
+            tablaGlobal.construir(gramatica);
+            
+            // Guardar la instancia en el panel padre
+            panelPadre.setTablaPredictivaExtendidaGlobal(tablaGlobal);
+            
+            System.out.println("Tabla predictiva extendida creada con " + tablaPredictiva.getColumns().size() + " columnas");
+        } else {
+            System.out.println("Usando la tabla predictiva extendida global existente");
+            
+            // Mostrar el número de columnas en la tabla global
+            int columnasOriginales = tablaGlobal.getTablaPredictiva().getColumns().size();
+            System.out.println("La tabla global tiene " + columnasOriginales + " columnas");
+            
+            // Si la tabla global ya tiene datos, asegurarnos de usarlos en la tabla local
+            if (tablaGlobal.getTablaPredictiva().getItems() != null && 
+                !tablaGlobal.getTablaPredictiva().getItems().isEmpty()) {
+                
+                // Limpiar la tabla local
+                tablaPredictiva.getColumns().clear();
+                
+                // Crear las columnas en la tabla local
+                crearColumnasEnTabla(tablaPredictiva);
+                
+                // Copiar los datos de la tabla global a la local
+                tablaPredictiva.setItems(tablaGlobal.getTablaPredictiva().getItems());
+                
+                System.out.println("Datos de la tabla global copiados a la tabla local");
+            } else {
+                // Crear una nueva tabla con la misma instancia UI
+                TablaPredictivaPaso5 nuevaTabla = new TablaPredictivaPaso5(tablaPredictiva);
+                nuevaTabla.setPanelPaso5(this);
+                
+                // Preservar funciones de error
+                nuevaTabla.setFuncionesError(tablaGlobal.getFuncionesError());
+                
+                // Construir tabla
+                nuevaTabla.construir(gramatica);
+                
+                // Reemplazar la tabla global
+                panelPadre.setTablaPredictivaExtendidaGlobal(nuevaTabla);
+                
+                System.out.println("Tabla predictiva reconstruida con " + tablaPredictiva.getColumns().size() + " columnas");
+            }
+        }
         
-        // Establecer las funciones de error ANTES de construir
-        tpredictiva.setFuncionesError(funcionesErrorExistentes);
+        // Asegurarnos de que las columnas estén bien
+        if (tablaPredictiva.getColumns().isEmpty()) {
+            System.out.println("¡ALERTA! No hay columnas en la tabla - creándolas");
+            crearColumnasEnTabla(tablaPredictiva);
+        }
         
-        // Construir la tabla
-        tpredictiva.construir(gramatica);
-        
-        // Guardar la instancia en la gramática
-        gramatica.setTPredictiva(tpredictiva);
-        
-        // Configurar la tabla
+        // Configurar propiedades visuales de la tabla
         tablaPredictiva.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         tablaPredictiva.setTableMenuButtonVisible(false);
+        tablaPredictiva.setEditable(true);
         tablaPredictiva.refresh();
+    }
+
+    /**
+     * Guarda la tabla local en la tabla global.
+     * Este método debe llamarse antes de salir del paso 5.
+     */
+    private void guardarTablaEnGlobal() {
+        TablaPredictivaPaso5 tablaGlobal = panelPadre.getTablaPredictivaExtendidaGlobal();
+        
+        if (tablaGlobal != null && tablaPredictiva.getItems() != null) {
+            System.out.println("Guardando datos de la tabla local a la global");
+            
+            try {
+                // 1. Asegurar que la tabla global tenga columnas
+                if (tablaGlobal.getTablaPredictiva().getColumns().isEmpty()) {
+                    System.out.println("La tabla global no tiene columnas - recreándolas");
+                    crearColumnasEnTabla(tablaGlobal.getTablaPredictiva());
+                }
+                
+                // 2. Iterar por todas las filas y columnas para copiar los valores manualmente
+                // Esto asegura que todos los valores se transfieran, incluyendo las funciones de error
+                ObservableList<FilaTablaPredictiva> filasLocales = tablaPredictiva.getItems();
+                ObservableList<FilaTablaPredictiva> filasGlobales = tablaGlobal.getTablaPredictiva().getItems();
+                
+                // Si no hay filas en la tabla global, copiar directamente
+                if (filasGlobales == null || filasGlobales.isEmpty()) {
+                    System.out.println("No hay filas en la tabla global - copiando directamente");
+                    // Crear una copia directa de los elementos para evitar problemas de referencia
+                    tablaGlobal.getTablaPredictiva().setItems(FXCollections.observableArrayList(filasLocales));
+                } else {
+                    // Copiar celda por celda para preservar los valores modificados
+                    System.out.println("Copiando valores celda por celda");
+                    
+                    // Obtener todas las columnas excepto la primera (que es "Símbolo")
+                    List<TableColumn<FilaTablaPredictiva, ?>> columnas = tablaPredictiva.getColumns();
+                    
+                    for (int i = 0; i < filasLocales.size() && i < filasGlobales.size(); i++) {
+                        FilaTablaPredictiva filaLocal = filasLocales.get(i);
+                        FilaTablaPredictiva filaGlobal = filasGlobales.get(i);
+                        
+                        // Verificar que se está copiando la misma fila (mismo símbolo)
+                        if (filaLocal.getSimbolo().equals(filaGlobal.getSimbolo())) {
+                            // Copiar cada celda de la fila
+                            for (int j = 1; j < columnas.size(); j++) {
+                                String nombreColumna = columnas.get(j).getText();
+                                String valorLocal = filaLocal.getValor(nombreColumna).get();
+                                
+                                // Solo copiar si hay un valor
+                                if (valorLocal != null && !valorLocal.isEmpty()) {
+                                    filaGlobal.setValor(nombreColumna, valorLocal);
+                                    System.out.println("Copiado valor en [" + filaGlobal.getSimbolo() + "," + nombreColumna + "]: " + valorLocal);
+                                }
+                            }
+                        } else {
+                            System.out.println("ADVERTENCIA: Fila " + i + " tiene símbolos distintos: " + 
+                                              filaLocal.getSimbolo() + " vs " + filaGlobal.getSimbolo());
+                        }
+                    }
+                }
+                
+                // 3. Copiar también las funciones de error
+                tablaGlobal.setFuncionesError(gramatica.getTPredictiva().getFuncionesError());
+                
+                System.out.println("Datos guardados - Global ahora tiene " + 
+                                 (tablaGlobal.getTablaPredictiva().getItems() != null ? 
+                                  tablaGlobal.getTablaPredictiva().getItems().size() : 0) + " filas");
+                
+                // 4. Forzar un refresh de la tabla global
+                tablaGlobal.getTablaPredictiva().refresh();
+            } catch (Exception e) {
+                System.out.println("ERROR al guardar la tabla: " + e.getMessage());
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("No se pudo guardar la tabla local en la global - referencias nulas");
+        }
+    }
+
+    /**
+     * Crea las columnas manualmente en una tabla dada.
+     */
+    private void crearColumnasEnTabla(TableView<FilaTablaPredictiva> tabla) {
+        // Limpiar columnas existentes
+        tabla.getColumns().clear();
+        
+        // Columna para símbolos
+        TableColumn<FilaTablaPredictiva, String> colSimbolo = new TableColumn<>("Símbolo");
+        colSimbolo.setCellValueFactory(cellData -> 
+            new SimpleStringProperty(cellData.getValue().getSimbolo()));
+        colSimbolo.setPrefWidth(100);
+        
+        // Añadir la columna de símbolos
+        tabla.getColumns().add(colSimbolo);
+        
+        // Añadir columnas para cada terminal
+        for (Terminal t : gramatica.getTerminales()) {
+            if (t.getNombre() == null || t.getNombre().isEmpty()) continue;
+            
+            TableColumn<FilaTablaPredictiva, String> colT = new TableColumn<>(t.getNombre());
+            colT.setPrefWidth(100);
+            
+            colT.setCellValueFactory(cellData -> 
+                cellData.getValue().getValor(t.getNombre()));
+            
+            tabla.getColumns().add(colT);
+        }
+        
+        // Añadir columna para $
+        TableColumn<FilaTablaPredictiva, String> colDolar = new TableColumn<>("$");
+        colDolar.setPrefWidth(100);
+        colDolar.setCellValueFactory(cellData -> 
+            cellData.getValue().getValor("$"));
+        tabla.getColumns().add(colDolar);
+        
+        System.out.println("Creadas " + tabla.getColumns().size() + " columnas manualmente");
     }
 
     private void actualizarComboBoxFuncionesError() {
@@ -172,6 +347,10 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
 
     @FXML
     private void handleAnterior() {
+        // Guardar la tabla local en la global antes de retroceder
+        guardarTablaEnGlobal();
+        
+        // Retroceder al paso 3
         panelPadre.cambiarPaso(3);
     }
 
@@ -179,7 +358,11 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
     private void handleSiguiente() { //Finalizar
         // Validar las funciones de error
         if (validarFuncionesError()) {
-            panelPadre.cambiarPaso(4); // Cambiar al siguiente paso SIMULADOR
+            // Guardar la tabla local en la global antes de avanzar
+            guardarTablaEnGlobal();
+            
+            // Avanzar al siguiente paso
+            panelPadre.cambiarPaso(4);
         } else {
             // Mostrar un mensaje de error si la validación falla
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -213,7 +396,13 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
                 if (valorCelda != null && (valorCelda.startsWith("E") || valorCelda.startsWith("ε_"))) {
                     // Eliminar la función de error o la producción épsilon (dejar la celda vacía)
                     fila.setValor(column.getText(), "");
+                    
+                    // Guardar inmediatamente en la tabla global para evitar pérdida de datos
+                    guardarTablaEnGlobal();
+                    
+                    // Refrescar la tabla local
                     tablaPredictiva.refresh();
+                    System.out.println("Función de error eliminada y cambios guardados");
                 } else {
                     // Mostrar alerta si la celda no tiene una función de error o una producción épsilon añadida
                     Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -242,7 +431,13 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
                     if (funcionErrorSeleccionada != null) {
                         // Añadir la función de error a la celda
                         fila.setValor(column.getText(), funcionErrorSeleccionada);
+                        
+                        // Guardar inmediatamente en la tabla global para evitar pérdida de datos
+                        guardarTablaEnGlobal();
+                        
+                        // Refrescar la tabla local
                         tablaPredictiva.refresh();
+                        System.out.println("Función de error añadida y guardada: " + funcionErrorSeleccionada);
                     } else {
                         // Mostrar alerta si no se ha seleccionado una función de error
                         Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -275,6 +470,9 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
 
     @FXML
     private void handlePrimero() {
+        // Guardar la tabla local en la global antes de retroceder
+        guardarTablaEnGlobal();
+        
         panelPadre.cambiarPaso(0);
     }
 
@@ -284,10 +482,20 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
     }
 
     /**
-     * Refresca la vista del paso 5: reconstruye la tabla y reconfigura listeners y ComboBox.
+     * Refresca la vista del paso 5.
+     * Reconstruye la tabla usando la global si existe.
      */
     public void refrescarVista() {
         construirTablaPredictiva();
         actualizarComboBoxFuncionesError();
+    }
+
+    /**
+     * Guarda explícitamente los datos de la tabla en la tabla global.
+     * Este método puede ser llamado desde fuera de la clase para forzar un guardado.
+     */
+    public void guardarDatosTabla() {
+        guardarTablaEnGlobal();
+        System.out.println("Guardado manual de datos de tabla ejecutado");
     }
 }

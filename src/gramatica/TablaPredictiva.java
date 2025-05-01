@@ -153,4 +153,17 @@ public class TablaPredictiva {
     public int getColumnas() {
         return tablaPredictiva.getColumns().size();
     }
+    
+    /**
+     * Establece los items en la tabla.
+     * Este método permite a las clases hijas actualizar los items
+     * sin necesidad de acceder directamente al campo tablaPredictiva.
+     * 
+     * @param items Los items a establecer en la tabla.
+     */
+    protected void setItems(ObservableList<FilaTablaPredictiva> items) {
+        if (tablaPredictiva != null) {
+            tablaPredictiva.setItems(items);
+        }
+    }
 }

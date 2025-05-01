@@ -2,6 +2,7 @@ package simulador;
 
 import com.itextpdf.text.DocumentException;
 import gramatica.*;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -35,17 +36,26 @@ public class PanelNuevaSimDescPaso6 extends BorderPane implements PanelNuevaSimD
 
     public PanelNuevaSimDescPaso6(Gramatica gramatica, PanelSimuladorDesc panelSimuladorDesc) {
         this.gramatica = gramatica;
-        if (!(gramatica.getTPredictiva() instanceof TablaPredictivaPaso5)) {
-            TablaPredictivaPaso5 nuevaTabla = new TablaPredictivaPaso5();
-            nuevaTabla.setFuncionesError(gramatica.getTPredictiva().getFuncionesError());
-            nuevaTabla.construir(gramatica);
-            gramatica.setTPredictiva(nuevaTabla);
+        this.panelSimuladorDesc = panelSimuladorDesc;
+        
+        // Usar directamente la tabla predictiva extendida global
+        if (panelSimuladorDesc != null && panelSimuladorDesc.getTablaPredictivaExtendidaGlobal() != null) {
+            System.out.println("Usando la tabla predictiva extendida global en el paso 6");
+            this.tablaPredictiva = panelSimuladorDesc.getTablaPredictivaExtendidaGlobal();
+        } else {
+            // Fallback por si no existe la global (no debería ocurrir)
+            System.out.println("ERROR: No se encontró una tabla predictiva extendida global en el paso 6");
+            this.tablaPredictiva = gramatica.getTPredictiva();
         }
-        this.tablaPredictiva = gramatica.getTPredictiva();
+        
+        // Obtener las funciones de error
         this.funcionesError = tablaPredictiva.getFuncionesError();
+        
+        // Inicializar componentes
         this.producciones = FXCollections.observableArrayList();
         this.cadenaEntrada = FXCollections.observableArrayList();
-        this.panelSimuladorDesc = panelSimuladorDesc;
+        
+        // Cargar UI y datos
         cargarFXML();
         cargarDatos();
     }
@@ -88,32 +98,118 @@ public class PanelNuevaSimDescPaso6 extends BorderPane implements PanelNuevaSimD
         }
         listFuncionesError.setItems(errores);
 
-        // Cargar tabla predictiva - Ahora usamos directamente la instancia del paso 5
+        // Cargar tabla predictiva
         if (tablaPredictiva instanceof TablaPredictivaPaso5) {
             TablaPredictivaPaso5 tablaPaso5 = (TablaPredictivaPaso5) tablaPredictiva;
             
-            // Nos aseguramos de que la tabla de UI tenga todas las columnas necesarias
-            if (tablePredictiva.getColumns().isEmpty() || 
-                tablePredictiva.getColumns().size() != tablaPaso5.getTablaPredictiva().getColumns().size()) {
+            // Verificar si hay datos en la tabla global
+            if (panelSimuladorDesc != null && panelSimuladorDesc.getTablaPredictivaExtendidaGlobal() != null) {
+                TablaPredictivaPaso5 tablaGlobal = panelSimuladorDesc.getTablaPredictivaExtendidaGlobal();
                 
-                tablePredictiva.getColumns().setAll(tablaPaso5.getTablaPredictiva().getColumns());
+                System.out.println("Columnas en tabla paso6: " + tablePredictiva.getColumns().size());
+                System.out.println("Columnas en tabla global: " + tablaGlobal.getTablaPredictiva().getColumns().size());
+                
+                // Si la tabla no tiene columnas o filas, reconstruirla desde cero
+                if (tablePredictiva.getColumns().isEmpty() || 
+                    tablePredictiva.getItems() == null || 
+                    tablePredictiva.getItems().isEmpty()) {
+                    
+                    System.out.println("Recreando la tabla predictiva en el paso 6...");
+                    
+                    // Limpiar la tabla
+                    tablePredictiva.getColumns().clear();
+                    
+                    // Recrear columnas manualmente
+                    crearColumnasManualmente();
+                    
+                    // Copiar filas si existen
+                    if (tablaGlobal.getTablaPredictiva().getItems() != null) {
+                        // Crear una copia de los items para asegurar que los datos se mantengan
+                        ObservableList<FilaTablaPredictiva> items = tablaGlobal.getTablaPredictiva().getItems();
+                        tablePredictiva.setItems(items);
+                        System.out.println("Filas copiadas: " + tablePredictiva.getItems().size());
+                    }
+                }
+                
+                // Configurar la tabla para mantener el estilo y comportamiento
+                tablePredictiva.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+                tablePredictiva.setTableMenuButtonVisible(false);
+                
+                // Desactivar la edición (solo lectura)
+                tablePredictiva.setEditable(false);
+                
+                // Refrescar la vista
+                tablePredictiva.refresh();
+                
+                System.out.println("Tabla cargada correctamente en el paso 6. Número de filas: " + 
+                                 (tablePredictiva.getItems() != null ? tablePredictiva.getItems().size() : 0) + 
+                                 ", Número de columnas: " + tablePredictiva.getColumns().size());
+            } else {
+                System.out.println("ERROR: La tabla predictiva extendida global no tiene tabla UI");
             }
-            
-            // Nos aseguramos de usar los mismos items (filas) que en el paso 5
-            tablePredictiva.setItems(tablaPaso5.getTablaPredictiva().getItems());
-            
-            // Configurar la tabla para mantener el estilo y comportamiento
-            tablePredictiva.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-            tablePredictiva.setTableMenuButtonVisible(false);
-            
-            // Hacemos un refresh para asegurar la visualización actualizada
-            tablePredictiva.refresh();
-            
-            System.out.println("Tabla cargada correctamente. Número de filas: " + tablePredictiva.getItems().size());
-            System.out.println("Número de columnas: " + tablePredictiva.getColumns().size());
         } else {
-            System.out.println("Error: La tabla predictiva no es del tipo TablaPredictivaPaso5");
+            System.out.println("ERROR: La tabla predictiva no es del tipo TablaPredictivaPaso5");
         }
+    }
+
+    /**
+     * Crea las columnas manualmente para la tabla predictiva.
+     */
+    private void crearColumnasManualmente() {
+        System.out.println("Creando columnas manualmente para el paso 6");
+        
+        // Verificar si hay una tabla global para comparar
+        if (panelSimuladorDesc != null && panelSimuladorDesc.getTablaPredictivaExtendidaGlobal() != null) {
+            TablaPredictivaPaso5 tablaGlobal = panelSimuladorDesc.getTablaPredictivaExtendidaGlobal();
+            
+            // Obtener el número de columnas en la tabla global para asegurar consistencia
+            int columnasEnGlobal = tablaGlobal.getTablaPredictiva().getColumns().size();
+            System.out.println("La tabla global tiene " + columnasEnGlobal + " columnas");
+        }
+        
+        // Columna para símbolos
+        TableColumn<FilaTablaPredictiva, String> colSimbolo = new TableColumn<>("Símbolo");
+        colSimbolo.setCellValueFactory(cellData -> 
+            new SimpleStringProperty(cellData.getValue().getSimbolo()));
+        colSimbolo.setPrefWidth(100);
+        
+        // Añadir la columna de símbolos
+        tablePredictiva.getColumns().add(colSimbolo);
+        
+        // Añadir columnas para cada terminal
+        for (Terminal t : gramatica.getTerminales()) {
+            if (t.getNombre() == null || t.getNombre().isEmpty()) continue;
+            
+            TableColumn<FilaTablaPredictiva, String> colT = new TableColumn<>(t.getNombre());
+            colT.setPrefWidth(100);
+            
+            // Configurar la fábrica de valores para la columna
+            final String nombreTerminal = t.getNombre(); // Capturar el nombre en una variable final
+            colT.setCellValueFactory(cellData -> 
+                cellData.getValue().getValor(nombreTerminal));
+            
+            // Añadir la columna
+            tablePredictiva.getColumns().add(colT);
+        }
+        
+        // Añadir columna para $ si no existe
+        boolean existeDolar = false;
+        for (TableColumn column : tablePredictiva.getColumns()) {
+            if ("$".equals(column.getText())) {
+                existeDolar = true;
+                break;
+            }
+        }
+        
+        if (!existeDolar) {
+            TableColumn<FilaTablaPredictiva, String> colDolar = new TableColumn<>("$");
+            colDolar.setPrefWidth(100);
+            colDolar.setCellValueFactory(cellData -> 
+                cellData.getValue().getValor("$"));
+            tablePredictiva.getColumns().add(colDolar);
+        }
+        
+        System.out.println("Creadas " + tablePredictiva.getColumns().size() + " columnas manualmente");
     }
 
     @FXML

@@ -13,6 +13,9 @@ import javafx.scene.control.SelectionMode;
 import java.util.ArrayList;
 import javafx.scene.control.TableRow;
 import javafx.scene.input.MouseEvent;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
+import javafx.util.Callback;
 
 /**
  * Versión extendida de TablaPredictiva específica para el paso 5,
@@ -22,6 +25,7 @@ public class TablaPredictivaPaso5 extends TablaPredictiva {
 
     private PanelNuevaSimDescPaso5 panelPaso5;
     private List<FuncionError> funcionesError;
+    private boolean columnsCreated = false;
 
     public TablaPredictivaPaso5() {
         super();
@@ -100,6 +104,59 @@ public class TablaPredictivaPaso5 extends TablaPredictiva {
     }
 
     @Override
+    public void construir(Gramatica gramatica) {
+        super.construir(gramatica);
+        
+        // Verificar si las columnas se crearon correctamente
+        if (getTablaPredictiva().getColumns().isEmpty()) {
+            System.out.println("ADVERTENCIA: No se crearon columnas en TablaPredictivaPaso5.construir");
+            // Forzar la creación de columnas
+            crearColumnas(gramatica);
+        } else {
+            System.out.println("Columnas creadas correctamente en TablaPredictivaPaso5: " + 
+                              getTablaPredictiva().getColumns().size() + " columnas");
+            columnsCreated = true;
+        }
+    }
+    
+    private void crearColumnas(Gramatica gramatica) {
+        // Columna para símbolos
+        TableColumn<FilaTablaPredictiva, String> colSimbolo = new TableColumn<>("Símbolo");
+        colSimbolo.setCellValueFactory(cellData -> 
+            new SimpleStringProperty(cellData.getValue().getSimbolo()));
+        colSimbolo.setPrefWidth(100);
+        
+        // Limpiar columnas existentes
+        getTablaPredictiva().getColumns().clear();
+        
+        // Añadir la columna de símbolos
+        getTablaPredictiva().getColumns().add(colSimbolo);
+        
+        // Añadir columnas para cada terminal
+        for (Terminal t : gramatica.getTerminales()) {
+            if (t.getNombre() == null || t.getNombre().isEmpty()) continue;
+            
+            TableColumn<FilaTablaPredictiva, String> colT = new TableColumn<>(t.getNombre());
+            colT.setPrefWidth(100);
+            
+            colT.setCellValueFactory(cellData -> 
+                cellData.getValue().getValor(t.getNombre()));
+            
+            getTablaPredictiva().getColumns().add(colT);
+        }
+        
+        // Añadir columna para $
+        TableColumn<FilaTablaPredictiva, String> colDolar = new TableColumn<>("$");
+        colDolar.setPrefWidth(100);
+        colDolar.setCellValueFactory(cellData -> 
+            cellData.getValue().getValor("$"));
+        getTablaPredictiva().getColumns().add(colDolar);
+        
+        System.out.println("Columnas creadas manualmente: " + getTablaPredictiva().getColumns().size());
+        columnsCreated = true;
+    }
+
+    @Override
     protected void cargarDatos() {
         ObservableList<FilaTablaPredictiva> filas = FXCollections.observableArrayList();
 
@@ -122,6 +179,12 @@ public class TablaPredictivaPaso5 extends TablaPredictiva {
         }
 
         getTablaPredictiva().setItems(filas);
+        
+        // Asegurar que tenemos columnas
+        if (!columnsCreated && gramatica != null) {
+            crearColumnas(gramatica);
+        }
+        
         configurarColumnas();
         configurarSeleccion();
         configurarManejadorClics();
@@ -278,18 +341,15 @@ public class TablaPredictivaPaso5 extends TablaPredictiva {
                 if (funcionErrorSeleccionada != null) {
                     String numeroFuncion = funcionErrorSeleccionada.substring(0, funcionErrorSeleccionada.indexOf(" "));
                     fila.setValor(columna, numeroFuncion);
+                    
+                    // Forzar un refresh para asegurar que la vista se actualice
                     getTablaPredictiva().refresh();
+                    
+                    // Informar al usuario de la acción realizada
+                    System.out.println("Función de error añadida: " + numeroFuncion);
                 }
             }
         });
-    }
-
-    @Override
-    public void construir(Gramatica gramatica) {
-        List<FuncionError> funcionesErrorExistentes = this.funcionesError;
-        super.construir(gramatica);
-        this.funcionesError = funcionesErrorExistentes;
-        cargarDatos();
     }
 
     @Override
@@ -308,5 +368,62 @@ public class TablaPredictivaPaso5 extends TablaPredictiva {
         alert.setHeaderText(header);
         alert.setContentText(contenido);
         alert.showAndWait();
+    }
+
+    /**
+     * Obtiene la gramática asociada a esta tabla predictiva.
+     * @return La gramática asociada.
+     */
+    public Gramatica getGramatica() {
+        return this.gramatica;
+    }
+
+    /**
+     * Establece la tabla UI que se utilizará para mostrar los datos.
+     * @param tabla La tabla UI a utilizar.
+     */
+    public void setTablaPredictiva(TableView<FilaTablaPredictiva> tabla) {
+        // En lugar de intentar modificar el campo privado directamente,
+        // transferimos los datos entre las tablas
+        
+        // Si hay datos en nuestra tabla actual, los transferimos a la nueva tabla
+        if (getTablaPredictiva() != null && getTablaPredictiva().getItems() != null) {
+            ObservableList<FilaTablaPredictiva> items = getTablaPredictiva().getItems();
+            tabla.setItems(items);
+        }
+        
+        // Asegurar que la nueva tabla tenga columnas
+        if (tabla.getColumns().isEmpty() && this.gramatica != null) {
+            // Columna para símbolos
+            TableColumn<FilaTablaPredictiva, String> colSimbolo = new TableColumn<>("Símbolo");
+            colSimbolo.setCellValueFactory(cellData -> 
+                new SimpleStringProperty(cellData.getValue().getSimbolo()));
+            colSimbolo.setPrefWidth(100);
+            
+            // Añadir la columna de símbolos
+            tabla.getColumns().add(colSimbolo);
+            
+            // Añadir columnas para cada terminal
+            for (Terminal t : gramatica.getTerminales()) {
+                if (t.getNombre() == null || t.getNombre().isEmpty()) continue;
+                
+                TableColumn<FilaTablaPredictiva, String> colT = new TableColumn<>(t.getNombre());
+                colT.setPrefWidth(100);
+                
+                colT.setCellValueFactory(cellData -> 
+                    cellData.getValue().getValor(t.getNombre()));
+                
+                tabla.getColumns().add(colT);
+            }
+            
+            // Añadir columna para $
+            TableColumn<FilaTablaPredictiva, String> colDolar = new TableColumn<>("$");
+            colDolar.setPrefWidth(100);
+            colDolar.setCellValueFactory(cellData -> 
+                cellData.getValue().getValor("$"));
+            tabla.getColumns().add(colDolar);
+        }
+        
+        System.out.println("Tabla UI actualizada correctamente");
     }
 } 
