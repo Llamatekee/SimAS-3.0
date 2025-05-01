@@ -6,18 +6,18 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 import javafx.scene.layout.*;
 import java.util.List;
 import java.io.File;
 import java.io.IOException;
+import javafx.scene.Parent;
 
 /**
  * Controlador para la simulación descendente en JavaFX.
  */
-public class Simulador extends BorderPane {
+public class PanelNuevaSimDescPaso6 extends BorderPane implements PanelNuevaSimDescPaso {
 
     @FXML private TableView<FilaTablaPredictiva> tablePredictiva;
     @FXML private ListView<String> listProducciones;
@@ -31,20 +31,33 @@ public class Simulador extends BorderPane {
     private List<FuncionError> funcionesError;
     private ObservableList<String> producciones;
     private ObservableList<Terminal> cadenaEntrada;
+    private PanelSimuladorDesc panelSimuladorDesc;
 
-    public Simulador(Gramatica gramatica) {
+    public PanelNuevaSimDescPaso6(Gramatica gramatica, PanelSimuladorDesc panelSimuladorDesc) {
         this.gramatica = gramatica;
+        if (!(gramatica.getTPredictiva() instanceof TablaPredictivaPaso5)) {
+            TablaPredictivaPaso5 nuevaTabla = new TablaPredictivaPaso5();
+            nuevaTabla.setFuncionesError(gramatica.getTPredictiva().getFuncionesError());
+            nuevaTabla.construir(gramatica);
+            gramatica.setTPredictiva(nuevaTabla);
+        }
         this.tablaPredictiva = gramatica.getTPredictiva();
         this.funcionesError = tablaPredictiva.getFuncionesError();
         this.producciones = FXCollections.observableArrayList();
         this.cadenaEntrada = FXCollections.observableArrayList();
+        this.panelSimuladorDesc = panelSimuladorDesc;
         cargarFXML();
         cargarDatos();
     }
 
+    // Constructor anterior para compatibilidad
+    public PanelNuevaSimDescPaso6(Gramatica gramatica) {
+        this(gramatica, null);
+    }
+
     private void cargarFXML() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/Simulador.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/PanelNuevaSimDescPaso6.fxml"));
             loader.setController(this);
             BorderPane root = loader.load();
             this.setTop(root.getTop());
@@ -75,11 +88,31 @@ public class Simulador extends BorderPane {
         }
         listFuncionesError.setItems(errores);
 
-        // Cargar tabla predictiva si tienes un modelo para ello
+        // Cargar tabla predictiva - Ahora usamos directamente la instancia del paso 5
         if (tablaPredictiva instanceof TablaPredictivaPaso5) {
-            TableView<FilaTablaPredictiva> tabla = ((TablaPredictivaPaso5) tablaPredictiva).getTablaPredictiva();
-            tablePredictiva.getColumns().setAll(tabla.getColumns());
-            tablePredictiva.setItems(tabla.getItems());
+            TablaPredictivaPaso5 tablaPaso5 = (TablaPredictivaPaso5) tablaPredictiva;
+            
+            // Nos aseguramos de que la tabla de UI tenga todas las columnas necesarias
+            if (tablePredictiva.getColumns().isEmpty() || 
+                tablePredictiva.getColumns().size() != tablaPaso5.getTablaPredictiva().getColumns().size()) {
+                
+                tablePredictiva.getColumns().setAll(tablaPaso5.getTablaPredictiva().getColumns());
+            }
+            
+            // Nos aseguramos de usar los mismos items (filas) que en el paso 5
+            tablePredictiva.setItems(tablaPaso5.getTablaPredictiva().getItems());
+            
+            // Configurar la tabla para mantener el estilo y comportamiento
+            tablePredictiva.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+            tablePredictiva.setTableMenuButtonVisible(false);
+            
+            // Hacemos un refresh para asegurar la visualización actualizada
+            tablePredictiva.refresh();
+            
+            System.out.println("Tabla cargada correctamente. Número de filas: " + tablePredictiva.getItems().size());
+            System.out.println("Número de columnas: " + tablePredictiva.getColumns().size());
+        } else {
+            System.out.println("Error: La tabla predictiva no es del tipo TablaPredictivaPaso5");
         }
     }
 
@@ -109,7 +142,13 @@ public class Simulador extends BorderPane {
 
     @FXML
     private void modificarErrores() {
-        // Implementa la lógica para modificar funciones de error
+        // Volver a abrir el paso 5
+        if (panelSimuladorDesc != null) {
+            panelSimuladorDesc.cambiarPaso(4);
+        }
+        else{
+            System.out.println("No se pudo acceder al panelSimuladorDesc");
+        }
     }
 
     public String actualizarVisualizacion() {
@@ -126,6 +165,11 @@ public class Simulador extends BorderPane {
         alert.setHeaderText(null);
         alert.setContentText(mensaje);
         alert.showAndWait();
+    }
+
+    @Override
+    public Parent getRoot() {
+        return this;
     }
 }
 

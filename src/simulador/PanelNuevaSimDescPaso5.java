@@ -97,42 +97,10 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
 
         // Llenar el ComboBox con las funciones de error
         actualizarComboBoxFuncionesError();
-
-        // Configurar el manejador de clics en la tabla
-        tablaPredictiva.setOnMouseClicked(event -> {
-            if (event.getClickCount() == 1) {
-                TablePosition<?, ?> pos = tablaPredictiva.getFocusModel().getFocusedCell();
-                if (pos != null && pos.getColumn() > 0) { // Ignorar la columna "No Terminal"
-                    // Obtener la función de error seleccionada
-                    String funcionSeleccionada = comboBoxFuncionesError.getSelectionModel().getSelectedItem();
-                    if (funcionSeleccionada != null) {
-                        // Extraer el número de la función de error (E0, E1, etc.)
-                        String numeroFuncion = funcionSeleccionada.split(" ")[0];
-                        
-                        // Obtener la fila y columna seleccionadas
-                        FilaTablaPredictiva fila = tablaPredictiva.getItems().get(pos.getRow());
-                        String columna = tablaPredictiva.getColumns().get(pos.getColumn()).getText();
-                        
-                        // Actualizar el valor en la tabla
-                        if (!fila.getEsTerminal()) {
-                            fila.setValor(columna, numeroFuncion);
-                            tablaPredictiva.refresh();
-                        }
-                    }
-                }
-            }
-        });
     }
 
     private void iniciarSimulacion() {
-        // Crear una nueva pestaña para la simulación
-        Tab pestañaSimulacion = new Tab("Simulación");
-        Simulador simulador = new Simulador(gramatica);
-        pestañaSimulacion.setContent(simulador);
-        
-        // Añadir la pestaña y seleccionarla
-        panelPadre.tabPane.getTabs().add(pestañaSimulacion);
-        panelPadre.tabPane.getSelectionModel().select(pestañaSimulacion);
+        panelPadre.cambiarPaso(5);
     }
 
     private void construirTablaPredictiva() {
@@ -313,5 +281,13 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
     @FXML
     private void handleUltimo() {
         // Ya estamos en el último paso, no hacer nada
+    }
+
+    /**
+     * Refresca la vista del paso 5: reconstruye la tabla y reconfigura listeners y ComboBox.
+     */
+    public void refrescarVista() {
+        construirTablaPredictiva();
+        actualizarComboBoxFuncionesError();
     }
 }

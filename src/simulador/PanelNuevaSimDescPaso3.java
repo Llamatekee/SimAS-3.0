@@ -56,10 +56,10 @@ public class PanelNuevaSimDescPaso3 implements PanelNuevaSimDescPaso {
         if (gramatica.getProducciones().get(0).getNumero() == 0) { // Evitar numerar si ya están numeradas
             gramatica.numerarProducciones();
         }
+        // Siempre crear una nueva tabla predictiva local para el paso 3
         gramatica.generarTPredictiva(); // Generar tabla predictiva
         TablaPredictiva tpredictiva = new TablaPredictiva(tablaPredictiva); // Pasar la tabla del FXML
         tpredictiva.construir(gramatica);
-
         // Configurar la tabla
         tablaPredictiva.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         tablaPredictiva.setTableMenuButtonVisible(false);

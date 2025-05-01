@@ -235,35 +235,26 @@ public class TablaPredictivaPaso5 extends TablaPredictiva {
         getTablaPredictiva().getSelectionModel().setCellSelectionEnabled(true);
         getTablaPredictiva().getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         
-        getTablaPredictiva().setRowFactory(tv -> {
-            TableRow<FilaTablaPredictiva> row = new TableRow<>();
-            row.setStyle("-fx-selection-bar: transparent; -fx-selection-bar-non-focused: transparent;");
-            return row;
-        });
+        getTablaPredictiva().setRowFactory(tv -> new TableRow<>());
     }
 
     private void configurarManejadorClics() {
-        getTablaPredictiva().addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
-            if (event.isConsumed()) return; // Evitar procesamiento múltiple
-            
-            System.out.println("[DEBUG] Clic detectado en la tabla");
-            TablePosition<FilaTablaPredictiva, ?> pos = getTablaPredictiva().getFocusModel().getFocusedCell();
+        getTablaPredictiva().setOnMouseReleased(event -> {
+            TableView.TableViewSelectionModel<FilaTablaPredictiva> selectionModel = getTablaPredictiva().getSelectionModel();
+            ObservableList<TablePosition> selectedCells = selectionModel.getSelectedCells();
+            if (selectedCells.isEmpty()) return;
+            TablePosition pos = selectedCells.get(0);
+
             if (pos != null && pos.getColumn() > 0) {
                 FilaTablaPredictiva fila = getTablaPredictiva().getItems().get(pos.getRow());
                 String columna = getTablaPredictiva().getColumns().get(pos.getColumn()).getText();
                 String valorCelda = fila.getValor(columna).get();
 
-                System.out.println("[DEBUG] Celda seleccionada - Fila: " + fila.getSimbolo() + 
-                                 ", Columna: " + columna + 
-                                 ", Valor: " + valorCelda);
-
                 // No permitir modificar celdas con producciones
                 if (valorCelda != null && !valorCelda.isEmpty() && Character.isDigit(valorCelda.charAt(0))) {
-                    System.out.println("[DEBUG] Intento de modificar celda con producción");
                     mostrarError("No se puede modificar esta celda",
                                "Esta celda contiene una producción de la gramática",
                                "Las producciones son necesarias para el análisis sintáctico y no pueden ser modificadas.");
-                    event.consume();
                     return;
                 }
 
@@ -275,11 +266,9 @@ public class TablaPredictivaPaso5 extends TablaPredictiva {
                         .orElse(null);
 
                     if (terminalFila != null && apareceSoloPrimeraPos(terminalFila)) {
-                        System.out.println("[DEBUG] Intento de modificar terminal de primera posición");
                         mostrarError("No se permiten funciones de error",
                                    "No se pueden añadir funciones de error para este terminal",
                                    "Este terminal solo aparece en primera posición de las producciones.");
-                        event.consume();
                         return;
                     }
                 }
@@ -287,13 +276,9 @@ public class TablaPredictivaPaso5 extends TablaPredictiva {
                 // Procesar función de error seleccionada
                 String funcionErrorSeleccionada = panelPaso5.getFuncionErrorSeleccionada();
                 if (funcionErrorSeleccionada != null) {
-                    System.out.println("[DEBUG] Aplicando función de error: " + funcionErrorSeleccionada);
                     String numeroFuncion = funcionErrorSeleccionada.substring(0, funcionErrorSeleccionada.indexOf(" "));
                     fila.setValor(columna, numeroFuncion);
                     getTablaPredictiva().refresh();
-                    event.consume();
-                } else {
-                    System.out.println("[DEBUG] No hay función de error seleccionada");
                 }
             }
         });

@@ -8,12 +8,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.HPos;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -52,6 +48,7 @@ public class PanelSimuladorDesc {
         pasos.add(new PanelNuevaSimDescPaso3(this));
         pasos.add(new PanelNuevaSimDescPaso4(this));
         pasos.add(new PanelNuevaSimDescPaso5(this));
+        pasos.add(new PanelNuevaSimDescPaso6(this.gramatica, this));
         
         // Mostrar el primer paso
         mostrarPasoActual();
@@ -59,9 +56,19 @@ public class PanelSimuladorDesc {
 
     /**
      * Inicializa las funciones de error al principio de la simulación
+     * Solo inicializa si no hay funciones de error existentes
      */
     private void inicializarFuncionesError() {
+        // Verificar si la tabla predictiva existe
+        if (this.gramatica.getTPredictiva() == null) {
+            // Si no existe, crear una nueva
+            System.out.println("Creando una nueva tabla predictiva en inicializarFuncionesError");
+            this.gramatica.generarTPredictiva();
+        }
+        
+        // Verificar si ya hay funciones de error
         if (this.gramatica.getTPredictiva().getFuncionesError().isEmpty()) {
+            System.out.println("Inicializando funciones de error básicas");
             ObservableList<String> simbolosTerminales = this.gramatica.getTerminalesModel();
             TablaPredictiva tPredictiva = this.gramatica.getTPredictiva();
             
@@ -82,8 +89,10 @@ public class PanelSimuladorDesc {
                 tPredictiva.crearFunError(funError);
                 x++;
             }
-            
-            this.gramatica.setTPredictiva(tPredictiva);
+        } else {
+            System.out.println("Ya existen funciones de error (cantidad: " + 
+                              this.gramatica.getTPredictiva().getFuncionesError().size() + 
+                              "). No se sobrescriben.");
         }
     }
 
@@ -147,13 +156,23 @@ public class PanelSimuladorDesc {
     }
 
     public void cambiarPaso(int paso) {
-        // Actualizar el título de la pestaña
-        pestañaSimulacion.setText("Simulación: Paso " + (paso + 1));
-
-        // Actualizar el contenido según el paso
+        this.pasoActual = paso;
+        if (pestañaSimulacion == null) {
+            pestañaSimulacion = new Tab("Simulación: Paso " + (paso + 1));
+            pestañaSimulacion.setClosable(false);
+            tabPane.getTabs().add(pestañaSimulacion);
+        }
+        if (paso == 5) {
+            pestañaSimulacion.setText("Simulación");
+        } else {
+            pestañaSimulacion.setText("Simulación: Paso " + (paso + 1));
+        }
         pestañaSimulacion.setContent(pasos.get(paso).getRoot());
-
-        // Asegurarse de que la pestaña esté seleccionada
         tabPane.getSelectionModel().select(pestañaSimulacion);
+
+        // Refrescar la vista del paso 5 si corresponde
+        if (paso == 4 && pasos.get(4) instanceof PanelNuevaSimDescPaso5) {
+            ((PanelNuevaSimDescPaso5) pasos.get(4)).refrescarVista();
+        }
     }
 }
