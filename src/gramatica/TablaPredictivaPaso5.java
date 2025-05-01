@@ -277,6 +277,9 @@ public class TablaPredictivaPaso5 extends TablaPredictiva {
                             // Estilo para celda seleccionada
                             if (isCellSelected()) {
                                 style.append("; -fx-border-color: #1976D2; -fx-border-width: 2px;");
+                                // Asegurar que el texto sea siempre visible cuando la celda está seleccionada
+                                textStyle.setLength(0);
+                                textStyle.append("-fx-text-fill: black; -fx-font-weight: bold;");
                             }
 
                             // Aplicar estilos

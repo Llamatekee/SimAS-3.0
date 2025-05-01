@@ -14,6 +14,7 @@ import javafx.scene.control.Tab;
 import javafx.collections.ObservableList;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
+import javafx.scene.control.TableCell;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -187,7 +188,26 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
         tablaPredictiva.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         tablaPredictiva.setTableMenuButtonVisible(false);
         tablaPredictiva.setEditable(true);
+        
+        // Forzar un refresh
         tablaPredictiva.refresh();
+        
+        System.out.println("Tabla construida con éxito - Filas: " + 
+                         (tablaPredictiva.getItems() != null ? tablaPredictiva.getItems().size() : 0) + 
+                         ", Columnas: " + tablaPredictiva.getColumns().size());
+        
+        // Mostrar información sobre las celdas para diagnóstico
+        if (tablaPredictiva.getItems() != null && !tablaPredictiva.getItems().isEmpty()) {
+            FilaTablaPredictiva primeraFila = tablaPredictiva.getItems().get(0);
+            if (primeraFila != null) {
+                for (TableColumn<FilaTablaPredictiva, ?> col : tablaPredictiva.getColumns()) {
+                    if (col.getText().equals("Símbolo")) continue;
+                    
+                    String valorCelda = primeraFila.getValor(col.getText()).get();
+                    System.out.println("Celda [0," + col.getText() + "] = " + valorCelda);
+                }
+            }
+        }
     }
 
     /**
@@ -267,7 +287,7 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
     }
 
     /**
-     * Crea las columnas manualmente en una tabla dada.
+     * Crea las columnas en una tabla dada.
      */
     private void crearColumnasEnTabla(TableView<FilaTablaPredictiva> tabla) {
         // Limpiar columnas existentes
@@ -279,6 +299,33 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
             new SimpleStringProperty(cellData.getValue().getSimbolo()));
         colSimbolo.setPrefWidth(100);
         
+        // Configurar celda factory para la columna de símbolos
+        colSimbolo.setCellFactory(column -> {
+            return new TableCell<FilaTablaPredictiva, String>() {
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    
+                    if (empty || item == null) {
+                        setText(null);
+                        setStyle("");
+                        return;
+                    }
+                    
+                    setText(item);
+                    
+                    // Aplicar estilo
+                    if (isSelected()) {
+                        // Estilo para celda seleccionada
+                        setStyle("-fx-background-color: #E3F2FD; -fx-text-fill: black; -fx-font-weight: bold; -fx-border-color: #1976D2; -fx-border-width: 1px;");
+                    } else {
+                        // Estilo para símbolos
+                        setStyle("-fx-background-color: #F8F9FA; -fx-text-fill: black; -fx-font-weight: bold;");
+                    }
+                }
+            };
+        });
+        
         // Añadir la columna de símbolos
         tabla.getColumns().add(colSimbolo);
         
@@ -289,8 +336,47 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
             TableColumn<FilaTablaPredictiva, String> colT = new TableColumn<>(t.getNombre());
             colT.setPrefWidth(100);
             
+            // Usar variable final para capturar el nombre del terminal
+            final String nombreTerminal = t.getNombre();
             colT.setCellValueFactory(cellData -> 
-                cellData.getValue().getValor(t.getNombre()));
+                cellData.getValue().getValor(nombreTerminal));
+            
+            // Configurar celda factory personalizada para cada columna
+            colT.setCellFactory(column -> {
+                return new TableCell<FilaTablaPredictiva, String>() {
+                    @Override
+                    protected void updateItem(String item, boolean empty) {
+                        super.updateItem(item, empty);
+                        
+                        if (empty || item == null) {
+                            setText(null);
+                            setStyle("");
+                            return;
+                        }
+                        
+                        setText(item);
+                        
+                        // Aplicar estilo según tipo de contenido
+                        if (isSelected()) {
+                            // Estilo para celda seleccionada
+                            setStyle("-fx-background-color: #E3F2FD; -fx-text-fill: black; -fx-font-weight: bold; -fx-border-color: #1976D2; -fx-border-width: 1px;");
+                        } else if (item.startsWith("E")) {
+                            // Estilo para funciones de error
+                            setStyle("-fx-text-fill: #1976D2; -fx-font-weight: bold;");
+                        } else if (Character.isDigit(item.charAt(0))) {
+                            // Estilo para producciones
+                            setStyle("-fx-text-fill: black; -fx-font-weight: bold;");
+                        } else if (item.startsWith("ε_")) {
+                            // Estilo para épsilon
+                            setText(item.substring(2)); // Quitar prefijo
+                            setStyle("-fx-text-fill: #0D47A1; -fx-font-weight: bold;");
+                        } else {
+                            // Estilo predeterminado
+                            setStyle("-fx-text-fill: black;");
+                        }
+                    }
+                };
+            });
             
             tabla.getColumns().add(colT);
         }
@@ -300,7 +386,48 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
         colDolar.setPrefWidth(100);
         colDolar.setCellValueFactory(cellData -> 
             cellData.getValue().getValor("$"));
+        
+        // Configurar celda factory para columna $
+        colDolar.setCellFactory(column -> {
+            return new TableCell<FilaTablaPredictiva, String>() {
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    
+                    if (empty || item == null) {
+                        setText(null);
+                        setStyle("");
+                        return;
+                    }
+                    
+                    setText(item);
+                    
+                    // Aplicar estilo según tipo de contenido
+                    if (isSelected()) {
+                        // Estilo para celda seleccionada
+                        setStyle("-fx-background-color: #E3F2FD; -fx-text-fill: black; -fx-font-weight: bold; -fx-border-color: #1976D2; -fx-border-width: 1px;");
+                    } else if (item.startsWith("E")) {
+                        // Estilo para funciones de error
+                        setStyle("-fx-text-fill: #1976D2; -fx-font-weight: bold;");
+                    } else if (Character.isDigit(item.charAt(0))) {
+                        // Estilo para producciones
+                        setStyle("-fx-text-fill: black; -fx-font-weight: bold;");
+                    } else if (item.startsWith("ε_")) {
+                        // Estilo para épsilon
+                        setText(item.substring(2)); // Quitar prefijo
+                        setStyle("-fx-text-fill: #0D47A1; -fx-font-weight: bold;");
+                    } else {
+                        // Estilo predeterminado
+                        setStyle("-fx-text-fill: black;");
+                    }
+                }
+            };
+        });
+        
         tabla.getColumns().add(colDolar);
+        
+        // Aplicar configuración global
+        tabla.setStyle("-fx-background-color: white; -fx-table-cell-border-color: black;");
         
         System.out.println("Creadas " + tabla.getColumns().size() + " columnas manualmente");
     }
@@ -400,9 +527,14 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
                     // Guardar inmediatamente en la tabla global para evitar pérdida de datos
                     guardarTablaEnGlobal();
                     
+                    // Para forzar la actualización visual, recrear las columnas
+                    System.out.println("Recreando columnas para asegurar la visualización correcta");
+                    tablaPredictiva.getColumns().clear();
+                    crearColumnasEnTabla(tablaPredictiva);
+                    
                     // Refrescar la tabla local
                     tablaPredictiva.refresh();
-                    System.out.println("Función de error eliminada y cambios guardados");
+                    System.out.println("Función de error eliminada y cambios guardados en columna " + column.getText());
                 } else {
                     // Mostrar alerta si la celda no tiene una función de error o una producción épsilon añadida
                     Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -435,9 +567,14 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
                         // Guardar inmediatamente en la tabla global para evitar pérdida de datos
                         guardarTablaEnGlobal();
                         
+                        // Para forzar la actualización visual, recrear las columnas
+                        System.out.println("Recreando columnas para asegurar la visualización correcta");
+                        tablaPredictiva.getColumns().clear();
+                        crearColumnasEnTabla(tablaPredictiva);
+                        
                         // Refrescar la tabla local
                         tablaPredictiva.refresh();
-                        System.out.println("Función de error añadida y guardada: " + funcionErrorSeleccionada);
+                        System.out.println("Función de error añadida y guardada: " + funcionErrorSeleccionada + " en columna " + column.getText());
                     } else {
                         // Mostrar alerta si no se ha seleccionado una función de error
                         Alert alert = new Alert(Alert.AlertType.ERROR);

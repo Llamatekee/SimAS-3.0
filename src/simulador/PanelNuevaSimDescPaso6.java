@@ -173,6 +173,33 @@ public class PanelNuevaSimDescPaso6 extends BorderPane implements PanelNuevaSimD
             new SimpleStringProperty(cellData.getValue().getSimbolo()));
         colSimbolo.setPrefWidth(100);
         
+        // Configurar fábrica de celdas para personalizar el estilo de la columna de símbolos
+        colSimbolo.setCellFactory(column -> {
+            return new TableCell<FilaTablaPredictiva, String>() {
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    
+                    if (empty || item == null) {
+                        setText(null);
+                        setStyle("");
+                        return;
+                    }
+                    
+                    setText(item);
+                    
+                    // Aplicar estilo para columna de símbolos
+                    if (isSelected()) {
+                        // Estilo para celda seleccionada
+                        setStyle("-fx-background-color: #E3F2FD; -fx-text-fill: black; -fx-font-weight: bold; -fx-border-color: #1976D2; -fx-border-width: 1px;");
+                    } else {
+                        // Estilo para símbolos (terminales y no terminales)
+                        setStyle("-fx-background-color: #F8F9FA; -fx-text-fill: black; -fx-font-weight: bold;");
+                    }
+                }
+            };
+        });
+        
         // Añadir la columna de símbolos
         tablePredictiva.getColumns().add(colSimbolo);
         
@@ -187,6 +214,39 @@ public class PanelNuevaSimDescPaso6 extends BorderPane implements PanelNuevaSimD
             final String nombreTerminal = t.getNombre(); // Capturar el nombre en una variable final
             colT.setCellValueFactory(cellData -> 
                 cellData.getValue().getValor(nombreTerminal));
+            
+            // Configurar fábrica de celdas para personalizar el estilo
+            colT.setCellFactory(column -> {
+                return new TableCell<FilaTablaPredictiva, String>() {
+                    @Override
+                    protected void updateItem(String item, boolean empty) {
+                        super.updateItem(item, empty);
+                        
+                        if (empty || item == null) {
+                            setText(null);
+                            setStyle("");
+                            return;
+                        }
+                        
+                        setText(item);
+                        
+                        // Aplicar estilo según el tipo de contenido
+                        if (isSelected()) {
+                            // Estilo para celda seleccionada
+                            setStyle("-fx-background-color: #E3F2FD; -fx-text-fill: black; -fx-font-weight: bold; -fx-border-color: #1976D2; -fx-border-width: 1px;");
+                        } else if (item.startsWith("E")) {
+                            // Estilo para funciones de error
+                            setStyle("-fx-text-fill: #1976D2; -fx-font-weight: bold;");
+                        } else if (Character.isDigit(item.charAt(0))) {
+                            // Estilo para producciones
+                            setStyle("-fx-text-fill: black; -fx-font-weight: bold;");
+                        } else {
+                            // Estilo predeterminado
+                            setStyle("-fx-text-fill: black;");
+                        }
+                    }
+                };
+            });
             
             // Añadir la columna
             tablePredictiva.getColumns().add(colT);
@@ -206,8 +266,45 @@ public class PanelNuevaSimDescPaso6 extends BorderPane implements PanelNuevaSimD
             colDolar.setPrefWidth(100);
             colDolar.setCellValueFactory(cellData -> 
                 cellData.getValue().getValor("$"));
+                
+            // Configurar fábrica de celdas para personalizar el estilo
+            colDolar.setCellFactory(column -> {
+                return new TableCell<FilaTablaPredictiva, String>() {
+                    @Override
+                    protected void updateItem(String item, boolean empty) {
+                        super.updateItem(item, empty);
+                        
+                        if (empty || item == null) {
+                            setText(null);
+                            setStyle("");
+                            return;
+                        }
+                        
+                        setText(item);
+                        
+                        // Aplicar estilo según el tipo de contenido
+                        if (isSelected()) {
+                            // Estilo para celda seleccionada
+                            setStyle("-fx-background-color: #E3F2FD; -fx-text-fill: black; -fx-font-weight: bold; -fx-border-color: #1976D2; -fx-border-width: 1px;");
+                        } else if (item.startsWith("E")) {
+                            // Estilo para funciones de error
+                            setStyle("-fx-text-fill: #1976D2; -fx-font-weight: bold;");
+                        } else if (Character.isDigit(item.charAt(0))) {
+                            // Estilo para producciones
+                            setStyle("-fx-text-fill: black; -fx-font-weight: bold;");
+                        } else {
+                            // Estilo predeterminado
+                            setStyle("-fx-text-fill: black;");
+                        }
+                    }
+                };
+            });
+            
             tablePredictiva.getColumns().add(colDolar);
         }
+        
+        // Aplicar configuración global a la tabla
+        tablePredictiva.setStyle("-fx-background-color: white; -fx-table-cell-border-color: black;");
         
         System.out.println("Creadas " + tablePredictiva.getColumns().size() + " columnas manualmente");
     }
