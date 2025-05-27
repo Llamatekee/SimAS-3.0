@@ -661,20 +661,53 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
         System.out.println("Rellenando celdas vacías con épsilon...");
         boolean seHizoAlgunCambio = false;
         
-        for (FilaTablaPredictiva fila : tablaPredictiva.getItems()) {
-            // No procesar filas de terminales
-            if (fila.getEsTerminal()) continue;
-            
+        // Obtener la tabla extendida global
+        TablaPredictivaPaso5 tablaGlobal = panelPadre.getTablaPredictivaExtendidaGlobal();
+        if (tablaGlobal == null) {
+            System.out.println("ERROR: No se encontró la tabla predictiva extendida global");
+            return;
+        }
+        
+        // Usar los items de la tabla global
+        ObservableList<FilaTablaPredictiva> filas = tablaGlobal.getTablaPredictiva().getItems();
+        if (filas == null || filas.isEmpty()) {
+            System.out.println("ERROR: La tabla global no tiene filas");
+            return;
+        }
+        
+        System.out.println("Procesando " + filas.size() + " filas de la tabla global");
+        
+        for (FilaTablaPredictiva fila : filas) {
+            // Si es terminal y solo aparece en primera posición, saltar
+            if (fila.getEsTerminal()) {
+                Terminal terminalFila = gramatica.getTerminales().stream()
+                    .filter(t -> t.getNombre().equals(fila.getSimbolo()))
+                    .findFirst()
+                    .orElse(null);
+
+                // Usar el método privado de TablaPredictivaPaso5 mediante la instancia tablaGlobal
+                boolean soloPrimeraPos = false;
+                try {
+                    java.lang.reflect.Method m = tablaGlobal.getClass().getDeclaredMethod("apareceSoloPrimeraPos", Terminal.class);
+                    m.setAccessible(true);
+                    soloPrimeraPos = (boolean) m.invoke(tablaGlobal, terminalFila);
+                } catch (Exception e) {
+                    System.out.println("No se pudo invocar apareceSoloPrimeraPos: " + e.getMessage());
+                }
+
+                if (terminalFila != null && soloPrimeraPos) {
+                    System.out.println("Saltando terminal solo en primera posición: " + fila.getSimbolo());
+                    continue;
+                }
+            }
+            System.out.println("Procesando fila: " + fila.getSimbolo());
             for (TableColumn<FilaTablaPredictiva, ?> col : tablaPredictiva.getColumns()) {
                 String nombreCol = col.getText();
                 if (nombreCol.equals("Símbolo")) continue;
-                
+
                 String valor = fila.getValor(nombreCol).get();
                 // Si la celda está vacía
                 if (valor == null || valor.isEmpty()) {
-                    // No añadir épsilon si sería una celda de terminal en primera posición
-                    // (usamos la lógica de apareceSoloPrimeraPos si es necesario)
-                    // Aquí asumimos que solo las filas de no terminales pueden tener épsilon
                     fila.setValor(nombreCol, "ε");
                     seHizoAlgunCambio = true;
                     System.out.println("Añadido épsilon en [" + fila.getSimbolo() + "," + nombreCol + "]");
