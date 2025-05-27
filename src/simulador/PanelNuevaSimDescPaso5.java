@@ -38,6 +38,7 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
     @FXML private Button buttonPrimero;
     @FXML private Button buttonUltimo;
     @FXML private Button buttonSimulacion;
+    @FXML private Button buttonRellenarEpsilon;
     @FXML private ComboBox<String> comboBoxFuncionesError;
     @FXML private TableView<FilaTablaPredictiva> tablaPredictiva;
     @FXML private TableColumn<String[], String> columnSimbolo;
@@ -104,6 +105,10 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
                 guardarTablaEnGlobal();
             }
         });
+
+        if (buttonRellenarEpsilon != null) {
+            buttonRellenarEpsilon.setOnAction(e -> handleRellenarEpsilon());
+        }
     }
 
     private void iniciarSimulacion() {
@@ -360,18 +365,23 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
                         if (isSelected()) {
                             // Estilo para celda seleccionada
                             setStyle("-fx-background-color: #E3F2FD; -fx-text-fill: black; -fx-font-weight: bold; -fx-border-color: #1976D2; -fx-border-width: 1px;");
-                        } else if (item.startsWith("E")) {
-                            // Estilo para funciones de error
-                            setStyle("-fx-text-fill: #1976D2; -fx-font-weight: bold;");
-                        } else if (Character.isDigit(item.charAt(0))) {
-                            // Estilo para producciones
-                            setStyle("-fx-text-fill: black; -fx-font-weight: bold;");
-                        } else if (item.startsWith("ε_")) {
-                            // Estilo para épsilon
-                            setText(item.substring(2)); // Quitar prefijo
-                            setStyle("-fx-text-fill: #0D47A1; -fx-font-weight: bold;");
+                        } else if (item != null && !item.isEmpty()) {
+                            if (item.startsWith("E")) {
+                                // Estilo para funciones de error
+                                setStyle("-fx-text-fill: #D32F2F; -fx-font-weight: bold;");
+                            } else if (Character.isDigit(item.charAt(0))) {
+                                // Estilo para producciones
+                                setStyle("-fx-text-fill: black; -fx-font-weight: bold;");
+                            } else if (item.startsWith("ε_")) {
+                                // Estilo para épsilon
+                                setText(item.substring(2)); // Quitar prefijo
+                                setStyle("-fx-text-fill: #0D47A1; -fx-font-weight: bold;");
+                            } else {
+                                // Estilo predeterminado
+                                setStyle("-fx-text-fill: black;");
+                            }
                         } else {
-                            // Estilo predeterminado
+                            // Estilo para celdas vacías
                             setStyle("-fx-text-fill: black;");
                         }
                     }
@@ -406,18 +416,23 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
                     if (isSelected()) {
                         // Estilo para celda seleccionada
                         setStyle("-fx-background-color: #E3F2FD; -fx-text-fill: black; -fx-font-weight: bold; -fx-border-color: #1976D2; -fx-border-width: 1px;");
-                    } else if (item.startsWith("E")) {
-                        // Estilo para funciones de error
-                        setStyle("-fx-text-fill: #1976D2; -fx-font-weight: bold;");
-                    } else if (Character.isDigit(item.charAt(0))) {
-                        // Estilo para producciones
-                        setStyle("-fx-text-fill: black; -fx-font-weight: bold;");
-                    } else if (item.startsWith("ε_")) {
-                        // Estilo para épsilon
-                        setText(item.substring(2)); // Quitar prefijo
-                        setStyle("-fx-text-fill: #0D47A1; -fx-font-weight: bold;");
+                    } else if (item != null && !item.isEmpty()) {
+                        if (item.startsWith("E")) {
+                            // Estilo para funciones de error
+                            setStyle("-fx-text-fill: #D32F2F; -fx-font-weight: bold;");
+                        } else if (Character.isDigit(item.charAt(0))) {
+                            // Estilo para producciones
+                            setStyle("-fx-text-fill: black; -fx-font-weight: bold;");
+                        } else if (item.startsWith("ε_")) {
+                            // Estilo para épsilon
+                            setText(item.substring(2)); // Quitar prefijo
+                            setStyle("-fx-text-fill: #0D47A1; -fx-font-weight: bold;");
+                        } else {
+                            // Estilo predeterminado
+                            setStyle("-fx-text-fill: black;");
+                        }
                     } else {
-                        // Estilo predeterminado
+                        // Estilo para celdas vacías
                         setStyle("-fx-text-fill: black;");
                     }
                 }
@@ -634,5 +649,33 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
     public void guardarDatosTabla() {
         guardarTablaEnGlobal();
         System.out.println("Guardado manual de datos de tabla ejecutado");
+    }
+
+    /**
+     * Handler para rellenar automáticamente las celdas vacías con épsilon.
+     */
+    @FXML
+    private void handleRellenarEpsilon() {
+        System.out.println("Rellenando celdas vacías con épsilon...");
+        for (FilaTablaPredictiva fila : tablaPredictiva.getItems()) {
+            // No procesar filas de terminales
+            if (fila.getEsTerminal()) continue;
+            for (TableColumn<FilaTablaPredictiva, ?> col : tablaPredictiva.getColumns()) {
+                String nombreCol = col.getText();
+                if (nombreCol.equals("Símbolo")) continue;
+                String valor = fila.getValor(nombreCol).get();
+                // Si la celda está vacía
+                if (valor == null || valor.isEmpty()) {
+                    // No añadir épsilon si sería una celda de terminal en primera posición
+                    // (usamos la lógica de apareceSoloPrimeraPos si es necesario)
+                    // Aquí asumimos que solo las filas de no terminales pueden tener épsilon
+                    fila.setValor(nombreCol, "ε");
+                }
+            }
+        }
+        // Refrescar la tabla y guardar
+        guardarTablaEnGlobal();
+        tablaPredictiva.refresh();
+        System.out.println("Celdas vacías rellenadas con épsilon.");
     }
 }
