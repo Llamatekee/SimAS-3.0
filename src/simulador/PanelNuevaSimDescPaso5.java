@@ -653,16 +653,22 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
 
     /**
      * Handler para rellenar automáticamente las celdas vacías con épsilon.
+     * Recorre todas las celdas de la tabla y añade épsilon en las celdas vacías
+     * donde se podría añadir una función de error.
      */
     @FXML
     private void handleRellenarEpsilon() {
         System.out.println("Rellenando celdas vacías con épsilon...");
+        boolean seHizoAlgunCambio = false;
+        
         for (FilaTablaPredictiva fila : tablaPredictiva.getItems()) {
             // No procesar filas de terminales
             if (fila.getEsTerminal()) continue;
+            
             for (TableColumn<FilaTablaPredictiva, ?> col : tablaPredictiva.getColumns()) {
                 String nombreCol = col.getText();
                 if (nombreCol.equals("Símbolo")) continue;
+                
                 String valor = fila.getValor(nombreCol).get();
                 // Si la celda está vacía
                 if (valor == null || valor.isEmpty()) {
@@ -670,12 +676,19 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
                     // (usamos la lógica de apareceSoloPrimeraPos si es necesario)
                     // Aquí asumimos que solo las filas de no terminales pueden tener épsilon
                     fila.setValor(nombreCol, "ε");
+                    seHizoAlgunCambio = true;
+                    System.out.println("Añadido épsilon en [" + fila.getSimbolo() + "," + nombreCol + "]");
                 }
             }
         }
-        // Refrescar la tabla y guardar
-        guardarTablaEnGlobal();
-        tablaPredictiva.refresh();
-        System.out.println("Celdas vacías rellenadas con épsilon.");
+        
+        if (seHizoAlgunCambio) {
+            // Refrescar la tabla y guardar
+            guardarTablaEnGlobal();
+            tablaPredictiva.refresh();
+            System.out.println("Celdas vacías rellenadas con épsilon.");
+        } else {
+            System.out.println("No se encontraron celdas vacías para rellenar con épsilon.");
+        }
     }
 }

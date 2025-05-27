@@ -40,8 +40,8 @@
         <HBox spacing="10">
             <Button fx:id="buttonEliminar" text="Eliminar Función de Error" styleClass="button-cancel" 
                     onAction="#handleEliminar"/>
-            <Button fx:id="buttonRellenar" text="Rellenar con producciones épsilon" styleClass="button-grammar" 
-                    onAction="#handleRellenar"/>
+            <Button fx:id="buttonRellenarEpsilon" text="Rellenar con producciones épsilon" styleClass="button-grammar" 
+                    onAction="#handleRellenarEpsilon"/>
         </HBox>
     </VBox>
 
