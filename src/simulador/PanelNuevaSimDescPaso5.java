@@ -39,6 +39,7 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
     @FXML private Button buttonUltimo;
     @FXML private Button buttonSimulacion;
     @FXML private Button buttonRellenarEpsilon;
+    @FXML private Button buttonResetearTabla;
     @FXML private ComboBox<String> comboBoxFuncionesError;
     @FXML private TableView<FilaTablaPredictiva> tablaPredictiva;
     @FXML private TableColumn<String[], String> columnSimbolo;
@@ -295,13 +296,14 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
         tabla.getColumns().add(colSimbolo);
         
         // Añadir columnas para cada terminal
+        boolean existeDolar = false;
         for (Terminal t : gramatica.getTerminales()) {
             if (t.getNombre() == null || t.getNombre().isEmpty()) continue;
-            
+            if ("$".equals(t.getNombre())) {
+                existeDolar = true;
+            }
             TableColumn<FilaTablaPredictiva, String> colT = new TableColumn<>(t.getNombre());
             colT.setPrefWidth(100);
-            
-            // Usar variable final para capturar el nombre del terminal
             final String nombreTerminal = t.getNombre();
             colT.setCellValueFactory(cellData -> 
                 cellData.getValue().getValor(nombreTerminal));
@@ -373,55 +375,57 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
             tabla.getColumns().add(colT);
         }
         
-        // Añadir columna para $
-        TableColumn<FilaTablaPredictiva, String> colDolar = new TableColumn<>("$");
-        colDolar.setPrefWidth(100);
-        colDolar.setCellValueFactory(cellData -> 
-            cellData.getValue().getValor("$"));
-        
-        // Configurar celda factory para columna $
-        colDolar.setCellFactory(column -> {
-            return new TableCell<FilaTablaPredictiva, String>() {
-                @Override
-                protected void updateItem(String item, boolean empty) {
-                    super.updateItem(item, empty);
-                    
-                    if (empty || item == null) {
-                        setText(null);
-                        setStyle("");
-                        return;
-                    }
-                    
-                    setText(item);
-                    
-                    // Aplicar estilo según tipo de contenido
-                    if (isSelected()) {
-                        // Estilo para celda seleccionada
-                        setStyle("-fx-background-color: #E3F2FD; -fx-text-fill: black; -fx-font-weight: bold; -fx-border-color: #1976D2; -fx-border-width: 1px;");
-                    } else if (item != null && !item.isEmpty()) {
-                        if (item.startsWith("E")) {
-                            // Estilo para funciones de error
-                            setStyle("-fx-text-fill: #D32F2F; -fx-font-weight: bold;");
-                        } else if (Character.isDigit(item.charAt(0))) {
-                            // Estilo para producciones
-                            setStyle("-fx-text-fill: black; -fx-font-weight: bold;");
-                        } else if (item.startsWith("ε_")) {
-                            // Estilo para épsilon
-                            setText(item.substring(2)); // Quitar prefijo
-                            setStyle("-fx-text-fill: #0D47A1; -fx-font-weight: bold;");
+        // Solo añadir la columna $ si no existe ya en los terminales
+        if (!existeDolar) {
+            TableColumn<FilaTablaPredictiva, String> colDolar = new TableColumn<>("$");
+            colDolar.setPrefWidth(100);
+            colDolar.setCellValueFactory(cellData -> 
+                cellData.getValue().getValor("$"));
+            
+            // Configurar celda factory para columna $
+            colDolar.setCellFactory(column -> {
+                return new TableCell<FilaTablaPredictiva, String>() {
+                    @Override
+                    protected void updateItem(String item, boolean empty) {
+                        super.updateItem(item, empty);
+                        
+                        if (empty || item == null) {
+                            setText(null);
+                            setStyle("");
+                            return;
+                        }
+                        
+                        setText(item);
+                        
+                        // Aplicar estilo según tipo de contenido
+                        if (isSelected()) {
+                            // Estilo para celda seleccionada
+                            setStyle("-fx-background-color: #E3F2FD; -fx-text-fill: black; -fx-font-weight: bold; -fx-border-color: #1976D2; -fx-border-width: 1px;");
+                        } else if (item != null && !item.isEmpty()) {
+                            if (item.startsWith("E")) {
+                                // Estilo para funciones de error
+                                setStyle("-fx-text-fill: #D32F2F; -fx-font-weight: bold;");
+                            } else if (Character.isDigit(item.charAt(0))) {
+                                // Estilo para producciones
+                                setStyle("-fx-text-fill: black; -fx-font-weight: bold;");
+                            } else if (item.startsWith("ε_")) {
+                                // Estilo para épsilon
+                                setText(item.substring(2)); // Quitar prefijo
+                                setStyle("-fx-text-fill: #0D47A1; -fx-font-weight: bold;");
+                            } else {
+                                // Estilo predeterminado
+                                setStyle("-fx-text-fill: black;");
+                            }
                         } else {
-                            // Estilo predeterminado
+                            // Estilo para celdas vacías
                             setStyle("-fx-text-fill: black;");
                         }
-                    } else {
-                        // Estilo para celdas vacías
-                        setStyle("-fx-text-fill: black;");
                     }
-                }
-            };
-        });
-        
-        tabla.getColumns().add(colDolar);
+                };
+            });
+            
+            tabla.getColumns().add(colDolar);
+        }
         
         // Aplicar configuración global
         tabla.setStyle("-fx-background-color: white; -fx-table-cell-border-color: black;");
@@ -684,5 +688,21 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
             guardarTablaEnGlobal();
             tablaPredictiva.refresh();
         }
+    }
+
+    @FXML
+    private void handleResetearTabla() {
+        for (FilaTablaPredictiva fila : tablaPredictiva.getItems()) {
+            for (TableColumn<FilaTablaPredictiva, ?> col : tablaPredictiva.getColumns()) {
+                String nombreCol = col.getText();
+                if (nombreCol.equals("Símbolo")) continue;
+                String valor = fila.getValor(nombreCol).get();
+                if (valor != null && (valor.startsWith("E") || valor.equals("ε") || valor.startsWith("ε_"))) {
+                    fila.setValor(nombreCol, "");
+                }
+            }
+        }
+        guardarTablaEnGlobal();
+        tablaPredictiva.refresh();
     }
 }

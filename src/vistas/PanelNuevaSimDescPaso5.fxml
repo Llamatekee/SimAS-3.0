@@ -42,6 +42,8 @@
                     onAction="#handleEliminar"/>
             <Button fx:id="buttonRellenarEpsilon" text="Rellenar con producciones épsilon" styleClass="button-grammar" 
                     onAction="#handleRellenarEpsilon"/>
+            <Button fx:id="buttonResetearTabla" text="Resetear tabla" styleClass="button-cancel" 
+                    onAction="#handleResetearTabla"/>
         </HBox>
     </VBox>
 
