@@ -838,3 +838,14 @@
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 3, 0, 0, 1);
     -fx-padding: 10px 0;
 }
+
+.simulacion-output {
+    -fx-background-color: white;
+    -fx-text-fill: #222;
+    -fx-font-size: 15px;
+    -fx-font-family: "Consolas", "Menlo", "Monaco", monospace;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 10 12 10 12;
+    -fx-effect: dropshadow(gaussian, #00000022, 6, 0.2, 0, 2);
+}
