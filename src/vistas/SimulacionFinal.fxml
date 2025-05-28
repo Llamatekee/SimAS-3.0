@@ -42,6 +42,8 @@
                     <TableColumn fx:id="colAccion" text="Acción" minWidth="100"/>
                 </columns>
             </TableView>
+            <Button fx:id="btnDerivacion" text="Generar derivación" styleClass="button-grammar" alignment="CENTER"/>
+            <Button fx:id="btnArbol" text="Generar árbol sintáctico" styleClass="button-grammar" alignment="CENTER"/>
         </VBox>
     </center>
 </BorderPane> 

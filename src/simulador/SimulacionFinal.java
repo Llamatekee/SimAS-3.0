@@ -23,6 +23,10 @@ import java.util.Arrays;
 import java.util.List;
 import javafx.beans.property.SimpleStringProperty;
 import java.util.ArrayList;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
+import javafx.scene.layout.Priority;
+import java.io.File;
 
 public class SimulacionFinal extends BorderPane {
     @FXML private TextField campoEntrada;
@@ -35,6 +39,8 @@ public class SimulacionFinal extends BorderPane {
     @FXML private TextArea areaEntrada;
     @FXML private TextArea areaMensajes;
     @FXML private Button btnEditarCadena;
+    @FXML private Button btnDerivacion;
+    @FXML private Button btnArbol;
     @FXML private TableView<HistorialPaso> tablaHistorial;
     @FXML private TableColumn<HistorialPaso, String> colPaso;
     @FXML private TableColumn<HistorialPaso, String> colPila;
@@ -43,6 +49,7 @@ public class SimulacionFinal extends BorderPane {
 
     private Gramatica gramatica;
     private TablaPredictivaPaso5 tablaPredictiva;
+    private TabPane tabPane;
 
     // Estado de la simulación
     private Stack<String> pilaSimulacion;
@@ -67,9 +74,10 @@ public class SimulacionFinal extends BorderPane {
         }
     }
 
-    public SimulacionFinal(Gramatica gramatica, TablaPredictivaPaso5 tablaPredictiva) {
+    public SimulacionFinal(Gramatica gramatica, TablaPredictivaPaso5 tablaPredictiva, TabPane tabPane) {
         this.gramatica = gramatica;
         this.tablaPredictiva = tablaPredictiva;
+        this.tabPane = tabPane;
         cargarFXML();
     }
 
@@ -93,6 +101,8 @@ public class SimulacionFinal extends BorderPane {
         btnFinal.setOnAction(e -> avanzarAlFinal());
         btnInicio.setOnAction(e -> retrocederAlInicio());
         btnRetroceso.setOnAction(e -> retrocederPaso());
+        btnDerivacion.setOnAction(e -> mostrarDerivacionGenerada());
+        btnArbol.setOnAction(e -> mostrarArbolSintactico());
         
         // Inicializar áreas de texto
         areaMensajes.setText("");
@@ -407,6 +417,197 @@ public class SimulacionFinal extends BorderPane {
         String pilaStr = String.join(" ", pilaSimulacion);
         String entradaStr = String.join(" ", entradaSimulacion);
         historialObservable.add(new HistorialPaso(String.valueOf(pasoActual), pilaStr, entradaStr, accion));
+    }
+
+    private void mostrarDerivacionGenerada() {
+        // Construir la derivación a partir del historial
+        List<String> derivacion = new ArrayList<>();
+        if (historialObservable.isEmpty()) {
+            derivacion.add("No hay derivación generada.");
+        } else {
+            // Tomar el símbolo inicial
+            String actual = gramatica.getSimbInicial();
+            derivacion.add(actual + " => " + actual);
+            // Recorrer el historial y aplicar producciones
+            for (HistorialPaso paso : historialObservable) {
+                String accion = paso.getAccion();
+                if (accion.contains("→")) {
+                    String[] partes = accion.split("→");
+                    if (partes.length == 2) {
+                        String izquierda = partes[0].replaceAll("^[0-9. ]*", "").trim();
+                        String derecha = partes[1].trim();
+                        actual = actual.replaceFirst(izquierda.replace("'", "\\'"), derecha);
+                        derivacion.add("=> " + actual);
+                    }
+                }
+            }
+        }
+        if (tabPane != null) {
+            Tab tabDerivacion = null;
+            for (Tab tab : tabPane.getTabs()) {
+                if ("Derivación Generada".equals(tab.getText())) {
+                    tabDerivacion = tab;
+                    break;
+                }
+            }
+            TextArea area = new TextArea(String.join("\n", derivacion));
+            area.setEditable(false);
+            area.setWrapText(true);
+            area.setStyle(
+                "-fx-font-size: 18px;" +
+                "-fx-font-family: 'Consolas', 'monospace';" +
+                "-fx-background-color: #f8f9fa;" +
+                "-fx-text-fill: #222;" +
+                "-fx-border-radius: 12px;" +
+                "-fx-background-radius: 12px;" +
+                "-fx-border-color: #d0d0d0;" +
+                "-fx-border-width: 1.5px;" +
+                "-fx-padding: 24px;" +
+                "-fx-effect: dropshadow(gaussian, #b0b0b0, 12, 0.2, 0, 2);"
+            );
+            area.setMaxWidth(900);
+            area.setMaxHeight(Double.MAX_VALUE);
+            VBox layout = new VBox(15);
+            layout.setPadding(new Insets(40, 0, 0, 0));
+            layout.setAlignment(Pos.TOP_CENTER);
+            layout.setStyle(
+                "-fx-background-color: transparent;" +
+                "-fx-padding: 0 0 0 0;"
+            );
+            Label titulo = new Label("Derivación Generada");
+            titulo.setStyle(
+                "-fx-font-size: 30px;" +
+                "-fx-font-weight: bold;" +
+                "-fx-text-fill: #3498db;" +
+                "-fx-padding: 0 0 32 0;"
+            );
+            VBox.setVgrow(area, Priority.ALWAYS);
+            layout.getChildren().addAll(titulo, area);
+            if (tabDerivacion == null) {
+                tabDerivacion = new Tab("Derivación Generada", layout);
+                tabDerivacion.setClosable(true);
+                tabPane.getTabs().add(tabDerivacion);
+            } else {
+                tabDerivacion.setContent(layout);
+            }
+            tabPane.getSelectionModel().select(tabDerivacion);
+        }
+    }
+
+    private void mostrarArbolSintactico() {
+        try {
+            // 1. Construir el árbol sintáctico como estructura de nodos
+            NodoArbol raiz = construirArbolDesdeHistorial();
+            // 2. Generar el código DOT
+            String dot = generarDotDesdeArbol(raiz);
+            // 3. Guardar DOT en archivo temporal
+            File dotFile = File.createTempFile("arbol_sintactico", ".dot");
+            File imgFile = File.createTempFile("arbol_sintactico", ".png");
+            try (java.io.FileWriter fw = new java.io.FileWriter(dotFile)) {
+                fw.write(dot);
+            }
+            // 4. Ejecutar Graphviz para generar la imagen
+            ProcessBuilder pb = new ProcessBuilder("dot", "-Tpng", dotFile.getAbsolutePath(), "-o", imgFile.getAbsolutePath());
+            pb.start().waitFor();
+            // 5. Mostrar la imagen en una pestaña
+            javafx.scene.image.Image img = new javafx.scene.image.Image(imgFile.toURI().toString());
+            javafx.scene.image.ImageView imageView = new javafx.scene.image.ImageView(img);
+            imageView.setPreserveRatio(true);
+            imageView.setFitWidth(700);
+            imageView.setFitHeight(700);
+            VBox layout = new VBox(15);
+            layout.setPadding(new Insets(40, 0, 0, 0));
+            layout.setAlignment(Pos.TOP_CENTER);
+            Label titulo = new Label("Árbol Sintáctico Descendente");
+            titulo.setStyle("-fx-font-size: 30px; -fx-font-weight: bold; -fx-text-fill: #222; -fx-padding: 0 0 32 0;");
+            layout.getChildren().addAll(titulo, imageView);
+            Tab tabArbol = null;
+            for (Tab tab : tabPane.getTabs()) {
+                if ("Árbol Sintáctico".equals(tab.getText())) {
+                    tabArbol = tab;
+                    break;
+                }
+            }
+            if (tabArbol == null) {
+                tabArbol = new Tab("Árbol Sintáctico", layout);
+                tabArbol.setClosable(true);
+                tabPane.getTabs().add(tabArbol);
+            } else {
+                tabArbol.setContent(layout);
+            }
+            tabPane.getSelectionModel().select(tabArbol);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR, "No se pudo generar el árbol sintáctico: " + e.getMessage());
+            alert.showAndWait();
+        }
+    }
+
+    // Nodo para el árbol sintáctico
+    private static class NodoArbol {
+        String valor;
+        List<NodoArbol> hijos = new ArrayList<>();
+        NodoArbol(String valor) { this.valor = valor; }
+    }
+
+    // Construir el árbol sintáctico a partir del historial de pasos
+    private NodoArbol construirArbolDesdeHistorial() {
+        // Creamos la raíz con el símbolo inicial
+        NodoArbol raiz = new NodoArbol(gramatica.getSimbInicial());
+        construirRecursivo(raiz, new ArrayList<>(historialObservable));
+        return raiz;
+    }
+
+    // Recursivo: expande el primer no terminal de cada producción
+    private void construirRecursivo(NodoArbol nodo, List<HistorialPaso> pasos) {
+        if (pasos.isEmpty()) return;
+        HistorialPaso paso = pasos.remove(0);
+        String accion = paso.getAccion();
+        if (accion.contains("→")) {
+            String[] partes = accion.split("→");
+            if (partes.length == 2) {
+                String derecha = partes[1].trim();
+                if (!derecha.equals("ε")) {
+                    String[] simbolos = derecha.split(" ");
+                    for (String s : simbolos) {
+                        if (!s.isEmpty()) {
+                            NodoArbol hijo = new NodoArbol(s);
+                            nodo.hijos.add(hijo);
+                        }
+                    }
+                    // Expandir recursivamente los hijos no terminales
+                    for (NodoArbol hijo : nodo.hijos) {
+                        if (!esTerminal(hijo.valor) && !hijo.valor.equals("ε")) {
+                            construirRecursivo(hijo, new ArrayList<>(pasos));
+                        }
+                    }
+                } else {
+                    nodo.hijos.add(new NodoArbol("ε"));
+                }
+            }
+        }
+    }
+
+    // Generar el código DOT para Graphviz
+    private String generarDotDesdeArbol(NodoArbol raiz) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("digraph G {\n");
+        sb.append("node [shape=ellipse, fontsize=18, fontname=Consolas, style=filled, fillcolor=white, color=black];\n");
+        int[] id = {0};
+        generarDotRec(raiz, sb, id, null);
+        sb.append("}\n");
+        return sb.toString();
+    }
+
+    private void generarDotRec(NodoArbol nodo, StringBuilder sb, int[] id, String parentId) {
+        String myId = "n" + id[0]++;
+        sb.append(myId + " [label=\"" + nodo.valor.replace("\"", "\\\"") + "\"];\n");
+        if (parentId != null) {
+            sb.append(parentId + " -> " + myId + ";\n");
+        }
+        for (NodoArbol hijo : nodo.hijos) {
+            generarDotRec(hijo, sb, id, myId);
+        }
     }
 
     // Modelo para la tabla de historial
