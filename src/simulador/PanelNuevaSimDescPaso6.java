@@ -215,10 +215,10 @@ public class PanelNuevaSimDescPaso6 extends BorderPane implements PanelNuevaSimD
                         if (isSelected()) {
                             // Estilo para celda seleccionada
                             setStyle("-fx-background-color: #E3F2FD; -fx-text-fill: black; -fx-font-weight: bold; -fx-border-color: #1976D2; -fx-border-width: 1px;");
-                        } else if (item.startsWith("E")) {
+                        } else if (item != null && !item.isEmpty() && item.startsWith("E")) {
                             // Estilo para funciones de error
                             setStyle("-fx-text-fill: #1976D2; -fx-font-weight: bold;");
-                        } else if (Character.isDigit(item.charAt(0))) {
+                        } else if (item != null && !item.isEmpty() && Character.isDigit(item.charAt(0))) {
                             // Estilo para producciones
                             setStyle("-fx-text-fill: black; -fx-font-weight: bold;");
                         } else {
@@ -267,10 +267,10 @@ public class PanelNuevaSimDescPaso6 extends BorderPane implements PanelNuevaSimD
                         if (isSelected()) {
                             // Estilo para celda seleccionada
                             setStyle("-fx-background-color: #E3F2FD; -fx-text-fill: black; -fx-font-weight: bold; -fx-border-color: #1976D2; -fx-border-width: 1px;");
-                        } else if (item.startsWith("E")) {
+                        } else if (item != null && !item.isEmpty() && item.startsWith("E")) {
                             // Estilo para funciones de error
                             setStyle("-fx-text-fill: #1976D2; -fx-font-weight: bold;");
-                        } else if (Character.isDigit(item.charAt(0))) {
+                        } else if (item != null && !item.isEmpty() && Character.isDigit(item.charAt(0))) {
                             // Estilo para producciones
                             setStyle("-fx-text-fill: black; -fx-font-weight: bold;");
                         } else {
@@ -309,7 +309,21 @@ public class PanelNuevaSimDescPaso6 extends BorderPane implements PanelNuevaSimD
 
     @FXML
     private void iniciarSimulacion() {
-        // Implementa la lógica para iniciar la simulación descendente
+        if (panelSimuladorDesc == null) return;
+
+        // Crear la instancia de SimulacionFinal
+        SimulacionFinal simulacionFinal = new SimulacionFinal(
+            gramatica,
+            (TablaPredictivaPaso5) panelSimuladorDesc.getTablaPredictivaExtendidaGlobal()
+        );
+
+        // Crear una nueva pestaña y añadirla al TabPane principal
+        Tab nuevaPestana = new Tab("Simulación Final");
+        nuevaPestana.setContent(simulacionFinal);
+        nuevaPestana.setClosable(true);
+
+        panelSimuladorDesc.tabPane.getTabs().add(nuevaPestana);
+        panelSimuladorDesc.tabPane.getSelectionModel().select(nuevaPestana);
     }
 
     @FXML
