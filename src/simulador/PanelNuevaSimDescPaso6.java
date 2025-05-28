@@ -40,11 +40,9 @@ public class PanelNuevaSimDescPaso6 extends BorderPane implements PanelNuevaSimD
         
         // Usar directamente la tabla predictiva extendida global
         if (panelSimuladorDesc != null && panelSimuladorDesc.getTablaPredictivaExtendidaGlobal() != null) {
-            System.out.println("Usando la tabla predictiva extendida global en el paso 6");
             this.tablaPredictiva = panelSimuladorDesc.getTablaPredictivaExtendidaGlobal();
         } else {
             // Fallback por si no existe la global (no debería ocurrir)
-            System.out.println("ERROR: No se encontró una tabla predictiva extendida global en el paso 6");
             this.tablaPredictiva = gramatica.getTPredictiva();
         }
         
@@ -106,15 +104,10 @@ public class PanelNuevaSimDescPaso6 extends BorderPane implements PanelNuevaSimD
             if (panelSimuladorDesc != null && panelSimuladorDesc.getTablaPredictivaExtendidaGlobal() != null) {
                 TablaPredictivaPaso5 tablaGlobal = panelSimuladorDesc.getTablaPredictivaExtendidaGlobal();
                 
-                System.out.println("Columnas en tabla paso6: " + tablePredictiva.getColumns().size());
-                System.out.println("Columnas en tabla global: " + tablaGlobal.getTablaPredictiva().getColumns().size());
-                
                 // Si la tabla no tiene columnas o filas, reconstruirla desde cero
                 if (tablePredictiva.getColumns().isEmpty() || 
                     tablePredictiva.getItems() == null || 
                     tablePredictiva.getItems().isEmpty()) {
-                    
-                    System.out.println("Recreando la tabla predictiva en el paso 6...");
                     
                     // Limpiar la tabla
                     tablePredictiva.getColumns().clear();
@@ -127,7 +120,6 @@ public class PanelNuevaSimDescPaso6 extends BorderPane implements PanelNuevaSimD
                         // Crear una copia de los items para asegurar que los datos se mantengan
                         ObservableList<FilaTablaPredictiva> items = tablaGlobal.getTablaPredictiva().getItems();
                         tablePredictiva.setItems(items);
-                        System.out.println("Filas copiadas: " + tablePredictiva.getItems().size());
                     }
                 }
                 
@@ -140,31 +132,20 @@ public class PanelNuevaSimDescPaso6 extends BorderPane implements PanelNuevaSimD
                 
                 // Refrescar la vista
                 tablePredictiva.refresh();
-                
-                System.out.println("Tabla cargada correctamente en el paso 6. Número de filas: " + 
-                                 (tablePredictiva.getItems() != null ? tablePredictiva.getItems().size() : 0) + 
-                                 ", Número de columnas: " + tablePredictiva.getColumns().size());
-            } else {
-                System.out.println("ERROR: La tabla predictiva extendida global no tiene tabla UI");
             }
-        } else {
-            System.out.println("ERROR: La tabla predictiva no es del tipo TablaPredictivaPaso5");
-        }
+        } 
     }
 
     /**
      * Crea las columnas manualmente para la tabla predictiva.
      */
     private void crearColumnasManualmente() {
-        System.out.println("Creando columnas manualmente para el paso 6");
-        
         // Verificar si hay una tabla global para comparar
         if (panelSimuladorDesc != null && panelSimuladorDesc.getTablaPredictivaExtendidaGlobal() != null) {
             TablaPredictivaPaso5 tablaGlobal = panelSimuladorDesc.getTablaPredictivaExtendidaGlobal();
             
             // Obtener el número de columnas en la tabla global para asegurar consistencia
             int columnasEnGlobal = tablaGlobal.getTablaPredictiva().getColumns().size();
-            System.out.println("La tabla global tiene " + columnasEnGlobal + " columnas");
         }
         
         // Columna para símbolos
@@ -305,8 +286,6 @@ public class PanelNuevaSimDescPaso6 extends BorderPane implements PanelNuevaSimD
         
         // Aplicar configuración global a la tabla
         tablePredictiva.setStyle("-fx-background-color: white; -fx-table-cell-border-color: black;");
-        
-        System.out.println("Creadas " + tablePredictiva.getColumns().size() + " columnas manualmente");
     }
 
     @FXML
@@ -338,9 +317,6 @@ public class PanelNuevaSimDescPaso6 extends BorderPane implements PanelNuevaSimD
         // Volver a abrir el paso 5
         if (panelSimuladorDesc != null) {
             panelSimuladorDesc.cambiarPaso(4);
-        }
-        else{
-            System.out.println("No se pudo acceder al panelSimuladorDesc");
         }
     }
 

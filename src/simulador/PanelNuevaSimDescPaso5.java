@@ -80,14 +80,12 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
 
         // Verificar si hay una tabla predictiva básica en la gramática
         if (gramatica.getTPredictiva() == null) {
-            System.out.println("Error: No hay tabla predictiva básica inicializada en la gramática");
             return;
         }
 
         // Verificar las funciones de error
         List<FuncionError> funcionesError = gramatica.getTPredictiva().getFuncionesError();
         if (funcionesError == null || funcionesError.isEmpty()) {
-            System.out.println("Error: No hay funciones de error disponibles");
             return;
         }
 
@@ -101,7 +99,6 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
         tablaPredictiva.setOnMouseClicked(event -> {
             // Guardar al hacer clic para capturar cambios inmediatamente
             if (event.getClickCount() == 2) {
-                System.out.println("Guardando cambios en doble clic");
                 guardarTablaEnGlobal();
             }
         });
@@ -127,9 +124,7 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
         // Verificar si ya existe una tabla predictiva extendida global
         TablaPredictivaPaso5 tablaGlobal = panelPadre.getTablaPredictivaExtendidaGlobal();
         
-        if (tablaGlobal == null) {
-            System.out.println("Creando una nueva tabla predictiva extendida desde cero");
-            
+        if (tablaGlobal == null) {            
             // Crear una nueva tabla predictiva extendida
             tablaGlobal = new TablaPredictivaPaso5(tablaPredictiva);
             tablaGlobal.setPanelPaso5(this);
@@ -143,14 +138,7 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
             // Guardar la instancia en el panel padre
             panelPadre.setTablaPredictivaExtendidaGlobal(tablaGlobal);
             
-            System.out.println("Tabla predictiva extendida creada con " + tablaPredictiva.getColumns().size() + " columnas");
         } else {
-            System.out.println("Usando la tabla predictiva extendida global existente");
-            
-            // Mostrar el número de columnas en la tabla global
-            int columnasOriginales = tablaGlobal.getTablaPredictiva().getColumns().size();
-            System.out.println("La tabla global tiene " + columnasOriginales + " columnas");
-            
             // Si la tabla global ya tiene datos, asegurarnos de usarlos en la tabla local
             if (tablaGlobal.getTablaPredictiva().getItems() != null && 
                 !tablaGlobal.getTablaPredictiva().getItems().isEmpty()) {
@@ -164,7 +152,6 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
                 // Copiar los datos de la tabla global a la local
                 tablaPredictiva.setItems(tablaGlobal.getTablaPredictiva().getItems());
                 
-                System.out.println("Datos de la tabla global copiados a la tabla local");
             } else {
                 // Crear una nueva tabla con la misma instancia UI
                 TablaPredictivaPaso5 nuevaTabla = new TablaPredictivaPaso5(tablaPredictiva);
@@ -177,15 +164,12 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
                 nuevaTabla.construir(gramatica);
                 
                 // Reemplazar la tabla global
-                panelPadre.setTablaPredictivaExtendidaGlobal(nuevaTabla);
-                
-                System.out.println("Tabla predictiva reconstruida con " + tablaPredictiva.getColumns().size() + " columnas");
+                panelPadre.setTablaPredictivaExtendidaGlobal(nuevaTabla);                
             }
         }
         
         // Asegurarnos de que las columnas estén bien
         if (tablaPredictiva.getColumns().isEmpty()) {
-            System.out.println("¡ALERTA! No hay columnas en la tabla - creándolas");
             crearColumnasEnTabla(tablaPredictiva);
         }
         
@@ -197,19 +181,12 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
         // Forzar un refresh
         tablaPredictiva.refresh();
         
-        System.out.println("Tabla construida con éxito - Filas: " + 
-                         (tablaPredictiva.getItems() != null ? tablaPredictiva.getItems().size() : 0) + 
-                         ", Columnas: " + tablaPredictiva.getColumns().size());
-        
         // Mostrar información sobre las celdas para diagnóstico
         if (tablaPredictiva.getItems() != null && !tablaPredictiva.getItems().isEmpty()) {
             FilaTablaPredictiva primeraFila = tablaPredictiva.getItems().get(0);
             if (primeraFila != null) {
                 for (TableColumn<FilaTablaPredictiva, ?> col : tablaPredictiva.getColumns()) {
-                    if (col.getText().equals("Símbolo")) continue;
-                    
-                    String valorCelda = primeraFila.getValor(col.getText()).get();
-                    System.out.println("Celda [0," + col.getText() + "] = " + valorCelda);
+                    if (col.getText().equals("Símbolo")) continue;                    
                 }
             }
         }
@@ -222,13 +199,10 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
     private void guardarTablaEnGlobal() {
         TablaPredictivaPaso5 tablaGlobal = panelPadre.getTablaPredictivaExtendidaGlobal();
         
-        if (tablaGlobal != null && tablaPredictiva.getItems() != null) {
-            System.out.println("Guardando datos de la tabla local a la global");
-            
+        if (tablaGlobal != null && tablaPredictiva.getItems() != null) {            
             try {
                 // 1. Asegurar que la tabla global tenga columnas
                 if (tablaGlobal.getTablaPredictiva().getColumns().isEmpty()) {
-                    System.out.println("La tabla global no tiene columnas - recreándolas");
                     crearColumnasEnTabla(tablaGlobal.getTablaPredictiva());
                 }
                 
@@ -239,13 +213,10 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
                 
                 // Si no hay filas en la tabla global, copiar directamente
                 if (filasGlobales == null || filasGlobales.isEmpty()) {
-                    System.out.println("No hay filas en la tabla global - copiando directamente");
                     // Crear una copia directa de los elementos para evitar problemas de referencia
                     tablaGlobal.getTablaPredictiva().setItems(FXCollections.observableArrayList(filasLocales));
                 } else {
                     // Copiar celda por celda para preservar los valores modificados
-                    System.out.println("Copiando valores celda por celda");
-                    
                     // Obtener todas las columnas excepto la primera (que es "Símbolo")
                     List<TableColumn<FilaTablaPredictiva, ?>> columnas = tablaPredictiva.getColumns();
                     
@@ -263,31 +234,20 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
                                 // Solo copiar si hay un valor
                                 if (valorLocal != null && !valorLocal.isEmpty()) {
                                     filaGlobal.setValor(nombreColumna, valorLocal);
-                                    System.out.println("Copiado valor en [" + filaGlobal.getSimbolo() + "," + nombreColumna + "]: " + valorLocal);
                                 }
                             }
-                        } else {
-                            System.out.println("ADVERTENCIA: Fila " + i + " tiene símbolos distintos: " + 
-                                              filaLocal.getSimbolo() + " vs " + filaGlobal.getSimbolo());
-                        }
+                        } 
                     }
                 }
                 
                 // 3. Copiar también las funciones de error
                 tablaGlobal.setFuncionesError(gramatica.getTPredictiva().getFuncionesError());
-                
-                System.out.println("Datos guardados - Global ahora tiene " + 
-                                 (tablaGlobal.getTablaPredictiva().getItems() != null ? 
-                                  tablaGlobal.getTablaPredictiva().getItems().size() : 0) + " filas");
-                
+            
                 // 4. Forzar un refresh de la tabla global
                 tablaGlobal.getTablaPredictiva().refresh();
             } catch (Exception e) {
-                System.out.println("ERROR al guardar la tabla: " + e.getMessage());
                 e.printStackTrace();
             }
-        } else {
-            System.out.println("No se pudo guardar la tabla local en la global - referencias nulas");
         }
     }
 
@@ -361,6 +321,28 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
                         
                         setText(item);
                         
+                        // Color especial para terminales solo en primera posición
+                        FilaTablaPredictiva fila = getTableRow().getItem();
+                        if (fila != null && fila.getEsTerminal()) {
+                            Terminal terminalFila = gramatica.getTerminales().stream()
+                                .filter(t -> t.getNombre().equals(fila.getSimbolo()))
+                                .findFirst()
+                                .orElse(null);
+                            boolean soloPrimeraPos = false;
+                            TablaPredictivaPaso5 tablaGlobal = panelPadre.getTablaPredictivaExtendidaGlobal();
+                            if (tablaGlobal != null && terminalFila != null) {
+                                try {
+                                    java.lang.reflect.Method m = tablaGlobal.getClass().getDeclaredMethod("apareceSoloPrimeraPos", Terminal.class);
+                                    m.setAccessible(true);
+                                    soloPrimeraPos = (boolean) m.invoke(tablaGlobal, terminalFila);
+                                } catch (Exception e) {
+                                }
+                            }
+                            if (soloPrimeraPos) {
+                                setStyle("-fx-background-color: #E9ECEF; -fx-text-fill: black;");
+                                return;
+                            }
+                        }
                         // Aplicar estilo según tipo de contenido
                         if (isSelected()) {
                             // Estilo para celda seleccionada
@@ -443,8 +425,6 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
         
         // Aplicar configuración global
         tabla.setStyle("-fx-background-color: white; -fx-table-cell-border-color: black;");
-        
-        System.out.println("Creadas " + tabla.getColumns().size() + " columnas manualmente");
     }
 
     private void actualizarComboBoxFuncionesError() {
@@ -478,9 +458,7 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
         // Seleccionar el primer elemento si hay elementos disponibles
         if (!comboBoxFuncionesError.getItems().isEmpty()) {
             comboBoxFuncionesError.getSelectionModel().selectFirst();
-        } else {
-            System.out.println("No se encontraron funciones de error para mostrar en el ComboBox");
-        }
+        } 
     }
 
     public String getFuncionErrorSeleccionada() {
@@ -543,13 +521,11 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
                     guardarTablaEnGlobal();
                     
                     // Para forzar la actualización visual, recrear las columnas
-                    System.out.println("Recreando columnas para asegurar la visualización correcta");
                     tablaPredictiva.getColumns().clear();
                     crearColumnasEnTabla(tablaPredictiva);
                     
                     // Refrescar la tabla local
                     tablaPredictiva.refresh();
-                    System.out.println("Función de error eliminada y cambios guardados en columna " + column.getText());
                 } else {
                     // Mostrar alerta si la celda no tiene una función de error o una producción épsilon añadida
                     Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -583,13 +559,11 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
                         guardarTablaEnGlobal();
                         
                         // Para forzar la actualización visual, recrear las columnas
-                        System.out.println("Recreando columnas para asegurar la visualización correcta");
                         tablaPredictiva.getColumns().clear();
                         crearColumnasEnTabla(tablaPredictiva);
                         
                         // Refrescar la tabla local
                         tablaPredictiva.refresh();
-                        System.out.println("Función de error añadida y guardada: " + funcionErrorSeleccionada + " en columna " + column.getText());
                     } else {
                         // Mostrar alerta si no se ha seleccionado una función de error
                         Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -648,7 +622,6 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
      */
     public void guardarDatosTabla() {
         guardarTablaEnGlobal();
-        System.out.println("Guardado manual de datos de tabla ejecutado");
     }
 
     /**
@@ -658,25 +631,20 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
      */
     @FXML
     private void handleRellenarEpsilon() {
-        System.out.println("Rellenando celdas vacías con épsilon...");
         boolean seHizoAlgunCambio = false;
         
         // Obtener la tabla extendida global
         TablaPredictivaPaso5 tablaGlobal = panelPadre.getTablaPredictivaExtendidaGlobal();
         if (tablaGlobal == null) {
-            System.out.println("ERROR: No se encontró la tabla predictiva extendida global");
             return;
         }
         
         // Usar los items de la tabla global
         ObservableList<FilaTablaPredictiva> filas = tablaGlobal.getTablaPredictiva().getItems();
         if (filas == null || filas.isEmpty()) {
-            System.out.println("ERROR: La tabla global no tiene filas");
             return;
         }
-        
-        System.out.println("Procesando " + filas.size() + " filas de la tabla global");
-        
+                
         for (FilaTablaPredictiva fila : filas) {
             // Si es terminal y solo aparece en primera posición, saltar
             if (fila.getEsTerminal()) {
@@ -692,15 +660,12 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
                     m.setAccessible(true);
                     soloPrimeraPos = (boolean) m.invoke(tablaGlobal, terminalFila);
                 } catch (Exception e) {
-                    System.out.println("No se pudo invocar apareceSoloPrimeraPos: " + e.getMessage());
                 }
 
                 if (terminalFila != null && soloPrimeraPos) {
-                    System.out.println("Saltando terminal solo en primera posición: " + fila.getSimbolo());
                     continue;
                 }
             }
-            System.out.println("Procesando fila: " + fila.getSimbolo());
             for (TableColumn<FilaTablaPredictiva, ?> col : tablaPredictiva.getColumns()) {
                 String nombreCol = col.getText();
                 if (nombreCol.equals("Símbolo")) continue;
@@ -710,7 +675,6 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
                 if (valor == null || valor.isEmpty()) {
                     fila.setValor(nombreCol, "ε");
                     seHizoAlgunCambio = true;
-                    System.out.println("Añadido épsilon en [" + fila.getSimbolo() + "," + nombreCol + "]");
                 }
             }
         }
@@ -719,9 +683,6 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
             // Refrescar la tabla y guardar
             guardarTablaEnGlobal();
             tablaPredictiva.refresh();
-            System.out.println("Celdas vacías rellenadas con épsilon.");
-        } else {
-            System.out.println("No se encontraron celdas vacías para rellenar con épsilon.");
         }
     }
 }

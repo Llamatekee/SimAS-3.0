@@ -109,13 +109,8 @@ public class TablaPredictivaPaso5 extends TablaPredictiva {
         
         // Verificar si las columnas se crearon correctamente
         if (getTablaPredictiva().getColumns().isEmpty()) {
-            System.out.println("ADVERTENCIA: No se crearon columnas en TablaPredictivaPaso5.construir");
             // Forzar la creación de columnas
             crearColumnas(gramatica);
-        } else {
-            System.out.println("Columnas creadas correctamente en TablaPredictivaPaso5: " + 
-                              getTablaPredictiva().getColumns().size() + " columnas");
-            columnsCreated = true;
         }
     }
     
@@ -152,7 +147,6 @@ public class TablaPredictivaPaso5 extends TablaPredictiva {
             cellData.getValue().getValor("$"));
         getTablaPredictiva().getColumns().add(colDolar);
         
-        System.out.println("Columnas creadas manualmente: " + getTablaPredictiva().getColumns().size());
         columnsCreated = true;
     }
 
@@ -349,7 +343,6 @@ public class TablaPredictivaPaso5 extends TablaPredictiva {
                     getTablaPredictiva().refresh();
                     
                     // Informar al usuario de la acción realizada
-                    System.out.println("Función de error añadida: " + numeroFuncion);
                 }
             }
         });
@@ -426,7 +419,5 @@ public class TablaPredictivaPaso5 extends TablaPredictiva {
                 cellData.getValue().getValor("$"));
             tabla.getColumns().add(colDolar);
         }
-        
-        System.out.println("Tabla UI actualizada correctamente");
     }
 } 

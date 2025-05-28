@@ -66,7 +66,6 @@ public class PanelSimuladorDesc {
         // Verificar si la tabla predictiva existe
         if (this.gramatica.getTPredictiva() == null) {
             // Si no existe, crear una nueva tabla predictiva básica
-            System.out.println("Creando una nueva tabla predictiva básica");
             this.gramatica.generarTPredictiva();
         }
         
@@ -75,14 +74,11 @@ public class PanelSimuladorDesc {
         
         // Crear la tabla predictiva extendida global si no existe
         if (this.tablaPredictivaExtendidaGlobal == null) {
-            System.out.println("Creando tabla predictiva extendida global");
             this.tablaPredictivaExtendidaGlobal = new TablaPredictivaPaso5();
             // Copiar las funciones de error de la tabla básica
             this.tablaPredictivaExtendidaGlobal.setFuncionesError(
                 this.gramatica.getTPredictiva().getFuncionesError());
-        } else {
-            System.out.println("Ya existe una tabla predictiva extendida global");
-        }
+        } 
     }
 
     /**
@@ -91,7 +87,6 @@ public class PanelSimuladorDesc {
     private void inicializarFuncionesError() {
         // Verificar si ya hay funciones de error
         if (this.gramatica.getTPredictiva().getFuncionesError().isEmpty()) {
-            System.out.println("Inicializando funciones de error básicas");
             ObservableList<String> simbolosTerminales = this.gramatica.getTerminalesModel();
             TablaPredictiva tPredictiva = this.gramatica.getTPredictiva();
             
@@ -112,11 +107,7 @@ public class PanelSimuladorDesc {
                 tPredictiva.crearFunError(funError);
                 x++;
             }
-        } else {
-            System.out.println("Ya existen funciones de error (cantidad: " + 
-                              this.gramatica.getTPredictiva().getFuncionesError().size() + 
-                              "). No se sobrescriben.");
-        }
+        } 
     }
     
     /**
@@ -200,7 +191,6 @@ public class PanelSimuladorDesc {
             PanelNuevaSimDescPaso5 paso5 = (PanelNuevaSimDescPaso5) pasos.get(4);
             // Llamar al método público para guardar la tabla
             paso5.guardarDatosTabla();
-            System.out.println("Guardando datos de la tabla del paso 5 al cambiar a otro paso");
         }
         
         this.pasoActual = paso;
@@ -222,14 +212,12 @@ public class PanelSimuladorDesc {
         if (paso == 4 && pasos.get(4) instanceof PanelNuevaSimDescPaso5) {
             PanelNuevaSimDescPaso5 paso5View = (PanelNuevaSimDescPaso5) pasos.get(4);
             paso5View.refrescarVista();
-            System.out.println("Refrescando vista del paso 5");
         }
         // Paso 6
         else if (paso == 5 && pasos.get(5) instanceof PanelNuevaSimDescPaso6) {
             // Reconstruir el paso 6 con la tabla actualizada
             pasos.set(5, new PanelNuevaSimDescPaso6(this.gramatica, this));
             pestañaSimulacion.setContent(pasos.get(5).getRoot());
-            System.out.println("Reconstruyendo el paso 6 con datos actualizados");
         }
     }
 }
