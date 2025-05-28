@@ -8,6 +8,13 @@
 <BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="bienvenida.MenuPrincipal"
             stylesheets="@styles.css">
 
+    <top>
+        <HBox alignment="CENTER_RIGHT" spacing="10" style="-fx-padding: 10 20 0 0;">
+            <Label text="Idioma:" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
+            <ComboBox fx:id="comboIdioma" prefWidth="120" />
+        </HBox>
+    </top>
+
     <center>
         <StackPane>
             <TabPane fx:id="tabPane" tabClosingPolicy="SELECTED_TAB" styleClass="tab-pane">

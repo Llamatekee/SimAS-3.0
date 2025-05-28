@@ -10,12 +10,19 @@ import javafx.stage.Stage;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class MenuPrincipal {
 
     @FXML private TabPane tabPane;
     @FXML private Button btnCerrarTabs;
+    @FXML private ComboBox<String> comboIdioma;
+    @FXML private Button btnEditor;
+    @FXML private Button btnSalir;
     private Tab lastSelectedTab;
+    private ResourceBundle bundle;
+    private Locale currentLocale = new Locale("es");
 
     public void start(Stage primaryStage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/MenuPrincipal.fxml"));
@@ -36,12 +43,69 @@ public class MenuPrincipal {
 
     @FXML
     private void initialize() {
+        // Inicializar idiomas
+        comboIdioma.getItems().addAll("Español", "English", "Français");
+        comboIdioma.setValue("Español");
+        comboIdioma.setOnAction(e -> cambiarIdioma());
+        cargarBundle(currentLocale);
         // Guardar la última pestaña seleccionada
         tabPane.getSelectionModel().selectedItemProperty().addListener((obs, oldTab, newTab) -> {
             if (newTab != null) {
                 lastSelectedTab = newTab;
             }
         });
+    }
+
+    private void cambiarIdioma() {
+        String idioma = comboIdioma.getValue();
+        switch (idioma) {
+            case "English":
+                currentLocale = new Locale("en");
+                break;
+            case "Français":
+                currentLocale = new Locale("fr");
+                break;
+            default:
+                currentLocale = new Locale("es");
+        }
+        cargarBundle(currentLocale);
+        actualizarTextos();
+    }
+
+    private void cargarBundle(Locale locale) {
+        bundle = ResourceBundle.getBundle("messages", locale);
+    }
+
+    private void actualizarTextos() {
+        try {
+            // Actualizar textos de los botones principales
+            if (btnEditor != null) btnEditor.setText(bundle.getString("btn.editor"));
+            if (btnSalir != null) btnSalir.setText(bundle.getString("btn.salir"));
+            
+            // Actualizar textos de las etiquetas
+            if (comboIdioma != null && comboIdioma.getParent() != null) {
+                Label labelIdioma = (Label) comboIdioma.getParent().getChildrenUnmodifiable().get(0);
+                labelIdioma.setText(bundle.getString("label.idioma"));
+            }
+            
+            // Actualizar título de la ventana
+            if (btnEditor != null && btnEditor.getScene() != null) {
+                Stage stage = (Stage) btnEditor.getScene().getWindow();
+                stage.setTitle(bundle.getString("title.menu"));
+            }
+            
+            // Actualizar textos de las pestañas
+            if (tabPane != null) {
+                for (Tab tab : tabPane.getTabs()) {
+                    if (tab.getText().equals("Menú Principal")) {
+                        tab.setText(bundle.getString("title.menu"));
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Error al actualizar textos: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     @FXML
