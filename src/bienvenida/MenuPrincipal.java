@@ -20,6 +20,12 @@ public class MenuPrincipal {
     @FXML private ComboBox<String> comboIdioma;
     @FXML private Button btnEditor;
     @FXML private Button btnSalir;
+    @FXML private Button btnSimulador;
+    @FXML private Button btnAyuda;
+    @FXML private Button btnTutorial;
+    @FXML private Label labelTitulo;
+    @FXML private Label labelSubtitulo;
+    @FXML private Label labelDesarrollado;
     private Tab lastSelectedTab;
     private ResourceBundle bundle;
     private Locale currentLocale = new Locale("es");
@@ -81,12 +87,22 @@ public class MenuPrincipal {
             // Actualizar textos de los botones principales
             if (btnEditor != null) btnEditor.setText(bundle.getString("btn.editor"));
             if (btnSalir != null) btnSalir.setText(bundle.getString("btn.salir"));
+            if (btnSimulador != null) btnSimulador.setText(bundle.getString("btn.simulador"));
+            if (btnAyuda != null) btnAyuda.setText(bundle.getString("btn.ayuda"));
+            if (btnTutorial != null) btnTutorial.setText(bundle.getString("btn.tutorial"));
+            if (btnCerrarTabs != null) {
+                btnCerrarTabs.setText(bundle.getString("btn.cerrar"));
+                btnCerrarTabs.getTooltip().setText(bundle.getString("tooltip.cerrar"));
+            }
             
             // Actualizar textos de las etiquetas
             if (comboIdioma != null && comboIdioma.getParent() != null) {
                 Label labelIdioma = (Label) comboIdioma.getParent().getChildrenUnmodifiable().get(0);
                 labelIdioma.setText(bundle.getString("label.idioma"));
             }
+            if (labelTitulo != null) labelTitulo.setText(bundle.getString("label.titulo"));
+            if (labelSubtitulo != null) labelSubtitulo.setText(bundle.getString("label.subtitulo"));
+            if (labelDesarrollado != null) labelDesarrollado.setText(bundle.getString("label.desarrollado"));
             
             // Actualizar título de la ventana
             if (btnEditor != null && btnEditor.getScene() != null) {
@@ -97,9 +113,18 @@ public class MenuPrincipal {
             // Actualizar textos de las pestañas
             if (tabPane != null) {
                 for (Tab tab : tabPane.getTabs()) {
-                    if (tab.getText().equals("Menú Principal")) {
+                    // Título de la pestaña principal
+                    if (tab.getText().equals("Menú Principal") || 
+                        tab.getText().equals("Main Menu") || 
+                        tab.getText().equals("Menu Principal")) {
                         tab.setText(bundle.getString("title.menu"));
                     }
+                    // Si la pestaña contiene un Editor, actualizar sus textos y el título de la pestaña
+                    if (tab.getContent() instanceof editor.Editor) {
+                        ((editor.Editor) tab.getContent()).actualizarTextos(bundle);
+                        tab.setText(bundle.getString("editor.title"));
+                    }
+                    // Aquí puedes añadir más instanceof para otros controladores internacionalizables
                 }
             }
         } catch (Exception e) {
@@ -111,18 +136,15 @@ public class MenuPrincipal {
     @FXML
     private void onBtnCerrarTabsAction() {
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION,
-                "¿Seguro que quieres cerrar todas las pestañas menos la principal?",
+                bundle.getString("msg.confirmar.cerrar"),
                 ButtonType.YES, ButtonType.NO);
-        confirm.setTitle("Confirmación");
+        confirm.setTitle(bundle.getString("title.menu"));
         
         confirm.showAndWait().ifPresent(response -> {
             if (response == ButtonType.YES) {
-                // Seleccionar la pestaña del menú principal
                 tabPane.getSelectionModel().selectFirst();
-                // Cerrar todas las pestañas excepto la principal
                 tabPane.getTabs().removeIf(Tab::isClosable);
             } else {
-                // Volver a la pestaña anterior
                 if (lastSelectedTab != null) {
                     tabPane.getSelectionModel().select(lastSelectedTab);
                 }
@@ -133,7 +155,7 @@ public class MenuPrincipal {
     @FXML
     private void onBtnEditorAction() {
         Editor editor = new Editor(tabPane, this);
-        Tab editorTab = new Tab("Editor", editor.getRoot());
+        Tab editorTab = new Tab(bundle.getString("editor.title"), editor);
         editorTab.setClosable(true);
         tabPane.getTabs().add(editorTab);
         tabPane.getSelectionModel().select(editorTab);
@@ -147,13 +169,13 @@ public class MenuPrincipal {
                 if (Desktop.isDesktopSupported()) {
                     Desktop.getDesktop().open(manual);
                 } else {
-                    onMostrarErrorAction("La funcionalidad de escritorio no está soportada en este sistema.");
+                    onMostrarErrorAction(bundle.getString("msg.error.escritorio"));
                 }
             } catch (IOException e) {
-                onMostrarErrorAction("No se pudo abrir el manual de usuario: " + e.getMessage());
+                onMostrarErrorAction(bundle.getString("msg.error.manual") + ": " + e.getMessage());
             }
         } else {
-            onMostrarErrorAction("El archivo 'ManualDeUsuario.pdf' no se encuentra.");
+            onMostrarErrorAction(bundle.getString("msg.error.archivo"));
         }
     }
 
@@ -165,13 +187,13 @@ public class MenuPrincipal {
                 if (Desktop.isDesktopSupported()) {
                     Desktop.getDesktop().browse(tutorial.toURI());
                 } else {
-                    onMostrarErrorAction("La funcionalidad de escritorio no está soportada en este sistema.");
+                    onMostrarErrorAction(bundle.getString("msg.error.escritorio"));
                 }
             } catch (IOException e) {
-                onMostrarErrorAction("No se pudo abrir el tutorial: " + e.getMessage());
+                onMostrarErrorAction(bundle.getString("msg.error.tutorial") + ": " + e.getMessage());
             }
         } else {
-            onMostrarErrorAction("El archivo 'SimAS.html' no se encuentra.");
+            onMostrarErrorAction(bundle.getString("msg.error.archivo"));
         }
     }
 
@@ -186,9 +208,9 @@ public class MenuPrincipal {
     @FXML
     private void onBtnSalirAction() {
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION,
-                "¿Estás seguro de que quieres salir?",
+                bundle.getString("msg.confirmar.salir"),
                 ButtonType.YES, ButtonType.NO);
-        confirm.setTitle("Salir");
+        confirm.setTitle(bundle.getString("title.menu"));
         confirm.showAndWait().ifPresent(response -> {
             if (response == ButtonType.YES) {
                 System.exit(0);

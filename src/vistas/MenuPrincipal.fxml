@@ -23,10 +23,10 @@
                         <content>
                             <VBox fx:id="menuPanel" spacing="25" alignment="CENTER" styleClass="menu-panel">
                                 <!-- Título de la aplicación -->
-                                <Label text="SimAS 3.0" style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: white; -fx-padding: 0 0 20 0;"/>
+                                <Label fx:id="labelTitulo" text="SimAS 3.0" style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: white; -fx-padding: 0 0 20 0;"/>
                                 
                                 <!-- Subtítulo -->
-                                <Label text="Simulador de Análisis Sintáctico" style="-fx-font-size: 18px; -fx-text-fill: #bdc3c7; -fx-padding: 0 0 30 0;"/>
+                                <Label fx:id="labelSubtitulo" text="Simulador de Análisis Sintáctico" style="-fx-font-size: 18px; -fx-text-fill: #bdc3c7; -fx-padding: 0 0 30 0;"/>
                                 
                                 <!-- Botones del menú -->
                                 <Button fx:id="btnEditor" text="Editor de Gramáticas" onAction="#onBtnEditorAction" styleClass="menu-button">
@@ -70,7 +70,7 @@
                                 </Button>
                                 
                                 <!-- Pie de página -->
-                                <Label text="Desarrollado por Antonio" style="-fx-font-size: 14px; -fx-text-fill: #95a5a6; -fx-padding: 30 0 0 0;"/>
+                                <Label fx:id="labelDesarrollado" text="Desarrollado por Antonio" style="-fx-font-size: 14px; -fx-text-fill: #95a5a6; -fx-padding: 30 0 0 0;"/>
                             </VBox>
                         </content>
                     </Tab>

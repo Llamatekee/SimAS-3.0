@@ -17,12 +17,14 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.ResourceBundle;
 
 public class Editor extends VBox {
 
@@ -35,6 +37,7 @@ public class Editor extends VBox {
 
     // Componentes inyectados desde el FXML
     @FXML private BorderPane rootPane;
+    @FXML private Label labelTitulo;
     @FXML private Button btnAnadir;
     @FXML private Button btnAbrir;
     @FXML private Button btnGuardar;
@@ -50,6 +53,16 @@ public class Editor extends VBox {
     @FXML private ListView<String> listNoTerminales;
     @FXML private ListView<String> listTerminales;
     @FXML private ListView<String> listProducciones;
+    @FXML private Label labelPanelTitulo;
+    @FXML private Label labelNombre;
+    @FXML private Label labelSimboloInicial;
+    @FXML private Label labelDescripcion;
+    @FXML private Label labelNoTerminales;
+    @FXML private Label labelTerminales;
+    @FXML private Label labelProducciones;
+
+    private ResourceBundle bundle;
+    private File archivoActual;
 
     // ==========================
     // CONSTRUCTORES
@@ -93,8 +106,10 @@ public class Editor extends VBox {
      */
     private void cargarFXML() {
         try {
+            bundle = ResourceBundle.getBundle("messages");
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/Editor.fxml"));
             loader.setController(this);
+            loader.setResources(bundle);
             Parent root = loader.load();
             this.getChildren().clear();
             this.getChildren().add(root);
@@ -114,7 +129,9 @@ public class Editor extends VBox {
 
     // Método de inicialización; se invoca automáticamente tras cargar el FXML.
     @FXML
-    private void initialize() {
+    public void initialize() {
+        bundle = ResourceBundle.getBundle("messages");
+        actualizarTextos(bundle);
         // Configurar la vista según sea necesario
         btnEditar.setDisable(true);
         btnEliminar.setDisable(true);
@@ -174,9 +191,9 @@ public class Editor extends VBox {
     @FXML
     private void onBtnEliminarAction() {
         Alert confirm = new Alert(AlertType.CONFIRMATION, 
-            "¿Está seguro de que desea eliminar esta gramática?", 
+            bundle.getString("editor.msg.confirmar.eliminar"), 
             ButtonType.YES, ButtonType.NO);
-        confirm.setTitle("Eliminar Gramática");
+        confirm.setTitle(bundle.getString("editor.dialog.eliminar.titulo"));
         Optional<ButtonType> result = confirm.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.YES) {
             this.gramatica = new Gramatica();
@@ -201,18 +218,17 @@ public class Editor extends VBox {
 
     @FXML
     private void onBtnSalirAction() {
-        Alert confirm = new Alert(AlertType.CONFIRMATION, 
-            "¿Está seguro de que desea salir del editor?", 
-            ButtonType.YES, ButtonType.NO);
-        confirm.setTitle("Salir del Editor");
-        Optional<ButtonType> result = confirm.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.YES) {
-            // Cerrar la pestaña actual
-            Tab currentTab = tabPane.getSelectionModel().getSelectedItem();
-            if (currentTab != null) {
-                tabPane.getTabs().remove(currentTab);
+        Alert confirm = new Alert(AlertType.CONFIRMATION,
+                bundle.getString("msg.confirmar.salir"),
+                ButtonType.YES, ButtonType.NO);
+        confirm.setTitle(bundle.getString("editor.dialog.confirmar.titulo"));
+        
+        confirm.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.YES) {
+                Stage stage = (Stage) rootPane.getScene().getWindow();
+                stage.close();
             }
-        }
+        });
     }
 
     // ===============================
@@ -239,8 +255,8 @@ public class Editor extends VBox {
     public void grabarGramatica() {
         int i = gramatica.guardarGramatica(null); // Pasar null como ownerWindow
         if (i == 1) {
-            Alert alert = new Alert(AlertType.INFORMATION, "Gramática guardada correctamente", ButtonType.OK);
-            alert.setTitle("Guardar Gramática");
+            Alert alert = new Alert(AlertType.INFORMATION, bundle.getString("editor.msg.guardar.exito"), ButtonType.OK);
+            alert.setTitle(bundle.getString("editor.dialog.guardar.titulo"));
             alert.showAndWait();
         }
     }
@@ -284,23 +300,23 @@ public class Editor extends VBox {
         if (estadoValidacion == 1) {
             gramatica.setEstado(1);
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Gramática Validada");
+            alert.setTitle(bundle.getString("editor.dialog.validar.titulo"));
             alert.setHeaderText(null);
-            alert.setContentText("La gramática está validada correctamente.");
+            alert.setContentText(bundle.getString("editor.msg.validar.exito"));
             alert.showAndWait();
         } else {
             gramatica.setEstado(-1);
 
             // Construcción del mensaje sin etiquetas HTML
-            StringBuilder mensajeError = new StringBuilder("Se han detectado los siguientes errores:\n\n");
+            StringBuilder mensajeError = new StringBuilder(bundle.getString("editor.msg.validar.errores") + "\n\n");
             for (int i = 0; i < mensajesError.size(); i++) {
                 mensajeError.append(i + 1).append(". ").append(mensajesError.get(i)).append("\n\n");
             }
 
             // Crear un alert de error con el formato correcto
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error. Gramática No Validada");
-            alert.setHeaderText("Errores encontrados:");
+            alert.setTitle(bundle.getString("editor.dialog.validar.error.titulo"));
+            alert.setHeaderText(bundle.getString("editor.dialog.validar.error.header"));
             alert.setContentText(mensajeError.toString());
 
             // Hacer que la alerta muestre todo el texto correctamente si es muy largo
@@ -331,5 +347,41 @@ public class Editor extends VBox {
 
     private void generarInformePDF() {
         // Implementar la generación del informe PDF
+    }
+
+    public void actualizarTextos(ResourceBundle nuevoBundle) {
+        this.bundle = nuevoBundle;
+        try {
+            // Actualizar título
+            if (labelTitulo != null) {
+                labelTitulo.setText(bundle.getString("editor.title"));
+            }
+            // Actualizar labels de secciones y campos
+            if (labelPanelTitulo != null) labelPanelTitulo.setText(bundle.getString("editor.label.titulo"));
+            if (labelNombre != null) labelNombre.setText(bundle.getString("editor.label.nombre"));
+            if (labelSimboloInicial != null) labelSimboloInicial.setText(bundle.getString("editor.label.simb.inicial"));
+            if (labelDescripcion != null) labelDescripcion.setText(bundle.getString("editor.label.descripcion"));
+            if (labelNoTerminales != null) labelNoTerminales.setText(bundle.getString("editor.label.no.terminales"));
+            if (labelTerminales != null) labelTerminales.setText(bundle.getString("editor.label.terminales"));
+            if (labelProducciones != null) labelProducciones.setText(bundle.getString("editor.label.producciones"));
+            // Actualizar textos de los botones
+            if (btnAnadir != null) btnAnadir.setText(bundle.getString("editor.btn.nueva"));
+            if (btnAbrir != null) btnAbrir.setText(bundle.getString("editor.btn.abrir"));
+            if (btnGuardar != null) btnGuardar.setText(bundle.getString("editor.btn.guardar"));
+            if (btnEditar != null) btnEditar.setText(bundle.getString("editor.btn.editar"));
+            if (btnEliminar != null) btnEliminar.setText(bundle.getString("editor.btn.eliminar"));
+            if (btnValidar != null) btnValidar.setText(bundle.getString("editor.btn.validar"));
+            if (btnInforme != null) btnInforme.setText(bundle.getString("editor.btn.informe"));
+            if (btnSimular != null) btnSimular.setText(bundle.getString("editor.btn.simular"));
+            if (btnSalir != null) btnSalir.setText(bundle.getString("btn.salir"));
+            // Actualizar título de la ventana
+            if (rootPane != null && rootPane.getScene() != null) {
+                Stage stage = (Stage) rootPane.getScene().getWindow();
+                stage.setTitle(bundle.getString("editor.title"));
+            }
+        } catch (Exception e) {
+            System.err.println("Error al actualizar textos: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 }

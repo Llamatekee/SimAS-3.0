@@ -19,7 +19,7 @@
                 <padding>
                     <Insets top="10" right="10" bottom="10" left="10"/>
                 </padding>
-                <Label text="Editor de Gramáticas" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+                <Label fx:id="labelTitulo" text="%editor.title" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: white;"/>
             </HBox>
             
             <!-- Barra de herramientas -->
@@ -27,16 +27,16 @@
                 <padding>
                     <Insets top="5" right="10" bottom="5" left="10"/>
                 </padding>
-                <Button fx:id="btnAnadir" text="Añadir" onAction="#onBtnAnadirAction" styleClass="toolbar-button"/>
-                <Button fx:id="btnAbrir" text="Abrir" onAction="#onBtnAbrirAction" styleClass="toolbar-button"/>
-                <Button fx:id="btnGuardar" text="Guardar" onAction="#onBtnGuardarAction" styleClass="toolbar-button"/>
-                <Button fx:id="btnEditar" text="Editar" onAction="#onBtnEditarAction" styleClass="toolbar-button"/>
-                <Button fx:id="btnEliminar" text="Eliminar" onAction="#onBtnEliminarAction" styleClass="toolbar-button"/>
-                <Button fx:id="btnValidar" text="Validar" onAction="#onBtnValidarAction" styleClass="toolbar-button"/>
-                <Button fx:id="btnInforme" text="Informe" onAction="#onBtnInformeAction" styleClass="toolbar-button"/>
-                <Button fx:id="btnSimular" text="Simular" onAction="#onBtnSimularAction" styleClass="toolbar-button"/>
+                <Button fx:id="btnAnadir" text="%editor.btn.nueva" onAction="#onBtnAnadirAction" styleClass="toolbar-button"/>
+                <Button fx:id="btnAbrir" text="%editor.btn.abrir" onAction="#onBtnAbrirAction" styleClass="toolbar-button"/>
+                <Button fx:id="btnGuardar" text="%editor.btn.guardar" onAction="#onBtnGuardarAction" styleClass="toolbar-button"/>
+                <Button fx:id="btnEditar" text="%editor.btn.editar" onAction="#onBtnEditarAction" styleClass="toolbar-button"/>
+                <Button fx:id="btnEliminar" text="%editor.btn.eliminar" onAction="#onBtnEliminarAction" styleClass="toolbar-button"/>
+                <Button fx:id="btnValidar" text="%editor.btn.validar" onAction="#onBtnValidarAction" styleClass="toolbar-button"/>
+                <Button fx:id="btnInforme" text="%editor.btn.informe" onAction="#onBtnInformeAction" styleClass="toolbar-button"/>
+                <Button fx:id="btnSimular" text="%editor.btn.simular" onAction="#onBtnSimularAction" styleClass="toolbar-button"/>
                 <Region HBox.hgrow="ALWAYS"/>
-                <Button fx:id="btnSalir" text="Salir" onAction="#onBtnSalirAction" styleClass="toolbar-button"/>
+                <Button fx:id="btnSalir" text="%btn.salir" onAction="#onBtnSalirAction" styleClass="toolbar-button"/>
             </HBox>
         </VBox>
     </top>
@@ -49,7 +49,7 @@
                 <padding>
                     <Insets top="10" right="10" bottom="10" left="10"/>
                 </padding>
-                <Label text="Información de la Gramática" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+                <Label fx:id="labelPanelTitulo" text="%editor.label.titulo" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: white;"/>
                 
                 <GridPane hgap="10" vgap="10">
                     <padding>
@@ -62,13 +62,13 @@
                         <ColumnConstraints minWidth="100"/>
                     </columnConstraints>
 
-                    <Label text="Nombre:" styleClass="label" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                    <Label fx:id="labelNombre" text="%editor.label.nombre" styleClass="label" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
                     <TextField fx:id="txtNombre" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
                     
-                    <Label text="Símbolo inicial:" styleClass="label" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+                    <Label fx:id="labelSimboloInicial" text="%editor.label.simb.inicial" styleClass="label" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
                     <TextField fx:id="txtSimInicial" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="0"/>
 
-                    <Label text="Descripción:" styleClass="label" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                    <Label fx:id="labelDescripcion" text="%editor.label.descripcion" styleClass="label" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
                     <TextField fx:id="txtAreaDesc" editable="false" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="1"/>
                 </GridPane>
             </VBox>
@@ -80,12 +80,12 @@
                 </padding>
                 <!-- Símbolos -->
                 <VBox spacing="10" HBox.hgrow="ALWAYS">
-                    <Label text="Símbolos No Terminales" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+                    <Label fx:id="labelNoTerminales" text="%editor.label.no.terminales" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: white;"/>
                     <ListView fx:id="listNoTerminales" styleClass="list-view" VBox.vgrow="ALWAYS"/>
                 </VBox>
                 
                 <VBox spacing="10" HBox.hgrow="ALWAYS">
-                    <Label text="Símbolos Terminales" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+                    <Label fx:id="labelTerminales" text="%editor.label.terminales" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: white;"/>
                     <ListView fx:id="listTerminales" styleClass="list-view" VBox.vgrow="ALWAYS"/>
                 </VBox>
             </HBox>
@@ -95,7 +95,7 @@
                 <padding>
                     <Insets top="0" right="10" bottom="10" left="10"/>
                 </padding>
-                <Label text="Producciones" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+                <Label fx:id="labelProducciones" text="%editor.label.producciones" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: white;"/>
                 <ListView fx:id="listProducciones" styleClass="list-view" VBox.vgrow="ALWAYS"/>
             </VBox>
         </VBox>
