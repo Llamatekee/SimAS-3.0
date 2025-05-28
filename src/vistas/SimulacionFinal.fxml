@@ -22,24 +22,24 @@
             <HBox spacing="40" alignment="CENTER">
                 <VBox spacing="8">
                     <Label text="Pila" style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: white;"/>
-                    <TableView fx:id="tablaPila" prefWidth="180" prefHeight="220" styleClass="wizard-table"/>
+                    <TextArea fx:id="areaPila" editable="false" styleClass="simulacion-output" prefWidth="180" prefHeight="120" wrapText="true"/>
                 </VBox>
                 <VBox spacing="8">
                     <Label text="Entrada" style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: white;"/>
-                    <TableView fx:id="tablaEntrada" prefWidth="180" prefHeight="220" styleClass="wizard-table"/>
+                    <TextArea fx:id="areaEntrada" editable="false" styleClass="simulacion-output" prefWidth="180" prefHeight="120" wrapText="true"/>
                 </VBox>
                 <VBox spacing="8" alignment="TOP_LEFT">
-                    <Label text="Producción/Acción" style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+                    <Label text="Acción" style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: white;"/>
                     <TextArea fx:id="areaMensajes" prefWidth="350" prefHeight="120" wrapText="true" editable="false" styleClass="simulacion-output"/>
                 </VBox>
             </HBox>
             <Label text="Historial de pasos" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #3498DB; -fx-padding: 10 0 0 0;"/>
-            <TableView fx:id="tablaHistorial" prefHeight="300" prefWidth="900" styleClass="wizard-table">
+            <TableView fx:id="tablaHistorial" VBox.vgrow="ALWAYS" styleClass="wizard-table">
                 <columns>
-                    <TableColumn fx:id="colPaso" text="Paso" prefWidth="60"/>
-                    <TableColumn fx:id="colPila" text="Pila" prefWidth="250"/>
-                    <TableColumn fx:id="colEntrada" text="Entrada" prefWidth="250"/>
-                    <TableColumn fx:id="colAccion" text="Acción" prefWidth="340"/>
+                    <TableColumn fx:id="colPaso" text="Paso" minWidth="60" maxWidth="60"/>
+                    <TableColumn fx:id="colPila" text="Pila" minWidth="100"/>
+                    <TableColumn fx:id="colEntrada" text="Entrada" minWidth="100"/>
+                    <TableColumn fx:id="colAccion" text="Acción" minWidth="100"/>
                 </columns>
             </TableView>
         </VBox>

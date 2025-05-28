@@ -22,6 +22,7 @@ import java.util.Stack;
 import java.util.Arrays;
 import java.util.List;
 import javafx.beans.property.SimpleStringProperty;
+import java.util.ArrayList;
 
 public class SimulacionFinal extends BorderPane {
     @FXML private TextField campoEntrada;
@@ -30,8 +31,8 @@ public class SimulacionFinal extends BorderPane {
     @FXML private Button btnFinal;
     @FXML private Button btnRetroceso;
     @FXML private Button btnInicio;
-    @FXML private TableView<String> tablaPila;
-    @FXML private TableView<String> tablaEntrada;
+    @FXML private TextArea areaPila;
+    @FXML private TextArea areaEntrada;
     @FXML private TextArea areaMensajes;
     @FXML private Button btnEditarCadena;
     @FXML private TableView<HistorialPaso> tablaHistorial;
@@ -45,12 +46,26 @@ public class SimulacionFinal extends BorderPane {
 
     // Estado de la simulación
     private Stack<String> pilaSimulacion;
-    private ObservableList<String> pilaObservable;
-    private ObservableList<String> entradaObservable;
     private List<String> entradaSimulacion;
     private int pasoActual;
     private boolean simulacionEnCurso = false;
     private ObservableList<HistorialPaso> historialObservable = FXCollections.observableArrayList();
+    // Lista para almacenar los estados anteriores
+    private List<EstadoSimulacion> estadosAnteriores = new ArrayList<>();
+
+    // Clase para almacenar el estado de la simulación
+    private static class EstadoSimulacion {
+        Stack<String> pila;
+        List<String> entrada;
+        String accion;
+        
+        public EstadoSimulacion(Stack<String> pila, List<String> entrada, String accion) {
+            this.pila = new Stack<>();
+            this.pila.addAll(pila);
+            this.entrada = new ArrayList<>(entrada);
+            this.accion = accion;
+        }
+    }
 
     public SimulacionFinal(Gramatica gramatica, TablaPredictivaPaso5 tablaPredictiva) {
         this.gramatica = gramatica;
@@ -64,8 +79,9 @@ public class SimulacionFinal extends BorderPane {
             loader.setController(this);
             Parent root = loader.load();
             this.setCenter(root);
+            initialize(); 
         } catch (IOException e) {
-            // Manejo de error de carga de FXML
+            e.printStackTrace();
         }
     }
 
@@ -77,18 +93,25 @@ public class SimulacionFinal extends BorderPane {
         btnFinal.setOnAction(e -> avanzarAlFinal());
         btnInicio.setOnAction(e -> retrocederAlInicio());
         btnRetroceso.setOnAction(e -> retrocederPaso());
-        // Inicializar tablas
-        pilaObservable = FXCollections.observableArrayList();
-        entradaObservable = FXCollections.observableArrayList();
-        tablaPila.setItems(pilaObservable);
-        tablaEntrada.setItems(entradaObservable);
+        
+        // Inicializar áreas de texto
         areaMensajes.setText("");
-        // Inicializar historial
+        areaPila.setText("");
+        areaEntrada.setText("");
+        
+        // Inicializar tabla de historial
         colPaso.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getPaso()));
         colPila.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getPila()));
         colEntrada.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getEntrada()));
         colAccion.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getAccion()));
         tablaHistorial.setItems(historialObservable);
+        tablaHistorial.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        
+        // Deshabilitar botones inicialmente
+        btnPaso.setDisable(true);
+        btnFinal.setDisable(true);
+        btnRetroceso.setDisable(true);
+        btnInicio.setDisable(true);
     }
 
     private void mostrarDialogoEditarCadena() {
@@ -172,16 +195,15 @@ public class SimulacionFinal extends BorderPane {
         pilaSimulacion = new Stack<>();
         pilaSimulacion.push("$");
         pilaSimulacion.push(gramatica.getSimbInicial());
-        pilaObservable.setAll(pilaSimulacion);
 
         String entradaUsuario = campoEntrada.getText().trim();
         if (entradaUsuario.isEmpty()) {
-            areaMensajes.setText("Introduce una cadena de entrada válida.");
+            mostrarAlertaCadenaVacia();
             return;
         }
         entradaSimulacion = new java.util.ArrayList<>(Arrays.asList(entradaUsuario.split(" ")));
         entradaSimulacion.add("$");
-        entradaObservable.setAll(entradaSimulacion);
+        
         areaMensajes.setText("");
         pasoActual = 0;
         simulacionEnCurso = true;
@@ -191,22 +213,38 @@ public class SimulacionFinal extends BorderPane {
         btnInicio.setDisable(false);
         actualizarVista();
         historialObservable.clear();
+        estadosAnteriores.clear();
+        // Guardar estado inicial
+        estadosAnteriores.add(new EstadoSimulacion(pilaSimulacion, entradaSimulacion, "Inicio"));
+    }
+
+    private void mostrarAlertaCadenaVacia() {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Cadena de entrada vacía");
+        alert.setHeaderText(null);
+        alert.setContentText("Introduce una cadena de entrada válida antes de iniciar la simulación.");
+        alert.showAndWait();
     }
 
     private void avanzarPaso() {
         if (!simulacionEnCurso) return;
         if (pilaSimulacion.isEmpty() || entradaSimulacion.isEmpty()) return;
+
+        // Guardar estado actual antes de modificarlo
+        estadosAnteriores.add(new EstadoSimulacion(pilaSimulacion, entradaSimulacion, areaMensajes.getText()));
+
         String cimaPila = pilaSimulacion.peek();
         String simboloEntrada = entradaSimulacion.get(0);
         String accionRealizada = "";
 
         // Caso de aceptación
         if (cimaPila.equals("$") && simboloEntrada.equals("$")) {
-            accionRealizada = "Cadena aceptada. Simulación completada.";
+            accionRealizada = "Aceptar";
             areaMensajes.setText(accionRealizada);
             simulacionEnCurso = false;
             btnPaso.setDisable(true);
             btnFinal.setDisable(true);
+            pasoActual++;
             agregarPasoHistorial(accionRealizada);
             return;
         }
@@ -215,36 +253,37 @@ public class SimulacionFinal extends BorderPane {
         if (cimaPila.equals(simboloEntrada)) {
             pilaSimulacion.pop();
             entradaSimulacion.remove(0);
-            accionRealizada = "Se consume terminal: " + cimaPila;
+            accionRealizada = "Emparejar";
             areaMensajes.setText(accionRealizada);
         } else if (esTerminal(cimaPila)) {
             // Error: terminal en pila distinto de entrada
-            accionRealizada = "Error: Se esperaba '" + cimaPila + "', pero se encontró '" + simboloEntrada + "'.";
+            accionRealizada = "Error";
             areaMensajes.setText(accionRealizada);
             simulacionEnCurso = false;
             btnPaso.setDisable(true);
             btnFinal.setDisable(true);
+            pasoActual++;
             agregarPasoHistorial(accionRealizada);
             return;
         } else {
             // Buscar producción o función de error en la tabla predictiva
             String accion = buscarAccionTabla(cimaPila, simboloEntrada);
             if (accion == null || accion.isEmpty()) {
-                accionRealizada = "Error: No hay acción definida para (" + cimaPila + ", " + simboloEntrada + ").";
+                accionRealizada = "Error";
                 areaMensajes.setText(accionRealizada);
                 simulacionEnCurso = false;
                 btnPaso.setDisable(true);
                 btnFinal.setDisable(true);
+                pasoActual++;
                 agregarPasoHistorial(accionRealizada);
                 return;
             }
             if (accion.startsWith("E")) {
-                accionRealizada = "Función de error aplicada: " + accion;
+                accionRealizada = accion;
                 areaMensajes.setText(accionRealizada);
-                // Aquí podrías aplicar la lógica de la función de error si lo deseas
             } else if (accion.equals("ε") || accion.equals("ε_")) {
                 pilaSimulacion.pop();
-                accionRealizada = "Producción épsilon aplicada: " + cimaPila + " → ε";
+                accionRealizada = cimaPila + " → ε";
                 areaMensajes.setText(accionRealizada);
             } else {
                 // Es una producción, ejemplo: "3. D → T L;"
@@ -261,10 +300,10 @@ public class SimulacionFinal extends BorderPane {
                             if (!simbolos[i].isEmpty()) pilaSimulacion.push(simbolos[i]);
                         }
                     }
-                    accionRealizada = "Producción aplicada: " + produccion;
+                    accionRealizada = produccion.trim();
                     areaMensajes.setText(accionRealizada);
                 } else {
-                    accionRealizada = "Error en el formato de la producción: " + produccion;
+                    accionRealizada = "Error";
                     areaMensajes.setText(accionRealizada);
                 }
             }
@@ -281,17 +320,73 @@ public class SimulacionFinal extends BorderPane {
     }
 
     private void retrocederAlInicio() {
-        iniciarSimulacionFinal();
+        if (estadosAnteriores.size() <= 1) {
+            areaMensajes.setText("Ya estamos en el inicio.");
+            return;
+        }
+
+        // Mantener solo el estado inicial
+        EstadoSimulacion estadoInicial = estadosAnteriores.get(0);
+        estadosAnteriores.clear();
+        estadosAnteriores.add(estadoInicial);
+
+        // Restaurar el estado inicial
+        pilaSimulacion.clear();
+        pilaSimulacion.addAll(estadoInicial.pila);
+        
+        entradaSimulacion.clear();
+        entradaSimulacion.addAll(estadoInicial.entrada);
+        
+        areaMensajes.setText(estadoInicial.accion);
+        
+        // Actualizar la vista
+        actualizarVista();
+        
+        // Limpiar el historial
+        historialObservable.clear();
+        pasoActual = 0;
+        
+        // Deshabilitar el botón de retroceso
+        btnRetroceso.setDisable(true);
     }
 
     private void retrocederPaso() {
-        // (Opcional: implementar historial de estados para retroceder)
-        areaMensajes.setText("Funcionalidad de retroceso de paso no implementada.");
+        if (estadosAnteriores.size() <= 1) {
+            areaMensajes.setText("No hay pasos anteriores para retroceder.");
+            return;
+        }
+
+        // Eliminar el estado actual
+        estadosAnteriores.remove(estadosAnteriores.size() - 1);
+        
+        // Obtener el estado anterior
+        EstadoSimulacion estadoAnterior = estadosAnteriores.get(estadosAnteriores.size() - 1);
+        
+        // Restaurar el estado
+        pilaSimulacion.clear();
+        pilaSimulacion.addAll(estadoAnterior.pila);
+        
+        entradaSimulacion.clear();
+        entradaSimulacion.addAll(estadoAnterior.entrada);
+        
+        areaMensajes.setText(estadoAnterior.accion);
+        
+        // Actualizar la vista
+        actualizarVista();
+        
+        // Actualizar el historial
+        historialObservable.remove(historialObservable.size() - 1);
+        pasoActual--;
+        
+        // Si volvemos al inicio, deshabilitar el botón de retroceso
+        if (estadosAnteriores.size() == 1) {
+            btnRetroceso.setDisable(true);
+        }
     }
 
     private void actualizarVista() {
-        pilaObservable.setAll(pilaSimulacion);
-        entradaObservable.setAll(entradaSimulacion);
+        areaPila.setText(String.join(" ", pilaSimulacion));
+        areaEntrada.setText(String.join(" ", entradaSimulacion));
     }
 
     private boolean esTerminal(String simbolo) {
@@ -320,12 +415,14 @@ public class SimulacionFinal extends BorderPane {
         private final String pila;
         private final String entrada;
         private final String accion;
+        
         public HistorialPaso(String paso, String pila, String entrada, String accion) {
             this.paso = paso;
             this.pila = pila;
             this.entrada = entrada;
             this.accion = accion;
         }
+        
         public String getPaso() { return paso; }
         public String getPila() { return pila; }
         public String getEntrada() { return entrada; }
