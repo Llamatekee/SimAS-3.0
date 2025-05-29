@@ -14,11 +14,13 @@ import java.util.List;
 import java.io.File;
 import java.io.IOException;
 import javafx.scene.Parent;
+import editor.ActualizableTextos;
+import java.util.ResourceBundle;
 
 /**
  * Controlador para la simulación descendente en JavaFX.
  */
-public class PanelNuevaSimDescPaso6 extends BorderPane implements PanelNuevaSimDescPaso {
+public class PanelNuevaSimDescPaso6 extends BorderPane implements PanelNuevaSimDescPaso, ActualizableTextos {
 
     @FXML private TableView<FilaTablaPredictiva> tablePredictiva;
     @FXML private ListView<String> listProducciones;
@@ -26,6 +28,10 @@ public class PanelNuevaSimDescPaso6 extends BorderPane implements PanelNuevaSimD
     @FXML private Button btnSimular;
     @FXML private Button btnModificarErrores;
     @FXML private Button btnGenerarInforme;
+    @FXML private Label labelTitulo;
+    @FXML private Label labelProducciones;
+    @FXML private Label labelFuncionesError;
+    @FXML private Label labelTabla;
 
     private Gramatica gramatica;
     private TablaPredictiva tablaPredictiva;
@@ -33,10 +39,12 @@ public class PanelNuevaSimDescPaso6 extends BorderPane implements PanelNuevaSimD
     private ObservableList<String> producciones;
     private ObservableList<Terminal> cadenaEntrada;
     private PanelSimuladorDesc panelSimuladorDesc;
+    private ResourceBundle bundle;
 
     public PanelNuevaSimDescPaso6(Gramatica gramatica, PanelSimuladorDesc panelSimuladorDesc) {
         this.gramatica = gramatica;
         this.panelSimuladorDesc = panelSimuladorDesc;
+        this.bundle = panelSimuladorDesc.getBundle();
         
         // Usar directamente la tabla predictiva extendida global
         if (panelSimuladorDesc != null && panelSimuladorDesc.getTablaPredictivaExtendidaGlobal() != null) {
@@ -67,10 +75,14 @@ public class PanelNuevaSimDescPaso6 extends BorderPane implements PanelNuevaSimD
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/PanelNuevaSimDescPaso6.fxml"));
             loader.setController(this);
+            loader.setResources(bundle);
             BorderPane root = loader.load();
             this.setTop(root.getTop());
             this.setCenter(root.getCenter());
             this.setBottom(root.getBottom());
+            
+            // Inicializar los textos
+            actualizarTextos(bundle);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -85,14 +97,10 @@ public class PanelNuevaSimDescPaso6 extends BorderPane implements PanelNuevaSimD
         ObservableList<String> errores = FXCollections.observableArrayList();
         if (funcionesError != null && !funcionesError.isEmpty()) {
             for (FuncionError fe : funcionesError) {
-                String desc = fe.getMensaje();
-                if (desc == null || desc.trim().isEmpty()) {
-                    desc = "Función de error sin descripción";
-                }
-                errores.add(fe.getIdentificador() + " - " + desc);
+                errores.add(getDescripcionFuncionError(fe, bundle));
             }
         } else {
-            errores.add("No se están usando funciones de error");
+            errores.add(bundle.getString("simulador.paso6.error.sin.funciones"));
         }
         listFuncionesError.setItems(errores);
 
@@ -291,18 +299,20 @@ public class PanelNuevaSimDescPaso6 extends BorderPane implements PanelNuevaSimD
     @FXML
     private void generarInforme() {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Informes de simulación (.pdf)", "*.pdf"));
-        fileChooser.setTitle("Guardar Informe");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(bundle.getString("simulador.paso6.informe.filtro"), "*.pdf"));
+        fileChooser.setTitle(bundle.getString("simulador.paso6.informe.titulo"));
         File file = fileChooser.showSaveDialog(null);
 
         if (file != null) {
             try {
                 boolean resultado = gramatica.generarInforme(file.getAbsolutePath());
                 if (!resultado) {
-                    mostrarAlerta("Error", "No se pudo generar el informe de simulación.");
+                    mostrarAlerta(bundle.getString("simulador.paso6.error.titulo"), 
+                                bundle.getString("simulador.paso6.error.informe"));
                 }
             } catch (DocumentException e) {
-                mostrarAlerta("Error", "Error al generar el informe: " + e.getMessage());
+                mostrarAlerta(bundle.getString("simulador.paso6.error.titulo"), 
+                            bundle.getString("simulador.paso6.error.informe") + ": " + e.getMessage());
             }
         }
     }
@@ -319,7 +329,7 @@ public class PanelNuevaSimDescPaso6 extends BorderPane implements PanelNuevaSimD
         );
 
         // Crear una nueva pestaña y añadirla al TabPane principal
-        Tab nuevaPestana = new Tab("Simulación Final");
+        Tab nuevaPestana = new Tab(bundle.getString("simulador.paso6.simulacion.final"));
         nuevaPestana.setContent(simulacionFinal);
         nuevaPestana.setClosable(true);
 
@@ -354,6 +364,37 @@ public class PanelNuevaSimDescPaso6 extends BorderPane implements PanelNuevaSimD
     @Override
     public Parent getRoot() {
         return this;
+    }
+
+    @Override
+    public void actualizarTextos(ResourceBundle bundle) {
+        this.bundle = bundle;
+        // Actualizar textos de los títulos y secciones
+        if (labelTitulo != null) labelTitulo.setText(bundle.getString("simulador.paso6.titulo"));
+        if (labelProducciones != null) labelProducciones.setText(bundle.getString("simulador.paso6.producciones.titulo"));
+        if (labelFuncionesError != null) labelFuncionesError.setText(bundle.getString("simulador.paso6.funciones.error.titulo"));
+        if (labelTabla != null) labelTabla.setText(bundle.getString("simulador.paso6.tabla.titulo"));
+        // Actualizar textos de los botones
+        if (btnSimular != null) btnSimular.setText(bundle.getString("simulador.paso6.btn.simular"));
+        if (btnModificarErrores != null) btnModificarErrores.setText(bundle.getString("simulador.paso6.btn.modificar.errores"));
+        if (btnGenerarInforme != null) btnGenerarInforme.setText(bundle.getString("simulador.paso6.btn.generar.informe"));
+        // Recargar datos para actualizar textos dinámicos y funciones de error
+        cargarDatos();
+    }
+
+    private String getDescripcionFuncionError(FuncionError fe, ResourceBundle bundle) {
+        StringBuilder string = new StringBuilder();
+        string.append(fe.getIdentificador()).append(" - ");
+        int accion = fe.getAccion();
+        // Nombre internacionalizado de la acción
+        string.append(bundle.getString(fe.getNombreAccion()));
+        // Acciones que requieren símbolo
+        if (accion == 1 || accion == 3 || accion == 4 || accion == 6) {
+            if (fe.getSimbolo() != null) {
+                string.append(": ").append(fe.getSimbolo().getNombre());
+            }
+        }
+        return string.toString();
     }
 }
 
