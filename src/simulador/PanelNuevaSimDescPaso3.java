@@ -13,31 +13,39 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.Label;
+import editor.ActualizableTextos;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.Set;
-
-import gramatica.FuncionError;
 
 /**
  * Controlador para el Paso 3 de la Simulación Descendente.
  * Genera y muestra la Tabla Predictiva.
  */
-public class PanelNuevaSimDescPaso3 implements PanelNuevaSimDescPaso {
+public class PanelNuevaSimDescPaso3 implements PanelNuevaSimDescPaso, ActualizableTextos {
 
+    @FXML private Label lblTitulo;
+    @FXML private Label lblTabla;
     @FXML private TableView<FilaTablaPredictiva> tablaPredictiva;
     @FXML private Button btnPrimero;
+    @FXML private Button btnAnterior;
+    @FXML private Button btnSiguiente;
     @FXML private Button btnUltimo;
+    @FXML private Button btnCancelar;
+    @FXML private Button btnVisualizarGramatica;
+    
     private Parent root;
-
     private final PanelSimuladorDesc panelPadre;
     private final Gramatica gramatica;
-    //private ObservableList<FilaTablaPredictiva> datosTabla;
+    private ResourceBundle bundle;
 
     public PanelNuevaSimDescPaso3(PanelSimuladorDesc panelPadre) {
         this.panelPadre = panelPadre;
         this.gramatica = panelPadre.gramatica;
+        this.bundle = panelPadre.getBundle();
         cargarFXML();
         construirTablaPredictiva();
     }
@@ -46,24 +54,40 @@ public class PanelNuevaSimDescPaso3 implements PanelNuevaSimDescPaso {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/PanelNuevaSimDescPaso3.fxml"));
             loader.setController(this);
+            loader.setResources(bundle);
             root = loader.load();
+            
+            // Inicializar los textos
+            if (lblTitulo != null) lblTitulo.setText(bundle.getString("simulador.paso3.titulo"));
+            if (lblTabla != null) lblTabla.setText(bundle.getString("simulador.paso3.tabla"));
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     private void construirTablaPredictiva() {
-        if (gramatica.getProducciones().get(0).getNumero() == 0) { // Evitar numerar si ya están numeradas
-            gramatica.numerarProducciones();
+        if (gramatica != null) {
+            // Asegurarse de que las producciones estén numeradas
+            if (gramatica.getProducciones().get(0).getNumero() == 0) {
+                gramatica.numerarProducciones();
+            }
+            
+            // Limpiar la tabla actual
+            tablaPredictiva.getColumns().clear();
+            tablaPredictiva.getItems().clear();
+            
+            // Generar una nueva tabla predictiva
+            gramatica.generarTPredictiva();
+            TablaPredictiva tpredictiva = new TablaPredictiva(tablaPredictiva, bundle);
+            tpredictiva.construir(gramatica);
+            
+            // Configurar la tabla
+            tablaPredictiva.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+            tablaPredictiva.setTableMenuButtonVisible(false);
+            
+            // Forzar un refresh completo
+            tablaPredictiva.refresh();
         }
-        // Siempre crear una nueva tabla predictiva local para el paso 3
-        gramatica.generarTPredictiva(); // Generar tabla predictiva
-        TablaPredictiva tpredictiva = new TablaPredictiva(tablaPredictiva); // Pasar la tabla del FXML
-        tpredictiva.construir(gramatica);
-        // Configurar la tabla
-        tablaPredictiva.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        tablaPredictiva.setTableMenuButtonVisible(false);
-        tablaPredictiva.refresh(); // Refrescar la UI
     }
 
     @FXML
@@ -96,7 +120,21 @@ public class PanelNuevaSimDescPaso3 implements PanelNuevaSimDescPaso {
         panelPadre.cambiarPaso(3);
     }
 
+    @Override
     public Parent getRoot() {
         return root;
+    }
+
+    @Override
+    public void actualizarTextos(ResourceBundle bundle) {
+        this.bundle = bundle;
+        if (lblTitulo != null) lblTitulo.setText(bundle.getString("simulador.paso3.titulo"));
+        if (lblTabla != null) lblTabla.setText(bundle.getString("simulador.paso3.tabla"));
+        if (btnPrimero != null) btnPrimero.setText(bundle.getString("button.primero"));
+        if (btnAnterior != null) btnAnterior.setText(bundle.getString("button.anterior"));
+        if (btnSiguiente != null) btnSiguiente.setText(bundle.getString("button.siguiente"));
+        if (btnUltimo != null) btnUltimo.setText(bundle.getString("button.ultimo"));
+        if (btnCancelar != null) btnCancelar.setText(bundle.getString("button.cancelar"));
+        if (btnVisualizarGramatica != null) btnVisualizarGramatica.setText(bundle.getString("simulador.paso1.btn.gramatica"));
     }
 }

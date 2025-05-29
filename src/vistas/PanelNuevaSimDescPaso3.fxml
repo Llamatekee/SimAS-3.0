@@ -22,7 +22,7 @@
     </padding>
 
     <!-- Header -->
-    <Label text="Tabla Predictiva" styleClass="wizard-header"
+    <Label fx:id="lblTitulo" text="Tabla Predictiva" styleClass="wizard-header"
            GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.halignment="CENTER"/>
 
     <!-- Content -->
@@ -31,7 +31,7 @@
         
         <!-- Tabla Section -->
         <VBox spacing="10" VBox.vgrow="ALWAYS">
-            <Label text="Tabla de Análisis Predictivo" styleClass="wizard-section-header"/>
+            <Label fx:id="lblTabla" text="Tabla de Análisis Predictivo" styleClass="wizard-section-header"/>
             <TableView fx:id="tablaPredictiva" VBox.vgrow="ALWAYS" styleClass="wizard-table"/>
         </VBox>
     </VBox>

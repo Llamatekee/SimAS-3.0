@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 /**
  * Representa la tabla predictiva de una gramática.
@@ -22,6 +23,7 @@ public class TablaPredictiva {
     protected Gramatica gramatica;
     private final Map<String, Integer> indiceColumnas;
     private List<FuncionError> funcionesError;
+    private ResourceBundle bundle;
 
     public TablaPredictiva() {
         this.tablaPredictiva = new TableView<>();
@@ -33,16 +35,26 @@ public class TablaPredictiva {
         this.indiceColumnas = new HashMap<>();
         this.funcionesError = new ArrayList<>();
     }
+    public TablaPredictiva(TableView<FilaTablaPredictiva> tabla, ResourceBundle bundle) {
+        this.tablaPredictiva = tabla;
+        this.indiceColumnas = new HashMap<>();
+        this.funcionesError = new ArrayList<>();
+        this.bundle = bundle;
+    }
 
     public void construir(Gramatica gramatica) {
         this.gramatica = gramatica;
+        
+        // Limpiar la tabla completamente
         tablaPredictiva.getColumns().clear();
         tablaPredictiva.getItems().clear();
         indiceColumnas.clear();
 
         // Primera columna con los No Terminales
-        TableColumn<FilaTablaPredictiva, String> colNT = new TableColumn<>("No Terminal");
+        String colName = (bundle != null && bundle.containsKey("simulador.paso3.columna.noterminal")) ? bundle.getString("simulador.paso3.columna.noterminal") : "No Terminal";
+        TableColumn<FilaTablaPredictiva, String> colNT = new TableColumn<>(colName);
         colNT.setCellValueFactory(cellData -> cellData.getValue().simboloProperty());
+        colNT.setPrefWidth(100);
         tablaPredictiva.getColumns().add(colNT);
 
         // Verificar si el símbolo $ es necesario para las producciones existentes
@@ -74,24 +86,24 @@ public class TablaPredictiva {
             if (t.getNombre() == null || t.getNombre().isEmpty()) continue;
             
             TableColumn<FilaTablaPredictiva, String> colT = new TableColumn<>(t.getNombre());
-            colT.setPrefWidth(100); // Establecer un ancho predeterminado
+            colT.setPrefWidth(100);
             
             // Usamos un Callback para acceder a los valores en el Map de `FilaTablaPredictiva`
-            colT.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<FilaTablaPredictiva, String>, ObservableValue<String>>() {
-                @Override
-                public ObservableValue<String> call(TableColumn.CellDataFeatures<FilaTablaPredictiva, String> param) {
-                    return param.getValue().getValor(t.getNombre());
-                }
-            });
-
+            colT.setCellValueFactory(cellData -> cellData.getValue().getValor(t.getNombre()));
+            
             tablaPredictiva.getColumns().add(colT);
+            indiceColumnas.put(t.getNombre(), tablaPredictiva.getColumns().size() - 1);
         }
 
         // Deshabilitar la creación automática de columnas
         tablaPredictiva.setTableMenuButtonVisible(false);
         tablaPredictiva.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
+        // Cargar los datos
         cargarDatos();
+        
+        // Forzar un refresh completo
+        tablaPredictiva.refresh();
     }
 
     protected void cargarDatos() {

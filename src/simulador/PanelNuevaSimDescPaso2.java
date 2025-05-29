@@ -12,17 +12,20 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.Label;
+import editor.ActualizableTextos;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.Set;
 
 /**
  * Controlador para el Paso 2 de la Simulación Descendente.
  * Muestra los Conjuntos Primero y Siguiente de cada No Terminal.
  */
-public class PanelNuevaSimDescPaso2 implements PanelNuevaSimDescPaso {
+public class PanelNuevaSimDescPaso2 implements PanelNuevaSimDescPaso, ActualizableTextos {
 
     @FXML private TableView<NoTerminalData> tablaConjuntos;
     @FXML private TableColumn<NoTerminalData, String> colSimbolo;
@@ -34,15 +37,19 @@ public class PanelNuevaSimDescPaso2 implements PanelNuevaSimDescPaso {
     @FXML private Button btnPrimero;
     @FXML private Button btnUltimo;
     @FXML private Button btnVisualizarGramatica;
+    @FXML private Label lblTitulo;
+    @FXML private Label lblConjuntos;
     private Parent root;
 
     private final PanelSimuladorDesc panelPadre;
     private final Gramatica gramatica;
     private ObservableList<NoTerminalData> datosConjuntos;
+    private ResourceBundle bundle;
 
     public PanelNuevaSimDescPaso2(PanelSimuladorDesc panelPadre) {
         this.panelPadre = panelPadre;
         this.gramatica = panelPadre.gramatica;
+        this.bundle = panelPadre.getBundle();
         cargarFXML();
         construirConjuntos();
     }
@@ -51,7 +58,11 @@ public class PanelNuevaSimDescPaso2 implements PanelNuevaSimDescPaso {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/PanelNuevaSimDescPaso2.fxml"));
             loader.setController(this);
+            loader.setResources(bundle);
             root = loader.load();
+            
+            // Inicializar los textos
+            actualizarTextos(bundle);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -106,6 +117,28 @@ public class PanelNuevaSimDescPaso2 implements PanelNuevaSimDescPaso {
 
     public Parent getRoot() {
         return root;
+    }
+
+    @Override
+    public void actualizarTextos(ResourceBundle bundle) {
+        this.bundle = bundle;
+        
+        // Actualizar textos de la interfaz
+        if (lblTitulo != null) lblTitulo.setText(bundle.getString("simulador.paso2.titulo"));
+        if (lblConjuntos != null) lblConjuntos.setText(bundle.getString("simulador.paso2.conjuntos"));
+        
+        // Actualizar textos de las columnas
+        colSimbolo.setText(bundle.getString("simulador.paso2.columna.simbolo"));
+        colPrimero.setText(bundle.getString("simulador.paso2.columna.primero"));
+        colSiguiente.setText(bundle.getString("simulador.paso2.columna.siguiente"));
+        
+        // Actualizar textos de los botones
+        btnCancelar.setText(bundle.getString("button.cancelar"));
+        btnAnterior.setText(bundle.getString("button.anterior"));
+        btnSiguiente.setText(bundle.getString("button.siguiente"));
+        btnPrimero.setText(bundle.getString("button.primero"));
+        btnUltimo.setText(bundle.getString("button.ultimo"));
+        btnVisualizarGramatica.setText(bundle.getString("simulador.paso1.btn.gramatica"));
     }
 
     /**

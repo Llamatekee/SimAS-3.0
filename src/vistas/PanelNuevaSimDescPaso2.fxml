@@ -23,7 +23,7 @@
     </padding>
 
     <!-- Header -->
-    <Label text="Conjunto Primero y Siguiente" styleClass="wizard-header"
+    <Label fx:id="lblTitulo" text="Conjunto Primero y Siguiente" styleClass="wizard-header"
            GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.halignment="CENTER"/>
 
     <!-- Content -->
@@ -32,7 +32,7 @@
         
         <!-- Tabla Section -->
         <VBox spacing="10" VBox.vgrow="ALWAYS">
-            <Label text="Conjuntos de Símbolos" styleClass="wizard-section-header"/>
+            <Label fx:id="lblConjuntos" text="Conjuntos de Símbolos" styleClass="wizard-section-header"/>
             <TableView fx:id="tablaConjuntos" VBox.vgrow="ALWAYS" styleClass="wizard-table">
                 <columns>
                     <TableColumn fx:id="colSimbolo" text="Símbolo" prefWidth="100">

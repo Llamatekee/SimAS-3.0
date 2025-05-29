@@ -14,6 +14,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.layout.VBox;
+import javafx.geometry.Insets;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -30,7 +32,6 @@ public class PanelSimuladorDesc {
 
     public Gramatica gramatica;
     private final Gramatica gramaticaOriginal;
-    private Stage ventanaGramatica;
     private Tab pestañaSimulacion;
     private int pasoActual;
     private ArrayList<PanelNuevaSimDescPaso> pasos;
@@ -38,6 +39,17 @@ public class PanelSimuladorDesc {
     
     // Referencia global a la tabla predictiva extendida (para pasos 5 y 6)
     private TablaPredictivaPaso5 tablaPredictivaExtendidaGlobal;
+
+    // Clase interna para almacenar los componentes de la pestaña de gramática
+    private static class GramaticaTabData {
+        public final ListView<String> listView;
+        public final Button btnCerrar;
+        
+        public GramaticaTabData(ListView<String> listView, Button btnCerrar) {
+            this.listView = listView;
+            this.btnCerrar = btnCerrar;
+        }
+    }
 
     public PanelSimuladorDesc(Gramatica gramatica, TabPane tabPane, ResourceBundle bundle) {
         this.gramatica = gramatica;
@@ -147,40 +159,40 @@ public class PanelSimuladorDesc {
     }
 
     /**
-     * Ventana emergente para visualizar la gramática original.
+     * Muestra la gramática original en una nueva pestaña.
      */
     public void mostrarGramaticaOriginal() {
-        if (ventanaGramatica != null) {
-            ventanaGramatica.toFront();
-            return;
-        }
-        
         try {
-            ventanaGramatica = new Stage();
-            ventanaGramatica.initModality(Modality.NONE);
-            ventanaGramatica.setTitle(bundle.getString("simulador.gramatica.original"));
+            // Crear una nueva pestaña para la gramática
+            Tab pestañaGramatica = new Tab(bundle.getString("simulador.gramatica.original"));
+            pestañaGramatica.setClosable(true);
             
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/VentanaGramaticaOriginal.fxml"));
-            loader.setResources(bundle);
-            Scene scene = new Scene(loader.load());
-            scene.getStylesheets().add(getClass().getResource("/vistas/styles.css").toExternalForm());
+            // Crear el contenido de la pestaña
+            VBox content = new VBox(10);
+            content.setPadding(new Insets(10));
             
-            // Obtener los elementos del FXML
-            ListView<String> listView = (ListView<String>) scene.lookup("#listViewProducciones");
-            Button btnCerrar = (Button) scene.lookup(".button-cancel");
-            
-            // Configurar la lista de producciones
+            // Lista de producciones
+            ListView<String> listView = new ListView<>();
             listView.setItems(FXCollections.observableArrayList(gramaticaOriginal.getProduccionesModel()));
+            listView.setPrefHeight(400);
             
-            // Configurar el botón de cerrar
-            btnCerrar.setOnAction(e -> {
-                ventanaGramatica.close();
-                ventanaGramatica = null;
-            });
+            // Botón de cerrar
+            Button btnCerrar = new Button(bundle.getString("btn.cerrar"));
+            btnCerrar.getStyleClass().add("button-cancel");
+            btnCerrar.setOnAction(e -> tabPane.getTabs().remove(pestañaGramatica));
             
-            ventanaGramatica.setScene(scene);
-            ventanaGramatica.setOnCloseRequest(e -> ventanaGramatica = null);
-            ventanaGramatica.show();
+            // Añadir elementos al contenido
+            content.getChildren().addAll(listView, btnCerrar);
+            
+            // Establecer el contenido de la pestaña
+            pestañaGramatica.setContent(content);
+            
+            // Añadir la pestaña al TabPane
+            tabPane.getTabs().add(pestañaGramatica);
+            tabPane.getSelectionModel().select(pestañaGramatica);
+            
+            // Guardar la referencia a la pestaña para poder actualizarla
+            pestañaGramatica.setUserData(new GramaticaTabData(listView, btnCerrar));
             
         } catch (Exception e) {
             e.printStackTrace();
@@ -216,7 +228,14 @@ public class PanelSimuladorDesc {
         } else {
             pestañaSimulacion.setText(bundle.getString("simulador.tab.paso1").replace("1", String.valueOf(paso + 1)));
         }
-        pestañaSimulacion.setContent(pasos.get(paso).getRoot());
+        
+        // Actualizar el paso actual con el bundle actual
+        PanelNuevaSimDescPaso pasoActual = pasos.get(paso);
+        if (pasoActual instanceof editor.ActualizableTextos) {
+            ((editor.ActualizableTextos) pasoActual).actualizarTextos(bundle);
+        }
+        
+        pestañaSimulacion.setContent(pasoActual.getRoot());
         tabPane.getSelectionModel().select(pestañaSimulacion);
 
         // Refrescar la vista del paso al que vamos
@@ -257,6 +276,16 @@ public class PanelSimuladorDesc {
             }
             // Refresh the content of the current step
             pestañaSimulacion.setContent(pasos.get(this.pasoActual).getRoot());
+        }
+        
+        // Actualizar la pestaña de gramática si existe
+        for (Tab tab : tabPane.getTabs()) {
+            if (tab.getUserData() instanceof GramaticaTabData) {
+                tab.setText(bundle.getString("simulador.gramatica.original"));
+                GramaticaTabData data = (GramaticaTabData) tab.getUserData();
+                data.listView.setItems(FXCollections.observableArrayList(gramaticaOriginal.getProduccionesModel()));
+                data.btnCerrar.setText(bundle.getString("btn.cerrar"));
+            }
         }
     }
 }

@@ -830,8 +830,12 @@ public class Gramatica {
     //SIMULACION
 
     public void generarTPredictiva() {
+        // Si ya existe una tabla predictiva, limpiarla
+        if (this.tpredictiva != null) {
+            this.tpredictiva = null;
+        }
+        // Crear una nueva tabla predictiva
         this.tpredictiva = new TablaPredictiva();
-        this.tpredictiva.construir(this);
     }
 
     public TablaPredictiva getTPredictiva() {
