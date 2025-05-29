@@ -47,14 +47,7 @@ public class PanelSimulacion extends VBox {
     private int posicionEntrada;
     private boolean simulacionEnCurso;
     
-    private enum Estado {
-        EN_PROGRESO,
-        ERROR,
-        COMPLETADO
-    }
 
-    private Estado estado = Estado.EN_PROGRESO;
-    
     private ObservableList<String> pilaList;
     private ObservableList<String> entradaList;
     
@@ -164,7 +157,6 @@ public class PanelSimulacion extends VBox {
         posicionEntrada = 0;
         
         simulacionEnCurso = true;
-        estado = Estado.EN_PROGRESO;
 
         // Actualizar UI
         actualizarAreas();
@@ -182,7 +174,6 @@ public class PanelSimulacion extends VBox {
 
         // Si ambos son $, la cadena es aceptada
         if (simboloPila.equals("$") && simboloEntrada.equals("$")) {
-            estado = Estado.COMPLETADO;
             finalizarSimulacion("Cadena aceptada");
             return;
         }
@@ -203,7 +194,6 @@ public class PanelSimulacion extends VBox {
             if (funcionError != null) {
                 aplicarFuncionError(funcionError);
             } else {
-                estado = Estado.ERROR;
                 finalizarSimulacion("Error: No hay producción ni función de error aplicable");
                 return;
             }
@@ -253,7 +243,6 @@ public class PanelSimulacion extends VBox {
                 }
                 break;
             case FuncionError.TERMINAR_ANALISIS:
-                estado = Estado.ERROR;
                 finalizarSimulacion(mensaje);
                 return;
         }
@@ -310,7 +299,6 @@ public class PanelSimulacion extends VBox {
         areaSalida.clear();
         arbolDerivacion.setRoot(new TreeItem<>(gramatica.getSimbInicial()));
         
-        estado = Estado.EN_PROGRESO;
         labelEstado.setText("");
     }
     

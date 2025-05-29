@@ -2,24 +2,17 @@ package simulador;
 
 import gramatica.FilaTablaPredictiva;
 import gramatica.Gramatica;
-import gramatica.NoTerminal;
 import gramatica.TablaPredictiva;
-import gramatica.Terminal;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.Label;
 import editor.ActualizableTextos;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.ResourceBundle;
-import java.util.Set;
 
 /**
  * Controlador para el Paso 3 de la Simulación Descendente.

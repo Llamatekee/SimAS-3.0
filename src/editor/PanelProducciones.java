@@ -10,7 +10,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import java.io.IOException;
 import java.util.stream.Collectors;
-import editor.ActualizableTextos;
 import java.util.ResourceBundle;
 
 /**

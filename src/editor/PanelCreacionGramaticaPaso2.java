@@ -11,7 +11,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
-import editor.ActualizableTextos;
 
 public class PanelCreacionGramaticaPaso2 extends VBox implements ActualizableTextos {
 

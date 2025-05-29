@@ -12,10 +12,7 @@ import javafx.scene.control.TablePosition;
 import javafx.scene.control.SelectionMode;
 import java.util.ArrayList;
 import javafx.scene.control.TableRow;
-import javafx.scene.input.MouseEvent;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
-import javafx.util.Callback;
 import java.util.ResourceBundle;
 
 /**
@@ -302,8 +299,11 @@ public class TablaPredictivaPaso5 extends TablaPredictiva {
     private void configurarManejadorClics() {
         getTablaPredictiva().setOnMouseReleased(event -> {
             TableView.TableViewSelectionModel<FilaTablaPredictiva> selectionModel = getTablaPredictiva().getSelectionModel();
+            // JavaFX API limitation: getSelectedCells() returns raw type
+            @SuppressWarnings("rawtypes")
             ObservableList<TablePosition> selectedCells = selectionModel.getSelectedCells();
             if (selectedCells.isEmpty()) return;
+            @SuppressWarnings("rawtypes")
             TablePosition pos = selectedCells.get(0);
 
             if (pos != null && pos.getColumn() > 0) {

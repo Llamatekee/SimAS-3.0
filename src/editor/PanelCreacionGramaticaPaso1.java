@@ -9,7 +9,6 @@ import javafx.beans.binding.BooleanBinding;
 
 import java.io.IOException;
 import java.util.ResourceBundle;
-import editor.ActualizableTextos;
 
 /**
  * Panel de creación de gramática - Paso 1
@@ -157,8 +156,11 @@ public class PanelCreacionGramaticaPaso1 extends VBox implements ActualizableTex
     }
 
     private boolean datosValidos() {
-        return !txtNombre.getText().trim().isEmpty() && 
-               !txtDescripcion.getText().trim().isEmpty() &&
+        String nombre = txtNombre.getText();
+        String descripcion = txtDescripcion.getText();
+        
+        return nombre != null && !nombre.trim().isEmpty() && 
+               descripcion != null && !descripcion.trim().isEmpty() &&
                !lblNombreError.isVisible() &&
                !lblDescripcionError.isVisible();
     }

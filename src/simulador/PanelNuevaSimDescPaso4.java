@@ -1,19 +1,14 @@
 package simulador;
 
-import gramatica.FilaTablaPredictiva;
 import gramatica.FuncionError;
 import gramatica.Gramatica;
-import gramatica.TablaPredictiva;
 import gramatica.Terminal;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 import editor.ActualizableTextos;
 
 import java.io.IOException;
@@ -39,7 +34,6 @@ public class PanelNuevaSimDescPaso4 implements PanelNuevaSimDescPaso, Actualizab
     private Parent root;
     private PanelSimuladorDesc panelPadre;
     private Gramatica gramatica;
-    private int funError = 0;
     private java.util.ResourceBundle bundle;
 
     public PanelNuevaSimDescPaso4(PanelSimuladorDesc panelPadre) {

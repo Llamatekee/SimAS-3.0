@@ -106,7 +106,6 @@ public class PanelNuevaSimDescPaso6 extends BorderPane implements PanelNuevaSimD
 
         // Cargar tabla predictiva
         if (tablaPredictiva instanceof TablaPredictivaPaso5) {
-            TablaPredictivaPaso5 tablaPaso5 = (TablaPredictivaPaso5) tablaPredictiva;
             
             // Verificar si hay datos en la tabla global
             if (panelSimuladorDesc != null && panelSimuladorDesc.getTablaPredictivaExtendidaGlobal() != null) {
@@ -148,14 +147,6 @@ public class PanelNuevaSimDescPaso6 extends BorderPane implements PanelNuevaSimD
      * Crea las columnas manualmente para la tabla predictiva.
      */
     private void crearColumnasManualmente() {
-        // Verificar si hay una tabla global para comparar
-        if (panelSimuladorDesc != null && panelSimuladorDesc.getTablaPredictivaExtendidaGlobal() != null) {
-            TablaPredictivaPaso5 tablaGlobal = panelSimuladorDesc.getTablaPredictivaExtendidaGlobal();
-            
-            // Obtener el número de columnas en la tabla global para asegurar consistencia
-            int columnasEnGlobal = tablaGlobal.getTablaPredictiva().getColumns().size();
-        }
-        
         // Columna para símbolos
         TableColumn<FilaTablaPredictiva, String> colSimbolo = new TableColumn<>("Símbolo");
         colSimbolo.setCellValueFactory(cellData -> 
@@ -243,7 +234,7 @@ public class PanelNuevaSimDescPaso6 extends BorderPane implements PanelNuevaSimD
         
         // Añadir columna para $ si no existe
         boolean existeDolar = false;
-        for (TableColumn column : tablePredictiva.getColumns()) {
+        for (TableColumn<FilaTablaPredictiva, ?> column : tablePredictiva.getColumns()) {
             if ("$".equals(column.getText())) {
                 existeDolar = true;
                 break;

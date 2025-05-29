@@ -29,7 +29,6 @@ public class PanelCreacionGramaticaPaso3 extends VBox implements ActualizableTex
     public final MenuPrincipal menuPane;
 
     private final ObservableList<Produccion> producciones = FXCollections.observableArrayList();
-    private ResourceBundle bundle;
 
     public PanelCreacionGramaticaPaso3(PanelCreacionGramatica panelPadre, TabPane tabPane, MenuPrincipal menuPane) {
         this.panelPadre = panelPadre;
@@ -122,7 +121,6 @@ public class PanelCreacionGramaticaPaso3 extends VBox implements ActualizableTex
 
     @Override
     public void actualizarTextos(ResourceBundle bundle) {
-        this.bundle = bundle;
         if (labelHeader != null) labelHeader.setText(bundle.getString("creacion3.header"));
         if (labelLista != null) labelLista.setText(bundle.getString("creacion3.label.lista"));
         if (btnModificarProducciones != null) btnModificarProducciones.setText(bundle.getString("creacion3.btn.modificar.producciones"));

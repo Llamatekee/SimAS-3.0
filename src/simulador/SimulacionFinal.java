@@ -69,10 +69,6 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
     // Lista para almacenar los estados anteriores
     private List<EstadoSimulacion> estadosAnteriores = new ArrayList<>();
 
-    // Referencias a los labels de título de las pestañas para internacionalización
-    private Label labelTituloDerivacion = null;
-    private Label labelTituloArbol = null;
-
     // Clase para almacenar el estado de la simulación
     private static class EstadoSimulacion {
         Stack<String> pila;

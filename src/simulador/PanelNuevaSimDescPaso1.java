@@ -1,28 +1,16 @@
 package simulador;
 
 import gramatica.Gramatica;
-import gramatica.FuncionError;
-import gramatica.TablaPredictiva;
-import gramatica.Terminal;
-import gramatica.FilaTablaPredictiva;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Button;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.cell.PropertyValueFactory;
 import editor.ActualizableTextos;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
-import java.util.Set;
 
 /**
  * Controlador para el Paso 1 de la Simulación Descendente.
@@ -43,14 +31,12 @@ public class PanelNuevaSimDescPaso1 implements PanelNuevaSimDescPaso, Actualizab
 
     private final PanelSimuladorDesc panelPadre;
     private final Gramatica gramatica;
-    private final ObservableList<String> producciones;
     private ResourceBundle bundle;
     private Parent root;
 
     public PanelNuevaSimDescPaso1(PanelSimuladorDesc panelPadre) {
         this.panelPadre = panelPadre;
         this.gramatica = panelPadre.gramatica;
-        this.producciones = FXCollections.observableArrayList();
         this.bundle = panelPadre.getBundle();
         cargarFXML();
         inicializarBotones();

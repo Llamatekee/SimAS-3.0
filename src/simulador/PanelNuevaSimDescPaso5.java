@@ -9,7 +9,6 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TablePosition;
 import javafx.scene.control.Tab;
 import javafx.collections.ObservableList;
 import javafx.beans.property.SimpleStringProperty;
@@ -17,10 +16,8 @@ import javafx.collections.FXCollections;
 import javafx.scene.control.TableCell;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.Map;
 
 import gramatica.FilaTablaPredictiva;
 import gramatica.FuncionError;
@@ -457,7 +454,7 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso, Actualizab
     private void actualizarTablaPredictiva() {
         if (tablaPredictiva == null) return;
 
-        // Actualizar encabezado de la primera columna
+        @SuppressWarnings("unchecked")
         TableColumn<FilaTablaPredictiva, String> columnaNoTerminal = 
             (TableColumn<FilaTablaPredictiva, String>) tablaPredictiva.getColumns().get(0);
         columnaNoTerminal.setText(bundle.getString("simulador.paso3.columna.noterminal"));
@@ -521,7 +518,9 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso, Actualizab
     @FXML
     private void handleEliminar() {
         // Obtener la celda seleccionada
-        TableColumn<FilaTablaPredictiva, ?> column = tablaPredictiva.getFocusModel().getFocusedCell().getTableColumn();
+        @SuppressWarnings("unchecked")
+        TableColumn<FilaTablaPredictiva, String> column = 
+            (TableColumn<FilaTablaPredictiva, String>) tablaPredictiva.getFocusModel().getFocusedCell().getTableColumn();
         if (column != null && !column.getText().equals("No Terminal")) {
             FilaTablaPredictiva fila = tablaPredictiva.getSelectionModel().getSelectedItem();
             if (fila != null) {
@@ -556,7 +555,9 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso, Actualizab
     @FXML
     private void handleRellenar() {
         // Obtener la celda seleccionada
-        TableColumn<FilaTablaPredictiva, ?> column = tablaPredictiva.getFocusModel().getFocusedCell().getTableColumn();
+        @SuppressWarnings("unchecked")
+        TableColumn<FilaTablaPredictiva, String> column = 
+            (TableColumn<FilaTablaPredictiva, String>) tablaPredictiva.getFocusModel().getFocusedCell().getTableColumn();
         if (column != null && !column.getText().equals("No Terminal")) {
             FilaTablaPredictiva fila = tablaPredictiva.getSelectionModel().getSelectedItem();
             if (fila != null) {
@@ -596,10 +597,6 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso, Actualizab
         }
     }
 
-    private List<FuncionError> obtenerProduccionesEpsilon() {
-        // Implementar la lógica para obtener las producciones épsilon
-        return new ArrayList<>();
-    }
 
     @FXML
     private void handleGramatica() {
@@ -665,9 +662,6 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso, Actualizab
         if (filas == null || filas.isEmpty()) {
             return;
         }
-
-        FuncionError funcionErrorSeleccionada = comboBoxFuncionesError.getValue();
-        String funcionErrorStr = funcionErrorToString(funcionErrorSeleccionada);
                 
         for (FilaTablaPredictiva fila : filas) {
             // Si es terminal y solo aparece en primera posición, saltar

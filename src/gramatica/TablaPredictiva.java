@@ -1,12 +1,9 @@
 package gramatica;
 
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TableCell;
-import javafx.util.Callback;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -126,21 +123,6 @@ public class TablaPredictiva {
 
         tablaPredictiva.setItems(filas);
         tablaPredictiva.refresh();
-    }
-
-    private String obtenerPredicciones(NoTerminal nt) {
-        // Suponiendo que hay un mapa con la relación NoTerminal -> Predicciones
-        List<String> reglas = new ArrayList<>();
-
-        for (String terminal : indiceColumnas.keySet()) {
-            // Obtener la producción asociada a (NoTerminal, Terminal)
-            String produccion = gramatica.getProduccion(nt, terminal);
-            if (produccion != null) {
-                reglas.add(terminal + " → " + produccion);
-            }
-        }
-
-        return String.join(", ", reglas);
     }
 
     public void crearFunError(FuncionError funcionError) {

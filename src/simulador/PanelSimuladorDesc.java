@@ -8,16 +8,12 @@ import gramatica.Terminal;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.VBox;
 import javafx.geometry.Insets;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.ResourceBundle;

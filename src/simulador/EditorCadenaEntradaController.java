@@ -17,7 +17,6 @@ public class EditorCadenaEntradaController {
     
     private Stage stage;
     private String resultado;
-    private List<Terminal> terminales;
     
     @FXML
     private void initialize() {
@@ -50,7 +49,6 @@ public class EditorCadenaEntradaController {
     }
     
     public void setTerminales(List<Terminal> terminales) {
-        this.terminales = terminales;
         ObservableList<String> items = FXCollections.observableArrayList();
         for (Terminal t : terminales) {
             items.add(t.getNombre());

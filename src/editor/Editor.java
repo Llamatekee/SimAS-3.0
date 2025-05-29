@@ -3,7 +3,6 @@ package editor;
 import bienvenida.MenuPrincipal;
 import simulador.PanelSimuladorDesc;
 
-import com.itextpdf.text.DocumentException;
 import gramatica.Gramatica;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,16 +15,11 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.ResourceBundle;
-import editor.ActualizableTextos;
 
 public class Editor extends VBox implements ActualizableTextos {
 
@@ -63,7 +57,6 @@ public class Editor extends VBox implements ActualizableTextos {
     @FXML private Label labelProducciones;
 
     private ResourceBundle bundle;
-    private File archivoActual;
 
     // ==========================
     // CONSTRUCTORES

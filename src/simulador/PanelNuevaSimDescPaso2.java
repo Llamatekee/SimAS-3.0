@@ -2,7 +2,6 @@ package simulador;
 
 import gramatica.Gramatica;
 import gramatica.NoTerminal;
-import gramatica.TablaPredictiva;
 import gramatica.Terminal;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,10 +15,7 @@ import javafx.scene.control.Label;
 import editor.ActualizableTextos;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
-import java.util.Set;
 
 /**
  * Controlador para el Paso 2 de la Simulación Descendente.

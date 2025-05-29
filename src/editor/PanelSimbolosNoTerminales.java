@@ -14,7 +14,6 @@ import java.util.HashSet;
 import java.util.ResourceBundle;
 import java.util.Set;
 
-import editor.ActualizableTextos;
 
 public class PanelSimbolosNoTerminales extends VBox implements ActualizableTextos {
 
