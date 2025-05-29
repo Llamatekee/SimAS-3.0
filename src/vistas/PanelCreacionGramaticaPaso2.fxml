@@ -22,7 +22,7 @@
     </padding>
 
     <!-- Header -->
-    <Label text="Vocabulario de la Gramática" styleClass="wizard-header"
+    <Label fx:id="labelHeader" text="Vocabulario de la Gramática" styleClass="wizard-header"
            GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.halignment="CENTER"/>
 
     <!-- Content -->
@@ -31,7 +31,7 @@
         
         <!-- No Terminales Section -->
         <VBox spacing="15" VBox.vgrow="ALWAYS">
-            <Label text="Símbolos No Terminales" styleClass="wizard-section-header"/>
+            <Label fx:id="labelNoTerminalesSeccion" text="Símbolos No Terminales" styleClass="wizard-section-header"/>
             <ListView fx:id="listNoTerminales" VBox.vgrow="ALWAYS"/>
             <Button fx:id="btnModificarNoTerminales" text="Modificar No Terminales" 
                     maxWidth="Infinity" onAction="#onBtnModificarNoTerminalesAction"/>
@@ -39,7 +39,7 @@
 
         <!-- Terminales Section -->
         <VBox spacing="15" VBox.vgrow="ALWAYS">
-            <Label text="Símbolos Terminales" styleClass="wizard-section-header"/>
+            <Label fx:id="labelTerminalesSeccion" text="Símbolos Terminales" styleClass="wizard-section-header"/>
             <ListView fx:id="listTerminales" VBox.vgrow="ALWAYS"/>
             <Button fx:id="btnModificarTerminales" text="Modificar Terminales" 
                     maxWidth="Infinity" onAction="#onBtnModificarTerminalesAction"/>

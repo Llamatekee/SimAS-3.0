@@ -7,6 +7,7 @@ import gramatica.Terminal;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -92,15 +93,15 @@ public class PanelCreacionGramatica extends BorderPane {
                 this.setCenter(this.paso4);
                 break;
         }
-        // Actualizar el título de la pestaña del asistente
+        
+        // Actualizar el título de la pestaña
         for (Tab tab : tabPane.getTabs()) {
             if (tab.getContent() == this) {
-                String key = "creacion.tab.paso" + paso;
-                if (bundle.containsKey(key)) {
-                    tab.setText(bundle.getString(key));
-                }
+                tab.setText(bundle.getString("creacion.tab.paso" + paso));
             }
         }
+        
+        actualizarTextos(bundle);
     }
 
     public MenuPrincipal getMenuPane() {
@@ -112,12 +113,17 @@ public class PanelCreacionGramatica extends BorderPane {
     }
 
     public void cancelarEdicion() {
-        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION, "¿Desea salir de la edición de la gramática?", ButtonType.YES, ButtonType.NO);
-        confirm.setTitle("Salir");
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+        confirm.setTitle(bundle.getString("editor.header.salir"));
+        confirm.setHeaderText(bundle.getString("editor.header.salir"));
+        confirm.setContentText(bundle.getString("creacion.dialog.salir.mensaje"));
+        ButtonType btnSi = new ButtonType(bundle.getString("button.si"), ButtonBar.ButtonData.YES);
+        ButtonType btnNo = new ButtonType(bundle.getString("button.no"), ButtonBar.ButtonData.NO);
+        confirm.getButtonTypes().setAll(btnNo, btnSi);
         Stage stage = (Stage) confirm.getDialogPane().getScene().getWindow();
         stage.toFront(); // Asegura que la alerta esté al frente
         confirm.showAndWait().ifPresent(result -> {
-            if (result == ButtonType.YES) {
+            if (result == btnSi) {
                 // Obtener la gramática actual desde el editor original
                 Gramatica gramatica = getPanelPadre().getGramatica();
 
@@ -151,24 +157,26 @@ public class PanelCreacionGramatica extends BorderPane {
     }
 
     public void actualizarTextos(ResourceBundle bundle) {
-        System.out.println("[DEBUG] PanelCreacionGramatica.actualizarTextos llamado con idioma: " + bundle.getLocale());
         this.bundle = bundle;
         if (paso1 != null) paso1.actualizarTextos(bundle);
         if (paso2 != null) paso2.actualizarTextos(bundle);
         if (paso3 != null) paso3.actualizarTextos(bundle);
         if (paso4 != null) paso4.actualizarTextos(bundle);
 
+        // Actualizar el título de la pestaña
         for (Tab tab : tabPane.getTabs()) {
             if (tab.getContent() == this) {
-                String key = null;
-                if (getCenter() == paso1) key = "creacion.tab.paso1";
-                else if (getCenter() == paso2) key = "creacion.tab.paso2";
-                else if (getCenter() == paso3) key = "creacion.tab.paso3";
-                else if (getCenter() == paso4) key = "creacion.tab.paso4";
-                if (key != null && bundle.containsKey(key)) {
-                    tab.setText(bundle.getString(key));
-                }
+                int pasoActual = 1;
+                if (getCenter() == paso2) pasoActual = 2;
+                else if (getCenter() == paso3) pasoActual = 3;
+                else if (getCenter() == paso4) pasoActual = 4;
+                
+                tab.setText(bundle.getString("creacion.tab.paso" + pasoActual));
             }
         }
+    }
+
+    public ResourceBundle getBundle() {
+        return this.bundle;
     }
 }

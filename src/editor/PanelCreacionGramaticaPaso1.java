@@ -187,7 +187,6 @@ public class PanelCreacionGramaticaPaso1 extends VBox {
     }
 
     public void actualizarTextos(ResourceBundle bundle) {
-        System.out.println("[DEBUG] Llamada a actualizarTextos en Paso 1 con idioma: " + bundle.getLocale());
         this.bundle = bundle;
         // Actualizar header y labels de sección
         if (labelHeader != null) labelHeader.setText(bundle.getString("creacion.header"));

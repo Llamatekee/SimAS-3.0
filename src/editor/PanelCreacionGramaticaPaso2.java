@@ -20,6 +20,16 @@ public class PanelCreacionGramaticaPaso2 extends VBox {
 
     @FXML private ListView<String> listNoTerminales;
     @FXML private ListView<String> listTerminales;
+    @FXML private Button btnModificarNoTerminales;
+    @FXML private Button btnModificarTerminales;
+    @FXML private Button btnCancelar;
+    @FXML private Button btnPrimero;
+    @FXML private Button btnAnterior;
+    @FXML private Button btnSiguiente;
+    @FXML private Button btnUltimo;
+    @FXML private Label labelHeader;
+    @FXML private Label labelNoTerminalesSeccion;
+    @FXML private Label labelTerminalesSeccion;
 
     private final ObservableList<String> simbolosNoTerminales = FXCollections.observableArrayList();
     private final ObservableList<String> simbolosTerminales = FXCollections.observableArrayList();
@@ -97,7 +107,8 @@ public class PanelCreacionGramaticaPaso2 extends VBox {
     @FXML
     private void onBtnModificarNoTerminalesAction() {
         PanelSimbolosNoTerminales panel = new PanelSimbolosNoTerminales(simbolosNoTerminales, tabPane, this);
-        Tab tab = new Tab("Modificar No Terminales", panel);
+        java.util.ResourceBundle bundle = panelPadre.getBundle();
+        Tab tab = new Tab(bundle.getString("creacion2.tab.modificar.no.terminales"), panel);
         tabPane.getTabs().add(tab);
         tabPane.getSelectionModel().select(tab);
     }
@@ -105,7 +116,8 @@ public class PanelCreacionGramaticaPaso2 extends VBox {
     @FXML
     private void onBtnModificarTerminalesAction() {
         PanelSimbolosTerminales panel = new PanelSimbolosTerminales(simbolosTerminales, tabPane, this);
-        Tab tab = new Tab("Modificar Terminales", panel);
+        java.util.ResourceBundle bundle = panelPadre.getBundle();
+        Tab tab = new Tab(bundle.getString("creacion2.tab.modificar.terminales"), panel);
         tabPane.getTabs().add(tab);
         tabPane.getSelectionModel().select(tab);
     }
@@ -129,6 +141,15 @@ public class PanelCreacionGramaticaPaso2 extends VBox {
     }
 
     public void actualizarTextos(java.util.ResourceBundle bundle) {
-        // Aquí puedes actualizar los textos de los labels, botones, etc. cuando implementes la i18n del paso 2
+        if (labelHeader != null) labelHeader.setText(bundle.getString("creacion2.header"));
+        if (labelNoTerminalesSeccion != null) labelNoTerminalesSeccion.setText(bundle.getString("creacion2.label.no.terminales.seccion"));
+        if (labelTerminalesSeccion != null) labelTerminalesSeccion.setText(bundle.getString("creacion2.label.terminales.seccion"));
+        if (btnModificarNoTerminales != null) btnModificarNoTerminales.setText(bundle.getString("creacion2.btn.modificar.no.terminales"));
+        if (btnModificarTerminales != null) btnModificarTerminales.setText(bundle.getString("creacion2.btn.modificar.terminales"));
+        if (btnCancelar != null) btnCancelar.setText(bundle.getString("button.cancelar"));
+        if (btnPrimero != null) btnPrimero.setText(bundle.getString("button.primero"));
+        if (btnAnterior != null) btnAnterior.setText(bundle.getString("button.anterior"));
+        if (btnSiguiente != null) btnSiguiente.setText(bundle.getString("button.siguiente"));
+        if (btnUltimo != null) btnUltimo.setText(bundle.getString("button.ultimo"));
     }
 }
