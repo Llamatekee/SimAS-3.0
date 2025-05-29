@@ -40,6 +40,7 @@ public class NuevaFuncionError implements ActualizableTextos {
         this.paso4 = paso4;
         this.bundle = bundle;
         cargarFXML();
+        inicializarCampos();
         actualizarTextos(bundle);
     }
 
@@ -57,8 +58,8 @@ public class NuevaFuncionError implements ActualizableTextos {
         return root;
     }
 
-    private void initialize() {
-        // Inicializar comboBoxAccion con valores
+    private void inicializarCampos() {
+        // Acciones internacionalizadas
         ObservableList<String> acciones = FXCollections.observableArrayList(
             bundle.getString("funcion.error.insertar.entrada"),
             bundle.getString("funcion.error.borrar.entrada"),
@@ -69,118 +70,77 @@ public class NuevaFuncionError implements ActualizableTextos {
             bundle.getString("funcion.error.terminar")
         );
         comboBoxAccion.setItems(acciones);
-    
         // Deshabilitar opciones si ya están definidas
         List<FuncionError> funcionesError = gramatica.getTPredictiva().getFuncionesError();
         for (FuncionError funcionError : funcionesError) {
             if (funcionError.getAccion() == 7 || funcionError.getAccion() == 2) {
-                comboBoxAccion.getItems().set(funcionError.getAccion() - 1, 
+                comboBoxAccion.getItems().set(funcionError.getAccion() - 1,
                     acciones.get(funcionError.getAccion() - 1) + bundle.getString("funcion.error.definida"));
             }
         }
-    
-        // Aplicar estilos CSS
-        comboBoxAccion.setCellFactory(lv -> new ListCell<String>() {
-            @Override
-            protected void updateItem(String item, boolean empty) {
-                super.updateItem(item, empty);
-                setText(item);
-                if (item != null && (item.contains("Terminar el análisis (Definida)") || item.contains("Borrar un Símbolo de la Entrada (Definida)") || item.contains("Borrar un Símbolo de la Pila (Definida)"))) {
-                    setDisable(true);
-                    setStyle("-fx-text-fill: gray; -fx-opacity: 0.5;");
-                } else {
-                    setDisable(false);
-                    setStyle("");
-                }
-            }
-        });
-    
-        // Inicializar comboBoxSimbolo con valores de la gramática
+        // ComboBox de símbolos (terminales)
         List<String> simbolos = new ArrayList<>();
         for (String terminal : gramatica.getTerminalesModel()) {
             simbolos.add(terminal);
         }
         ObservableList<String> observableSimbolos = FXCollections.observableArrayList(simbolos);
         comboBoxSimbolo.setItems(observableSimbolos);
-    
-        // Inicializar el campo de texto del identificador
+        // Identificador
         textFieldIdentificador.setText(String.valueOf(obtenerNuevoIdentificador()));
     }
 
     @FXML
     private void handleAceptar() {
         try {
-            // Validar que se haya seleccionado una acción
             if (comboBoxAccion.getSelectionModel().isEmpty()) {
-                throw new IllegalArgumentException("Debe seleccionar una acción.");
+                throw new IllegalArgumentException(bundle.getString("nuevaFuncionError.alert.seleccionar.accion"));
             }
-
             int id = obtenerNuevoIdentificador();
             int accion = comboBoxAccion.getSelectionModel().getSelectedIndex() + 1;
             String mensaje = textFieldMensaje.getText();
             String simbolo = comboBoxSimbolo.getSelectionModel().getSelectedItem();
-    
-            // Validar que se haya seleccionado un símbolo cuando es necesario
             if ((accion != 7 && accion != 2 && accion != 5) && (simbolo == null || simbolo.isEmpty())) {
-                throw new IllegalArgumentException("Debe seleccionar un símbolo para esta acción.");
+                throw new IllegalArgumentException(bundle.getString("nuevaFuncionError.alert.seleccionar.simbolo"));
             }
-    
             Terminal term = (accion == 7 || accion == 2 || accion == 5) ? null : new Terminal(simbolo, simbolo);
             FuncionError nuevaFuncionError = new FuncionError(id, accion, mensaje);
             nuevaFuncionError.setSimbolo(term);
-    
-            // Obtener la lista más reciente de funciones de error
             List<FuncionError> funcionesError = gramatica.getTPredictiva().getFuncionesError();
-    
-            // Verificar si la función de error ya está definida
             for (FuncionError funcionError : funcionesError) {
                 if (funcionError.getAccion() == nuevaFuncionError.getAccion() &&
                     (funcionError.getSimbolo() == null || 
                      (nuevaFuncionError.getSimbolo() != null && 
                       funcionError.getSimbolo().getNombre().equals(nuevaFuncionError.getSimbolo().getNombre())))) {
-                    throw new IllegalArgumentException("Esta función de error ya está definida.");
+                    throw new IllegalArgumentException(bundle.getString("nuevaFuncionError.alert.ya.definida"));
                 }
             }
-    
-            // Verificar que no se esté sobrescribiendo una función predefinida
             if (id == 0 || id == 1) {
-                throw new IllegalArgumentException("No se puede sobrescribir una función predefinida.");
+                throw new IllegalArgumentException(bundle.getString("nuevaFuncionError.alert.no.sobrescribir.predefinida"));
             }
-    
-            // Agregar la nueva función de error
             gramatica.getTPredictiva().crearFunError(nuevaFuncionError);
-            
-            // Reordenar los índices de las funciones de error
             paso4.reordenarIndicesFuncionesError();
-            
-            // Actualizar la lista de funciones de error
             paso4.funcionError();
-    
-            // Cerrar solo la pestaña actual
             TabPane tabPane = (TabPane) root.getParent().getParent();
             Tab tab = tabPane.getSelectionModel().getSelectedItem();
             tabPane.getTabs().remove(tab);
         } catch (NumberFormatException e) {
-            // Manejar error de formato de número
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Identificador inválido");
-            alert.setContentText("Por favor, ingrese un número válido para el identificador.");
+            alert.setTitle(bundle.getString("nuevaFuncionError.alert.titulo"));
+            alert.setHeaderText(bundle.getString("nuevaFuncionError.alert.header.identificador"));
+            alert.setContentText(bundle.getString("nuevaFuncionError.alert.mensaje.identificador"));
             alert.showAndWait();
         } catch (IllegalArgumentException e) {
-            // Manejar otros errores de validación
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Error de validación");
+            alert.setTitle(bundle.getString("nuevaFuncionError.alert.titulo"));
+            alert.setHeaderText(bundle.getString("nuevaFuncionError.alert.header.validacion"));
             alert.setContentText(e.getMessage());
             alert.showAndWait();
         } catch (Exception e) {
-            // Manejar cualquier otra excepción
             e.printStackTrace();
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Error inesperado");
-            alert.setContentText("Ocurrió un error inesperado. Por favor, inténtelo de nuevo.");
+            alert.setTitle(bundle.getString("nuevaFuncionError.alert.titulo"));
+            alert.setHeaderText(bundle.getString("nuevaFuncionError.alert.header.inesperado"));
+            alert.setContentText(bundle.getString("nuevaFuncionError.alert.mensaje.inesperado"));
             alert.showAndWait();
         }
     }
@@ -247,16 +207,6 @@ public class NuevaFuncionError implements ActualizableTextos {
         if (labelMensaje != null) labelMensaje.setText(bundle.getString("nuevaFuncionError.label.mensaje"));
         if (buttonAceptar != null) buttonAceptar.setText(bundle.getString("button.aceptar"));
         if (buttonCancelar != null) buttonCancelar.setText(bundle.getString("button.cancelar"));
-        // Actualizar ComboBox de acciones
-        ObservableList<String> acciones = FXCollections.observableArrayList(
-            bundle.getString("funcion.error.insertar.entrada"),
-            bundle.getString("funcion.error.borrar.entrada"),
-            bundle.getString("funcion.error.modificar.entrada"),
-            bundle.getString("funcion.error.insertar.pila"),
-            bundle.getString("funcion.error.borrar.pila"),
-            bundle.getString("funcion.error.modificar.pila"),
-            bundle.getString("funcion.error.terminar")
-        );
-        comboBoxAccion.setItems(acciones);
+        inicializarCampos();
     }
 }
