@@ -22,7 +22,7 @@
     </padding>
 
     <!-- Header -->
-    <Label text="Incluir Funciones de Error" styleClass="wizard-header"
+    <Label fx:id="labelTitulo" text="%simulador.paso5.titulo" styleClass="wizard-header"
            GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.halignment="CENTER"/>
 
     <!-- Content -->
@@ -31,18 +31,18 @@
         
         <!-- Funciones de Error Section -->
         <VBox spacing="10" VBox.vgrow="ALWAYS">
-            <Label text="Seleccione una función de error para insertar en la tabla:" styleClass="wizard-section-header"/>
+            <Label fx:id="labelSeleccioneFuncion" text="%simulador.paso5.seleccione.funcion" styleClass="wizard-section-header"/>
             <ComboBox fx:id="comboBoxFuncionesError" styleClass="wizard-combo-box"/>
             <TableView fx:id="tablaPredictiva" VBox.vgrow="ALWAYS" styleClass="wizard-table"/>
         </VBox>
 
         <!-- Acciones Section -->
         <HBox spacing="10">
-            <Button fx:id="buttonEliminar" text="Eliminar Función de Error" styleClass="button-cancel" 
+            <Button fx:id="buttonEliminar" text="%simulador.paso5.btn.eliminar" styleClass="button-cancel" 
                     onAction="#handleEliminar"/>
-            <Button fx:id="buttonRellenarEpsilon" text="Rellenar con producciones épsilon" styleClass="button-grammar" 
+            <Button fx:id="buttonRellenarEpsilon" text="%simulador.paso5.btn.rellenar.epsilon" styleClass="button-grammar" 
                     onAction="#handleRellenarEpsilon"/>
-            <Button fx:id="buttonResetearTabla" text="Resetear tabla" styleClass="button-cancel" 
+            <Button fx:id="buttonResetearTabla" text="%simulador.paso5.btn.resetear" styleClass="button-cancel" 
                     onAction="#handleResetearTabla"/>
         </HBox>
     </VBox>
@@ -50,20 +50,20 @@
     <!-- Navigation -->
     <HBox styleClass="wizard-navigation" GridPane.columnIndex="0" GridPane.rowIndex="2" 
           GridPane.valignment="BOTTOM">
-        <Button fx:id="buttonCancelar" text="Cancelar" styleClass="button-cancel" 
+        <Button fx:id="buttonCancelar" text="%simulador.paso5.btn.cancelar" styleClass="button-cancel" 
                 onAction="#handleCancelar"/>
-        <Button fx:id="buttonGramatica" text="Gramática" styleClass="button-grammar" 
+        <Button fx:id="buttonGramatica" text="%simulador.paso5.btn.gramatica" styleClass="button-grammar" 
                 onAction="#handleGramatica"/>
         <Region HBox.hgrow="ALWAYS"/>
-        <Button fx:id="buttonPrimero" text="Primero" styleClass="button-first-last" 
+        <Button fx:id="buttonPrimero" text="%simulador.paso5.btn.primero" styleClass="button-first-last" 
                 onAction="#handlePrimero"/>
-        <Button fx:id="buttonAnterior" text="Anterior" styleClass="button-prev-next" 
+        <Button fx:id="buttonAnterior" text="%simulador.paso5.btn.anterior" styleClass="button-prev-next" 
                 onAction="#handleAnterior"/>
-        <Button fx:id="buttonSiguiente" text="Siguiente" styleClass="button-prev-next" 
+        <Button fx:id="buttonSiguiente" text="%simulador.paso5.btn.siguiente" styleClass="button-prev-next" 
                 onAction="#handleSiguiente"/>
-        <Button fx:id="buttonUltimo" text="Último" styleClass="button-first-last" 
+        <Button fx:id="buttonUltimo" text="%simulador.paso5.btn.ultimo" styleClass="button-first-last" 
                 onAction="#handleUltimo"/>
-        <Button fx:id="buttonSimulacion" text="Simulación" styleClass="button-grammar" />
+        <Button fx:id="buttonSimulacion" text="%simulador.paso5.btn.simulacion" styleClass="button-grammar" />
     </HBox>
 
 </GridPane>

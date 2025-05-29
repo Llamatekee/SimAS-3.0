@@ -16,6 +16,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.util.Callback;
+import java.util.ResourceBundle;
 
 /**
  * Versión extendida de TablaPredictiva específica para el paso 5,
@@ -310,9 +311,9 @@ public class TablaPredictivaPaso5 extends TablaPredictiva {
                 String columna = getTablaPredictiva().getColumns().get(pos.getColumn()).getText();
                 String valorCelda = fila.getValor(columna).get();
 
-                // No permitir modificar celdas con producciones
-                if (valorCelda != null && !valorCelda.isEmpty() && Character.isDigit(valorCelda.charAt(0))) {
-                    mostrarError("No se puede modificar esta celda",
+                // No permitir modificar celdas con producciones (contienen '→')
+                if (valorCelda != null && valorCelda.contains("→")) {
+                    mostrarError("produccion",
                                "Esta celda contiene una producción de la gramática",
                                "Las producciones son necesarias para el análisis sintáctico y no pueden ser modificadas.");
                     return;
@@ -326,23 +327,19 @@ public class TablaPredictivaPaso5 extends TablaPredictiva {
                         .orElse(null);
 
                     if (terminalFila != null && apareceSoloPrimeraPos(terminalFila)) {
-                        mostrarError("No se permiten funciones de error",
-                                   "No se pueden añadir funciones de error para este terminal",
+                        mostrarError("invalida",
+                                   "No se permiten funciones de error",
                                    "Este terminal solo aparece en primera posición de las producciones.");
                         return;
                     }
                 }
 
-                // Procesar función de error seleccionada
-                String funcionErrorSeleccionada = panelPaso5.getFuncionErrorSeleccionada();
+                // Permitir sobrescribir cualquier celda que no sea producción
+                FuncionError funcionErrorSeleccionada = panelPaso5.getFuncionErrorSeleccionada();
                 if (funcionErrorSeleccionada != null) {
-                    String numeroFuncion = funcionErrorSeleccionada.substring(0, funcionErrorSeleccionada.indexOf(" "));
-                    fila.setValor(columna, numeroFuncion);
-                    
-                    // Forzar un refresh para asegurar que la vista se actualice
+                    String textoFuncion = "E" + funcionErrorSeleccionada.getIdentificador();
+                    fila.setValor(columna, textoFuncion);
                     getTablaPredictiva().refresh();
-                    
-                    // Informar al usuario de la acción realizada
                 }
             }
         });
@@ -359,10 +356,25 @@ public class TablaPredictivaPaso5 extends TablaPredictiva {
     }
 
     private void mostrarError(String titulo, String header, String contenido) {
+        ResourceBundle bundle = panelPaso5 != null ? panelPaso5.getBundle() : null;
         Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(titulo);
-        alert.setHeaderText(header);
-        alert.setContentText(contenido);
+        if (bundle != null) {
+            alert.setTitle(bundle.getString("simulador.paso5.alert.error"));
+            if ("produccion".equals(titulo)) {
+                alert.setHeaderText(bundle.getString("simulador.paso5.alert.celda.produccion.header"));
+                alert.setContentText(bundle.getString("simulador.paso5.alert.celda.produccion.content"));
+            } else if ("invalida".equals(titulo)) {
+                alert.setHeaderText(bundle.getString("simulador.paso5.alert.celda.invalida.header"));
+                alert.setContentText(bundle.getString("simulador.paso5.alert.celda.invalida.content"));
+            } else {
+                alert.setHeaderText(header);
+                alert.setContentText(contenido);
+            }
+        } else {
+            alert.setTitle(titulo);
+            alert.setHeaderText(header);
+            alert.setContentText(contenido);
+        }
         alert.showAndWait();
     }
 

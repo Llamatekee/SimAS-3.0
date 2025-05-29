@@ -223,6 +223,8 @@ public class PanelSimuladorDesc {
             pestañaSimulacion.setClosable(false);
             tabPane.getTabs().add(pestañaSimulacion);
         }
+        
+        // Actualizar el título de la pestaña según el paso
         if (paso == 5) {
             pestañaSimulacion.setText(bundle.getString("simulador.tab.paso6"));
         } else {

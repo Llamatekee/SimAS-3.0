@@ -19,16 +19,20 @@ import javafx.scene.control.TableCell;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
+import java.util.Map;
 
 import gramatica.FilaTablaPredictiva;
 import gramatica.FuncionError;
 import gramatica.Gramatica;
 import gramatica.TablaPredictivaPaso5;
 import gramatica.Terminal;
+import editor.ActualizableTextos;
 
-public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
+public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso, ActualizableTextos {
 
     @FXML private Label labelTitulo;
+    @FXML private Label labelSeleccioneFuncion;
     @FXML private Button buttonAnterior;
     @FXML private Button buttonSiguiente;
     @FXML private Button buttonCancelar;
@@ -40,26 +44,28 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
     @FXML private Button buttonSimulacion;
     @FXML private Button buttonRellenarEpsilon;
     @FXML private Button buttonResetearTabla;
-    @FXML private ComboBox<String> comboBoxFuncionesError;
+    @FXML private ComboBox<FuncionError> comboBoxFuncionesError;
     @FXML private TableView<FilaTablaPredictiva> tablaPredictiva;
-    @FXML private TableColumn<String[], String> columnSimbolo;
-    @FXML private TableColumn<String[], String> columnAccion;
+    @FXML private TableColumn<FilaTablaPredictiva, String> columnSimbolo;
+    @FXML private TableColumn<FilaTablaPredictiva, String> columnAccion;
 
     private Parent root;
     private PanelSimuladorDesc panelPadre;
     private Gramatica gramatica;
+    private ResourceBundle bundle;
 
     public PanelNuevaSimDescPaso5(PanelSimuladorDesc panelPadre) {
         this.panelPadre = panelPadre;
         this.gramatica = panelPadre.gramatica;
+        this.bundle = panelPadre.getBundle();
         cargarFXML();
-        initialize();
     }
 
     private void cargarFXML() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/PanelNuevaSimDescPaso5.fxml"));
             loader.setController(this);
+            loader.setResources(bundle);
             root = loader.load();
         } catch (IOException e) {
             e.printStackTrace();
@@ -107,6 +113,7 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
         if (buttonRellenarEpsilon != null) {
             buttonRellenarEpsilon.setOnAction(e -> handleRellenarEpsilon());
         }
+        actualizarTextos(bundle);
     }
 
     private void iniciarSimulacion() {
@@ -191,6 +198,8 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
                 }
             }
         }
+
+        actualizarTablaPredictiva();
     }
 
     /**
@@ -320,53 +329,27 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
                             setStyle("");
                             return;
                         }
-                        
-                        setText(item);
-                        
-                        // Color especial para terminales solo en primera posición
-                        FilaTablaPredictiva fila = getTableRow().getItem();
-                        if (fila != null && fila.getEsTerminal()) {
-                            Terminal terminalFila = gramatica.getTerminales().stream()
-                                .filter(t -> t.getNombre().equals(fila.getSimbolo()))
-                                .findFirst()
-                                .orElse(null);
-                            boolean soloPrimeraPos = false;
-                            TablaPredictivaPaso5 tablaGlobal = panelPadre.getTablaPredictivaExtendidaGlobal();
-                            if (tablaGlobal != null && terminalFila != null) {
-                                try {
-                                    java.lang.reflect.Method m = tablaGlobal.getClass().getDeclaredMethod("apareceSoloPrimeraPos", Terminal.class);
-                                    m.setAccessible(true);
-                                    soloPrimeraPos = (boolean) m.invoke(tablaGlobal, terminalFila);
-                                } catch (Exception e) {
-                                }
-                            }
-                            if (soloPrimeraPos) {
-                                setStyle("-fx-background-color: #E9ECEF; -fx-text-fill: black;");
-                                return;
-                            }
-                        }
-                        // Aplicar estilo según tipo de contenido
-                        if (isSelected()) {
-                            // Estilo para celda seleccionada
-                            setStyle("-fx-background-color: #E3F2FD; -fx-text-fill: black; -fx-font-weight: bold; -fx-border-color: #1976D2; -fx-border-width: 1px;");
-                        } else if (item != null && !item.isEmpty()) {
-                            if (item.startsWith("E")) {
-                                // Estilo para funciones de error
-                                setStyle("-fx-text-fill: #D32F2F; -fx-font-weight: bold;");
-                            } else if (Character.isDigit(item.charAt(0))) {
-                                // Estilo para producciones
-                                setStyle("-fx-text-fill: black; -fx-font-weight: bold;");
-                            } else if (item.startsWith("ε_")) {
-                                // Estilo para épsilon
-                                setText(item.substring(2)); // Quitar prefijo
-                                setStyle("-fx-text-fill: #0D47A1; -fx-font-weight: bold;");
-                            } else {
-                                // Estilo predeterminado
-                                setStyle("-fx-text-fill: black;");
-                            }
+                        // Mostrar solo Ex si es función de error
+                        if (item.matches("E\\d+")) {
+                            setText(item);
+                            setStyle("-fx-text-fill: #D32F2F; -fx-font-weight: bold;");
+                        } else if (item.startsWith("E")) {
+                            int i = 1;
+                            while (i < item.length() && Character.isDigit(item.charAt(i))) i++;
+                            setText(item.substring(0, i));
+                            setStyle("-fx-text-fill: #D32F2F; -fx-font-weight: bold;");
+                        } else if (!item.isEmpty() && Character.isDigit(item.charAt(0))) {
+                            setText(item);
+                            setStyle("-fx-text-fill: black; -fx-font-weight: bold;");
+                        } else if (item.startsWith("ε_")) {
+                            setText(item.substring(2)); // Quitar prefijo
+                            setStyle("-fx-text-fill: #0D47A1; -fx-font-weight: bold;");
                         } else {
-                            // Estilo para celdas vacías
+                            setText(item);
                             setStyle("-fx-text-fill: black;");
+                        }
+                        if (isSelected()) {
+                            setStyle("-fx-background-color: #E3F2FD; -fx-text-fill: black; -fx-font-weight: bold; -fx-border-color: #1976D2; -fx-border-width: 1px;");
                         }
                     }
                 };
@@ -432,41 +415,69 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
     }
 
     private void actualizarComboBoxFuncionesError() {
-        // Limpiar el ComboBox antes de llenarlo
-        comboBoxFuncionesError.getItems().clear();
+        if (comboBoxFuncionesError == null) return;
+
+        // Guardar la selección actual
+        FuncionError seleccionActual = comboBoxFuncionesError.getValue();
         
-        // Obtener las funciones de error
+        // Limpiar y actualizar el ComboBox
+        comboBoxFuncionesError.getItems().clear();
         List<FuncionError> funcionesError = gramatica.getTPredictiva().getFuncionesError();
         
-        // Llenar el ComboBox con las funciones de error
-        for (FuncionError funcion : funcionesError) {
-            StringBuilder descripcion = new StringBuilder();
-            descripcion.append("E").append(funcion.getIdentificador()).append(" - ");
-            switch (funcion.getAccion()) {
-                case 1 -> descripcion.append("Insertar un Símbolo en la Entrada: ");
-                case 2 -> descripcion.append("Borrar un Símbolo de la Entrada");
-                case 3 -> descripcion.append("Modificar un Símbolo de la Entrada: ");
-                case 4 -> descripcion.append("Insertar un Símbolo de la Pila: ");
-                case 5 -> descripcion.append("Borrar un Símbolo de la Pila");
-                case 6 -> descripcion.append("Modificar un Símbolo de la Pila: ");
-                case 7 -> descripcion.append("Terminar el análisis");
+        if (funcionesError != null) {
+            for (FuncionError funcion : funcionesError) {
+                comboBoxFuncionesError.getItems().add(funcion);
             }
-            if (funcion.getAccion() == 1 || funcion.getAccion() == 3 || funcion.getAccion() == 4 || funcion.getAccion() == 6) {
-                if (funcion.getSimbolo() != null) {
-                    descripcion.append(funcion.getSimbolo().getNombre());
-                }
-            }
-            comboBoxFuncionesError.getItems().add(descripcion.toString());
         }
-        
-        // Seleccionar el primer elemento si hay elementos disponibles
-        if (!comboBoxFuncionesError.getItems().isEmpty()) {
+
+        // Personalizar la visualización del ComboBox
+        comboBoxFuncionesError.setCellFactory(listView -> new javafx.scene.control.ListCell<FuncionError>() {
+            @Override
+            protected void updateItem(FuncionError item, boolean empty) {
+                super.updateItem(item, empty);
+                setText((empty || item == null) ? "" : funcionErrorToString(item));
+            }
+        });
+        comboBoxFuncionesError.setButtonCell(new javafx.scene.control.ListCell<FuncionError>() {
+            @Override
+            protected void updateItem(FuncionError item, boolean empty) {
+                super.updateItem(item, empty);
+                setText((empty || item == null) ? "" : funcionErrorToString(item));
+            }
+        });
+
+        // Restaurar la selección si es posible
+        if (seleccionActual != null) {
+            comboBoxFuncionesError.setValue(seleccionActual);
+        } else if (comboBoxFuncionesError.getItems().size() > 0) {
             comboBoxFuncionesError.getSelectionModel().selectFirst();
-        } 
+        }
     }
 
-    public String getFuncionErrorSeleccionada() {
-        return comboBoxFuncionesError.getSelectionModel().getSelectedItem();
+    private void actualizarTablaPredictiva() {
+        if (tablaPredictiva == null) return;
+
+        // Actualizar encabezado de la primera columna
+        TableColumn<FilaTablaPredictiva, String> columnaNoTerminal = 
+            (TableColumn<FilaTablaPredictiva, String>) tablaPredictiva.getColumns().get(0);
+        columnaNoTerminal.setText(bundle.getString("simulador.paso3.columna.noterminal"));
+        // El resto de columnas mantienen su nombre original (el símbolo terminal)
+
+        // Refrescar la tabla
+        tablaPredictiva.refresh();
+    }
+
+    public String funcionErrorToString(FuncionError funcion) {
+        if (funcion == null) return "";
+        StringBuilder sb = new StringBuilder();
+        sb.append(funcion.getIdentificador());
+        sb.append(" - ");
+        sb.append(bundle.getString(funcion.getNombreAccion()));
+        if (funcion.getSimbolo() != null) {
+            sb.append(": ");
+            sb.append(funcion.getSimbolo().getNombre());
+        }
+        return sb.toString();
     }
 
     @FXML
@@ -490,9 +501,9 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
         } else {
             // Mostrar un mensaje de error si la validación falla
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Validación fallida");
-            alert.setContentText("Por favor, asegúrese de que todas las funciones de error estén correctamente definidas.");
+            alert.setTitle(bundle.getString("simulador.paso5.alert.error"));
+            alert.setHeaderText(bundle.getString("simulador.paso5.alert.validacion.header"));
+            alert.setContentText(bundle.getString("simulador.paso5.alert.validacion.content"));
             alert.showAndWait();
         }
     }
@@ -533,9 +544,9 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
                 } else {
                     // Mostrar alerta si la celda no tiene una función de error o una producción épsilon añadida
                     Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Error");
-                    alert.setHeaderText("Celda no válida");
-                    alert.setContentText("Esta celda no contiene una función de error o una producción épsilon añadida para eliminar.");
+                    alert.setTitle(bundle.getString("simulador.paso5.alert.error"));
+                    alert.setHeaderText(bundle.getString("simulador.paso5.alert.celda.invalida.header"));
+                    alert.setContentText(bundle.getString("simulador.paso5.alert.celda.invalida.content"));
                     alert.showAndWait();
                 }
             }
@@ -554,34 +565,31 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
                 // Verificar si la celda está vacía
                 if (valorCelda == null || valorCelda.isEmpty()) {
                     // Obtener la función de error seleccionada
-                    String funcionErrorSeleccionada = getFuncionErrorSeleccionada();
+                    FuncionError funcionErrorSeleccionada = (FuncionError) comboBoxFuncionesError.getValue();
                     if (funcionErrorSeleccionada != null) {
-                        // Añadir la función de error a la celda
-                        fila.setValor(column.getText(), funcionErrorSeleccionada);
-                        
+                        // Añadir la función de error a la celda en formato Ex
+                        fila.setValor(column.getText(), "E" + funcionErrorSeleccionada.getIdentificador());
                         // Guardar inmediatamente en la tabla global para evitar pérdida de datos
                         guardarTablaEnGlobal();
-                        
                         // Para forzar la actualización visual, recrear las columnas
                         tablaPredictiva.getColumns().clear();
                         crearColumnasEnTabla(tablaPredictiva);
-                        
                         // Refrescar la tabla local
                         tablaPredictiva.refresh();
                     } else {
                         // Mostrar alerta si no se ha seleccionado una función de error
                         Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Error");
-                        alert.setHeaderText("No se ha seleccionado una función de error");
-                        alert.setContentText("Por favor, seleccione una función de error antes de rellenar la celda.");
+                        alert.setTitle(bundle.getString("simulador.paso5.alert.error"));
+                        alert.setHeaderText(bundle.getString("simulador.paso5.alert.no.funcion.header"));
+                        alert.setContentText(bundle.getString("simulador.paso5.alert.no.funcion.content"));
                         alert.showAndWait();
                     }
                 } else {
                     // Mostrar alerta si la celda ya tiene un valor
                     Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Error");
-                    alert.setHeaderText("Celda no vacía");
-                    alert.setContentText("Esta celda ya tiene un valor. Por favor, seleccione una celda vacía.");
+                    alert.setTitle(bundle.getString("simulador.paso5.alert.error"));
+                    alert.setHeaderText(bundle.getString("simulador.paso5.alert.celda.no.vacia.header"));
+                    alert.setContentText(bundle.getString("simulador.paso5.alert.celda.no.vacia.content"));
                     alert.showAndWait();
                 }
             }
@@ -635,6 +643,15 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
      */
     @FXML
     private void handleRellenarEpsilon() {
+        if (comboBoxFuncionesError.getValue() == null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle(bundle.getString("simulador.paso5.alert.error"));
+            alert.setHeaderText(bundle.getString("simulador.paso5.alert.no.funcion.header"));
+            alert.setContentText(bundle.getString("simulador.paso5.alert.no.funcion.content"));
+            alert.showAndWait();
+            return;
+        }
+
         boolean seHizoAlgunCambio = false;
         
         // Obtener la tabla extendida global
@@ -648,6 +665,9 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
         if (filas == null || filas.isEmpty()) {
             return;
         }
+
+        FuncionError funcionErrorSeleccionada = comboBoxFuncionesError.getValue();
+        String funcionErrorStr = funcionErrorToString(funcionErrorSeleccionada);
                 
         for (FilaTablaPredictiva fila : filas) {
             // Si es terminal y solo aparece en primera posición, saltar
@@ -704,5 +724,50 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso {
         }
         guardarTablaEnGlobal();
         tablaPredictiva.refresh();
+    }
+
+    @Override
+    public void actualizarTextos(ResourceBundle bundle) {
+        this.bundle = bundle;
+        
+        // Actualizar textos de la interfaz
+        if (labelTitulo != null) labelTitulo.setText(bundle.getString("simulador.paso5.titulo"));
+        if (labelSeleccioneFuncion != null) labelSeleccioneFuncion.setText(bundle.getString("simulador.paso5.seleccione.funcion"));
+        if (buttonEliminar != null) buttonEliminar.setText(bundle.getString("simulador.paso5.btn.eliminar"));
+        if (buttonRellenarEpsilon != null) buttonRellenarEpsilon.setText(bundle.getString("simulador.paso5.btn.rellenar.epsilon"));
+        if (buttonResetearTabla != null) buttonResetearTabla.setText(bundle.getString("simulador.paso5.btn.resetear"));
+        if (buttonCancelar != null) buttonCancelar.setText(bundle.getString("simulador.paso5.btn.cancelar"));
+        if (buttonGramatica != null) buttonGramatica.setText(bundle.getString("simulador.paso5.btn.gramatica"));
+        if (buttonPrimero != null) buttonPrimero.setText(bundle.getString("simulador.paso5.btn.primero"));
+        if (buttonAnterior != null) buttonAnterior.setText(bundle.getString("simulador.paso5.btn.anterior"));
+        if (buttonSiguiente != null) buttonSiguiente.setText(bundle.getString("simulador.paso5.btn.siguiente"));
+        if (buttonUltimo != null) buttonUltimo.setText(bundle.getString("simulador.paso5.btn.ultimo"));
+        if (buttonSimulacion != null) buttonSimulacion.setText(bundle.getString("simulador.paso5.btn.simulacion"));
+
+        // Actualizar el título de la pestaña de simulación
+        if (panelPadre != null && panelPadre.tabPane != null) {
+            for (Tab tab : panelPadre.tabPane.getTabs()) {
+                if (tab.getContent() == this.getRoot()) {
+                    tab.setText(bundle.getString("simulador.tab.paso1").replace("1", "5"));
+                    break;
+                }
+            }
+        }
+
+        // Actualizar el ComboBox de funciones de error
+        actualizarComboBoxFuncionesError();
+
+        // Actualizar la tabla predictiva
+        if (tablaPredictiva != null) {
+            actualizarTablaPredictiva();
+        }
+    }
+
+    public FuncionError getFuncionErrorSeleccionada() {
+        return comboBoxFuncionesError != null ? comboBoxFuncionesError.getValue() : null;
+    }
+
+    public ResourceBundle getBundle() {
+        return this.bundle;
     }
 }
