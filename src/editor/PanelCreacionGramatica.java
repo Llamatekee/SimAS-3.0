@@ -14,8 +14,9 @@ import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import java.util.ResourceBundle;
+import editor.ActualizableTextos;
 
-public class PanelCreacionGramatica extends BorderPane {
+public class PanelCreacionGramatica extends BorderPane implements ActualizableTextos {
 
     private final TabPane tabPane;
     private final PanelCreacionGramaticaPaso1 paso1;

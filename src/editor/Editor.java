@@ -25,8 +25,9 @@ import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.ResourceBundle;
+import editor.ActualizableTextos;
 
-public class Editor extends VBox {
+public class Editor extends VBox implements ActualizableTextos {
 
     // Modelo
     private Gramatica gramatica = crearGramatica();

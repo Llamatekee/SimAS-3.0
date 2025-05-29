@@ -9,12 +9,13 @@ import javafx.beans.binding.BooleanBinding;
 
 import java.io.IOException;
 import java.util.ResourceBundle;
+import editor.ActualizableTextos;
 
 /**
  * Panel de creación de gramática - Paso 1
  * Permite al usuario ingresar el nombre y la descripción de la gramática
  */
-public class PanelCreacionGramaticaPaso1 extends VBox {
+public class PanelCreacionGramaticaPaso1 extends VBox implements ActualizableTextos {
 
     private static final int MAX_NOMBRE_LENGTH = 50;
     private static final int MAX_DESCRIPCION_LENGTH = 500;

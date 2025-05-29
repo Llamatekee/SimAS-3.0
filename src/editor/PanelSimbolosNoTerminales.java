@@ -11,29 +11,47 @@ import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.ResourceBundle;
 import java.util.Set;
 
-public class PanelSimbolosNoTerminales extends VBox {
+import editor.ActualizableTextos;
+
+public class PanelSimbolosNoTerminales extends VBox implements ActualizableTextos {
 
     @FXML private FlowPane symbolButtonsPane;
     @FXML private TextField txtSimboloNoTerminal;
     @FXML private ListView<String> listSimbolosNoTerminales;
+    @FXML private Label labelHeader;
+    @FXML private Label labelPredefinidos;
+    @FXML private Label labelEditar;
+    @FXML private Label labelLista;
+    @FXML private Button btnInsertar;
+    @FXML private Button btnModificar;
+    @FXML private Button btnEliminar;
+    @FXML private Button btnCancelar;
+    @FXML private Button btnAceptar;
 
     private final ObservableList<String> simbolosNoTerminales;
     private final ObservableList<String> simbolosTemporales; // Lista temporal para cambios
     private final Set<String> simbolosSet;
     private final TabPane tabPane;
     private final PanelCreacionGramaticaPaso2 panelPadre;
+    private ResourceBundle bundle;
 
     // Lista de símbolos predefinidos para No Terminales
     private final String[] simbolosPredefinidos = {"S", "A", "B", "C", "D", "X", "Y", "Z"};
 
     public PanelSimbolosNoTerminales(ObservableList<String> simbolosNoTerminales, TabPane tabPane, PanelCreacionGramaticaPaso2 panelPadre) {
+        this(simbolosNoTerminales, tabPane, panelPadre, panelPadre.panelPadre.getBundle());
+    }
+
+    public PanelSimbolosNoTerminales(ObservableList<String> simbolosNoTerminales, TabPane tabPane, PanelCreacionGramaticaPaso2 panelPadre, ResourceBundle bundle) {
         this.simbolosNoTerminales = simbolosNoTerminales;
         this.simbolosTemporales = FXCollections.observableArrayList(simbolosNoTerminales); // Copia temporal
         this.simbolosSet = new HashSet<>(simbolosTemporales);
         this.tabPane = tabPane;
         this.panelPadre = panelPadre;
+        this.bundle = bundle;
         cargarFXML();
     }
 
@@ -52,6 +70,7 @@ public class PanelSimbolosNoTerminales extends VBox {
     private void initialize() {
         listSimbolosNoTerminales.setItems(simbolosTemporales); // Usamos la lista temporal
         generarBotonesPredefinidos();
+        actualizarTextos(bundle);
     }
 
     private void generarBotonesPredefinidos() {
@@ -67,7 +86,7 @@ public class PanelSimbolosNoTerminales extends VBox {
         if (simbolosSet.add(simbolo)) {
             simbolosTemporales.add(simbolo); // Agregamos solo a la lista temporal
         } else {
-            panelPadre.panelPadre.mostrarAlerta("Símbolo Duplicado", "El símbolo ya está en la lista.");
+            panelPadre.panelPadre.mostrarAlerta(bundle.getString("simbolos.error.duplicado.titulo"), bundle.getString("simbolos.error.duplicado.mensaje"));
         }
     }
 
@@ -78,7 +97,7 @@ public class PanelSimbolosNoTerminales extends VBox {
             simbolosTemporales.add(nuevoSimbolo); // Agregamos solo a la lista temporal
             txtSimboloNoTerminal.clear();
         } else {
-            panelPadre.panelPadre.mostrarAlerta("Error", "El símbolo ya existe o es inválido.");
+            panelPadre.panelPadre.mostrarAlerta(bundle.getString("simbolos.error.insertar.titulo"), bundle.getString("simbolos.error.insertar.mensaje"));
         }
     }
 
@@ -93,7 +112,9 @@ public class PanelSimbolosNoTerminales extends VBox {
 
     @FXML
     private void onAceptarAction() {
-        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION, "¿Desea guardar los cambios y salir?", ButtonType.YES, ButtonType.NO);
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION, bundle.getString("simbolos.dialog.guardar.mensaje"), ButtonType.YES, ButtonType.NO);
+        confirm.setTitle(bundle.getString("simbolos.dialog.guardar.titulo"));
+        confirm.setHeaderText(bundle.getString("simbolos.dialog.guardar.titulo"));
         confirm.showAndWait().ifPresent(response -> {
             if (response == ButtonType.YES) {
                 simbolosNoTerminales.setAll(simbolosTemporales); // Guardamos cambios en la lista original
@@ -105,7 +126,9 @@ public class PanelSimbolosNoTerminales extends VBox {
 
     @FXML
     private void onCancelarAction() {
-        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION, "¿Desea borrar los cambios y salir?", ButtonType.YES, ButtonType.NO);
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION, bundle.getString("simbolos.dialog.cancelar.mensaje"), ButtonType.YES, ButtonType.NO);
+        confirm.setTitle(bundle.getString("simbolos.dialog.cancelar.titulo"));
+        confirm.setHeaderText(bundle.getString("simbolos.dialog.cancelar.titulo"));
         confirm.showAndWait().ifPresent(response -> {
             if (response == ButtonType.YES) {
                 cerrarPestanaActual();
@@ -115,11 +138,9 @@ public class PanelSimbolosNoTerminales extends VBox {
 
     private String mostrarDialogoModificarSimbolo(String simboloActual) {
         TextInputDialog dialog = new TextInputDialog(simboloActual);
-        dialog.setTitle("Modificar Símbolo");
-        dialog.setHeaderText("Modificar Símbolo No Terminal");
-        dialog.setContentText("Nuevo valor para el símbolo:");
-
-        // Obtener el nuevo valor del símbolo
+        dialog.setTitle(bundle.getString("simbolos.dialog.modificar.titulo"));
+        dialog.setHeaderText(bundle.getString("simbolos.dialog.modificar.header"));
+        dialog.setContentText(bundle.getString("simbolos.dialog.modificar.content"));
         return dialog.showAndWait().orElse(null);
     }
 
@@ -127,23 +148,19 @@ public class PanelSimbolosNoTerminales extends VBox {
     @FXML
     private void onModificarAction() {
         String simboloSeleccionado = listSimbolosNoTerminales.getSelectionModel().getSelectedItem();
-
         if (simboloSeleccionado != null) {
-            String nuevoSimbolo = mostrarDialogoModificarSimbolo(simboloSeleccionado).trim();
-
+            String nuevoSimbolo = mostrarDialogoModificarSimbolo(simboloSeleccionado);
+            if (nuevoSimbolo != null) nuevoSimbolo = nuevoSimbolo.trim();
             if (nuevoSimbolo != null && !nuevoSimbolo.isEmpty() && !simbolosSet.contains(nuevoSimbolo)) {
-                // Actualizar el conjunto y la lista temporal
                 simbolosSet.remove(simboloSeleccionado);
                 simbolosSet.add(nuevoSimbolo);
                 simbolosTemporales.set(simbolosTemporales.indexOf(simboloSeleccionado), nuevoSimbolo);
-
-                // Actualizar las producciones de la gramática
                 panelPadre.panelPadre.getGramatica().modificarSimboloProduccion(simboloSeleccionado, nuevoSimbolo);
             } else {
-                panelPadre.panelPadre.mostrarAlerta("Error", "El símbolo ya existe o es inválido.");
+                panelPadre.panelPadre.mostrarAlerta(bundle.getString("simbolos.error.modificar.titulo"), bundle.getString("simbolos.error.modificar.mensaje"));
             }
         } else {
-            panelPadre.panelPadre.mostrarAlerta("Error", "No se ha seleccionado ningún símbolo.");
+            panelPadre.panelPadre.mostrarAlerta(bundle.getString("simbolos.error.seleccion.titulo"), bundle.getString("simbolos.error.seleccion.mensaje"));
         }
     }
 
@@ -164,6 +181,20 @@ public class PanelSimbolosNoTerminales extends VBox {
         } else {
             System.err.println("TabPane es null, no se puede cerrar la pestaña.");
         }
+    }
+
+    public void actualizarTextos(ResourceBundle bundle) {
+        this.bundle = bundle;
+        if (labelHeader != null) labelHeader.setText(bundle.getString("simbolos.no.terminales.header"));
+        if (labelPredefinidos != null) labelPredefinidos.setText(bundle.getString("simbolos.predefinidos"));
+        if (labelEditar != null) labelEditar.setText(bundle.getString("simbolos.editar"));
+        if (labelLista != null) labelLista.setText(bundle.getString("simbolos.lista"));
+        if (btnInsertar != null) btnInsertar.setText(bundle.getString("simbolos.btn.insertar"));
+        if (btnModificar != null) btnModificar.setText(bundle.getString("simbolos.btn.modificar"));
+        if (btnEliminar != null) btnEliminar.setText(bundle.getString("simbolos.btn.eliminar"));
+        if (btnCancelar != null) btnCancelar.setText(bundle.getString("button.cancelar"));
+        if (btnAceptar != null) btnAceptar.setText(bundle.getString("button.aceptar"));
+        if (txtSimboloNoTerminal != null) txtSimboloNoTerminal.setPromptText(bundle.getString("simbolos.prompt.simbolo"));
     }
 
 }

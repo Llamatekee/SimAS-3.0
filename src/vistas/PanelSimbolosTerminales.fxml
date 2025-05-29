@@ -22,7 +22,7 @@
     </padding>
 
     <!-- Header -->
-    <Label text="Símbolos Terminales" styleClass="wizard-header"
+    <Label fx:id="labelHeader" styleClass="wizard-header"
            GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.halignment="CENTER"/>
 
     <!-- Content -->
@@ -31,28 +31,28 @@
         
         <!-- Símbolos Predefinidos -->
         <VBox spacing="10">
-            <Label text="Símbolos Predefinidos" styleClass="wizard-section-header"/>
+            <Label fx:id="labelPredefinidos" styleClass="wizard-section-header"/>
             <FlowPane fx:id="symbolButtonsPane" hgap="8" vgap="8" styleClass="symbol-buttons-pane"/>
         </VBox>
 
         <!-- Editor Section -->
         <VBox spacing="10">
-            <Label text="Editar Símbolo" styleClass="wizard-section-header"/>
+            <Label fx:id="labelEditar" styleClass="wizard-section-header"/>
             <HBox spacing="10">
                 <TextField fx:id="txtSimboloTerminal" styleClass="wizard-field"
-                          promptText="Ingrese un símbolo" HBox.hgrow="ALWAYS"/>
-                <Button fx:id="btnInsertar" text="Insertar" styleClass="button-next"
+                          HBox.hgrow="ALWAYS"/>
+                <Button fx:id="btnInsertar" styleClass="button-next"
                         onAction="#onInsertarAction"/>
-                <Button fx:id="btnModificar" text="Modificar" styleClass="button-next"
+                <Button fx:id="btnModificar" styleClass="button-next"
                         onAction="#onModificarAction"/>
-                <Button fx:id="btnEliminar" text="Eliminar" styleClass="button-cancel"
+                <Button fx:id="btnEliminar" styleClass="button-cancel"
                         onAction="#onEliminarAction"/>
             </HBox>
         </VBox>
 
         <!-- Lista de Símbolos -->
         <VBox spacing="10" VBox.vgrow="ALWAYS">
-            <Label text="Lista de Símbolos" styleClass="wizard-section-header"/>
+            <Label fx:id="labelLista" styleClass="wizard-section-header"/>
             <ListView fx:id="listSimbolosTerminales" VBox.vgrow="ALWAYS"/>
         </VBox>
     </VBox>
@@ -60,10 +60,10 @@
     <!-- Navigation -->
     <HBox styleClass="wizard-navigation" GridPane.columnIndex="0" GridPane.rowIndex="2" 
           GridPane.valignment="BOTTOM">
-        <Button fx:id="btnCancelar" text="Cancelar" styleClass="button-cancel" 
+        <Button fx:id="btnCancelar" styleClass="button-cancel" 
                 onAction="#onCancelarAction"/>
         <Region HBox.hgrow="ALWAYS"/>
-        <Button fx:id="btnAceptar" text="Aceptar" styleClass="button-finish" 
+        <Button fx:id="btnAceptar" styleClass="button-finish" 
                 onAction="#onAceptarAction"/>
     </HBox>
 

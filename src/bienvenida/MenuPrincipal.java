@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import editor.ActualizableTextos;
 
 public class MenuPrincipal {
 
@@ -121,15 +122,17 @@ public class MenuPrincipal {
                         tab.getText().equals("Menu Principal")) {
                         tab.setText(bundle.getString("title.menu"));
                     }
-                    // Si la pestaña contiene un Editor, actualizar sus textos y el título de la pestaña
-                    if (tab.getContent() instanceof editor.Editor) {
-                        ((editor.Editor) tab.getContent()).actualizarTextos(bundle);
-                        tab.setText(bundle.getString("editor.title"));
-                    }
-                    // Si la pestaña contiene un PanelCreacionGramatica, actualizar sus textos y el título de la pestaña
-                    if (tab.getContent() instanceof editor.PanelCreacionGramatica) {
-                        ((editor.PanelCreacionGramatica) tab.getContent()).actualizarTextos(bundle);
-                        // El propio PanelCreacionGramatica se encarga de actualizar el título de la pestaña activa
+                    // Actualizar textos de cualquier panel que implemente ActualizableTextos
+                    if (tab.getContent() instanceof ActualizableTextos) {
+                        ((ActualizableTextos) tab.getContent()).actualizarTextos(bundle);
+                        // Si es Editor, actualiza el título
+                        if (tab.getContent() instanceof editor.Editor) {
+                            tab.setText(bundle.getString("editor.title"));
+                        } else if (tab.getContent() instanceof editor.PanelSimbolosNoTerminales) {
+                            tab.setText(bundle.getString("creacion2.tab.modificar.no.terminales"));
+                        } else if (tab.getContent() instanceof editor.PanelSimbolosTerminales) {
+                            tab.setText(bundle.getString("creacion2.tab.modificar.terminales"));
+                        }
                     }
                 }
             }
