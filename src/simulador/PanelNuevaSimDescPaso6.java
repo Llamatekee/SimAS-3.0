@@ -325,7 +325,8 @@ public class PanelNuevaSimDescPaso6 extends BorderPane implements PanelNuevaSimD
         SimulacionFinal simulacionFinal = new SimulacionFinal(
             gramatica,
             (TablaPredictivaPaso5) panelSimuladorDesc.getTablaPredictivaExtendidaGlobal(),
-            panelSimuladorDesc.tabPane
+            panelSimuladorDesc.tabPane,
+            panelSimuladorDesc.getBundle()
         );
 
         // Crear una nueva pestaña y añadirla al TabPane principal

@@ -5,45 +5,45 @@
 <BorderPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" styleClass="wizard-step">
     <top>
         <HBox spacing="15" alignment="CENTER_LEFT" styleClass="wizard-content" style="-fx-padding: 30 0 20 40;">
-            <Label text="Cadena de entrada:" styleClass="wizard-section-header"/>
-            <TextField fx:id="campoEntrada" promptText="Introduce la cadena de entrada..." styleClass="wizard-combo-box" editable="false"/>
-            <Button fx:id="btnEditarCadena" text="Editar cadena" styleClass="button-grammar"/>
-            <Button fx:id="btnIniciar" text="Iniciar simulación" styleClass="button-grammar"/>
+            <Label fx:id="labelEntrada" text="%simulacionfinal.label.entrada" styleClass="wizard-section-header"/>
+            <TextField fx:id="campoEntrada" promptText="%simulacionfinal.prompt.entrada" styleClass="wizard-combo-box" editable="false"/>
+            <Button fx:id="btnEditarCadena" text="%simulacionfinal.btn.editar" styleClass="button-grammar"/>
+            <Button fx:id="btnIniciar" text="%simulacionfinal.btn.iniciar" styleClass="button-grammar"/>
         </HBox>
     </top>
     <center>
         <VBox spacing="25" styleClass="wizard-content">
             <HBox spacing="15" alignment="CENTER">
-                <Button fx:id="btnInicio" text="Retroceder al inicio" styleClass="button-cancel"/>
-                <Button fx:id="btnRetroceso" text="Retroceder un paso" styleClass="button-prev-next"/>
-                <Button fx:id="btnPaso" text="Avanzar un paso" styleClass="button-prev-next"/>
-                <Button fx:id="btnFinal" text="Avanzar al final" styleClass="button-grammar"/>
+                <Button fx:id="btnInicio" text="%simulacionfinal.btn.inicio" styleClass="button-cancel"/>
+                <Button fx:id="btnRetroceso" text="%simulacionfinal.btn.retroceso" styleClass="button-prev-next"/>
+                <Button fx:id="btnPaso" text="%simulacionfinal.btn.paso" styleClass="button-prev-next"/>
+                <Button fx:id="btnFinal" text="%simulacionfinal.btn.final" styleClass="button-grammar"/>
             </HBox>
             <HBox spacing="40" alignment="CENTER">
                 <VBox spacing="8">
-                    <Label text="Pila" style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+                    <Label fx:id="labelPila" text="%simulacionfinal.label.pila" style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: white;"/>
                     <TextArea fx:id="areaPila" editable="false" styleClass="simulacion-output" prefWidth="180" prefHeight="120" wrapText="true"/>
                 </VBox>
                 <VBox spacing="8">
-                    <Label text="Entrada" style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+                    <Label fx:id="labelEntradaStack" text="%simulacionfinal.label.entrada.stack" style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: white;"/>
                     <TextArea fx:id="areaEntrada" editable="false" styleClass="simulacion-output" prefWidth="180" prefHeight="120" wrapText="true"/>
                 </VBox>
                 <VBox spacing="8" alignment="TOP_LEFT">
-                    <Label text="Acción" style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+                    <Label fx:id="labelAccion" text="%simulacionfinal.label.accion" style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: white;"/>
                     <TextArea fx:id="areaMensajes" prefWidth="350" prefHeight="120" wrapText="true" editable="false" styleClass="simulacion-output"/>
                 </VBox>
             </HBox>
-            <Label text="Historial de pasos" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #3498DB; -fx-padding: 10 0 0 0;"/>
+            <Label fx:id="labelHistorial" text="%simulacionfinal.label.historial" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #3498DB; -fx-padding: 10 0 0 0;"/>
             <TableView fx:id="tablaHistorial" VBox.vgrow="ALWAYS" styleClass="wizard-table">
                 <columns>
-                    <TableColumn fx:id="colPaso" text="Paso" minWidth="60" maxWidth="60"/>
-                    <TableColumn fx:id="colPila" text="Pila" minWidth="100"/>
-                    <TableColumn fx:id="colEntrada" text="Entrada" minWidth="100"/>
-                    <TableColumn fx:id="colAccion" text="Acción" minWidth="100"/>
+                    <TableColumn fx:id="colPaso" text="%simulacionfinal.col.paso" minWidth="60" maxWidth="60"/>
+                    <TableColumn fx:id="colPila" text="%simulacionfinal.col.pila" minWidth="100"/>
+                    <TableColumn fx:id="colEntrada" text="%simulacionfinal.col.entrada" minWidth="100"/>
+                    <TableColumn fx:id="colAccion" text="%simulacionfinal.col.accion" minWidth="100"/>
                 </columns>
             </TableView>
-            <Button fx:id="btnDerivacion" text="Generar derivación" styleClass="button-grammar" alignment="CENTER"/>
-            <Button fx:id="btnArbol" text="Generar árbol sintáctico" styleClass="button-grammar" alignment="CENTER"/>
+            <Button fx:id="btnDerivacion" text="%simulacionfinal.btn.derivacion" styleClass="button-grammar" alignment="CENTER"/>
+            <Button fx:id="btnArbol" text="%simulacionfinal.btn.arbol" styleClass="button-grammar" alignment="CENTER"/>
         </VBox>
     </center>
 </BorderPane> 

@@ -27,8 +27,10 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.Priority;
 import java.io.File;
+import editor.ActualizableTextos;
+import java.util.ResourceBundle;
 
-public class SimulacionFinal extends BorderPane {
+public class SimulacionFinal extends BorderPane implements ActualizableTextos {
     @FXML private TextField campoEntrada;
     @FXML private Button btnIniciar;
     @FXML private Button btnPaso;
@@ -46,10 +48,17 @@ public class SimulacionFinal extends BorderPane {
     @FXML private TableColumn<HistorialPaso, String> colPila;
     @FXML private TableColumn<HistorialPaso, String> colEntrada;
     @FXML private TableColumn<HistorialPaso, String> colAccion;
+    // Labels para internacionalización
+    @FXML private Label labelEntrada;
+    @FXML private Label labelPila;
+    @FXML private Label labelEntradaStack;
+    @FXML private Label labelAccion;
+    @FXML private Label labelHistorial;
 
     private Gramatica gramatica;
     private TablaPredictivaPaso5 tablaPredictiva;
     private TabPane tabPane;
+    private ResourceBundle bundle;
 
     // Estado de la simulación
     private Stack<String> pilaSimulacion;
@@ -74,10 +83,11 @@ public class SimulacionFinal extends BorderPane {
         }
     }
 
-    public SimulacionFinal(Gramatica gramatica, TablaPredictivaPaso5 tablaPredictiva, TabPane tabPane) {
+    public SimulacionFinal(Gramatica gramatica, TablaPredictivaPaso5 tablaPredictiva, TabPane tabPane, ResourceBundle bundle) {
         this.gramatica = gramatica;
         this.tablaPredictiva = tablaPredictiva;
         this.tabPane = tabPane;
+        this.bundle = bundle;
         cargarFXML();
     }
 
@@ -85,6 +95,8 @@ public class SimulacionFinal extends BorderPane {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/SimulacionFinal.fxml"));
             loader.setController(this);
+            // Si tienes un bundle global, pásalo aquí:
+            if (bundle != null) loader.setResources(bundle);
             Parent root = loader.load();
             this.setCenter(root);
             initialize(); 
@@ -116,6 +128,8 @@ public class SimulacionFinal extends BorderPane {
         colAccion.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getAccion()));
         tablaHistorial.setItems(historialObservable);
         tablaHistorial.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        // No mostrar mensaje de tabla vacía
+        tablaHistorial.setPlaceholder(new Label(""));
         
         // Deshabilitar botones inicialmente
         btnPaso.setDisable(true);
@@ -127,7 +141,7 @@ public class SimulacionFinal extends BorderPane {
     private void mostrarDialogoEditarCadena() {
         Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
-        dialog.setTitle("Editar cadena de entrada");
+        dialog.setTitle(bundle != null ? bundle.getString("simulacionfinal.dialog.editar.titulo") : "Editar cadena de entrada");
 
         FlowPane terminalPane = new FlowPane();
         terminalPane.setHgap(10);
@@ -153,7 +167,7 @@ public class SimulacionFinal extends BorderPane {
         }
 
         // Botón para borrar último
-        Button btnBorrar = new Button("Borrar último");
+        Button btnBorrar = new Button(bundle != null ? bundle.getString("simulacionfinal.btn.borrar.ultimo") : "Borrar último");
         btnBorrar.getStyleClass().add("button-cancel");
         btnBorrar.setOnAction(ev -> {
             String[] partes = campoCadena.getText().trim().split(" ");
@@ -168,7 +182,7 @@ public class SimulacionFinal extends BorderPane {
         });
 
         // Botón aceptar
-        Button btnAceptar = new Button("Aceptar");
+        Button btnAceptar = new Button(bundle != null ? bundle.getString("button.aceptar") : "Aceptar");
         btnAceptar.getStyleClass().add("button-grammar");
         btnAceptar.setOnAction(ev -> {
             campoEntrada.setText(campoCadena.getText());
@@ -176,7 +190,7 @@ public class SimulacionFinal extends BorderPane {
         });
 
         // Botón cancelar
-        Button btnCancelar = new Button("Cancelar");
+        Button btnCancelar = new Button(bundle != null ? bundle.getString("button.cancelar") : "Cancelar");
         btnCancelar.getStyleClass().add("button-cancel");
         btnCancelar.setOnAction(ev -> dialog.close());
 
@@ -185,7 +199,7 @@ public class SimulacionFinal extends BorderPane {
         acciones.setPadding(new Insets(10, 0, 0, 0));
 
         VBox layout = new VBox(15,
-            new Label("Haz clic en los terminales para construir la cadena de entrada:"),
+            new Label(bundle != null ? bundle.getString("simulacionfinal.dialog.editar.instruccion") : "Haz clic en los terminales para construir la cadena de entrada:"),
             terminalPane,
             campoCadena,
             acciones
@@ -230,9 +244,9 @@ public class SimulacionFinal extends BorderPane {
 
     private void mostrarAlertaCadenaVacia() {
         Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Cadena de entrada vacía");
+        alert.setTitle(bundle != null ? bundle.getString("simulacionfinal.alert.cadena.vacia.titulo") : "Cadena de entrada vacía");
         alert.setHeaderText(null);
-        alert.setContentText("Introduce una cadena de entrada válida antes de iniciar la simulación.");
+        alert.setContentText(bundle != null ? bundle.getString("simulacionfinal.alert.cadena.vacia.mensaje") : "Introduce una cadena de entrada válida antes de iniciar la simulación.");
         alert.showAndWait();
     }
 
@@ -628,5 +642,37 @@ public class SimulacionFinal extends BorderPane {
         public String getPila() { return pila; }
         public String getEntrada() { return entrada; }
         public String getAccion() { return accion; }
+    }
+
+    @Override
+    public void actualizarTextos(ResourceBundle bundle) {
+        this.bundle = bundle;
+        if (labelEntrada != null) labelEntrada.setText(bundle.getString("simulacionfinal.label.entrada"));
+        if (campoEntrada != null) campoEntrada.setPromptText(bundle.getString("simulacionfinal.prompt.entrada"));
+        if (btnEditarCadena != null) btnEditarCadena.setText(bundle.getString("simulacionfinal.btn.editar"));
+        if (btnIniciar != null) btnIniciar.setText(bundle.getString("simulacionfinal.btn.iniciar"));
+        if (btnInicio != null) btnInicio.setText(bundle.getString("simulacionfinal.btn.inicio"));
+        if (btnRetroceso != null) btnRetroceso.setText(bundle.getString("simulacionfinal.btn.retroceso"));
+        if (btnPaso != null) btnPaso.setText(bundle.getString("simulacionfinal.btn.paso"));
+        if (btnFinal != null) btnFinal.setText(bundle.getString("simulacionfinal.btn.final"));
+        if (labelPila != null) labelPila.setText(bundle.getString("simulacionfinal.label.pila"));
+        if (labelEntradaStack != null) labelEntradaStack.setText(bundle.getString("simulacionfinal.label.entrada.stack"));
+        if (labelAccion != null) labelAccion.setText(bundle.getString("simulacionfinal.label.accion"));
+        if (labelHistorial != null) labelHistorial.setText(bundle.getString("simulacionfinal.label.historial"));
+        if (colPaso != null) colPaso.setText(bundle.getString("simulacionfinal.col.paso"));
+        if (colPila != null) colPila.setText(bundle.getString("simulacionfinal.col.pila"));
+        if (colEntrada != null) colEntrada.setText(bundle.getString("simulacionfinal.col.entrada"));
+        if (colAccion != null) colAccion.setText(bundle.getString("simulacionfinal.col.accion"));
+        if (btnDerivacion != null) btnDerivacion.setText(bundle.getString("simulacionfinal.btn.derivacion"));
+        if (btnArbol != null) btnArbol.setText(bundle.getString("simulacionfinal.btn.arbol"));
+        // Actualizar el título de la pestaña si está presente
+        if (tabPane != null) {
+            for (Tab tab : tabPane.getTabs()) {
+                if (tab.getContent() == this) {
+                    tab.setText(bundle.getString("simulador.paso6.simulacion.final"));
+                    break;
+                }
+            }
+        }
     }
 } 
