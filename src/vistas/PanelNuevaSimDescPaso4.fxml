@@ -22,7 +22,7 @@
     </padding>
 
     <!-- Header -->
-    <Label text="Funciones de Error" styleClass="wizard-header"
+    <Label fx:id="labelTitulo" text="Funciones de Error" styleClass="wizard-header"
            GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.halignment="CENTER"/>
 
     <!-- Content -->
@@ -31,7 +31,7 @@
         
         <!-- Lista de Funciones Section -->
         <VBox spacing="10" VBox.vgrow="ALWAYS">
-            <Label text="Funciones de Error Definidas" styleClass="wizard-section-header"/>
+            <Label fx:id="labelSubtitulo" text="Funciones de Error Definidas" styleClass="wizard-section-header"/>
             <ScrollPane VBox.vgrow="ALWAYS" styleClass="wizard-scroll" prefHeight="800" fitToWidth="true">
                 <content>
                     <ListView fx:id="listViewFuncionesError" styleClass="wizard-list" prefHeight="800" prefWidth="600"/>

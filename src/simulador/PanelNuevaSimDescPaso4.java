@@ -14,14 +14,16 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import editor.ActualizableTextos;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
 
-public class PanelNuevaSimDescPaso4 implements PanelNuevaSimDescPaso {
+public class PanelNuevaSimDescPaso4 implements PanelNuevaSimDescPaso, ActualizableTextos {
 
     @FXML private Label labelTitulo;
+    @FXML private Label labelSubtitulo;
     @FXML private Button buttonCancelar;
     @FXML private Button buttonUltimo;
     @FXML private Button buttonSiguiente;
@@ -38,10 +40,12 @@ public class PanelNuevaSimDescPaso4 implements PanelNuevaSimDescPaso {
     private PanelSimuladorDesc panelPadre;
     private Gramatica gramatica;
     private int funError = 0;
+    private java.util.ResourceBundle bundle;
 
     public PanelNuevaSimDescPaso4(PanelSimuladorDesc panelPadre) {
         this.panelPadre = panelPadre;
         this.gramatica = panelPadre.gramatica;
+        this.bundle = panelPadre.getBundle();
         cargarFXML();
         initialize();
     }
@@ -50,6 +54,7 @@ public class PanelNuevaSimDescPaso4 implements PanelNuevaSimDescPaso {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/PanelNuevaSimDescPaso4.fxml"));
             loader.setController(this);
+            loader.setResources(bundle);
             root = loader.load();
         } catch (IOException e) {
             e.printStackTrace();
@@ -130,17 +135,9 @@ public class PanelNuevaSimDescPaso4 implements PanelNuevaSimDescPaso {
             int accion;
             string.append(funError.get(i).getIdentificador()).append(" - ");
             accion = funError.get(i).getAccion();
-            switch (accion) {
-                case 1 -> string.append("Insertar un Símbolo en la Entrada: ");
-                case 2 -> string.append("Borrar un Símbolo de la Entrada");
-                case 3 -> string.append("Modificar un Símbolo de la Entrada: ");
-                case 4 -> string.append("Insertar un Símbolo de la Pila: ");
-                case 5 -> string.append("Borrar un Símbolo de la Pila");
-                case 6 -> string.append("Modificar un Símbolo de la Pila: ");
-                case 7 -> string.append("Terminar el análisis");
-            }
+            string.append(bundle.getString(funError.get(i).getNombreAccion()));
             if (accion == 1 || accion == 3 || accion == 4 || accion == 6) {
-                string.append(funError.get(i).getSimbolo().getNombre());
+                string.append(": ").append(funError.get(i).getSimbolo().getNombre());
             }
             lista.add(string.toString());
             i++;
@@ -217,9 +214,10 @@ public class PanelNuevaSimDescPaso4 implements PanelNuevaSimDescPaso {
         // Asegurarse de que las funciones predefinidas estén presentes
         inicializarFuncionesError();
         
-        Tab nuevaFunc = new Tab("Nueva Función de Error");
-        NuevaFuncionError nuevaFuncionError = new NuevaFuncionError(this.gramatica, this);
+        Tab nuevaFunc = new Tab(bundle.getString("simulador.paso4.btn.nueva"));
+        NuevaFuncionError nuevaFuncionError = new NuevaFuncionError(this.gramatica, this, bundle);
         nuevaFunc.setContent(nuevaFuncionError.getRoot());
+        nuevaFunc.setUserData(nuevaFuncionError);
         panelPadre.tabPane.getTabs().add(nuevaFunc);
         panelPadre.tabPane.getSelectionModel().select(nuevaFunc);
     }
@@ -301,5 +299,24 @@ public class PanelNuevaSimDescPaso4 implements PanelNuevaSimDescPaso {
     @FXML
     private void handleVisualizarGramatica() {
         panelPadre.mostrarGramaticaOriginal();
+    }
+
+    @Override
+    public void actualizarTextos(java.util.ResourceBundle bundle) {
+        if (labelTitulo != null) labelTitulo.setText(bundle.getString("simulador.paso4.titulo"));
+        if (labelSubtitulo != null) labelSubtitulo.setText(bundle.getString("simulador.paso4.subtitulo"));
+        if (checkBoxNoFuncionesError != null) checkBoxNoFuncionesError.setText(bundle.getString("simulador.paso4.checkbox"));
+        if (buttonNueva != null) buttonNueva.setText(bundle.getString("simulador.paso4.btn.nueva"));
+        if (buttonEliminar != null) buttonEliminar.setText(bundle.getString("simulador.paso4.btn.eliminar"));
+        if (buttonFinalizar != null) buttonFinalizar.setText(bundle.getString("button.finalizar"));
+        if (buttonCancelar != null) buttonCancelar.setText(bundle.getString("button.cancelar"));
+        if (buttonVisualizarGramatica != null) buttonVisualizarGramatica.setText(bundle.getString("simulador.paso1.btn.gramatica"));
+        if (buttonPrimero != null) buttonPrimero.setText(bundle.getString("button.primero"));
+        if (buttonAnterior != null) buttonAnterior.setText(bundle.getString("button.anterior"));
+        if (buttonSiguiente != null) buttonSiguiente.setText(bundle.getString("button.siguiente"));
+        if (buttonUltimo != null) buttonUltimo.setText(bundle.getString("button.ultimo"));
+        this.bundle = bundle;
+
+        funcionError();
     }
 }

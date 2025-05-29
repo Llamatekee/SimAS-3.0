@@ -9,12 +9,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import editor.ActualizableTextos;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
-public class NuevaFuncionError {
+public class NuevaFuncionError implements ActualizableTextos {
 
     @FXML private Label labelTitulo;
     @FXML private Label labelIdentificador;
@@ -31,12 +33,14 @@ public class NuevaFuncionError {
     private Parent root;
     private Gramatica gramatica;
     private PanelNuevaSimDescPaso4 paso4;
+    private ResourceBundle bundle;
 
-    public NuevaFuncionError(Gramatica gramatica, PanelNuevaSimDescPaso4 paso4) {
+    public NuevaFuncionError(Gramatica gramatica, PanelNuevaSimDescPaso4 paso4, ResourceBundle bundle) {
         this.gramatica = gramatica;
         this.paso4 = paso4;
+        this.bundle = bundle;
         cargarFXML();
-        initialize();
+        actualizarTextos(bundle);
     }
 
     private void cargarFXML() {
@@ -56,13 +60,13 @@ public class NuevaFuncionError {
     private void initialize() {
         // Inicializar comboBoxAccion con valores
         ObservableList<String> acciones = FXCollections.observableArrayList(
-            "Insertar un Símbolo en la Entrada",
-            "Borrar un Símbolo de la Entrada",
-            "Modificar un Símbolo de la Entrada",
-            "Insertar un Símbolo de la Pila",
-            "Borrar un Símbolo de la Pila",
-            "Modificar un Símbolo de la Pila",
-            "Terminar el análisis"
+            bundle.getString("funcion.error.insertar.entrada"),
+            bundle.getString("funcion.error.borrar.entrada"),
+            bundle.getString("funcion.error.modificar.entrada"),
+            bundle.getString("funcion.error.insertar.pila"),
+            bundle.getString("funcion.error.borrar.pila"),
+            bundle.getString("funcion.error.modificar.pila"),
+            bundle.getString("funcion.error.terminar")
         );
         comboBoxAccion.setItems(acciones);
     
@@ -70,7 +74,8 @@ public class NuevaFuncionError {
         List<FuncionError> funcionesError = gramatica.getTPredictiva().getFuncionesError();
         for (FuncionError funcionError : funcionesError) {
             if (funcionError.getAccion() == 7 || funcionError.getAccion() == 2) {
-                comboBoxAccion.getItems().set(funcionError.getAccion() - 1, acciones.get(funcionError.getAccion() - 1) + " (Definida)");
+                comboBoxAccion.getItems().set(funcionError.getAccion() - 1, 
+                    acciones.get(funcionError.getAccion() - 1) + bundle.getString("funcion.error.definida"));
             }
         }
     
@@ -230,5 +235,28 @@ public class NuevaFuncionError {
         TabPane tabPane = (TabPane) root.getParent().getParent();
         Tab tab = tabPane.getSelectionModel().getSelectedItem();
         tabPane.getTabs().remove(tab);
+    }
+
+    @Override
+    public void actualizarTextos(ResourceBundle bundle) {
+        this.bundle = bundle;
+        if (labelTitulo != null) labelTitulo.setText(bundle.getString("nuevaFuncionError.titulo"));
+        if (labelIdentificador != null) labelIdentificador.setText(bundle.getString("nuevaFuncionError.label.identificador"));
+        if (labelAccion != null) labelAccion.setText(bundle.getString("nuevaFuncionError.label.accion"));
+        if (labelSimbolo != null) labelSimbolo.setText(bundle.getString("nuevaFuncionError.label.simbolo"));
+        if (labelMensaje != null) labelMensaje.setText(bundle.getString("nuevaFuncionError.label.mensaje"));
+        if (buttonAceptar != null) buttonAceptar.setText(bundle.getString("button.aceptar"));
+        if (buttonCancelar != null) buttonCancelar.setText(bundle.getString("button.cancelar"));
+        // Actualizar ComboBox de acciones
+        ObservableList<String> acciones = FXCollections.observableArrayList(
+            bundle.getString("funcion.error.insertar.entrada"),
+            bundle.getString("funcion.error.borrar.entrada"),
+            bundle.getString("funcion.error.modificar.entrada"),
+            bundle.getString("funcion.error.insertar.pila"),
+            bundle.getString("funcion.error.borrar.pila"),
+            bundle.getString("funcion.error.modificar.pila"),
+            bundle.getString("funcion.error.terminar")
+        );
+        comboBoxAccion.setItems(acciones);
     }
 }

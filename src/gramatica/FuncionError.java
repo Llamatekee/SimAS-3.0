@@ -60,22 +60,22 @@ public class FuncionError {
         this.simbolo = simbolo;
     }
 
-    private String getNombreAccion() {
+    public String getNombreAccion() {
         switch (accion) {
             case INSERTAR_ENTRADA:
-                return "Insertar en entrada";
+                return "funcion.error.insertar.entrada";
             case BORRAR_ENTRADA:
-                return "Borrar de entrada";
+                return "funcion.error.borrar.entrada";
             case MODIFICAR_ENTRADA:
-                return "Modificar entrada";
+                return "funcion.error.modificar.entrada";
             case INSERTAR_PILA:
-                return "Insertar en pila";
+                return "funcion.error.insertar.pila";
             case BORRAR_PILA:
-                return "Borrar de pila";
+                return "funcion.error.borrar.pila";
             case MODIFICAR_PILA:
-                return "Modificar pila";
+                return "funcion.error.modificar.pila";
             case TERMINAR_ANALISIS:
-                return "Terminar análisis";
+                return "funcion.error.terminar";
             default:
                 return "Acción desconocida";
         }

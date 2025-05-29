@@ -286,6 +286,10 @@ public class PanelSimuladorDesc {
                 data.listView.setItems(FXCollections.observableArrayList(gramaticaOriginal.getProduccionesModel()));
                 data.btnCerrar.setText(bundle.getString("btn.cerrar"));
             }
+            if (tab.getUserData() instanceof simulador.NuevaFuncionError) {
+                ((simulador.NuevaFuncionError) tab.getUserData()).actualizarTextos(bundle);
+                tab.setText(bundle.getString("simulador.paso4.btn.nueva"));
+            }
         }
     }
 }
