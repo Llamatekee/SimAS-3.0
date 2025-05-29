@@ -127,4 +127,8 @@ public class PanelCreacionGramaticaPaso2 extends VBox {
     public void asignarListaSimbolosTerminales(ObservableList<String> lista) {
         simbolosTerminales.setAll(lista);
     }
+
+    public void actualizarTextos(java.util.ResourceBundle bundle) {
+        // Aquí puedes actualizar los textos de los labels, botones, etc. cuando implementes la i18n del paso 2
+    }
 }

@@ -109,4 +109,8 @@ public class PanelCreacionGramaticaPaso3 extends VBox {
             listProducciones.refresh();  // Refrescar la ListView para mostrar los datos actualizados
         }
     }
+
+    public void actualizarTextos(java.util.ResourceBundle bundle) {
+        // Aquí puedes actualizar los textos de los labels, botones, etc. cuando implementes la i18n del paso 3
+    }
 }

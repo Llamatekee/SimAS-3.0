@@ -22,7 +22,7 @@
     </padding>
 
     <!-- Header -->
-    <Label text="Datos de la Gramática" styleClass="wizard-header"
+    <Label fx:id="labelHeader" text="Datos de la Gramática" styleClass="wizard-header"
            GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.halignment="CENTER"/>
 
     <!-- Content -->
@@ -31,7 +31,7 @@
         
         <!-- Nombre Section -->
         <VBox spacing="15">
-            <Label text="Nombre de la Gramática" styleClass="wizard-section-header"/>
+            <Label fx:id="labelNombreSeccion" text="Nombre de la Gramática" styleClass="wizard-section-header"/>
             <TextField fx:id="txtNombre" styleClass="wizard-field"/>
             <Label fx:id="lblNombreError" styleClass="error-label" 
                    managed="false" visible="false"/>
@@ -39,7 +39,7 @@
 
         <!-- Descripción Section -->
         <VBox spacing="15">
-            <Label text="Descripción" styleClass="wizard-section-header"/>
+            <Label fx:id="labelDescripcionSeccion" text="Descripción" styleClass="wizard-section-header"/>
             <TextArea fx:id="txtDescripcion" styleClass="wizard-field" 
                      wrapText="true" prefRowCount="6"/>
             <Label fx:id="lblDescripcionError" styleClass="error-label" 

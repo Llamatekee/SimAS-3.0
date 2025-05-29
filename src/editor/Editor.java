@@ -398,4 +398,8 @@ public class Editor extends VBox {
             e.printStackTrace();
         }
     }
+
+    public ResourceBundle getBundle() {
+        return bundle;
+    }
 }

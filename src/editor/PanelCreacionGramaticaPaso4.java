@@ -119,4 +119,8 @@ public class PanelCreacionGramaticaPaso4 extends VBox {
         alert.setContentText("Debe seleccionar un símbolo inicial en el Paso 4.");
         alert.showAndWait();
     }
+
+    public void actualizarTextos(java.util.ResourceBundle bundle) {
+        // Aquí puedes actualizar los textos de los labels, botones, etc. cuando implementes la i18n del paso 4
+    }
 }

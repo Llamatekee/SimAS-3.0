@@ -64,6 +64,7 @@ public class MenuPrincipal {
 
     private void cambiarIdioma() {
         String idioma = comboIdioma.getValue();
+        System.out.println("[DEBUG] Cambiando idioma a: " + idioma);
         switch (idioma) {
             case "English":
                 currentLocale = new Locale("en");
@@ -83,6 +84,7 @@ public class MenuPrincipal {
     }
 
     private void actualizarTextos() {
+        System.out.println("[DEBUG] MenuPrincipal.actualizarTextos llamado con idioma: " + bundle.getLocale());
         try {
             // Actualizar textos de los botones principales
             if (btnEditor != null) btnEditor.setText(bundle.getString("btn.editor"));
@@ -124,7 +126,11 @@ public class MenuPrincipal {
                         ((editor.Editor) tab.getContent()).actualizarTextos(bundle);
                         tab.setText(bundle.getString("editor.title"));
                     }
-                    // Aquí puedes añadir más instanceof para otros controladores internacionalizables
+                    // Si la pestaña contiene un PanelCreacionGramatica, actualizar sus textos y el título de la pestaña
+                    if (tab.getContent() instanceof editor.PanelCreacionGramatica) {
+                        ((editor.PanelCreacionGramatica) tab.getContent()).actualizarTextos(bundle);
+                        // El propio PanelCreacionGramatica se encarga de actualizar el título de la pestaña activa
+                    }
                 }
             }
         } catch (Exception e) {

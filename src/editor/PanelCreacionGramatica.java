@@ -12,6 +12,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import java.util.ResourceBundle;
 
 public class PanelCreacionGramatica extends BorderPane {
 
@@ -23,15 +24,17 @@ public class PanelCreacionGramatica extends BorderPane {
     private final Editor panelPadre;
     private final MenuPrincipal menuPane;
     private Gramatica gramaticaTemporal;
+    private ResourceBundle bundle;
 
     public PanelCreacionGramatica(Editor ventanaPadre, TabPane tabPane, Gramatica gr, MenuPrincipal menuPane) {
         this.tabPane = tabPane;
         this.panelPadre = ventanaPadre;
         this.menuPane = menuPane;
         this.gramaticaTemporal = (gr != null) ? new Gramatica(gr) : new Gramatica();
+        this.bundle = panelPadre.getBundle();
 
         // Inicializar paneles del asistente
-        this.paso1 = new PanelCreacionGramaticaPaso1(this);
+        this.paso1 = new PanelCreacionGramaticaPaso1(this, this.bundle);
         this.paso2 = new PanelCreacionGramaticaPaso2(this, menuPane, tabPane);
         this.paso3 = new PanelCreacionGramaticaPaso3(this, tabPane, menuPane);
         this.paso4 = new PanelCreacionGramaticaPaso4(this, tabPane);
@@ -57,10 +60,13 @@ public class PanelCreacionGramatica extends BorderPane {
         this.paso3.asignarProducciones(gramaticaTemporal.getProducciones());
         //this.paso4.setSimbInicial(gr.getSimbInicial());
 
-        // Agregar pestaña del Paso 1
-        Tab tabPaso1 = new Tab("Edición: Paso 1", this.paso1);
-        tabPane.getTabs().add(tabPaso1);
-        tabPane.getSelectionModel().select(tabPaso1);
+        // Mostrar el Paso 1 en el centro del asistente
+        this.setCenter(this.paso1);
+
+        // Agregar pestaña del asistente (el contenido es this)
+        Tab tabAsistente = new Tab(bundle.getString("creacion.tab.paso1"), this);
+        tabPane.getTabs().add(tabAsistente);
+        tabPane.getSelectionModel().select(tabAsistente);
     }
 
     public Gramatica getGramatica() {
@@ -72,27 +78,30 @@ public class PanelCreacionGramatica extends BorderPane {
     }
 
     public void cambiarPaso(int paso) {
-
-        tabPane.getTabs().removeIf(tab -> tab.getText().startsWith("Edición: Paso"));
         switch (paso) {
             case 1:
-                tabPane.getTabs().add(new Tab("Edición: Paso 1", this.paso1));
+                this.setCenter(this.paso1);
                 break;
             case 2:
-                tabPane.getTabs().add(new Tab("Edición: Paso 2", this.paso2));
+                this.setCenter(this.paso2);
                 break;
             case 3:
-                tabPane.getTabs().add(new Tab("Edición: Paso 3", this.paso3));
+                this.setCenter(this.paso3);
                 break;
             case 4:
-                tabPane.getTabs().add(new Tab("Edición: Paso 4", this.paso4));
+                this.setCenter(this.paso4);
                 break;
         }
-
-        tabPane.getSelectionModel().selectLast();
+        // Actualizar el título de la pestaña del asistente
+        for (Tab tab : tabPane.getTabs()) {
+            if (tab.getContent() == this) {
+                String key = "creacion.tab.paso" + paso;
+                if (bundle.containsKey(key)) {
+                    tab.setText(bundle.getString(key));
+                }
+            }
+        }
     }
-
-
 
     public MenuPrincipal getMenuPane() {
         return menuPane;
@@ -139,5 +148,27 @@ public class PanelCreacionGramatica extends BorderPane {
         alert.setHeaderText(null);
         alert.setContentText(mensaje);
         alert.showAndWait();
+    }
+
+    public void actualizarTextos(ResourceBundle bundle) {
+        System.out.println("[DEBUG] PanelCreacionGramatica.actualizarTextos llamado con idioma: " + bundle.getLocale());
+        this.bundle = bundle;
+        if (paso1 != null) paso1.actualizarTextos(bundle);
+        if (paso2 != null) paso2.actualizarTextos(bundle);
+        if (paso3 != null) paso3.actualizarTextos(bundle);
+        if (paso4 != null) paso4.actualizarTextos(bundle);
+
+        for (Tab tab : tabPane.getTabs()) {
+            if (tab.getContent() == this) {
+                String key = null;
+                if (getCenter() == paso1) key = "creacion.tab.paso1";
+                else if (getCenter() == paso2) key = "creacion.tab.paso2";
+                else if (getCenter() == paso3) key = "creacion.tab.paso3";
+                else if (getCenter() == paso4) key = "creacion.tab.paso4";
+                if (key != null && bundle.containsKey(key)) {
+                    tab.setText(bundle.getString(key));
+                }
+            }
+        }
     }
 }

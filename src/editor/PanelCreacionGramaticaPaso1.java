@@ -8,6 +8,7 @@ import javafx.scene.layout.VBox;
 import javafx.beans.binding.BooleanBinding;
 
 import java.io.IOException;
+import java.util.ResourceBundle;
 
 /**
  * Panel de creación de gramática - Paso 1
@@ -24,13 +25,19 @@ public class PanelCreacionGramaticaPaso1 extends VBox {
     @FXML private Button btnAnterior;
     @FXML private Button btnCancelar;
     @FXML private Button btnUltimo;
+    @FXML private Button btnPrimero;
     @FXML private Label lblNombreError;
     @FXML private Label lblDescripcionError;
+    @FXML private Label labelHeader;
+    @FXML private Label labelNombreSeccion;
+    @FXML private Label labelDescripcionSeccion;
 
     private final PanelCreacionGramatica panelPadre;
+    private ResourceBundle bundle;
 
-    public PanelCreacionGramaticaPaso1(PanelCreacionGramatica panelPadre) {
+    public PanelCreacionGramaticaPaso1(PanelCreacionGramatica panelPadre, ResourceBundle bundle) {
         this.panelPadre = panelPadre;
+        this.bundle = bundle;
         cargarFXML();
     }
 
@@ -48,6 +55,7 @@ public class PanelCreacionGramaticaPaso1 extends VBox {
 
     @FXML
     private void initialize() {
+        actualizarTextos(bundle);
         // Configurar validaciones en tiempo real
         configurarValidaciones();
         
@@ -70,9 +78,9 @@ public class PanelCreacionGramaticaPaso1 extends VBox {
         // Validación del nombre
         txtNombre.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue == null || newValue.trim().isEmpty()) {
-                mostrarErrorCampo(lblNombreError, "El nombre no puede estar vacío");
+                mostrarErrorCampo(lblNombreError, bundle.getString("creacion.error.nombre.vacio"));
             } else if (newValue.length() > MAX_NOMBRE_LENGTH) {
-                mostrarErrorCampo(lblNombreError, "El nombre no puede exceder " + MAX_NOMBRE_LENGTH + " caracteres");
+                mostrarErrorCampo(lblNombreError, bundle.getString("creacion.error.nombre.largo").replace("{MAX}", String.valueOf(MAX_NOMBRE_LENGTH)));
                 txtNombre.setText(oldValue);
             } else {
                 ocultarErrorCampo(lblNombreError);
@@ -82,9 +90,9 @@ public class PanelCreacionGramaticaPaso1 extends VBox {
         // Validación de la descripción
         txtDescripcion.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue == null || newValue.trim().isEmpty()) {
-                mostrarErrorCampo(lblDescripcionError, "La descripción no puede estar vacía");
+                mostrarErrorCampo(lblDescripcionError, bundle.getString("creacion.error.descripcion.vacia"));
             } else if (newValue.length() > MAX_DESCRIPCION_LENGTH) {
-                mostrarErrorCampo(lblDescripcionError, "La descripción no puede exceder " + MAX_DESCRIPCION_LENGTH + " caracteres");
+                mostrarErrorCampo(lblDescripcionError, bundle.getString("creacion.error.descripcion.larga").replace("{MAX}", String.valueOf(MAX_DESCRIPCION_LENGTH)));
                 txtDescripcion.setText(oldValue);
             } else {
                 ocultarErrorCampo(lblDescripcionError);
@@ -176,5 +184,41 @@ public class PanelCreacionGramaticaPaso1 extends VBox {
 
     public void setDescripcion(String descripcion) {
         txtDescripcion.setText(descripcion);
+    }
+
+    public void actualizarTextos(ResourceBundle bundle) {
+        System.out.println("[DEBUG] Llamada a actualizarTextos en Paso 1 con idioma: " + bundle.getLocale());
+        this.bundle = bundle;
+        // Actualizar header y labels de sección
+        if (labelHeader != null) labelHeader.setText(bundle.getString("creacion.header"));
+        if (labelNombreSeccion != null) labelNombreSeccion.setText(bundle.getString("creacion.label.nombre.seccion"));
+        if (labelDescripcionSeccion != null) labelDescripcionSeccion.setText(bundle.getString("creacion.label.descripcion.seccion"));
+        // Actualizar botones de navegación
+        if (btnCancelar != null) btnCancelar.setText(bundle.getString("button.cancelar"));
+        if (btnAnterior != null) btnAnterior.setText(bundle.getString("button.anterior"));
+        if (btnSiguiente != null) btnSiguiente.setText(bundle.getString("button.siguiente"));
+        if (btnUltimo != null) btnUltimo.setText(bundle.getString("button.ultimo"));
+        if (btnPrimero != null) btnPrimero.setText(bundle.getString("button.primero"));
+        // Actualizar mensajes de error visibles
+        if (lblNombreError != null && lblNombreError.isVisible()) {
+            String texto = "";
+            String nombre = txtNombre.getText();
+            if (nombre == null || nombre.trim().isEmpty()) {
+                texto = bundle.getString("creacion.error.nombre.vacio");
+            } else if (nombre.length() > MAX_NOMBRE_LENGTH) {
+                texto = bundle.getString("creacion.error.nombre.largo").replace("{MAX}", String.valueOf(MAX_NOMBRE_LENGTH));
+            }
+            lblNombreError.setText(texto);
+        }
+        if (lblDescripcionError != null && lblDescripcionError.isVisible()) {
+            String texto = "";
+            String desc = txtDescripcion.getText();
+            if (desc == null || desc.trim().isEmpty()) {
+                texto = bundle.getString("creacion.error.descripcion.vacia");
+            } else if (desc.length() > MAX_DESCRIPCION_LENGTH) {
+                texto = bundle.getString("creacion.error.descripcion.larga").replace("{MAX}", String.valueOf(MAX_DESCRIPCION_LENGTH));
+            }
+            lblDescripcionError.setText(texto);
+        }
     }
 }
