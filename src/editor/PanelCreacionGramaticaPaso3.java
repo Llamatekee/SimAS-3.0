@@ -10,17 +10,26 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import java.io.IOException;
+import java.util.ResourceBundle;
 
-public class PanelCreacionGramaticaPaso3 extends VBox {
+public class PanelCreacionGramaticaPaso3 extends VBox implements ActualizableTextos {
 
     @FXML private ListView<Produccion> listProducciones;
+    @FXML private Button btnModificarProducciones;
+    @FXML private Button btnCancelar;
+    @FXML private Button btnPrimero;
+    @FXML private Button btnAnterior;
+    @FXML private Button btnSiguiente;
+    @FXML private Button btnUltimo;
+    @FXML private Label labelHeader;
+    @FXML private Label labelLista;
 
     public final PanelCreacionGramatica panelPadre;
     public final TabPane tabPane;
     public final MenuPrincipal menuPane;
 
-
     private final ObservableList<Produccion> producciones = FXCollections.observableArrayList();
+    private ResourceBundle bundle;
 
     public PanelCreacionGramaticaPaso3(PanelCreacionGramatica panelPadre, TabPane tabPane, MenuPrincipal menuPane) {
         this.panelPadre = panelPadre;
@@ -34,7 +43,7 @@ public class PanelCreacionGramaticaPaso3 extends VBox {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/PanelCreacionGramaticaPaso3.fxml"));
             loader.setController(this);
             Parent root = loader.load();
-            this.getChildren().add(root);
+            this.getChildren().setAll(root);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -43,6 +52,7 @@ public class PanelCreacionGramaticaPaso3 extends VBox {
     @FXML
     private void initialize() {
         listProducciones.setItems(producciones);
+        actualizarTextos(panelPadre.getBundle());
 
         // Formatear correctamente la lista de producciones
         listProducciones.setCellFactory(param -> new ListCell<>() {
@@ -58,6 +68,12 @@ public class PanelCreacionGramaticaPaso3 extends VBox {
         });
     }
 
+    public void asignarProducciones(ObservableList<Produccion> nuevasProducciones) {
+        if (nuevasProducciones != null) {
+            producciones.setAll(nuevasProducciones);
+            listProducciones.refresh();  // Refrescar la ListView para mostrar los datos actualizados
+        }
+    }
 
     @FXML
     private void onBtnModificarProduccionesAction() {
@@ -72,7 +88,8 @@ public class PanelCreacionGramaticaPaso3 extends VBox {
         }
 
         PanelProducciones panel = new PanelProducciones(this, producciones, tabPane);
-        Tab tab = new Tab("Modificar Producciones", panel);
+        ResourceBundle bundle = panelPadre.getBundle();
+        Tab tab = new Tab(bundle.getString("creacion3.tab.modificar.producciones"), panel);
         tabPane.getTabs().add(tab);
         tabPane.getSelectionModel().select(tab);
     }
@@ -103,14 +120,16 @@ public class PanelCreacionGramaticaPaso3 extends VBox {
         panelPadre.cambiarPaso(1);
     }
 
-    public void asignarProducciones(ObservableList<Produccion> nuevasProducciones) {
-        if (nuevasProducciones != null) {
-            producciones.setAll(nuevasProducciones);
-            listProducciones.refresh();  // Refrescar la ListView para mostrar los datos actualizados
-        }
-    }
-
-    public void actualizarTextos(java.util.ResourceBundle bundle) {
-        // Aquí puedes actualizar los textos de los labels, botones, etc. cuando implementes la i18n del paso 3
+    @Override
+    public void actualizarTextos(ResourceBundle bundle) {
+        this.bundle = bundle;
+        if (labelHeader != null) labelHeader.setText(bundle.getString("creacion3.header"));
+        if (labelLista != null) labelLista.setText(bundle.getString("creacion3.label.lista"));
+        if (btnModificarProducciones != null) btnModificarProducciones.setText(bundle.getString("creacion3.btn.modificar.producciones"));
+        if (btnCancelar != null) btnCancelar.setText(bundle.getString("button.cancelar"));
+        if (btnPrimero != null) btnPrimero.setText(bundle.getString("button.primero"));
+        if (btnAnterior != null) btnAnterior.setText(bundle.getString("button.anterior"));
+        if (btnSiguiente != null) btnSiguiente.setText(bundle.getString("button.siguiente"));
+        if (btnUltimo != null) btnUltimo.setText(bundle.getString("button.ultimo"));
     }
 }

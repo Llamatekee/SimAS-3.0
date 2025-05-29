@@ -22,7 +22,7 @@
     </padding>
 
     <!-- Header -->
-    <Label text="Edición de Producciones" styleClass="wizard-header"
+    <Label fx:id="labelHeader" styleClass="wizard-header"
            GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.halignment="CENTER"/>
 
     <!-- Content -->
@@ -31,43 +31,43 @@
         
         <!-- Antecedente Section -->
         <VBox spacing="10">
-            <Label text="Antecedente" styleClass="wizard-section-header"/>
+            <Label fx:id="labelAntecedente" styleClass="wizard-section-header"/>
             <ComboBox fx:id="comboBoxAntecedente" styleClass="wizard-combo-box" 
                      maxWidth="Infinity"/>
         </VBox>
 
         <!-- Consecuente Section -->
         <VBox spacing="10">
-            <Label text="Consecuente" styleClass="wizard-section-header"/>
+            <Label fx:id="labelConsecuente" styleClass="wizard-section-header"/>
             <HBox spacing="10">
                 <TextField fx:id="txtConsecuente" styleClass="wizard-field"
-                          promptText="Ingrese los símbolos del consecuente" HBox.hgrow="ALWAYS"/>
-                <Button fx:id="btnBorrar" text="Borrar" styleClass="button-cancel"
+                          HBox.hgrow="ALWAYS"/>
+                <Button fx:id="btnBorrar" styleClass="button-cancel"
                         onAction="#onBtnBorrarAction"/>
             </HBox>
         </VBox>
 
         <!-- Símbolos Section -->
         <VBox spacing="15">
-            <Label text="Añadir Símbolos al Consecuente" styleClass="wizard-section-header"/>
+            <Label fx:id="labelAnadirSimbolos" styleClass="wizard-section-header"/>
             <HBox spacing="20">
                 <!-- No Terminales -->
                 <VBox spacing="10" HBox.hgrow="ALWAYS">
-                    <Label text="No Terminales" styleClass="wizard-subsection-header"/>
+                    <Label fx:id="labelNoTerminales" styleClass="wizard-subsection-header"/>
                     <ListView fx:id="listNoTerminales" VBox.vgrow="ALWAYS" 
                              onMouseClicked="#onListNoTerminalesClicked"/>
                 </VBox>
                 
                 <!-- Terminales -->
                 <VBox spacing="10" HBox.hgrow="ALWAYS">
-                    <Label text="Terminales" styleClass="wizard-subsection-header"/>
+                    <Label fx:id="labelTerminales" styleClass="wizard-subsection-header"/>
                     <ListView fx:id="listTerminales" VBox.vgrow="ALWAYS"
                              onMouseClicked="#onListTerminalesClicked"/>
                 </VBox>
                 
                 <!-- Epsilon -->
                 <VBox spacing="10">
-                    <Label text="Epsilon (ε)" styleClass="wizard-subsection-header"/>
+                    <Label fx:id="labelEpsilon" styleClass="wizard-subsection-header"/>
                     <Button fx:id="btnEpsilon" text="ε" styleClass="button-next"
                             onAction="#onBtnEpsilonAction"/>
                 </VBox>
@@ -76,20 +76,17 @@
 
         <!-- Acciones Section -->
         <HBox spacing="10">
-            <Button fx:id="btnInsertar" text="Insertar Producción" 
-                    styleClass="button-next" maxWidth="Infinity" HBox.hgrow="ALWAYS"
+            <Button fx:id="btnInsertar" styleClass="button-next" maxWidth="Infinity" HBox.hgrow="ALWAYS"
                     onAction="#onBtnInsertarAction"/>
-            <Button fx:id="btnModificar" text="Modificar Producción" 
-                    styleClass="button-next" maxWidth="Infinity" HBox.hgrow="ALWAYS"
+            <Button fx:id="btnModificar" styleClass="button-next" maxWidth="Infinity" HBox.hgrow="ALWAYS"
                     onAction="#onBtnModificarAction"/>
-            <Button fx:id="btnEliminar" text="Eliminar Producción" 
-                    styleClass="button-cancel" maxWidth="Infinity" HBox.hgrow="ALWAYS"
+            <Button fx:id="btnEliminar" styleClass="button-cancel" maxWidth="Infinity" HBox.hgrow="ALWAYS"
                     onAction="#onBtnEliminarAction"/>
         </HBox>
 
         <!-- Lista de Producciones -->
         <VBox spacing="10" VBox.vgrow="ALWAYS">
-            <Label text="Lista de Producciones" styleClass="wizard-section-header"/>
+            <Label fx:id="labelLista" styleClass="wizard-section-header"/>
             <ListView fx:id="listProducciones" VBox.vgrow="ALWAYS"/>
         </VBox>
     </VBox>
@@ -97,10 +94,10 @@
     <!-- Navigation -->
     <HBox styleClass="wizard-navigation" GridPane.columnIndex="0" GridPane.rowIndex="2" 
           GridPane.valignment="BOTTOM">
-        <Button fx:id="btnCancelar" text="Cancelar" styleClass="button-cancel" 
+        <Button fx:id="btnCancelar" styleClass="button-cancel" 
                 onAction="#onBtnCancelarAction"/>
         <Region HBox.hgrow="ALWAYS"/>
-        <Button fx:id="btnAceptar" text="Aceptar" styleClass="button-finish" 
+        <Button fx:id="btnAceptar" styleClass="button-finish" 
                 onAction="#onBtnAceptarAction"/>
     </HBox>
 

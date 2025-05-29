@@ -10,11 +10,13 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import java.io.IOException;
 import java.util.stream.Collectors;
+import editor.ActualizableTextos;
+import java.util.ResourceBundle;
 
 /**
  * Panel para modificar las producciones de la gramática.
  */
-public class PanelProducciones extends VBox {
+public class PanelProducciones extends VBox implements ActualizableTextos {
 
     @FXML private ComboBox<NoTerminal> comboBoxAntecedente;
     @FXML private TextField txtConsecuente;
@@ -22,14 +24,28 @@ public class PanelProducciones extends VBox {
     @FXML private ListView<Simbolo> listTerminales;
     @FXML private ListView<Simbolo> listNoTerminales;
     @FXML private Button btnInsertar;
+    @FXML private Button btnModificar;
+    @FXML private Button btnEliminar;
+    @FXML private Button btnBorrar;
+    @FXML private Button btnEpsilon;
+    @FXML private Button btnCancelar;
+    @FXML private Button btnAceptar;
+    @FXML private Label labelHeader;
+    @FXML private Label labelAntecedente;
+    @FXML private Label labelConsecuente;
+    @FXML private Label labelAnadirSimbolos;
+    @FXML private Label labelNoTerminales;
+    @FXML private Label labelTerminales;
+    @FXML private Label labelEpsilon;
+    @FXML private Label labelLista;
 
     private final PanelCreacionGramaticaPaso3 panelPadre;
     private final TabPane tabPane;
     private final ObservableList<Produccion> producciones;
     private final ObservableList<NoTerminal> noTerminales;
     private final ObservableList<Terminal> terminales;
-
     private Produccion produccionSeleccionada = null;
+    private ResourceBundle bundle;
 
     public PanelProducciones(PanelCreacionGramaticaPaso3 panelPadre, ObservableList<Produccion> producciones, TabPane tabPane) {
         this.panelPadre = panelPadre;
@@ -37,6 +53,7 @@ public class PanelProducciones extends VBox {
         this.producciones = FXCollections.observableArrayList(producciones);
         this.noTerminales = panelPadre.panelPadre.getGramatica().getNoTerminales();
         this.terminales = panelPadre.panelPadre.getGramatica().getTerminales();
+        this.bundle = panelPadre.panelPadre.getBundle();
         cargarFXML();
     }
 
@@ -53,14 +70,11 @@ public class PanelProducciones extends VBox {
 
     @FXML
     private void initialize() {
-        // Configurar listas
         listProducciones.setItems(producciones);
         listNoTerminales.setItems(FXCollections.observableArrayList(noTerminales));
         listTerminales.setItems(FXCollections.observableArrayList(terminales));
-
-        // Configurar combobox de antecedentes
         comboBoxAntecedente.setItems(noTerminales);
-
+        actualizarTextos(bundle);
         // Configurar visualización de la lista de producciones
         listProducciones.setCellFactory(param -> new ListCell<>() {
             @Override
@@ -132,7 +146,7 @@ public class PanelProducciones extends VBox {
     @FXML
     private void onBtnInsertarAction() {
         if (comboBoxAntecedente.getValue() == null || txtConsecuente.getText().trim().isEmpty()) {
-            mostrarAlerta("Debe seleccionar un antecedente y escribir un consecuente.");
+            mostrarAlerta(bundle.getString("producciones.error.antecedente.consecuente"));
             return;
         }
 
@@ -187,9 +201,13 @@ public class PanelProducciones extends VBox {
 
     @FXML
     private void onBtnCancelarAction() {
-        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION, "¿Desea descartar los cambios y salir?", ButtonType.YES, ButtonType.NO);
+        ButtonType btnSi = new ButtonType(bundle.getString("button.si"), ButtonBar.ButtonData.YES);
+        ButtonType btnNo = new ButtonType(bundle.getString("button.no"), ButtonBar.ButtonData.NO);
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION, bundle.getString("producciones.dialog.cancelar.mensaje"), btnSi, btnNo);
+        confirm.setTitle(bundle.getString("producciones.dialog.cancelar.titulo"));
+        confirm.setHeaderText(bundle.getString("producciones.dialog.cancelar.titulo"));
         confirm.showAndWait().ifPresent(response -> {
-            if (response == ButtonType.YES) {
+            if (response == btnSi) {
                 cerrarPestanaActual();
             }
         });
@@ -204,7 +222,7 @@ public class PanelProducciones extends VBox {
 
     private void mostrarAlerta(String mensaje) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Error");
+        alert.setTitle(bundle.getString("editor.dialog.error.titulo"));
         alert.setHeaderText(null);
         alert.setContentText(mensaje);
         alert.showAndWait();
@@ -232,7 +250,7 @@ public class PanelProducciones extends VBox {
         if (txtConsecuente.getText().isEmpty()) {
             txtConsecuente.setText("ε");
         } else {
-            mostrarAlerta("El símbolo ε solo puede aparecer solo en el consecuente.");
+            mostrarAlerta(bundle.getString("producciones.error.epsilon"));
         }
     }
 
@@ -240,13 +258,13 @@ public class PanelProducciones extends VBox {
     private void onBtnModificarAction() {
         // Verificar si el conjunto de no terminales está vacío
         if (noTerminales.isEmpty()) {
-            mostrarAlerta("El conjunto de No Terminales está vacío.");
+            mostrarAlerta(bundle.getString("producciones.error.no.terminales.vacio"));
             return;
         }
 
         // Verificar si el conjunto de terminales está vacío
         if (terminales.isEmpty()) {
-            mostrarAlerta("El conjunto de Terminales está vacío.");
+            mostrarAlerta(bundle.getString("producciones.error.terminales.vacio"));
             return;
         }
 
@@ -267,10 +285,31 @@ public class PanelProducciones extends VBox {
             txtConsecuente.setText(consecuenteTexto);
 
             // Cambiar el botón de "Insertar" a "Guardar cambios"
-            btnInsertar.setText("Guardar Cambios");
+            btnInsertar.setText(bundle.getString("producciones.btn.guardar.cambios"));
         } else {
-            mostrarAlerta("Debe seleccionar una producción para modificar.");
+            mostrarAlerta(bundle.getString("producciones.error.seleccion"));
         }
+    }
+
+    @Override
+    public void actualizarTextos(ResourceBundle bundle) {
+        this.bundle = bundle;
+        if (labelHeader != null) labelHeader.setText(bundle.getString("producciones.header"));
+        if (labelAntecedente != null) labelAntecedente.setText(bundle.getString("producciones.label.antecedente"));
+        if (labelConsecuente != null) labelConsecuente.setText(bundle.getString("producciones.label.consecuente"));
+        if (labelAnadirSimbolos != null) labelAnadirSimbolos.setText(bundle.getString("producciones.label.anadir.simbolos"));
+        if (labelNoTerminales != null) labelNoTerminales.setText(bundle.getString("producciones.label.no.terminales"));
+        if (labelTerminales != null) labelTerminales.setText(bundle.getString("producciones.label.terminales"));
+        if (labelEpsilon != null) labelEpsilon.setText(bundle.getString("producciones.label.epsilon"));
+        if (labelLista != null) labelLista.setText(bundle.getString("producciones.label.lista"));
+        if (btnInsertar != null) btnInsertar.setText(bundle.getString("producciones.btn.insertar"));
+        if (btnModificar != null) btnModificar.setText(bundle.getString("producciones.btn.modificar"));
+        if (btnEliminar != null) btnEliminar.setText(bundle.getString("producciones.btn.eliminar"));
+        if (btnBorrar != null) btnBorrar.setText(bundle.getString("producciones.btn.borrar"));
+        if (btnEpsilon != null) btnEpsilon.setText(bundle.getString("producciones.btn.epsilon"));
+        if (btnCancelar != null) btnCancelar.setText(bundle.getString("button.cancelar"));
+        if (btnAceptar != null) btnAceptar.setText(bundle.getString("button.aceptar"));
+        if (txtConsecuente != null) txtConsecuente.setPromptText(bundle.getString("producciones.prompt.consecuente"));
     }
 
 }

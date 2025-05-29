@@ -112,11 +112,13 @@ public class PanelSimbolosNoTerminales extends VBox implements ActualizableTexto
 
     @FXML
     private void onAceptarAction() {
-        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION, bundle.getString("simbolos.dialog.guardar.mensaje"), ButtonType.YES, ButtonType.NO);
+        ButtonType btnSi = new ButtonType(bundle.getString("button.si"), ButtonBar.ButtonData.YES);
+        ButtonType btnNo = new ButtonType(bundle.getString("button.no"), ButtonBar.ButtonData.NO);
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION, bundle.getString("simbolos.dialog.guardar.mensaje"), btnSi, btnNo);
         confirm.setTitle(bundle.getString("simbolos.dialog.guardar.titulo"));
         confirm.setHeaderText(bundle.getString("simbolos.dialog.guardar.titulo"));
         confirm.showAndWait().ifPresent(response -> {
-            if (response == ButtonType.YES) {
+            if (response == btnSi) {
                 simbolosNoTerminales.setAll(simbolosTemporales); // Guardamos cambios en la lista original
                 panelPadre.panelPadre.getGramatica().setNoTerminalesModel(simbolosNoTerminales);
                 cerrarPestanaActual();
@@ -126,11 +128,13 @@ public class PanelSimbolosNoTerminales extends VBox implements ActualizableTexto
 
     @FXML
     private void onCancelarAction() {
-        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION, bundle.getString("simbolos.dialog.cancelar.mensaje"), ButtonType.YES, ButtonType.NO);
+        ButtonType btnSi = new ButtonType(bundle.getString("button.si"), ButtonBar.ButtonData.YES);
+        ButtonType btnNo = new ButtonType(bundle.getString("button.no"), ButtonBar.ButtonData.NO);
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION, bundle.getString("simbolos.dialog.cancelar.mensaje"), btnSi, btnNo);
         confirm.setTitle(bundle.getString("simbolos.dialog.cancelar.titulo"));
         confirm.setHeaderText(bundle.getString("simbolos.dialog.cancelar.titulo"));
         confirm.showAndWait().ifPresent(response -> {
-            if (response == ButtonType.YES) {
+            if (response == btnSi) {
                 cerrarPestanaActual();
             }
         });

@@ -22,7 +22,7 @@
     </padding>
 
     <!-- Header -->
-    <Label text="Símbolo Inicial de la Gramática" styleClass="wizard-header"
+    <Label fx:id="labelHeader" styleClass="wizard-header"
            GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.halignment="CENTER"/>
 
     <!-- Content -->
@@ -33,7 +33,7 @@
             <Insets top="40" />
         </padding>
         
-        <Label text="Seleccione el Símbolo Inicial" styleClass="wizard-section-header"/>
+        <Label fx:id="labelSimboloInicial" styleClass="wizard-section-header"/>
         
         <ComboBox fx:id="comboBoxSimboloInicial" styleClass="wizard-combo-box" 
                   prefWidth="300" style="-fx-text-fill: white; -fx-background-color: #2c3e50;"/>

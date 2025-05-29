@@ -8,23 +8,31 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import java.io.IOException;
+import java.util.ResourceBundle;
 
 /**
  * Panel para seleccionar el símbolo inicial de la gramática.
  */
-public class PanelCreacionGramaticaPaso4 extends VBox {
+public class PanelCreacionGramaticaPaso4 extends VBox implements ActualizableTextos {
 
     @FXML private ComboBox<NoTerminal> comboBoxSimboloInicial;
     @FXML private Button btnFinalizar;
+    @FXML private Button btnCancelar;
+    @FXML private Button btnAnterior;
+    @FXML private Button btnPrimero;
+    @FXML private Label labelHeader;
+    @FXML private Label labelSimboloInicial;
 
     private final PanelCreacionGramatica panelPadre;
     private final TabPane tabPane;
     private final ObservableList<NoTerminal> noTerminales;
+    private ResourceBundle bundle;
 
     public PanelCreacionGramaticaPaso4(PanelCreacionGramatica panelPadre, TabPane tabPane) {
         this.panelPadre = panelPadre;
         this.tabPane = tabPane;
         this.noTerminales = panelPadre.getGramatica().getNoTerminales();
+        this.bundle = panelPadre.getBundle();
         cargarFXML();
     }
 
@@ -70,6 +78,8 @@ public class PanelCreacionGramaticaPaso4 extends VBox {
                 panelPadre.getGramatica().setSimbInicial(seleccionado.getNombre());
             }
         });
+
+        actualizarTextos(bundle);
     }
 
     @FXML
@@ -88,9 +98,13 @@ public class PanelCreacionGramaticaPaso4 extends VBox {
 
     @FXML
     private void onBtnCancelarAction() {
-        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION, "¿Desea salir de la edición de la gramática?", ButtonType.YES, ButtonType.NO);
+        ButtonType btnSi = new ButtonType(bundle.getString("button.si"), ButtonBar.ButtonData.YES);
+        ButtonType btnNo = new ButtonType(bundle.getString("button.no"), ButtonBar.ButtonData.NO);
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION, bundle.getString("creacion.dialog.salir.mensaje"), btnSi, btnNo);
+        confirm.setTitle(bundle.getString("creacion.dialog.salir.titulo"));
+        confirm.setHeaderText(bundle.getString("creacion.dialog.salir.titulo"));
         confirm.showAndWait().ifPresent(response -> {
-            if (response == ButtonType.YES) {
+            if (response == btnSi) {
                 cerrarAsistente();
             }
         });
@@ -114,13 +128,20 @@ public class PanelCreacionGramaticaPaso4 extends VBox {
 
     private void mostrarAlerta() {
         Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Error");
+        alert.setTitle(bundle.getString("editor.dialog.error.titulo"));
         alert.setHeaderText(null);
-        alert.setContentText("Debe seleccionar un símbolo inicial en el Paso 4.");
+        alert.setContentText(bundle.getString("creacion4.error.simbolo.inicial"));
         alert.showAndWait();
     }
 
-    public void actualizarTextos(java.util.ResourceBundle bundle) {
-        // Aquí puedes actualizar los textos de los labels, botones, etc. cuando implementes la i18n del paso 4
+    @Override
+    public void actualizarTextos(ResourceBundle bundle) {
+        this.bundle = bundle;
+        if (labelHeader != null) labelHeader.setText(bundle.getString("wizard.step4.header"));
+        if (labelSimboloInicial != null) labelSimboloInicial.setText(bundle.getString("wizard.step4.select_initial"));
+        if (btnFinalizar != null) btnFinalizar.setText(bundle.getString("wizard.finish"));
+        if (btnCancelar != null) btnCancelar.setText(bundle.getString("wizard.cancel"));
+        if (btnAnterior != null) btnAnterior.setText(bundle.getString("wizard.previous"));
+        if (btnPrimero != null) btnPrimero.setText(bundle.getString("wizard.first"));
     }
 }

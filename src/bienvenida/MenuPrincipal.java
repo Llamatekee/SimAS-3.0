@@ -65,7 +65,6 @@ public class MenuPrincipal {
 
     private void cambiarIdioma() {
         String idioma = comboIdioma.getValue();
-        System.out.println("[DEBUG] Cambiando idioma a: " + idioma);
         switch (idioma) {
             case "English":
                 currentLocale = new Locale("en");
@@ -85,7 +84,6 @@ public class MenuPrincipal {
     }
 
     private void actualizarTextos() {
-        System.out.println("[DEBUG] MenuPrincipal.actualizarTextos llamado con idioma: " + bundle.getLocale());
         try {
             // Actualizar textos de los botones principales
             if (btnEditor != null) btnEditor.setText(bundle.getString("btn.editor"));
