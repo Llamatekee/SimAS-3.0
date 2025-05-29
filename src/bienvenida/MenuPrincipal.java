@@ -135,13 +135,15 @@ public class MenuPrincipal {
 
     @FXML
     private void onBtnCerrarTabsAction() {
+        ButtonType btnSi = new ButtonType(bundle.getString("button.si"), ButtonBar.ButtonData.YES);
+        ButtonType btnNo = new ButtonType(bundle.getString("button.no"), ButtonBar.ButtonData.NO);
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION,
                 bundle.getString("msg.confirmar.cerrar"),
-                ButtonType.YES, ButtonType.NO);
-        confirm.setTitle(bundle.getString("title.menu"));
+                btnSi, btnNo);
+        confirm.setTitle(bundle.getString("title.cerrar.pestanas"));
         
         confirm.showAndWait().ifPresent(response -> {
-            if (response == ButtonType.YES) {
+            if (response == btnSi) {
                 tabPane.getSelectionModel().selectFirst();
                 tabPane.getTabs().removeIf(Tab::isClosable);
             } else {
@@ -154,7 +156,7 @@ public class MenuPrincipal {
 
     @FXML
     private void onBtnEditorAction() {
-        Editor editor = new Editor(tabPane, this);
+        Editor editor = new Editor(tabPane, this, bundle);
         Tab editorTab = new Tab(bundle.getString("editor.title"), editor);
         editorTab.setClosable(true);
         tabPane.getTabs().add(editorTab);

@@ -97,6 +97,17 @@ public class Editor extends VBox {
         cargarFXML();
     }
 
+    /**
+     * 🔹 Constructor con TabPane, MenuPrincipal y ResourceBundle.
+     */
+    public Editor(TabPane tabPane, MenuPrincipal menuPane, ResourceBundle bundle) {
+        this.tabPane = tabPane;
+        this.menuPane = menuPane;
+        this.gramatica = new Gramatica();
+        this.bundle = bundle;
+        cargarFXML();
+    }
+
     // ==========================
     // MÉTODOS DE INICIALIZACIÓN
     // ==========================
@@ -106,7 +117,6 @@ public class Editor extends VBox {
      */
     private void cargarFXML() {
         try {
-            bundle = ResourceBundle.getBundle("messages");
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/Editor.fxml"));
             loader.setController(this);
             loader.setResources(bundle);
@@ -130,7 +140,6 @@ public class Editor extends VBox {
     // Método de inicialización; se invoca automáticamente tras cargar el FXML.
     @FXML
     public void initialize() {
-        bundle = ResourceBundle.getBundle("messages");
         actualizarTextos(bundle);
         // Configurar la vista según sea necesario
         btnEditar.setDisable(true);
@@ -190,12 +199,15 @@ public class Editor extends VBox {
 
     @FXML
     private void onBtnEliminarAction() {
+        ButtonType btnSi = new ButtonType(bundle.getString("button.si"), ButtonBar.ButtonData.YES);
+        ButtonType btnNo = new ButtonType(bundle.getString("button.no"), ButtonBar.ButtonData.NO);
         Alert confirm = new Alert(AlertType.CONFIRMATION, 
             bundle.getString("editor.msg.confirmar.eliminar"), 
-            ButtonType.YES, ButtonType.NO);
+            btnSi, btnNo);
         confirm.setTitle(bundle.getString("editor.dialog.eliminar.titulo"));
+        confirm.setHeaderText(bundle.getString("editor.header.eliminar"));
         Optional<ButtonType> result = confirm.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.YES) {
+        if (result.isPresent() && result.get() == btnSi) {
             this.gramatica = new Gramatica();
             actualizarVisualizacion();
         }
@@ -218,13 +230,15 @@ public class Editor extends VBox {
 
     @FXML
     private void onBtnSalirAction() {
+        ButtonType btnSi = new ButtonType(bundle.getString("button.si"), ButtonBar.ButtonData.YES);
+        ButtonType btnNo = new ButtonType(bundle.getString("button.no"), ButtonBar.ButtonData.NO);
         Alert confirm = new Alert(AlertType.CONFIRMATION,
                 bundle.getString("msg.confirmar.salir"),
-                ButtonType.YES, ButtonType.NO);
-        confirm.setTitle(bundle.getString("editor.dialog.confirmar.titulo"));
-        
+                btnSi, btnNo);
+        confirm.setTitle(bundle.getString("editor.header.salir"));
+        confirm.setHeaderText(bundle.getString("editor.header.salir"));
         confirm.showAndWait().ifPresent(response -> {
-            if (response == ButtonType.YES) {
+            if (response == btnSi) {
                 Stage stage = (Stage) rootPane.getScene().getWindow();
                 stage.close();
             }
