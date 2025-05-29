@@ -18,6 +18,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
+import java.util.ResourceBundle;
 
 /**
  * Controlador para la simulación descendente en JavaFX.
@@ -33,29 +34,38 @@ public class PanelSimuladorDesc {
     private Tab pestañaSimulacion;
     private int pasoActual;
     private ArrayList<PanelNuevaSimDescPaso> pasos;
+    private ResourceBundle bundle;
     
     // Referencia global a la tabla predictiva extendida (para pasos 5 y 6)
     private TablaPredictivaPaso5 tablaPredictivaExtendidaGlobal;
 
-    public PanelSimuladorDesc(Gramatica gramatica, TabPane tabPane) {
+    public PanelSimuladorDesc(Gramatica gramatica, TabPane tabPane, ResourceBundle bundle) {
         this.gramatica = gramatica;
         this.gramaticaOriginal = gramatica;
         this.tabPane = tabPane;
+        this.bundle = bundle;
+        this.pasoActual = 0;
         
         // Inicializar funciones de error y tabla predictiva extendida
         inicializarTablaPredictivaYFuncionesError();
         
         // Inicializar pasos
         pasos = new ArrayList<>();
-        pasos.add(new PanelNuevaSimDescPaso1(this));
-        pasos.add(new PanelNuevaSimDescPaso2(this));
-        pasos.add(new PanelNuevaSimDescPaso3(this));
-        pasos.add(new PanelNuevaSimDescPaso4(this));
-        pasos.add(new PanelNuevaSimDescPaso5(this));
-        pasos.add(new PanelNuevaSimDescPaso6(this.gramatica, this));
-        
-        // Mostrar el primer paso
-        mostrarPasoActual();
+        try {
+            pasos.add(new PanelNuevaSimDescPaso1(this));
+            pasos.add(new PanelNuevaSimDescPaso2(this));
+            pasos.add(new PanelNuevaSimDescPaso3(this));
+            pasos.add(new PanelNuevaSimDescPaso4(this));
+            pasos.add(new PanelNuevaSimDescPaso5(this));
+            pasos.add(new PanelNuevaSimDescPaso6(this.gramatica, this));
+            
+            // Mostrar el primer paso
+            mostrarPasoActual();
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Si hay un error, cerrar la pestaña
+            cancelarSimulacion();
+        }
     }
 
     /**
@@ -127,9 +137,10 @@ public class PanelSimuladorDesc {
     }
     
     private void mostrarPasoActual() {
-        pestañaSimulacion = new Tab("Simulación: Paso " + (pasoActual + 1));
+        pestañaSimulacion = new Tab(bundle.getString("simulador.tab.paso1"));
         pestañaSimulacion.setClosable(false);
         pestañaSimulacion.setContent(pasos.get(pasoActual).getRoot());
+        pestañaSimulacion.setUserData(this);  // Guardar la referencia al panel en userData
 
         tabPane.getTabs().add(pestañaSimulacion);
         tabPane.getSelectionModel().select(pestañaSimulacion);
@@ -147,9 +158,10 @@ public class PanelSimuladorDesc {
         try {
             ventanaGramatica = new Stage();
             ventanaGramatica.initModality(Modality.NONE);
-            ventanaGramatica.setTitle("Gramática Original");
+            ventanaGramatica.setTitle(bundle.getString("simulador.gramatica.original"));
             
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/VentanaGramaticaOriginal.fxml"));
+            loader.setResources(bundle);
             Scene scene = new Scene(loader.load());
             scene.getStylesheets().add(getClass().getResource("/vistas/styles.css").toExternalForm());
             
@@ -195,14 +207,14 @@ public class PanelSimuladorDesc {
         
         this.pasoActual = paso;
         if (pestañaSimulacion == null) {
-            pestañaSimulacion = new Tab("Simulación: Paso " + (paso + 1));
+            pestañaSimulacion = new Tab(bundle.getString("simulador.tab.paso1"));
             pestañaSimulacion.setClosable(false);
             tabPane.getTabs().add(pestañaSimulacion);
         }
         if (paso == 5) {
-            pestañaSimulacion.setText("Simulación");
+            pestañaSimulacion.setText(bundle.getString("simulador.tab.paso6"));
         } else {
-            pestañaSimulacion.setText("Simulación: Paso " + (paso + 1));
+            pestañaSimulacion.setText(bundle.getString("simulador.tab.paso1").replace("1", String.valueOf(paso + 1)));
         }
         pestañaSimulacion.setContent(pasos.get(paso).getRoot());
         tabPane.getSelectionModel().select(pestañaSimulacion);
@@ -218,6 +230,33 @@ public class PanelSimuladorDesc {
             // Reconstruir el paso 6 con la tabla actualizada
             pasos.set(5, new PanelNuevaSimDescPaso6(this.gramatica, this));
             pestañaSimulacion.setContent(pasos.get(5).getRoot());
+        }
+    }
+
+    public ResourceBundle getBundle() {
+        return bundle;
+    }
+
+    public void setBundle(ResourceBundle bundle) {
+        this.bundle = bundle;
+        
+        // Recargar el FXML del paso actual con el nuevo bundle
+        if (pasoActual >= 0 && pasoActual < pasos.size()) {
+            PanelNuevaSimDescPaso pasoActual = pasos.get(this.pasoActual);
+            if (pasoActual instanceof editor.ActualizableTextos) {
+                ((editor.ActualizableTextos) pasoActual).actualizarTextos(bundle);
+            }
+        }
+        
+        // Update tab title and content if it exists
+        if (pestañaSimulacion != null) {
+            if (this.pasoActual == 5) {
+                pestañaSimulacion.setText(bundle.getString("simulador.tab.paso6"));
+            } else {
+                pestañaSimulacion.setText(bundle.getString("simulador.tab.paso1").replace("1", String.valueOf(this.pasoActual + 1)));
+            }
+            // Refresh the content of the current step
+            pestañaSimulacion.setContent(pasos.get(this.pasoActual).getRoot());
         }
     }
 }

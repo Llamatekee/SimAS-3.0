@@ -226,7 +226,7 @@ public class Editor extends VBox implements ActualizableTextos {
 
     @FXML
     private void onBtnSimularAction() {
-        new PanelSimuladorDesc(gramatica, tabPane);
+        new PanelSimuladorDesc(gramatica, tabPane, bundle);
     }
 
     @FXML
@@ -393,6 +393,16 @@ public class Editor extends VBox implements ActualizableTextos {
             if (rootPane != null && rootPane.getScene() != null) {
                 Stage stage = (Stage) rootPane.getScene().getWindow();
                 stage.setTitle(bundle.getString("editor.title"));
+            }
+
+            // Actualizar el simulador si existe
+            if (tabPane != null) {
+                for (Tab tab : tabPane.getTabs()) {
+                    Object userData = tab.getUserData();
+                    if (userData instanceof simulador.PanelSimuladorDesc) {
+                        ((simulador.PanelSimuladorDesc) userData).setBundle(bundle);
+                    }
+                }
             }
         } catch (Exception e) {
             System.err.println("Error al actualizar textos: " + e.getMessage());

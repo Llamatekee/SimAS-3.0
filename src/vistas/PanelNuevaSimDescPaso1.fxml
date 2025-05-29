@@ -22,7 +22,7 @@
     </padding>
 
     <!-- Header -->
-    <Label text="Producciones para la Simulación Descendente" styleClass="wizard-header"
+    <Label fx:id="lblTitulo" styleClass="wizard-header"
            GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.halignment="CENTER"/>
 
     <!-- Content -->
@@ -31,7 +31,7 @@
         
         <!-- Estado Section -->
         <VBox spacing="15">
-            <Label text="Estado de la Gramática" styleClass="wizard-section-header"/>
+            <Label fx:id="lblEstadoTitulo" styleClass="wizard-section-header"/>
             <Label fx:id="lblEstadoGramatica" styleClass="wizard-label"/>
             <Label fx:id="lblRecursividad" styleClass="error-label"/>
             <Label fx:id="lblFactorizacion" styleClass="error-label"/>
@@ -39,7 +39,7 @@
 
         <!-- Producciones Section -->
         <VBox spacing="10" VBox.vgrow="ALWAYS">
-            <Label text="Lista de Producciones" styleClass="wizard-section-header"/>
+            <Label fx:id="lblProduccionesTitulo" styleClass="wizard-section-header"/>
             <ListView fx:id="listProducciones" VBox.vgrow="ALWAYS" styleClass="wizard-list"/>
         </VBox>
     </VBox>
@@ -47,18 +47,18 @@
     <!-- Navigation -->
     <HBox styleClass="wizard-navigation" GridPane.columnIndex="0" GridPane.rowIndex="2" 
           GridPane.valignment="BOTTOM">
-        <Button fx:id="btnCancelar" text="Cancelar" styleClass="button-cancel" 
+        <Button fx:id="btnCancelar" text="%button.cancelar" styleClass="button-cancel" 
                 onAction="#cancelarSimulacion"/>
-        <Button fx:id="btnVisualizarGramatica" text="Gramática" styleClass="button-grammar" 
+        <Button fx:id="btnVisualizarGramatica" text="%simulador.paso1.btn.gramatica" styleClass="button-grammar" 
                 onAction="#visualizarGramatica"/>
         <Region HBox.hgrow="ALWAYS"/>
-        <Button fx:id="btnPrimero" text="Primero" styleClass="button-first-last" 
+        <Button fx:id="btnPrimero" text="%button.primero" styleClass="button-first-last" 
                 onAction="#handlePrimero" disable="true"/>
-        <Button fx:id="btnAnterior" text="Anterior" styleClass="button-prev-next" 
+        <Button fx:id="btnAnterior" text="%button.anterior" styleClass="button-prev-next" 
                 onAction="#handleAnterior" disable="true"/>
-        <Button fx:id="btnSiguiente" text="Siguiente" styleClass="button-prev-next" 
+        <Button fx:id="btnSiguiente" text="%button.siguiente" styleClass="button-prev-next" 
                 onAction="#avanzarPaso"/>
-        <Button fx:id="btnUltimo" text="Último" styleClass="button-first-last" 
+        <Button fx:id="btnUltimo" text="%button.ultimo" styleClass="button-first-last" 
                 onAction="#handleUltimo"/>
     </HBox>
 

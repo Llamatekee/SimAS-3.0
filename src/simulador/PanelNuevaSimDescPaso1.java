@@ -16,18 +16,23 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
+import editor.ActualizableTextos;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.Set;
 
 /**
  * Controlador para el Paso 1 de la Simulación Descendente.
  * Muestra la gramática original.
  */
-public class PanelNuevaSimDescPaso1 implements PanelNuevaSimDescPaso {
+public class PanelNuevaSimDescPaso1 implements PanelNuevaSimDescPaso, ActualizableTextos {
 
+    @FXML private Label lblTitulo;
+    @FXML private Label lblEstadoTitulo;
+    @FXML private Label lblProduccionesTitulo;
     @FXML private Label lblEstadoGramatica;
     @FXML private Label lblRecursividad;
     @FXML private Label lblFactorizacion;
@@ -39,12 +44,14 @@ public class PanelNuevaSimDescPaso1 implements PanelNuevaSimDescPaso {
     private final PanelSimuladorDesc panelPadre;
     private final Gramatica gramatica;
     private final ObservableList<String> producciones;
+    private ResourceBundle bundle;
     private Parent root;
 
     public PanelNuevaSimDescPaso1(PanelSimuladorDesc panelPadre) {
         this.panelPadre = panelPadre;
         this.gramatica = panelPadre.gramatica;
         this.producciones = FXCollections.observableArrayList();
+        this.bundle = panelPadre.getBundle();
         cargarFXML();
         inicializarBotones();
         verificarEstadoGramatica();
@@ -54,10 +61,22 @@ public class PanelNuevaSimDescPaso1 implements PanelNuevaSimDescPaso {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/PanelNuevaSimDescPaso1.fxml"));
             loader.setController(this);
+            loader.setResources(bundle);
             root = loader.load();
+            
+            // Inicializar los textos después de cargar el FXML
+            if (lblTitulo != null) lblTitulo.setText(bundle.getString("simulador.window.paso1"));
+            if (lblEstadoTitulo != null) lblEstadoTitulo.setText(bundle.getString("simulador.paso1.estado.titulo"));
+            if (lblProduccionesTitulo != null) lblProduccionesTitulo.setText(bundle.getString("simulador.paso1.producciones.titulo"));
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    private void initialize() {
+        // Este método se llama automáticamente después de cargar el FXML
+        // No necesitamos hacer nada aquí ya que la inicialización se hace en el constructor
     }
 
     private void inicializarBotones() {
@@ -71,15 +90,15 @@ public class PanelNuevaSimDescPaso1 implements PanelNuevaSimDescPaso {
         boolean necesitaFactorizacion = gramatica.factorizar();
 
         if (esRecursiva) {
-            lblRecursividad.setText("La gramática original era recursiva por la izquierda.");
+            lblRecursividad.setText(bundle.getString("simulador.gramatica.recursiva"));
             lblRecursividad.setStyle("-fx-text-fill: red;");
         }
         if (necesitaFactorizacion) {
-            lblFactorizacion.setText("La gramática original no estaba factorizada.");
+            lblFactorizacion.setText(bundle.getString("simulador.gramatica.no.factorizada"));
             lblFactorizacion.setStyle("-fx-text-fill: red;");
         }
         if (!esRecursiva && !necesitaFactorizacion) {
-            lblEstadoGramatica.setText("La gramática original es correcta.");
+            lblEstadoGramatica.setText(bundle.getString("simulador.gramatica.correcta"));
             lblEstadoGramatica.setStyle("-fx-text-fill: green;");
         }
         listProducciones.setItems(gramatica.getProduccionesModel());
@@ -123,5 +142,27 @@ public class PanelNuevaSimDescPaso1 implements PanelNuevaSimDescPaso {
     @Override
     public Parent getRoot() {
         return root;
+    }
+
+    @Override
+    public void actualizarTextos(ResourceBundle bundle) {
+        this.bundle = bundle;
+        try {
+            // Recargar el FXML con el nuevo bundle
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/PanelNuevaSimDescPaso1.fxml"));
+            loader.setController(this);
+            loader.setResources(bundle);
+            root = loader.load();
+            
+            // Actualizar los textos
+            if (lblTitulo != null) lblTitulo.setText(bundle.getString("simulador.window.paso1"));
+            if (lblEstadoTitulo != null) lblEstadoTitulo.setText(bundle.getString("simulador.paso1.estado.titulo"));
+            if (lblProduccionesTitulo != null) lblProduccionesTitulo.setText(bundle.getString("simulador.paso1.producciones.titulo"));
+            
+            // Actualizar el estado de la gramática
+            verificarEstadoGramatica();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
