@@ -92,7 +92,7 @@ public class MenuPrincipal {
             if (btnAyuda != null) btnAyuda.setText(bundle.getString("btn.ayuda"));
             if (btnTutorial != null) btnTutorial.setText(bundle.getString("btn.tutorial"));
             if (btnCerrarTabs != null) {
-                btnCerrarTabs.setText(bundle.getString("btn.cerrar"));
+                btnCerrarTabs.setText("✖");
                 btnCerrarTabs.getTooltip().setText(bundle.getString("tooltip.cerrar"));
             }
             
@@ -142,15 +142,16 @@ public class MenuPrincipal {
 
     @FXML
     private void onBtnCerrarTabsAction() {
-        ButtonType btnSi = new ButtonType(bundle.getString("button.si"), ButtonBar.ButtonData.YES);
-        ButtonType btnNo = new ButtonType(bundle.getString("button.no"), ButtonBar.ButtonData.NO);
+        ButtonType btnCerrar = new ButtonType(bundle.getString("btn.cerrar"), ButtonBar.ButtonData.YES);
+        ButtonType btnCancelar = new ButtonType(bundle.getString("button.cancelar"), ButtonBar.ButtonData.NO);
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION,
                 bundle.getString("msg.confirmar.cerrar"),
-                btnSi, btnNo);
+                btnCerrar, btnCancelar);
         confirm.setTitle(bundle.getString("title.cerrar.pestanas"));
+        confirm.setHeaderText(bundle.getString("title.cerrar.pestanas"));
         
         confirm.showAndWait().ifPresent(response -> {
-            if (response == btnSi) {
+            if (response == btnCerrar) {
                 tabPane.getSelectionModel().selectFirst();
                 tabPane.getTabs().removeIf(Tab::isClosable);
             } else {

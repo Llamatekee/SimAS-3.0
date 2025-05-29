@@ -69,6 +69,10 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
     // Lista para almacenar los estados anteriores
     private List<EstadoSimulacion> estadosAnteriores = new ArrayList<>();
 
+    // Referencias a los labels de título de las pestañas para internacionalización
+    private Label labelTituloDerivacion = null;
+    private Label labelTituloArbol = null;
+
     // Clase para almacenar el estado de la simulación
     private static class EstadoSimulacion {
         Stack<String> pila;
@@ -437,7 +441,7 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         // Construir la derivación a partir del historial
         List<String> derivacion = new ArrayList<>();
         if (historialObservable.isEmpty()) {
-            derivacion.add("No hay derivación generada.");
+            derivacion.add(bundle.getString("simulacionfinal.tab.derivacion"));
         } else {
             // Tomar el símbolo inicial
             String actual = gramatica.getSimbInicial();
@@ -457,9 +461,10 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
             }
         }
         if (tabPane != null) {
+            String tituloDerivacion = bundle.getString("simulacionfinal.tab.derivacion");
             Tab tabDerivacion = null;
             for (Tab tab : tabPane.getTabs()) {
-                if ("Derivación Generada".equals(tab.getText())) {
+                if (tab.getUserData() != null && tab.getUserData().equals("derivacion")) {
                     tabDerivacion = tab;
                     break;
                 }
@@ -488,18 +493,19 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
                 "-fx-background-color: transparent;" +
                 "-fx-padding: 0 0 0 0;"
             );
-            Label titulo = new Label("Derivación Generada");
-            titulo.setStyle(
+            Label labelTitulo = new Label(tituloDerivacion);
+            labelTitulo.setStyle(
                 "-fx-font-size: 30px;" +
                 "-fx-font-weight: bold;" +
                 "-fx-text-fill: #3498db;" +
                 "-fx-padding: 0 0 32 0;"
             );
             VBox.setVgrow(area, Priority.ALWAYS);
-            layout.getChildren().addAll(titulo, area);
+            layout.getChildren().addAll(labelTitulo, area);
             if (tabDerivacion == null) {
-                tabDerivacion = new Tab("Derivación Generada", layout);
+                tabDerivacion = new Tab(tituloDerivacion, layout);
                 tabDerivacion.setClosable(true);
+                tabDerivacion.setUserData("derivacion");
                 tabPane.getTabs().add(tabDerivacion);
             } else {
                 tabDerivacion.setContent(layout);
@@ -532,19 +538,21 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
             VBox layout = new VBox(15);
             layout.setPadding(new Insets(40, 0, 0, 0));
             layout.setAlignment(Pos.TOP_CENTER);
-            Label titulo = new Label("Árbol Sintáctico Descendente");
-            titulo.setStyle("-fx-font-size: 30px; -fx-font-weight: bold; -fx-text-fill: #222; -fx-padding: 0 0 32 0;");
-            layout.getChildren().addAll(titulo, imageView);
+            String tituloArbol = bundle.getString("simulacionfinal.tab.arbol");
+            Label labelTitulo = new Label(tituloArbol);
+            labelTitulo.setStyle("-fx-font-size: 30px; -fx-font-weight: bold; -fx-text-fill: #222; -fx-padding: 0 0 32 0;");
+            layout.getChildren().addAll(labelTitulo, imageView);
             Tab tabArbol = null;
             for (Tab tab : tabPane.getTabs()) {
-                if ("Árbol Sintáctico".equals(tab.getText())) {
+                if (tab.getUserData() != null && tab.getUserData().equals("arbol")) {
                     tabArbol = tab;
                     break;
                 }
             }
             if (tabArbol == null) {
-                tabArbol = new Tab("Árbol Sintáctico", layout);
+                tabArbol = new Tab(tituloArbol, layout);
                 tabArbol.setClosable(true);
+                tabArbol.setUserData("arbol");
                 tabPane.getTabs().add(tabArbol);
             } else {
                 tabArbol.setContent(layout);
@@ -665,12 +673,20 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         if (colAccion != null) colAccion.setText(bundle.getString("simulacionfinal.col.accion"));
         if (btnDerivacion != null) btnDerivacion.setText(bundle.getString("simulacionfinal.btn.derivacion"));
         if (btnArbol != null) btnArbol.setText(bundle.getString("simulacionfinal.btn.arbol"));
-        // Actualizar el título de la pestaña si está presente
+        
+        // Actualizar el título de la pestaña si está presente y el label interno
         if (tabPane != null) {
             for (Tab tab : tabPane.getTabs()) {
                 if (tab.getContent() == this) {
                     tab.setText(bundle.getString("simulador.paso6.simulacion.final"));
-                    break;
+                } else if (tab.getUserData() != null) {
+                    if (tab.getUserData().equals("derivacion")) {
+                        tab.setText(bundle.getString("simulacionfinal.tab.derivacion"));
+                        mostrarDerivacionGenerada();
+                    } else if (tab.getUserData().equals("arbol")) {
+                        tab.setText(bundle.getString("simulacionfinal.tab.arbol"));
+                        mostrarArbolSintactico();
+                    }
                 }
             }
         }

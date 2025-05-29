@@ -150,7 +150,7 @@ public class PanelSimuladorDesc {
     
     private void mostrarPasoActual() {
         pestañaSimulacion = new Tab(bundle.getString("simulador.tab.paso1"));
-        pestañaSimulacion.setClosable(false);
+        pestañaSimulacion.setClosable(true);
         pestañaSimulacion.setContent(pasos.get(pasoActual).getRoot());
         pestañaSimulacion.setUserData(this);  // Guardar la referencia al panel en userData
 
@@ -220,7 +220,7 @@ public class PanelSimuladorDesc {
         this.pasoActual = paso;
         if (pestañaSimulacion == null) {
             pestañaSimulacion = new Tab(bundle.getString("simulador.tab.paso1"));
-            pestañaSimulacion.setClosable(false);
+            pestañaSimulacion.setClosable(true);
             tabPane.getTabs().add(pestañaSimulacion);
         }
         
@@ -241,16 +241,17 @@ public class PanelSimuladorDesc {
         tabPane.getSelectionModel().select(pestañaSimulacion);
 
         // Refrescar la vista del paso al que vamos
-        // Paso 5
-        if (paso == 4 && pasos.get(4) instanceof PanelNuevaSimDescPaso5) {
-            PanelNuevaSimDescPaso5 paso5View = (PanelNuevaSimDescPaso5) pasos.get(4);
-            paso5View.refrescarVista();
-        }
-        // Paso 6
-        else if (paso == 5 && pasos.get(5) instanceof PanelNuevaSimDescPaso6) {
-            // Reconstruir el paso 6 con la tabla actualizada
-            pasos.set(5, new PanelNuevaSimDescPaso6(this.gramatica, this));
-            pestañaSimulacion.setContent(pasos.get(5).getRoot());
+        for (Tab tab : tabPane.getTabs()) {
+            if (tab.getUserData() instanceof GramaticaTabData) {
+                tab.setText(bundle.getString("simulador.gramatica.original"));
+                GramaticaTabData data = (GramaticaTabData) tab.getUserData();
+                data.listView.setItems(FXCollections.observableArrayList(gramaticaOriginal.getProduccionesModel()));
+                data.btnCerrar.setText(bundle.getString("btn.cerrar"));
+            }
+            if (tab.getUserData() instanceof simulador.NuevaFuncionError) {
+                ((simulador.NuevaFuncionError) tab.getUserData()).actualizarTextos(bundle);
+                tab.setText(bundle.getString("simulador.paso4.btn.nueva"));
+            }
         }
     }
 
