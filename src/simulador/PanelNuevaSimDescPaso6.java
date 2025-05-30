@@ -327,6 +327,9 @@ public class PanelNuevaSimDescPaso6 extends BorderPane implements PanelNuevaSimD
 
         panelSimuladorDesc.tabPane.getTabs().add(nuevaPestana);
         panelSimuladorDesc.tabPane.getSelectionModel().select(nuevaPestana);
+        
+        // Actualizar la numeración de las simulaciones
+        simulador.SimulacionFinal.reasignarNumerosSimulaciones(panelSimuladorDesc.tabPane);
     }
 
     @FXML

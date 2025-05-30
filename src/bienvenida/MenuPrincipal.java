@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import editor.ActualizableTextos;
+import simulador.SimulacionFinal;
 
 public class MenuPrincipal extends Application {
 
@@ -197,6 +198,7 @@ public class MenuPrincipal extends Application {
             editorTab.setClosable(true);
             tabPane.getTabs().add(editorTab);
             tabPane.getSelectionModel().select(editorTab);
+            SimulacionFinal.reasignarNumerosSimulaciones(tabPane);
         }
     }
 
@@ -281,5 +283,10 @@ public class MenuPrincipal extends Application {
         if (btnTutorial != null) btnTutorial.setText(bundle.getString("btn.tutorial"));
         if (btnSalir != null) btnSalir.setText(bundle.getString("btn.salir"));
         if (btnCerrarTabs != null) btnCerrarTabs.setText(bundle.getString("btn.cerrar"));
+    }
+
+    public static void reasignarNumerosSimulaciones(TabPane tabPane) {
+        if (tabPane == null) return;
+        // ... (resto del código igual, pero usando el tabPane recibido)
     }
 }

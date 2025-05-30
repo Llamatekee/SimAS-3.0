@@ -29,6 +29,8 @@ import javafx.scene.layout.Priority;
 import java.io.File;
 import editor.ActualizableTextos;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
+import java.util.Collections;
 
 public class SimulacionFinal extends BorderPane implements ActualizableTextos {
     @FXML private TextField campoEntrada;
@@ -69,6 +71,11 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
     // Lista para almacenar los estados anteriores
     private List<EstadoSimulacion> estadosAnteriores = new ArrayList<>();
 
+    private String simulacionId; // Identificador único para esta simulación
+    private static int contadorSimulaciones = 0; // Contador estático para numerar las simulaciones
+    private int numeroSimulacion; // Número de esta simulación específica
+    private static List<Integer> numerosDisponibles = new ArrayList<>(); // Lista de números disponibles
+
     // Clase para almacenar el estado de la simulación
     private static class EstadoSimulacion {
         Stack<String> pila;
@@ -88,7 +95,107 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         this.tablaPredictiva = tablaPredictiva;
         this.tabPane = tabPane;
         this.bundle = bundle;
+        this.simulacionId = "sim_" + System.currentTimeMillis(); // Generar ID único
+        
+        // Asignar número de simulación
+        if (numerosDisponibles.isEmpty()) {
+            this.numeroSimulacion = ++contadorSimulaciones;
+        } else {
+            this.numeroSimulacion = numerosDisponibles.remove(0);
+        }
+        
         cargarFXML();
+        
+        // Actualizar títulos de las pestañas
+        actualizarTitulosPestañas();
+        
+        // Añadir listener para cerrar pestañas hijas cuando se cierre la pestaña de simulación
+        if (tabPane != null) {
+            tabPane.getTabs().addListener((javafx.collections.ListChangeListener.Change<? extends Tab> change) -> {
+                while (change.next()) {
+                    if (change.wasRemoved()) {
+                        for (Tab tab : change.getRemoved()) {
+                            if (tab.getContent() == this) {
+                                // Liberar el número de esta simulación
+                                numerosDisponibles.add(this.numeroSimulacion);
+                                Collections.sort(numerosDisponibles);
+                                
+                                // Reasignar números a las simulaciones restantes
+                                reasignarNumerosSimulaciones(tabPane);
+                                
+                                // Cerrar las pestañas hijas
+                                javafx.application.Platform.runLater(() -> {
+                                    List<Tab> tabsToRemove = new ArrayList<>();
+                                    for (Tab t : tabPane.getTabs()) {
+                                        if (t.getUserData() != null) {
+                                            String userData = t.getUserData().toString();
+                                            if ((userData.startsWith("derivacion_") || userData.startsWith("arbol_")) 
+                                                && userData.endsWith(simulacionId)) {
+                                                tabsToRemove.add(t);
+                                            }
+                                        }
+                                    }
+                                    for (Tab t : tabsToRemove) {
+                                        tabPane.getTabs().remove(t);
+                                    }
+                                });
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+    private void actualizarTitulosPestañas() {
+        if (tabPane == null) return;
+        
+        // Contar cuántas simulaciones hay
+        int numSimulaciones = 0;
+        for (Tab tab : tabPane.getTabs()) {
+            if (tab.getContent() instanceof SimulacionFinal) {
+                numSimulaciones++;
+            }
+        }
+        
+        // Actualizar títulos
+        for (Tab tab : tabPane.getTabs()) {
+            if (tab.getContent() == this) {
+                tab.setText(bundle.getString("simulador.paso6.simulacion.final") + 
+                          (numSimulaciones > 1 ? " " + numeroSimulacion : ""));
+            } else if (tab.getUserData() != null) {
+                String userData = tab.getUserData().toString();
+                if (userData.startsWith("derivacion_") && userData.endsWith(simulacionId)) {
+                    tab.setText(bundle.getString("simulacionfinal.tab.derivacion") + 
+                              (numSimulaciones > 1 ? " " + numeroSimulacion : ""));
+                } else if (userData.startsWith("arbol_") && userData.endsWith(simulacionId)) {
+                    tab.setText(bundle.getString("simulacionfinal.tab.arbol") + 
+                              (numSimulaciones > 1 ? " " + numeroSimulacion : ""));
+                }
+            }
+        }
+    }
+
+    public static void reasignarNumerosSimulaciones(TabPane tabPane) {
+        if (tabPane == null) return;
+        // Obtener todas las simulaciones activas
+        List<SimulacionFinal> simulacionesActivas = new ArrayList<>();
+        for (Tab tab : tabPane.getTabs()) {
+            if (tab.getContent() instanceof SimulacionFinal) {
+                simulacionesActivas.add((SimulacionFinal) tab.getContent());
+            }
+        }
+        // Ordenar por número actual
+        simulacionesActivas.sort((s1, s2) -> Integer.compare(s1.numeroSimulacion, s2.numeroSimulacion));
+        // Reasignar números
+        for (int i = 0; i < simulacionesActivas.size(); i++) {
+            SimulacionFinal sim = simulacionesActivas.get(i);
+            sim.numeroSimulacion = i + 1;
+        }
+        // Actualizar títulos de todas las simulaciones
+        for (SimulacionFinal sim : simulacionesActivas) {
+            sim.actualizarTitulosPestañas();
+        }
     }
 
     private void cargarFXML() {
@@ -457,14 +564,19 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
             }
         }
         if (tabPane != null) {
-            String tituloDerivacion = bundle.getString("simulacionfinal.tab.derivacion");
+            String tituloDerivacion = bundle.getString("simulacionfinal.tab.derivacion") + " " + numeroSimulacion;
             Tab tabDerivacion = null;
+            
+            // Buscar la pestaña de derivación asociada a esta simulación
             for (Tab tab : tabPane.getTabs()) {
-                if (tab.getUserData() != null && tab.getUserData().equals("derivacion")) {
+                if (tab.getUserData() != null && 
+                    tab.getUserData().toString().startsWith("derivacion_") && 
+                    tab.getUserData().toString().endsWith(simulacionId)) {
                     tabDerivacion = tab;
                     break;
                 }
             }
+
             TextArea area = new TextArea(String.join("\n", derivacion));
             area.setEditable(false);
             area.setWrapText(true);
@@ -498,13 +610,30 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
             );
             VBox.setVgrow(area, Priority.ALWAYS);
             layout.getChildren().addAll(labelTitulo, area);
+
             if (tabDerivacion == null) {
                 tabDerivacion = new Tab(tituloDerivacion, layout);
                 tabDerivacion.setClosable(true);
-                tabDerivacion.setUserData("derivacion");
-                tabPane.getTabs().add(tabDerivacion);
+                tabDerivacion.setUserData("derivacion_" + simulacionId);
+                
+                // Encontrar la posición de la pestaña de simulación actual
+                int simIndex = -1;
+                for (int i = 0; i < tabPane.getTabs().size(); i++) {
+                    if (tabPane.getTabs().get(i).getContent() == this) {
+                        simIndex = i;
+                        break;
+                    }
+                }
+                
+                // Insertar la pestaña de derivación justo después de la pestaña de simulación
+                if (simIndex != -1) {
+                    tabPane.getTabs().add(simIndex + 1, tabDerivacion);
+                } else {
+                    tabPane.getTabs().add(tabDerivacion);
+                }
             } else {
                 tabDerivacion.setContent(layout);
+                tabDerivacion.setText(tituloDerivacion);
             }
             tabPane.getSelectionModel().select(tabDerivacion);
         }
@@ -534,30 +663,75 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
             VBox layout = new VBox(15);
             layout.setPadding(new Insets(40, 0, 0, 0));
             layout.setAlignment(Pos.TOP_CENTER);
-            String tituloArbol = bundle.getString("simulacionfinal.tab.arbol");
+            String tituloArbol = bundle.getString("simulacionfinal.tab.arbol") + " " + numeroSimulacion;
             Label labelTitulo = new Label(tituloArbol);
-            labelTitulo.setStyle("-fx-font-size: 30px; -fx-font-weight: bold; -fx-text-fill: #222; -fx-padding: 0 0 32 0;");
+            labelTitulo.setStyle(
+                "-fx-font-size: 30px;" +
+                "-fx-font-weight: bold;" +
+                "-fx-text-fill: #3498db;" +
+                "-fx-padding: 0 0 32 0;"
+            );
             layout.getChildren().addAll(labelTitulo, imageView);
-            Tab tabArbol = null;
-            for (Tab tab : tabPane.getTabs()) {
-                if (tab.getUserData() != null && tab.getUserData().equals("arbol")) {
-                    tabArbol = tab;
-                    break;
+
+            if (tabPane != null) {
+                Tab tabArbol = null;
+                
+                // Buscar la pestaña de árbol asociada a esta simulación
+                for (Tab tab : tabPane.getTabs()) {
+                    if (tab.getUserData() != null && 
+                        tab.getUserData().toString().startsWith("arbol_") && 
+                        tab.getUserData().toString().endsWith(simulacionId)) {
+                        tabArbol = tab;
+                        break;
+                    }
                 }
+
+                if (tabArbol == null) {
+                    tabArbol = new Tab(tituloArbol, layout);
+                    tabArbol.setClosable(true);
+                    tabArbol.setUserData("arbol_" + simulacionId);
+                    
+                    // Encontrar la posición de la pestaña de simulación actual
+                    int simIndex = -1;
+                    for (int i = 0; i < tabPane.getTabs().size(); i++) {
+                        if (tabPane.getTabs().get(i).getContent() == this) {
+                            simIndex = i;
+                            break;
+                        }
+                    }
+                    
+                    // Insertar la pestaña de árbol después de la pestaña de derivación (si existe)
+                    if (simIndex != -1) {
+                        // Buscar la pestaña de derivación asociada
+                        Tab tabDerivacion = null;
+                        for (Tab tab : tabPane.getTabs()) {
+                            if (tab.getUserData() != null && 
+                                tab.getUserData().toString().startsWith("derivacion_") && 
+                                tab.getUserData().toString().endsWith(simulacionId)) {
+                                tabDerivacion = tab;
+                                break;
+                            }
+                        }
+                        
+                        if (tabDerivacion != null) {
+                            // Insertar después de la pestaña de derivación
+                            int derivIndex = tabPane.getTabs().indexOf(tabDerivacion);
+                            tabPane.getTabs().add(derivIndex + 1, tabArbol);
+                        } else {
+                            // Si no hay pestaña de derivación, insertar después de la simulación
+                            tabPane.getTabs().add(simIndex + 1, tabArbol);
+                        }
+                    } else {
+                        tabPane.getTabs().add(tabArbol);
+                    }
+                } else {
+                    tabArbol.setContent(layout);
+                    tabArbol.setText(tituloArbol);
+                }
+                tabPane.getSelectionModel().select(tabArbol);
             }
-            if (tabArbol == null) {
-                tabArbol = new Tab(tituloArbol, layout);
-                tabArbol.setClosable(true);
-                tabArbol.setUserData("arbol");
-                tabPane.getTabs().add(tabArbol);
-            } else {
-                tabArbol.setContent(layout);
-            }
-            tabPane.getSelectionModel().select(tabArbol);
         } catch (Exception e) {
             e.printStackTrace();
-            Alert alert = new Alert(Alert.AlertType.ERROR, "No se pudo generar el árbol sintáctico: " + e.getMessage());
-            alert.showAndWait();
         }
     }
 
@@ -670,21 +844,7 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         if (btnDerivacion != null) btnDerivacion.setText(bundle.getString("simulacionfinal.btn.derivacion"));
         if (btnArbol != null) btnArbol.setText(bundle.getString("simulacionfinal.btn.arbol"));
         
-        // Actualizar el título de la pestaña si está presente y el label interno
-        if (tabPane != null) {
-            for (Tab tab : tabPane.getTabs()) {
-                if (tab.getContent() == this) {
-                    tab.setText(bundle.getString("simulador.paso6.simulacion.final"));
-                } else if (tab.getUserData() != null) {
-                    if (tab.getUserData().equals("derivacion")) {
-                        tab.setText(bundle.getString("simulacionfinal.tab.derivacion"));
-                        mostrarDerivacionGenerada();
-                    } else if (tab.getUserData().equals("arbol")) {
-                        tab.setText(bundle.getString("simulacionfinal.tab.arbol"));
-                        mostrarArbolSintactico();
-                    }
-                }
-            }
-        }
+        // Actualizar títulos de las pestañas
+        actualizarTitulosPestañas();
     }
 } 
