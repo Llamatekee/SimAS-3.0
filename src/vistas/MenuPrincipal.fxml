@@ -5,7 +5,7 @@
 <?import javafx.scene.image.*?>
 <?import javafx.geometry.Insets?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="bienvenida.MenuPrincipal"
+<BorderPane xmlns:fx="http://javafx.com/fxml/1"
             stylesheets="@styles.css">
 
     <top>

@@ -23,7 +23,7 @@ public class EditorWindow {
         tabPane = new TabPane();
         
         // Configurar la ventana
-        stage.setTitle(bundle.getString("editor.title"));
+        stage.setTitle("SimAS 3.0");
         stage.setWidth(800);
         stage.setHeight(900);
         stage.setMinWidth(600);

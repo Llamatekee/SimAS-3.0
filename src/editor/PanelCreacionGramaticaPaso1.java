@@ -169,8 +169,16 @@ public class PanelCreacionGramaticaPaso1 extends VBox implements ActualizableTex
         String nombreActual = panelPadre.getGramatica().getNombre();
         String descripcionActual = panelPadre.getGramatica().getDescripcion();
         
-        return !txtNombre.getText().trim().equals(nombreActual != null ? nombreActual : "") ||
-               !txtDescripcion.getText().trim().equals(descripcionActual != null ? descripcionActual : "");
+        String nombreTexto = txtNombre.getText();
+        String descripcionTexto = txtDescripcion.getText();
+        
+        // Si alguno de los campos es nulo, consideramos que no hay datos sin guardar
+        if (nombreTexto == null || descripcionTexto == null) {
+            return false;
+        }
+        
+        return !nombreTexto.trim().equals(nombreActual != null ? nombreActual : "") ||
+               !descripcionTexto.trim().equals(descripcionActual != null ? descripcionActual : "");
     }
 
     private void mostrarError(String titulo, String mensaje) {

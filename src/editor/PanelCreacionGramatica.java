@@ -124,26 +124,29 @@ public class PanelCreacionGramatica extends BorderPane implements ActualizableTe
         stage.toFront(); // Asegura que la alerta esté al frente
         confirm.showAndWait().ifPresent(result -> {
             if (result == btnSi) {
-                // Obtener la gramática actual desde el editor original
-                Gramatica gramatica = getPanelPadre().getGramatica();
-
-                // Eliminar la pestaña del asistente
-                tabPane.getTabs().removeIf(tab -> tab.getText().startsWith("Edición: Paso"));
-
-                // Buscar la pestaña del editor existente
+                // Encontrar la pestaña actual
+                Tab currentTab = null;
                 for (Tab tab : tabPane.getTabs()) {
-                    if (tab.getText().equals("Editor")) {
-                        tabPane.getSelectionModel().select(tab);
-                        return;  // Salimos del método sin crear otro Editor
+                    if (tab.getContent() == this) {
+                        currentTab = tab;
+                        break;
                     }
                 }
 
-                // Si no se encuentra el editor, lo creamos (caso raro)
-                Editor nuevoEditor = new Editor(tabPane, gramatica, menuPane);
-                Tab editorTab = new Tab("Editor", nuevoEditor.getRoot());
-                editorTab.setClosable(true);
-                tabPane.getTabs().add(editorTab);
-                tabPane.getSelectionModel().select(editorTab);
+                if (currentTab != null) {
+                    // Obtener el índice de la pestaña actual
+                    int currentIndex = tabPane.getTabs().indexOf(currentTab);
+                    
+                    // Eliminar la pestaña actual
+                    tabPane.getTabs().remove(currentTab);
+                    
+                    // Seleccionar la pestaña adyacente o el menú principal
+                    if (!tabPane.getTabs().isEmpty()) {
+                        // Si hay pestañas, seleccionar la anterior o la siguiente
+                        int newIndex = Math.min(currentIndex, tabPane.getTabs().size() - 1);
+                        tabPane.getSelectionModel().select(newIndex);
+                    }
+                }
             }
         });
     }

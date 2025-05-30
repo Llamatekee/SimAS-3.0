@@ -2,6 +2,7 @@ package bienvenida;
 
 import editor.Editor;
 import editor.EditorWindow;
+import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -15,7 +16,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import editor.ActualizableTextos;
 
-public class MenuPrincipal {
+public class MenuPrincipal extends Application {
 
     @FXML private TabPane tabPane;
     @FXML private Button btnCerrarTabs;
@@ -32,21 +33,30 @@ public class MenuPrincipal {
     private ResourceBundle bundle;
     private Locale currentLocale = new Locale("es");
 
-    public void start(Stage primaryStage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/MenuPrincipal.fxml"));
-        Parent root = loader.load();
-
-        primaryStage.setTitle("SimAS 3.0");
-
-        // Configurar el tamaño de la ventana
-        primaryStage.setWidth(800);
-        primaryStage.setHeight(900);
-        primaryStage.setMinWidth(600);
-        primaryStage.setMinHeight(700);
-
-        Scene scene = new Scene(root);
-        primaryStage.setScene(scene);
-        primaryStage.show();
+    @Override
+    public void start(Stage primaryStage) {
+        try {
+            // Cargar el FXML
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/MenuPrincipal.fxml"));
+            loader.setController(this);
+            Parent root = loader.load();
+            
+            // Configurar la escena
+            Scene scene = new Scene(root);
+            primaryStage.setTitle("SimAS 3.0");
+            primaryStage.setScene(scene);
+            
+            // Configurar el tamaño de la ventana
+            primaryStage.setWidth(800);
+            primaryStage.setHeight(900);
+            primaryStage.setMinWidth(600);
+            primaryStage.setMinHeight(700);
+            
+            primaryStage.show();
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -56,6 +66,7 @@ public class MenuPrincipal {
         comboIdioma.setValue("Español");
         comboIdioma.setOnAction(e -> cambiarIdioma());
         cargarBundle(currentLocale);
+        
         // Guardar la última pestaña seleccionada
         tabPane.getSelectionModel().selectedItemProperty().addListener((obs, oldTab, newTab) -> {
             if (newTab != null) {
@@ -105,12 +116,6 @@ public class MenuPrincipal {
             if (labelTitulo != null) labelTitulo.setText(bundle.getString("label.titulo"));
             if (labelSubtitulo != null) labelSubtitulo.setText(bundle.getString("label.subtitulo"));
             if (labelDesarrollado != null) labelDesarrollado.setText(bundle.getString("label.desarrollado"));
-            
-            // Actualizar título de la ventana
-            if (btnEditor != null && btnEditor.getScene() != null) {
-                Stage stage = (Stage) btnEditor.getScene().getWindow();
-                stage.setTitle(bundle.getString("title.menu"));
-            }
             
             // Actualizar textos de las pestañas
             if (tabPane != null) {
@@ -180,6 +185,9 @@ public class MenuPrincipal {
             Editor newEditor = new Editor(newWindow.getTabPane(), null, bundle);
             newWindow.addEditor(newEditor);
             newWindow.show();
+            // Asegurar que la nueva ventana tenga el título correcto
+            Stage stage = (Stage) newWindow.getTabPane().getScene().getWindow();
+            stage.setTitle("SimAS 3.0");
         } else {
             // Si no existe un editor, abrir en la ventana actual
             Editor editor = new Editor(tabPane, this, bundle);

@@ -111,7 +111,8 @@ public class Editor extends VBox implements ActualizableTextos {
      */
     private void cargarFXML() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/Editor.fxml"));
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/vistas/Editor.fxml"));
             loader.setController(this);
             loader.setResources(bundle);
             Parent root = loader.load();
@@ -169,25 +170,8 @@ public class Editor extends VBox implements ActualizableTextos {
 
     @FXML
     private void onBtnAnadirAction() {
-        // Verificar si ya existe un editor en la ventana principal
-        boolean editorExists = false;
-        for (Tab tab : tabPane.getTabs()) {
-            if (tab.getContent() instanceof Editor) {
-                editorExists = true;
-                break;
-            }
-        }
-
-        if (editorExists) {
-            // Si ya existe un editor, abrir en una nueva ventana
-            EditorWindow newWindow = new EditorWindow(bundle);
-            Editor newEditor = new Editor(newWindow.getTabPane(), null, bundle);
-            newWindow.addEditor(newEditor);
-            newWindow.show();
-        } else {
-            // Si no existe un editor, abrir en la ventana actual
-            new PanelCreacionGramatica(this, tabPane, null, menuPane);
-        }
+        // Siempre abrir el asistente de creación en la ventana actual
+        new PanelCreacionGramatica(this, tabPane, null, menuPane);
     }
 
     @FXML
@@ -423,5 +407,10 @@ public class Editor extends VBox implements ActualizableTextos {
 
     public ResourceBundle getBundle() {
         return bundle;
+    }
+
+    public void setBundle(ResourceBundle bundle) {
+        this.bundle = bundle;
+        actualizarTextos(bundle);
     }
 }
