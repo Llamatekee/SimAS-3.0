@@ -1,6 +1,7 @@
 package bienvenida;
 
 import editor.Editor;
+import editor.EditorWindow;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -164,11 +165,29 @@ public class MenuPrincipal {
 
     @FXML
     private void onBtnEditorAction() {
-        Editor editor = new Editor(tabPane, this, bundle);
-        Tab editorTab = new Tab(bundle.getString("editor.title"), editor);
-        editorTab.setClosable(true);
-        tabPane.getTabs().add(editorTab);
-        tabPane.getSelectionModel().select(editorTab);
+        // Verificar si ya existe un editor en la ventana principal
+        boolean editorExists = false;
+        for (Tab tab : tabPane.getTabs()) {
+            if (tab.getContent() instanceof Editor) {
+                editorExists = true;
+                break;
+            }
+        }
+
+        if (editorExists) {
+            // Si ya existe un editor, abrir en una nueva ventana
+            EditorWindow newWindow = new EditorWindow(bundle);
+            Editor newEditor = new Editor(newWindow.getTabPane(), null, bundle);
+            newWindow.addEditor(newEditor);
+            newWindow.show();
+        } else {
+            // Si no existe un editor, abrir en la ventana actual
+            Editor editor = new Editor(tabPane, this, bundle);
+            Tab editorTab = new Tab(bundle.getString("editor.title"), editor);
+            editorTab.setClosable(true);
+            tabPane.getTabs().add(editorTab);
+            tabPane.getSelectionModel().select(editorTab);
+        }
     }
 
     @FXML

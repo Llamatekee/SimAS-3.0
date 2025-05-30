@@ -169,7 +169,25 @@ public class Editor extends VBox implements ActualizableTextos {
 
     @FXML
     private void onBtnAnadirAction() {
-        new PanelCreacionGramatica(this, tabPane, null, menuPane);
+        // Verificar si ya existe un editor en la ventana principal
+        boolean editorExists = false;
+        for (Tab tab : tabPane.getTabs()) {
+            if (tab.getContent() instanceof Editor) {
+                editorExists = true;
+                break;
+            }
+        }
+
+        if (editorExists) {
+            // Si ya existe un editor, abrir en una nueva ventana
+            EditorWindow newWindow = new EditorWindow(bundle);
+            Editor newEditor = new Editor(newWindow.getTabPane(), null, bundle);
+            newWindow.addEditor(newEditor);
+            newWindow.show();
+        } else {
+            // Si no existe un editor, abrir en la ventana actual
+            new PanelCreacionGramatica(this, tabPane, null, menuPane);
+        }
     }
 
     @FXML
