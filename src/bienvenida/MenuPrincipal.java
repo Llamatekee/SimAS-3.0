@@ -182,7 +182,9 @@ public class MenuPrincipal extends Application {
         if (editorExists) {
             // Si ya existe un editor, abrir en una nueva ventana
             EditorWindow newWindow = new EditorWindow(bundle);
-            Editor newEditor = new Editor(newWindow.getTabPane(), null, bundle);
+            MenuPrincipal newMenu = new MenuPrincipal();
+            newMenu.setBundle(bundle);
+            Editor newEditor = new Editor(newWindow.getTabPane(), newMenu, bundle);
             newWindow.addEditor(newEditor);
             newWindow.show();
             // Asegurar que la nueva ventana tenga el título correcto
@@ -262,5 +264,22 @@ public class MenuPrincipal extends Application {
                 ButtonType.OK);
         acercaDe.setTitle("Acerca de");
         acercaDe.showAndWait();
+    }
+
+    public void setBundle(ResourceBundle bundle) {
+        this.bundle = bundle;
+        actualizarTextos(bundle);
+    }
+
+    private void actualizarTextos(ResourceBundle bundle) {
+        if (labelTitulo != null) labelTitulo.setText(bundle.getString("label.titulo"));
+        if (labelSubtitulo != null) labelSubtitulo.setText(bundle.getString("label.subtitulo"));
+        if (labelDesarrollado != null) labelDesarrollado.setText(bundle.getString("label.desarrollado"));
+        if (btnEditor != null) btnEditor.setText(bundle.getString("btn.editor"));
+        if (btnSimulador != null) btnSimulador.setText(bundle.getString("btn.simulador"));
+        if (btnAyuda != null) btnAyuda.setText(bundle.getString("btn.ayuda"));
+        if (btnTutorial != null) btnTutorial.setText(bundle.getString("btn.tutorial"));
+        if (btnSalir != null) btnSalir.setText(bundle.getString("btn.salir"));
+        if (btnCerrarTabs != null) btnCerrarTabs.setText(bundle.getString("btn.cerrar"));
     }
 }

@@ -121,9 +121,11 @@ public class PanelCreacionGramaticaPaso4 extends VBox implements ActualizableTex
     }
 
     private void cerrarAsistente() {
+        // Buscar la pestaña que contiene el PanelCreacionGramatica
         tabPane.getTabs().stream()
-                .filter(tab -> tab.getContent() == this)
-                .findFirst().ifPresent(tabActual -> tabPane.getTabs().remove(tabActual));
+                .filter(tab -> tab.getContent() instanceof PanelCreacionGramatica)
+                .findFirst()
+                .ifPresent(tabActual -> tabPane.getTabs().remove(tabActual));
     }
 
     private void mostrarAlerta() {
