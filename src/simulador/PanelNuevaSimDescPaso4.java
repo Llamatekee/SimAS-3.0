@@ -10,6 +10,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import editor.ActualizableTextos;
+import editor.TabManager;
 
 import java.io.IOException;
 import java.util.List;
@@ -208,12 +209,19 @@ public class PanelNuevaSimDescPaso4 implements PanelNuevaSimDescPaso, Actualizab
         // Asegurarse de que las funciones predefinidas estén presentes
         inicializarFuncionesError();
         
-        Tab nuevaFunc = new Tab(bundle.getString("simulador.paso4.btn.nueva"));
-        NuevaFuncionError nuevaFuncionError = new NuevaFuncionError(this.gramatica, this, bundle);
-        nuevaFunc.setContent(nuevaFuncionError.getRoot());
-        nuevaFunc.setUserData(nuevaFuncionError);
-        panelPadre.tabPane.getTabs().add(nuevaFunc);
-        panelPadre.tabPane.getSelectionModel().select(nuevaFunc);
+        // Usar TabManager para obtener o crear la pestaña
+        Tab tab = TabManager.getOrCreateTab(panelPadre.tabPane, NuevaFuncionError.class, 
+            bundle.getString("simulador.paso4.btn.nueva"), null);
+            
+        // Si la pestaña es nueva, configurar su contenido
+        if (tab.getContent() == null) {
+            NuevaFuncionError nuevaFuncionError = new NuevaFuncionError(this.gramatica, this, bundle);
+            tab.setContent(nuevaFuncionError.getRoot());
+            tab.setUserData(nuevaFuncionError);
+        }
+        
+        // Seleccionar la pestaña
+        panelPadre.tabPane.getSelectionModel().select(tab);
     }
 
     @FXML

@@ -14,6 +14,8 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.VBox;
 import javafx.geometry.Insets;
+import javafx.scene.Parent;
+import editor.TabManager;
 
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -145,13 +147,21 @@ public class PanelSimuladorDesc {
     }
     
     private void mostrarPasoActual() {
-        pestañaSimulacion = new Tab(bundle.getString("simulador.tab.paso1"));
-        pestañaSimulacion.setClosable(true);
-        pestañaSimulacion.setContent(pasos.get(pasoActual).getRoot());
-        pestañaSimulacion.setUserData(this);  // Guardar la referencia al panel en userData
-
-        tabPane.getTabs().add(pestañaSimulacion);
-        tabPane.getSelectionModel().select(pestañaSimulacion);
+        if (pasoActual == 4) {
+            // Para el paso 4 (análisis de cadenas), permitir múltiples pestañas
+            pestañaSimulacion = new Tab(bundle.getString("simulador.tab.paso1"));
+            pestañaSimulacion.setClosable(true);
+            pestañaSimulacion.setContent(pasos.get(pasoActual).getRoot());
+            pestañaSimulacion.setUserData(this);
+            tabPane.getTabs().add(pestañaSimulacion);
+            tabPane.getSelectionModel().select(pestañaSimulacion);
+        } else {
+            // Para los demás pasos, usar TabManager para asegurar una única instancia
+            Tab tab = TabManager.getOrCreateTab(tabPane, PanelSimuladorDesc.class, 
+                bundle.getString("simulador.tab.paso1"), pasos.get(pasoActual).getRoot());
+            pestañaSimulacion = tab;
+            pestañaSimulacion.setUserData(this);
+        }
     }
 
     /**
@@ -159,10 +169,6 @@ public class PanelSimuladorDesc {
      */
     public void mostrarGramaticaOriginal() {
         try {
-            // Crear una nueva pestaña para la gramática
-            Tab pestañaGramatica = new Tab(bundle.getString("simulador.gramatica.original"));
-            pestañaGramatica.setClosable(true);
-            
             // Crear el contenido de la pestaña
             VBox content = new VBox(10);
             content.setPadding(new Insets(10));
@@ -175,20 +181,15 @@ public class PanelSimuladorDesc {
             // Botón de cerrar
             Button btnCerrar = new Button(bundle.getString("btn.cerrar"));
             btnCerrar.getStyleClass().add("button-cancel");
-            btnCerrar.setOnAction(e -> tabPane.getTabs().remove(pestañaGramatica));
+            btnCerrar.setOnAction(e -> tabPane.getTabs().remove(tabPane.getSelectionModel().getSelectedItem()));
             
             // Añadir elementos al contenido
             content.getChildren().addAll(listView, btnCerrar);
             
-            // Establecer el contenido de la pestaña
-            pestañaGramatica.setContent(content);
-            
-            // Añadir la pestaña al TabPane
-            tabPane.getTabs().add(pestañaGramatica);
-            tabPane.getSelectionModel().select(pestañaGramatica);
-            
-            // Guardar la referencia a la pestaña para poder actualizarla
-            pestañaGramatica.setUserData(new GramaticaTabData(listView, btnCerrar));
+            // Usar TabManager para obtener o crear la pestaña
+            Tab tab = TabManager.getOrCreateTab(tabPane, GramaticaTabData.class, 
+                bundle.getString("simulador.gramatica.original"), content);
+            tab.setUserData(new GramaticaTabData(listView, btnCerrar));
             
         } catch (Exception e) {
             e.printStackTrace();
@@ -196,13 +197,12 @@ public class PanelSimuladorDesc {
     }
 
     public void cancelarSimulacion() {
-        // Cerrar la pestaña de simulación si existe
-        if (pestañaSimulacion != null) {
-            tabPane.getTabs().remove(pestañaSimulacion);
-            pestañaSimulacion = null;
-        }
-        // Seleccionar la primera pestaña
-        tabPane.getSelectionModel().select(0);
+        // Cerrar todas las pestañas relacionadas con la simulación
+        tabPane.getTabs().removeIf(tab -> 
+            tab.getContent() instanceof Parent && tab.getContent().getClass().getEnclosingClass() == PanelSimuladorDesc.class ||
+            tab.getUserData() instanceof GramaticaTabData ||
+            tab.getUserData() instanceof NuevaFuncionError
+        );
     }
 
     public void cambiarPaso(int paso) {
@@ -214,17 +214,13 @@ public class PanelSimuladorDesc {
         }
         
         this.pasoActual = paso;
-        if (pestañaSimulacion == null) {
-            pestañaSimulacion = new Tab(bundle.getString("simulador.tab.paso1"));
-            pestañaSimulacion.setClosable(true);
-            tabPane.getTabs().add(pestañaSimulacion);
-        }
         
         // Actualizar el título de la pestaña según el paso
+        String tituloPestaña;
         if (paso == 5) {
-            pestañaSimulacion.setText(bundle.getString("simulador.tab.paso6"));
+            tituloPestaña = bundle.getString("simulador.tab.paso6");
         } else {
-            pestañaSimulacion.setText(bundle.getString("simulador.tab.paso1").replace("1", String.valueOf(paso + 1)));
+            tituloPestaña = bundle.getString("simulador.tab.paso1").replace("1", String.valueOf(paso + 1));
         }
         
         // Actualizar el paso actual con el bundle actual
@@ -233,21 +229,18 @@ public class PanelSimuladorDesc {
             ((editor.ActualizableTextos) pasoActual).actualizarTextos(bundle);
         }
         
-        pestañaSimulacion.setContent(pasoActual.getRoot());
-        tabPane.getSelectionModel().select(pestañaSimulacion);
-
-        // Refrescar la vista del paso al que vamos
-        for (Tab tab : tabPane.getTabs()) {
-            if (tab.getUserData() instanceof GramaticaTabData) {
-                tab.setText(bundle.getString("simulador.gramatica.original"));
-                GramaticaTabData data = (GramaticaTabData) tab.getUserData();
-                data.listView.setItems(FXCollections.observableArrayList(gramaticaOriginal.getProduccionesModel()));
-                data.btnCerrar.setText(bundle.getString("btn.cerrar"));
-            }
-            if (tab.getUserData() instanceof simulador.NuevaFuncionError) {
-                ((simulador.NuevaFuncionError) tab.getUserData()).actualizarTextos(bundle);
-                tab.setText(bundle.getString("simulador.paso4.btn.nueva"));
-            }
+        // Actualizar la pestaña existente o crear una nueva si no existe
+        if (pestañaSimulacion != null) {
+            pestañaSimulacion.setText(tituloPestaña);
+            pestañaSimulacion.setContent(pasoActual.getRoot());
+            tabPane.getSelectionModel().select(pestañaSimulacion);
+        } else {
+            // Si no existe la pestaña, crear una nueva
+            pestañaSimulacion = new Tab(tituloPestaña);
+            pestañaSimulacion.setContent(pasoActual.getRoot());
+            pestañaSimulacion.setUserData(this);
+            tabPane.getTabs().add(pestañaSimulacion);
+            tabPane.getSelectionModel().select(pestañaSimulacion);
         }
     }
 
@@ -290,5 +283,9 @@ public class PanelSimuladorDesc {
                 tab.setText(bundle.getString("simulador.paso4.btn.nueva"));
             }
         }
+    }
+
+    public Parent getRoot() {
+        return (Parent) pestañaSimulacion.getContent();
     }
 }

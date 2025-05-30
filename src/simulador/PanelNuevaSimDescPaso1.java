@@ -62,13 +62,14 @@ public class PanelNuevaSimDescPaso1 implements PanelNuevaSimDescPaso, Actualizab
     @FXML
     private void initialize() {
         // Este método se llama automáticamente después de cargar el FXML
-        // No necesitamos hacer nada aquí ya que la inicialización se hace en el constructor
+        inicializarBotones();
+        verificarEstadoGramatica();
     }
 
     private void inicializarBotones() {
         // En el paso 1, los botones Primero y Anterior están deshabilitados
-        btnPrimero.setDisable(true);
-        btnAnterior.setDisable(true);
+        if (btnPrimero != null) btnPrimero.setDisable(true);
+        if (btnAnterior != null) btnAnterior.setDisable(true);
     }
 
     private void verificarEstadoGramatica() {
@@ -92,37 +93,42 @@ public class PanelNuevaSimDescPaso1 implements PanelNuevaSimDescPaso, Actualizab
 
     @FXML
     private void cancelarSimulacion() {
-        panelPadre.cancelarSimulacion();
+        if (panelPadre != null) {
+            panelPadre.cancelarSimulacion();
+        }
     }
 
     @FXML
-    private void avanzarPaso() {
-        panelPadre.cambiarPaso(1);
+    private void handleSiguiente() {
+        if (panelPadre != null) {
+            panelPadre.cambiarPaso(1);
+        }
     }
 
     @FXML
-    private void retrocederPaso() {
-        // No hay paso anterior
+    private void handleUltimo() {
+        if (panelPadre != null) {
+            panelPadre.cambiarPaso(5);
+        }
     }
 
     @FXML
     private void visualizarGramatica() {
-        panelPadre.mostrarGramaticaOriginal();
+        if (panelPadre != null) {
+            panelPadre.mostrarGramaticaOriginal();
+        }
     }
 
     @FXML
     private void handlePrimero() {
-        panelPadre.cambiarPaso(0);
+        if (panelPadre != null) {
+            panelPadre.cambiarPaso(0);
+        }
     }
 
     @FXML
     private void handleAnterior() {
         // No hay paso anterior, este es el primer paso
-    }
-
-    @FXML
-    private void handleUltimo() {
-        panelPadre.cambiarPaso(3);
     }
 
     @Override

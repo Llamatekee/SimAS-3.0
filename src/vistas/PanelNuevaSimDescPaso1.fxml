@@ -57,7 +57,7 @@
         <Button fx:id="btnAnterior" text="%button.anterior" styleClass="button-prev-next" 
                 onAction="#handleAnterior" disable="true"/>
         <Button fx:id="btnSiguiente" text="%button.siguiente" styleClass="button-prev-next" 
-                onAction="#avanzarPaso"/>
+                onAction="#handleSiguiente"/>
         <Button fx:id="btnUltimo" text="%button.ultimo" styleClass="button-first-last" 
                 onAction="#handleUltimo"/>
     </HBox>

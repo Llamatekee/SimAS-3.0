@@ -63,11 +63,6 @@ public class PanelCreacionGramatica extends BorderPane implements ActualizableTe
 
         // Mostrar el Paso 1 en el centro del asistente
         this.setCenter(this.paso1);
-
-        // Agregar pestaña del asistente (el contenido es this)
-        Tab tabAsistente = new Tab(bundle.getString("creacion.tab.paso1"), this);
-        tabPane.getTabs().add(tabAsistente);
-        tabPane.getSelectionModel().select(tabAsistente);
     }
 
     public Gramatica getGramatica() {

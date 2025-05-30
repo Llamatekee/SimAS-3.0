@@ -106,20 +106,28 @@ public class PanelCreacionGramaticaPaso2 extends VBox implements ActualizableTex
 
     @FXML
     private void onBtnModificarNoTerminalesAction() {
-        PanelSimbolosNoTerminales panel = new PanelSimbolosNoTerminales(simbolosNoTerminales, tabPane, this);
         java.util.ResourceBundle bundle = panelPadre.getBundle();
-        Tab tab = new Tab(bundle.getString("creacion2.tab.modificar.no.terminales"), panel);
-        tabPane.getTabs().add(tab);
-        tabPane.getSelectionModel().select(tab);
+        if (TabManager.hasTab(tabPane, PanelSimbolosNoTerminales.class)) {
+            // Si ya existe una pestaña de no terminales, seleccionarla
+            TabManager.getOrCreateTab(tabPane, PanelSimbolosNoTerminales.class, bundle.getString("creacion2.tab.modificar.no.terminales"), null);
+        } else {
+            // Si no existe, crear una nueva
+            PanelSimbolosNoTerminales panel = new PanelSimbolosNoTerminales(simbolosNoTerminales, tabPane, this);
+            TabManager.getOrCreateTab(tabPane, PanelSimbolosNoTerminales.class, bundle.getString("creacion2.tab.modificar.no.terminales"), panel);
+        }
     }
 
     @FXML
     private void onBtnModificarTerminalesAction() {
-        PanelSimbolosTerminales panel = new PanelSimbolosTerminales(simbolosTerminales, tabPane, this);
         java.util.ResourceBundle bundle = panelPadre.getBundle();
-        Tab tab = new Tab(bundle.getString("creacion2.tab.modificar.terminales"), panel);
-        tabPane.getTabs().add(tab);
-        tabPane.getSelectionModel().select(tab);
+        if (TabManager.hasTab(tabPane, PanelSimbolosTerminales.class)) {
+            // Si ya existe una pestaña de terminales, seleccionarla
+            TabManager.getOrCreateTab(tabPane, PanelSimbolosTerminales.class, bundle.getString("creacion2.tab.modificar.terminales"), null);
+        } else {
+            // Si no existe, crear una nueva
+            PanelSimbolosTerminales panel = new PanelSimbolosTerminales(simbolosTerminales, tabPane, this);
+            TabManager.getOrCreateTab(tabPane, PanelSimbolosTerminales.class, bundle.getString("creacion2.tab.modificar.terminales"), panel);
+        }
     }
 
     @FXML

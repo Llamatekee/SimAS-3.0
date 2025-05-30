@@ -170,8 +170,14 @@ public class Editor extends VBox implements ActualizableTextos {
 
     @FXML
     private void onBtnAnadirAction() {
-        // Siempre abrir el asistente de creación en la ventana actual
-        new PanelCreacionGramatica(this, tabPane, null, menuPane);
+        if (TabManager.hasTab(tabPane, PanelCreacionGramatica.class)) {
+            // Si ya existe una pestaña de creación, seleccionarla
+            TabManager.getOrCreateTab(tabPane, PanelCreacionGramatica.class, bundle.getString("creacion.tab.paso1"), null);
+        } else {
+            // Si no existe, crear una nueva
+            PanelCreacionGramatica asistente = new PanelCreacionGramatica(this, tabPane, null, menuPane);
+            TabManager.getOrCreateTab(tabPane, PanelCreacionGramatica.class, bundle.getString("creacion.tab.paso1"), asistente);
+        }
     }
 
     @FXML
@@ -190,7 +196,14 @@ public class Editor extends VBox implements ActualizableTextos {
             mostrarError("Error", "No se pueden iniciar la edición en este momento.");
             return;
         }
-        new PanelCreacionGramatica(this, tabPane, this.gramatica, menuPane);
+        if (TabManager.hasTab(tabPane, PanelCreacionGramatica.class)) {
+            // Si ya existe una pestaña de edición, seleccionarla
+            TabManager.getOrCreateTab(tabPane, PanelCreacionGramatica.class, bundle.getString("creacion.tab.paso1"), null);
+        } else {
+            // Si no existe, crear una nueva
+            PanelCreacionGramatica asistente = new PanelCreacionGramatica(this, tabPane, this.gramatica, menuPane);
+            TabManager.getOrCreateTab(tabPane, PanelCreacionGramatica.class, bundle.getString("creacion.tab.paso1"), asistente);
+        }
     }
 
     @FXML
@@ -221,7 +234,14 @@ public class Editor extends VBox implements ActualizableTextos {
 
     @FXML
     private void onBtnSimularAction() {
-        new PanelSimuladorDesc(gramatica, tabPane, bundle);
+        if (TabManager.hasTab(tabPane, PanelSimuladorDesc.class)) {
+            // Si ya existe una pestaña de simulación, seleccionarla
+            TabManager.getOrCreateTab(tabPane, PanelSimuladorDesc.class, bundle.getString("simulador.tab.paso1"), null);
+        } else {
+            // Si no existe, crear una nueva
+            PanelSimuladorDesc simulador = new PanelSimuladorDesc(gramatica, tabPane, bundle);
+            TabManager.getOrCreateTab(tabPane, PanelSimuladorDesc.class, bundle.getString("simulador.tab.paso1"), simulador.getRoot());
+        }
     }
 
     @FXML

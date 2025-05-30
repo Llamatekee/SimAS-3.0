@@ -86,11 +86,15 @@ public class PanelCreacionGramaticaPaso3 extends VBox implements ActualizableTex
             return;
         }
 
-        PanelProducciones panel = new PanelProducciones(this, producciones, tabPane);
         ResourceBundle bundle = panelPadre.getBundle();
-        Tab tab = new Tab(bundle.getString("creacion3.tab.modificar.producciones"), panel);
-        tabPane.getTabs().add(tab);
-        tabPane.getSelectionModel().select(tab);
+        if (TabManager.hasTab(tabPane, PanelProducciones.class)) {
+            // Si ya existe una pestaña de producciones, seleccionarla
+            TabManager.getOrCreateTab(tabPane, PanelProducciones.class, bundle.getString("creacion3.tab.modificar.producciones"), null);
+        } else {
+            // Si no existe, crear una nueva
+            PanelProducciones panel = new PanelProducciones(this, producciones, tabPane);
+            TabManager.getOrCreateTab(tabPane, PanelProducciones.class, bundle.getString("creacion3.tab.modificar.producciones"), panel);
+        }
     }
 
     @FXML
