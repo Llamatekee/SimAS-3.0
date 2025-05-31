@@ -219,16 +219,11 @@ public class Editor extends VBox implements ActualizableTextos {
 
     @FXML
     private void onBtnAnadirAction() {
-        if (TabManager.hasTab(tabPane, PanelCreacionGramatica.class)) {
-            // Si ya existe una pestaña de creación, seleccionarla
-            TabManager.getOrCreateTab(tabPane, PanelCreacionGramatica.class, bundle.getString("creacion.tab.paso1"), null);
-        } else {
-            // Si no existe, crear una nueva como pestaña hija del editor
-            PanelCreacionGramatica asistente = new PanelCreacionGramatica(this, tabPane, null, menuPane);
-            String childId = "creacion_" + editorId;
-            TabManager.getOrCreateTab(tabPane, PanelCreacionGramatica.class, 
-                bundle.getString("creacion.tab.paso1"), asistente, editorId, childId);
-        }
+        // Crear una nueva pestaña de creación como hija del editor
+        String childId = "creacion_" + editorId.replace("editor_", "");
+        PanelCreacionGramatica asistente = new PanelCreacionGramatica(this, tabPane, null, menuPane, childId);
+        TabManager.getOrCreateTab(tabPane, PanelCreacionGramatica.class, 
+            bundle.getString("creacion.tab.paso1"), asistente, editorId, childId);
     }
 
     @FXML
@@ -247,16 +242,11 @@ public class Editor extends VBox implements ActualizableTextos {
             mostrarError("Error", "No se pueden iniciar la edición en este momento.");
             return;
         }
-        if (TabManager.hasTab(tabPane, PanelCreacionGramatica.class)) {
-            // Si ya existe una pestaña de edición, seleccionarla
-            TabManager.getOrCreateTab(tabPane, PanelCreacionGramatica.class, bundle.getString("creacion.tab.paso1"), null);
-        } else {
-            // Si no existe, crear una nueva como pestaña hija del editor
-            PanelCreacionGramatica asistente = new PanelCreacionGramatica(this, tabPane, this.gramatica, menuPane);
-            String childId = "creacion_" + editorId;
-            TabManager.getOrCreateTab(tabPane, PanelCreacionGramatica.class, 
-                bundle.getString("creacion.tab.paso1"), asistente, editorId, childId);
-        }
+        // Crear una nueva pestaña de edición como hija del editor
+        String childId = "creacion_" + editorId.replace("editor_", "");
+        PanelCreacionGramatica asistente = new PanelCreacionGramatica(this, tabPane, this.gramatica, menuPane, childId);
+        TabManager.getOrCreateTab(tabPane, PanelCreacionGramatica.class, 
+            bundle.getString("creacion.tab.paso1"), asistente, editorId, childId);
     }
 
     @FXML

@@ -107,31 +107,49 @@ public class PanelCreacionGramaticaPaso2 extends VBox implements ActualizableTex
     @FXML
     private void onBtnModificarNoTerminalesAction() {
         java.util.ResourceBundle bundle = panelPadre.getBundle();
-        if (TabManager.hasTab(tabPane, PanelSimbolosNoTerminales.class)) {
-            // Si ya existe una pestaña de no terminales, seleccionarla
-            TabManager.getOrCreateTab(tabPane, PanelSimbolosNoTerminales.class, bundle.getString("creacion2.tab.modificar.no.terminales"), null);
-        } else {
-            // Si no existe, crear una nueva como pestaña hija de la creación
-            PanelSimbolosNoTerminales panel = new PanelSimbolosNoTerminales(simbolosNoTerminales, tabPane, this);
-            String childId = "no_terminales_" + panelPadre.getCreacionId();
-            TabManager.getOrCreateTab(tabPane, PanelSimbolosNoTerminales.class, 
-                bundle.getString("creacion2.tab.modificar.no.terminales"), panel, panelPadre.getCreacionId(), childId);
+        String childId = "no_terminales_" + panelPadre.getCreacionId();
+        
+        // Verificar si ya existe una pestaña para esta creación específica
+        Tab existingTab = findTabByChildId(childId);
+        if (existingTab != null) {
+            tabPane.getSelectionModel().select(existingTab);
+            return;
         }
+        
+        // Crear una nueva pestaña de no terminales como hija de la creación
+        PanelSimbolosNoTerminales panel = new PanelSimbolosNoTerminales(simbolosNoTerminales, tabPane, this);
+        TabManager.getOrCreateTab(tabPane, PanelSimbolosNoTerminales.class, 
+            bundle.getString("creacion2.tab.modificar.no.terminales"), panel, panelPadre.getCreacionId(), childId);
     }
 
     @FXML
     private void onBtnModificarTerminalesAction() {
         java.util.ResourceBundle bundle = panelPadre.getBundle();
-        if (TabManager.hasTab(tabPane, PanelSimbolosTerminales.class)) {
-            // Si ya existe una pestaña de terminales, seleccionarla
-            TabManager.getOrCreateTab(tabPane, PanelSimbolosTerminales.class, bundle.getString("creacion2.tab.modificar.terminales"), null);
-        } else {
-            // Si no existe, crear una nueva como pestaña hija de la creación
-            PanelSimbolosTerminales panel = new PanelSimbolosTerminales(simbolosTerminales, tabPane, this);
-            String childId = "terminales_" + panelPadre.getCreacionId();
-            TabManager.getOrCreateTab(tabPane, PanelSimbolosTerminales.class, 
-                bundle.getString("creacion2.tab.modificar.terminales"), panel, panelPadre.getCreacionId(), childId);
+        String childId = "terminales_" + panelPadre.getCreacionId();
+        
+        // Verificar si ya existe una pestaña para esta creación específica
+        Tab existingTab = findTabByChildId(childId);
+        if (existingTab != null) {
+            tabPane.getSelectionModel().select(existingTab);
+            return;
         }
+        
+        // Crear una nueva pestaña de terminales como hija de la creación
+        PanelSimbolosTerminales panel = new PanelSimbolosTerminales(simbolosTerminales, tabPane, this);
+        TabManager.getOrCreateTab(tabPane, PanelSimbolosTerminales.class, 
+            bundle.getString("creacion2.tab.modificar.terminales"), panel, panelPadre.getCreacionId(), childId);
+    }
+    
+    /**
+     * Busca una pestaña por su childId específico.
+     */
+    private Tab findTabByChildId(String childId) {
+        for (Tab tab : tabPane.getTabs()) {
+            if (tab.getUserData() != null && tab.getUserData().toString().equals(childId)) {
+                return tab;
+            }
+        }
+        return null;
     }
 
     @FXML

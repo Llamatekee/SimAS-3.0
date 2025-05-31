@@ -16,6 +16,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import editor.ActualizableTextos;
 import simulador.SimulacionFinal;
+import editor.TabManager;
 
 public class MenuPrincipal extends Application {
 
@@ -98,6 +99,9 @@ public class MenuPrincipal extends Application {
 
     private void actualizarTextos() {
         try {
+            // Actualizar ResourceBundle en TabManager
+            TabManager.setResourceBundle(tabPane, bundle);
+            
             // Actualizar textos de los botones principales
             if (btnEditor != null) btnEditor.setText(bundle.getString("btn.editor"));
             if (btnSalir != null) btnSalir.setText(bundle.getString("btn.salir"));
@@ -140,6 +144,9 @@ public class MenuPrincipal extends Application {
                         }
                     }
                 }
+                
+                // Reasignar numeración de editores con nuevos títulos
+                TabManager.reasignarNumerosEditores(tabPane);
             }
         } catch (Exception e) {
             System.err.println("Error al actualizar textos: " + e.getMessage());
@@ -171,37 +178,18 @@ public class MenuPrincipal extends Application {
 
     @FXML
     private void onBtnEditorAction() {
-        // Verificar si ya existe un editor en la ventana principal
-        boolean editorExists = false;
-        for (Tab tab : tabPane.getTabs()) {
-            if (tab.getContent() instanceof Editor) {
-                editorExists = true;
-                break;
-            }
-        }
-
-        if (editorExists) {
-            // Si ya existe un editor, abrir en una nueva ventana
-            EditorWindow newWindow = new EditorWindow(bundle);
-            MenuPrincipal newMenu = new MenuPrincipal();
-            newMenu.setBundle(bundle);
-            Editor newEditor = new Editor(newWindow.getTabPane(), newMenu, bundle);
-            newWindow.addEditor(newEditor);
-            newWindow.show();
-            // Asegurar que la nueva ventana tenga el título correcto
-            Stage stage = (Stage) newWindow.getTabPane().getScene().getWindow();
-            stage.setTitle("SimAS 3.0");
-        } else {
-            // Si no existe un editor, abrir en la ventana actual
-            Editor editor = new Editor(tabPane, this, bundle);
-            Tab editorTab = new Tab(bundle.getString("editor.title"), editor);
-            editorTab.setClosable(true);
-            // Establecer el editorId como userData para habilitar relaciones padre-hijo
-            editorTab.setUserData(editor.getEditorId());
-            tabPane.getTabs().add(editorTab);
-            tabPane.getSelectionModel().select(editorTab);
-            SimulacionFinal.reasignarNumerosSimulaciones(tabPane);
-        }
+        // Establecer el ResourceBundle en TabManager para internacionalización
+        TabManager.setResourceBundle(tabPane, bundle);
+        
+        // Crear un nuevo editor usando TabManager para posicionamiento correcto
+        Editor editor = new Editor(tabPane, this, bundle);
+        
+        // Usar TabManager para crear la pestaña del editor con posicionamiento adecuado
+        Tab editorTab = TabManager.getOrCreateTab(tabPane, Editor.class, 
+            bundle.getString("editor.title"), editor, editor.getEditorId(), null);
+        
+        // Asegurar que el editorId esté configurado como userData
+        editorTab.setUserData(editor.getEditorId());
     }
 
     @FXML

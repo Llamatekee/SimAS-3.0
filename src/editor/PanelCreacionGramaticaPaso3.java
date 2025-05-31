@@ -87,16 +87,31 @@ public class PanelCreacionGramaticaPaso3 extends VBox implements ActualizableTex
         }
 
         ResourceBundle bundle = panelPadre.getBundle();
-        if (TabManager.hasTab(tabPane, PanelProducciones.class)) {
-            // Si ya existe una pestaña de producciones, seleccionarla
-            TabManager.getOrCreateTab(tabPane, PanelProducciones.class, bundle.getString("creacion3.tab.modificar.producciones"), null);
-        } else {
-            // Si no existe, crear una nueva como pestaña hija de la creación
-            PanelProducciones panel = new PanelProducciones(this, producciones, tabPane);
-            String childId = "producciones_" + panelPadre.getCreacionId();
-            TabManager.getOrCreateTab(tabPane, PanelProducciones.class, 
-                bundle.getString("creacion3.tab.modificar.producciones"), panel, panelPadre.getCreacionId(), childId);
+        String childId = "producciones_" + panelPadre.getCreacionId();
+        
+        // Verificar si ya existe una pestaña para esta creación específica
+        Tab existingTab = findTabByChildId(childId);
+        if (existingTab != null) {
+            tabPane.getSelectionModel().select(existingTab);
+            return;
         }
+        
+        // Crear una nueva pestaña de producciones como hija de la creación
+        PanelProducciones panel = new PanelProducciones(this, producciones, tabPane);
+        TabManager.getOrCreateTab(tabPane, PanelProducciones.class, 
+            bundle.getString("creacion3.tab.modificar.producciones"), panel, panelPadre.getCreacionId(), childId);
+    }
+    
+    /**
+     * Busca una pestaña por su childId específico.
+     */
+    private Tab findTabByChildId(String childId) {
+        for (Tab tab : tabPane.getTabs()) {
+            if (tab.getUserData() != null && tab.getUserData().toString().equals(childId)) {
+                return tab;
+            }
+        }
+        return null;
     }
 
     @FXML

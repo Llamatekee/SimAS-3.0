@@ -32,12 +32,22 @@ public class PanelCreacionGramatica extends BorderPane implements ActualizableTe
     private static int contadorCreaciones = 0;
 
     public PanelCreacionGramatica(Editor ventanaPadre, TabPane tabPane, Gramatica gr, MenuPrincipal menuPane) {
+        this(ventanaPadre, tabPane, gr, menuPane, null);
+    }
+    
+    public PanelCreacionGramatica(Editor ventanaPadre, TabPane tabPane, Gramatica gr, MenuPrincipal menuPane, String creacionId) {
         this.tabPane = tabPane;
         this.panelPadre = ventanaPadre;
         this.menuPane = menuPane;
         this.gramaticaTemporal = (gr != null) ? new Gramatica(gr) : new Gramatica();
         this.bundle = panelPadre.getBundle();
-        this.creacionId = "creacion_" + System.currentTimeMillis() + "_" + (++contadorCreaciones);
+        
+        // Usar el creacionId proporcionado o generar uno nuevo
+        if (creacionId != null) {
+            this.creacionId = creacionId;
+        } else {
+            this.creacionId = "creacion_" + System.currentTimeMillis() + "_" + (++contadorCreaciones);
+        }
 
         // Inicializar paneles del asistente
         this.paso1 = new PanelCreacionGramaticaPaso1(this, this.bundle);
