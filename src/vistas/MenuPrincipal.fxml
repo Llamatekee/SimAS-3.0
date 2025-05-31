@@ -37,7 +37,7 @@
                                     </graphic>
                                 </Button>
                                 
-                                <Button fx:id="btnSimulador" text="Simulador Descendente" disable="true" styleClass="menu-button-disabled">
+                                <Button fx:id="btnSimulador" text="Simulador Descendente" onAction="#onBtnSimuladorAction" styleClass="menu-button">
                                     <graphic>
                                         <ImageView fitHeight="24" fitWidth="24">
                                             <Image url="@images/simulator-icon.png"/>

@@ -7,8 +7,12 @@ import java.util.*;
 public class TabManager {
     private static final Map<TabPane, Map<Class<?>, Tab>> tabInstances = new HashMap<>();
     private static final Map<TabPane, Map<String, List<Tab>>> parentChildRelations = new HashMap<>();
-    private static final Map<TabPane, Map<String, Integer>> gruposGramatica = new HashMap<>(); // Mapea editorId -> numeroGrupo
+    private static final Map<TabPane, Map<String, String>> elementoToGrupo = new HashMap<>(); // Mapea editorId/simuladorId -> grupoId
+    private static final Map<TabPane, Map<String, Integer>> gruposGramatica = new HashMap<>(); // Mapea grupoId -> numeroGrupo
     private static final Map<TabPane, java.util.ResourceBundle> resourceBundles = new HashMap<>();
+    
+    // Contador global para generar IDs únicos de grupo
+    private static int contadorGrupos = 0;
 
     public static Tab getOrCreateTab(TabPane tabPane, Class<?> tabType, String title, Object content) {
         return getOrCreateTab(tabPane, tabType, title, content, null, null);
@@ -18,12 +22,13 @@ public class TabManager {
         // Inicializar el mapa para este TabPane si no existe
         tabInstances.computeIfAbsent(tabPane, k -> new HashMap<>());
         parentChildRelations.computeIfAbsent(tabPane, k -> new HashMap<>());
+        elementoToGrupo.computeIfAbsent(tabPane, k -> new HashMap<>());
         gruposGramatica.computeIfAbsent(tabPane, k -> new HashMap<>());
 
         // Obtener el mapa de pestañas para este TabPane
         Map<Class<?>, Tab> paneTabs = tabInstances.get(tabPane);
 
-        // Para editores y pestañas hijas de editores, permitir múltiples instancias (no usar caché)
+        // Para editores, simuladores independientes y pestañas hijas de editores, permitir múltiples instancias (no usar caché)
         boolean isChildOfEditor = (parentId != null && parentId.startsWith("editor_")) || 
                                  (childId != null && (childId.contains("editor_") || 
                                                      childId.contains("creacion_") ||
@@ -31,7 +36,9 @@ public class TabManager {
                                                      childId.startsWith("no_terminales_") ||
                                                      childId.startsWith("producciones_")));
         
-        if (!isEditorType(tabType) && !isChildOfEditor) {
+        boolean isSimuladorIndependiente = isSimuladorType(tabType) && parentId != null && childId == null;
+        
+        if (!isEditorType(tabType) && !isChildOfEditor && !isSimuladorIndependiente) {
             // Solo usar caché para pestañas que realmente deben ser únicas globalmente
             if (paneTabs.containsKey(tabType)) {
                 Tab existingTab = paneTabs.get(tabType);
@@ -54,7 +61,25 @@ public class TabManager {
         }
 
         // Crear una nueva pestaña
-        Tab newTab = new Tab(title, (javafx.scene.Node) content);
+        javafx.scene.Node nodeContent;
+        if (content instanceof javafx.scene.Node) {
+            nodeContent = (javafx.scene.Node) content;
+        } else if (content instanceof simulador.PanelSimuladorDesc) {
+            nodeContent = ((simulador.PanelSimuladorDesc) content).getRoot();
+        } else if (content instanceof editor.Editor) {
+            nodeContent = ((editor.Editor) content).getRoot();
+        } else {
+            // Fallback: asumir que es un Node o que tiene un método getRoot()
+            try {
+                java.lang.reflect.Method getRootMethod = content.getClass().getMethod("getRoot");
+                nodeContent = (javafx.scene.Node) getRootMethod.invoke(content);
+            } catch (Exception e) {
+                // Si todo falla, intentar cast directo
+                nodeContent = (javafx.scene.Node) content;
+            }
+        }
+        
+        Tab newTab = new Tab(title, nodeContent);
         newTab.setClosable(true);
         
         // Establecer userData para identificar relaciones padre-hijo
@@ -111,8 +136,8 @@ public class TabManager {
             }
         });
 
-        // Guardar la nueva pestaña en el mapa (solo para no-editores y no-hijas-de-editores)
-        if (!isEditorType(tabType) && !isChildOfEditor) {
+        // Guardar la nueva pestaña en el mapa (solo para no-editores, no-hijas-de-editores y no-simuladores-independientes)
+        if (!isEditorType(tabType) && !isChildOfEditor && !isSimuladorIndependiente) {
             paneTabs.put(tabType, newTab);
         }
         
@@ -128,9 +153,41 @@ public class TabManager {
             System.out.println("DEBUG: Registering child relationship - parentId: " + parentId + ", childId: " + childId + ", title: " + title);
         }
         
-        // Si es un editor, asignar número de grupo
-        if (isEditorType(tabType) && parentId != null) {
-            asignarNumeroGrupoEditor(tabPane, parentId);
+        // ASIGNACIÓN AUTOMÁTICA A GRUPOS - Más explícita y directa
+        if (parentId != null && childId == null) {
+            // Esto significa que es un elemento raíz (editor o simulador independiente)
+            
+            System.out.println("DEBUG AUTO-ASSIGN: parentId=" + parentId + ", childId=" + childId);
+            System.out.println("DEBUG AUTO-ASSIGN: tabType=" + tabType.getSimpleName());
+            System.out.println("DEBUG AUTO-ASSIGN: isEditorType=" + isEditorType(tabType));
+            System.out.println("DEBUG AUTO-ASSIGN: isSimuladorType=" + isSimuladorType(tabType));
+            
+            // Verificar si ya está asignado a un grupo (ej: simulador desde editor)
+            Map<String, String> elementos = elementoToGrupo.get(tabPane);
+            boolean yaAsignado = (elementos != null && elementos.containsKey(parentId));
+            
+            System.out.println("DEBUG AUTO-ASSIGN: yaAsignado=" + yaAsignado);
+            
+            if (!yaAsignado) {
+                if (isEditorType(tabType)) {
+                    // EDITOR INDEPENDIENTE desde menú principal → NUEVO GRUPO
+                    System.out.println("DEBUG AUTO-ASSIGN: Creating NEW GROUP for EDITOR");
+                    asignarElementoANuevoGrupo(tabPane, parentId);
+                    System.out.println("DEBUG: Created NEW GROUP for EDITOR: " + parentId);
+                    
+                } else if (isSimuladorType(tabType)) {
+                    // SIMULADOR INDEPENDIENTE desde menú principal → NUEVO GRUPO
+                    System.out.println("DEBUG AUTO-ASSIGN: Creating NEW GROUP for SIMULATOR");
+                    asignarElementoANuevoGrupo(tabPane, parentId);
+                    System.out.println("DEBUG: Created NEW GROUP for SIMULATOR: " + parentId);
+                } else {
+                    System.out.println("DEBUG AUTO-ASSIGN: Unknown tabType, no group assignment");
+                }
+            } else {
+                System.out.println("DEBUG: Element " + parentId + " already assigned to group, skipping auto-assignment");
+            }
+        } else {
+            System.out.println("DEBUG AUTO-ASSIGN: Skipping auto-assignment - parentId=" + parentId + ", childId=" + childId);
         }
         
         // Añadir la pestaña al TabPane en la posición correcta
@@ -151,29 +208,129 @@ public class TabManager {
     }
     
     /**
-     * Asigna un número de grupo a un editor basado en su posición.
+     * Asigna un elemento (editor o simulador) a un grupo de gramática.
      */
-    private static void asignarNumeroGrupoEditor(TabPane tabPane, String editorId) {
+    private static void asignarElementoAGrupo(TabPane tabPane, String elementoId, String grupoIdPadre) {
+        Map<String, String> elementos = elementoToGrupo.get(tabPane);
         Map<String, Integer> grupos = gruposGramatica.get(tabPane);
-        if (grupos != null && !grupos.containsKey(editorId)) {
-            // Contar editores existentes para asignar el siguiente número
-            int numeroGrupo = contarEditoresActivos(tabPane);
-            grupos.put(editorId, numeroGrupo);
-            System.out.println("DEBUG: Assigned group number " + numeroGrupo + " to editor " + editorId);
+        
+        if (elementos != null && grupos != null && !elementos.containsKey(elementoId)) {
+            String grupoId;
+            
+            if (grupoIdPadre != null) {
+                // Si se especifica un grupo padre, usar ese grupo
+                grupoId = grupoIdPadre;
+            } else {
+                // Crear un nuevo grupo
+                grupoId = "grupo_" + System.currentTimeMillis() + "_" + (++contadorGrupos);
+                
+                // Asignar número de grupo basado en el orden actual
+                int numeroGrupo = contarElementosActivosEnGrupos(tabPane) + 1;
+                grupos.put(grupoId, numeroGrupo);
+            }
+            
+            elementos.put(elementoId, grupoId);
+            System.out.println("DEBUG: Assigned element " + elementoId + " to group " + grupoId);
         }
     }
     
     /**
-     * Cuenta el número de editores activos en el TabPane.
+     * Asigna un elemento (editor o simulador independiente) a un NUEVO grupo automáticamente.
      */
-    private static int contarEditoresActivos(TabPane tabPane) {
-        int contador = 0;
-        for (Tab tab : tabPane.getTabs()) {
-            if (isEditorContent(tab.getContent())) {
-                contador++;
+    private static void asignarElementoANuevoGrupo(TabPane tabPane, String elementoId) {
+        Map<String, String> elementos = elementoToGrupo.get(tabPane);
+        Map<String, Integer> grupos = gruposGramatica.get(tabPane);
+        
+        if (elementos != null && grupos != null) {
+            // Solo crear grupo si el elemento no está ya asignado
+            if (!elementos.containsKey(elementoId)) {
+                // Crear un nuevo grupo único
+                String grupoId = "grupo_" + System.currentTimeMillis() + "_" + (++contadorGrupos);
+                
+                // Asignar número de grupo basado en el orden actual de elementos activos
+                int numeroGrupo = contarElementosActivosEnGrupos(tabPane) + 1;
+                grupos.put(grupoId, numeroGrupo);
+                
+                // Asignar el elemento al nuevo grupo
+                elementos.put(elementoId, grupoId);
+                
+                System.out.println("DEBUG: Created NEW group " + grupoId + " with number " + numeroGrupo + " for element " + elementoId);
+            } else {
+                System.out.println("DEBUG: Element " + elementoId + " already has a group assigned");
             }
         }
+    }
+    
+    /**
+     * Cuenta el número de elementos activos (editores y simuladores) en todos los grupos.
+     */
+    private static int contarElementosActivosEnGrupos(TabPane tabPane) {
+        int contador = 0;
+        System.out.println("DEBUG contarElementosActivosEnGrupos: Starting count...");
+        for (Tab tab : tabPane.getTabs()) {
+            System.out.println("DEBUG contarElementosActivosEnGrupos: Checking tab: " + tab.getText() + 
+                             ", content type: " + (tab.getContent() != null ? tab.getContent().getClass().getSimpleName() : "null"));
+            if (isEditorContent(tab.getContent()) || isSimuladorContent(tab.getContent())) {
+                contador++;
+                System.out.println("DEBUG contarElementosActivosEnGrupos: Found element! Count now: " + contador);
+            }
+        }
+        System.out.println("DEBUG contarElementosActivosEnGrupos: Final count: " + contador);
         return contador;
+    }
+    
+    /**
+     * Verifica si el tipo de pestaña es un Simulador.
+     */
+    private static boolean isSimuladorType(Class<?> tabType) {
+        boolean result = tabType.getSimpleName().contains("Simulador") || 
+               tabType.getName().contains("simulador.PanelSimuladorDesc") ||
+               tabType == simulador.PanelSimuladorDesc.class;
+               
+        System.out.println("DEBUG isSimuladorType: tabType=" + tabType.getName() + 
+                         ", simpleName=" + tabType.getSimpleName() + 
+                         ", result=" + result);
+        return result;
+    }
+    
+    /**
+     * Verifica si el contenido de una pestaña es un Simulador.
+     */
+    private static boolean isSimuladorContent(Object content) {
+        return content instanceof simulador.PanelSimuladorDesc ||
+               content instanceof simulador.PanelNuevaSimDescPaso ||
+               content instanceof simulador.PanelNuevaSimDescPaso1 ||
+               content instanceof simulador.PanelNuevaSimDescPaso2 ||
+               content instanceof simulador.PanelNuevaSimDescPaso3 ||
+               content instanceof simulador.PanelNuevaSimDescPaso4 ||
+               content instanceof simulador.PanelNuevaSimDescPaso5 ||
+               content instanceof simulador.PanelNuevaSimDescPaso6 ||
+               (content != null && content.getClass().getSimpleName().contains("PanelNuevaSimDescPaso"));
+    }
+    
+    /**
+     * Obtiene el ID de grupo para un elemento específico.
+     */
+    public static String obtenerGrupoDeElemento(TabPane tabPane, String elementoId) {
+        Map<String, String> elementos = elementoToGrupo.get(tabPane);
+        if (elementos != null) {
+            return elementos.get(elementoId);
+        }
+        return null;
+    }
+    
+    /**
+     * Asigna un simulador al mismo grupo que un editor.
+     */
+    public static void asignarSimuladorAGrupoDeEditor(TabPane tabPane, String simuladorId, String editorId) {
+        String grupoEditor = obtenerGrupoDeElemento(tabPane, editorId);
+        if (grupoEditor != null) {
+            Map<String, String> elementos = elementoToGrupo.get(tabPane);
+            if (elementos != null) {
+                elementos.put(simuladorId, grupoEditor);
+                System.out.println("DEBUG: Assigned simulator " + simuladorId + " to editor's group " + grupoEditor);
+            }
+        }
     }
     
     /**
@@ -191,6 +348,11 @@ public class TabManager {
         // Si es un Editor, colocarlo después del menú principal
         if (isEditorType(tabType)) {
             return calcularPosicionEditor(tabPane);
+        }
+        
+        // Si es un Simulador independiente (no hijo), posicionarlo después del menú principal
+        if (isSimuladorType(tabType) && parentId != null && childId == null) {
+            return calcularPosicionSimulador(tabPane);
         }
         
         // Para otros tipos, al final
@@ -340,7 +502,11 @@ public class TabManager {
     private static Tab findChildTabInGroup(TabPane tabPane, String parentId, String childId) {
         System.out.println("DEBUG: findChildTabInGroup - Looking for childId: " + childId + " in parent: " + parentId);
         
-        // Buscar en las relaciones padre-hijo registradas
+        // Obtener el grupo del padre
+        String grupoDelPadre = obtenerGrupoDeElemento(tabPane, parentId);
+        System.out.println("DEBUG: Parent " + parentId + " belongs to group: " + grupoDelPadre);
+        
+        // Buscar en las relaciones padre-hijo registradas DENTRO DEL MISMO GRUPO
         Map<String, List<Tab>> relations = parentChildRelations.get(tabPane);
         if (relations != null && relations.containsKey(parentId)) {
             List<Tab> childTabs = relations.get(parentId);
@@ -349,29 +515,52 @@ public class TabManager {
                 if (childTab.getUserData() != null && 
                     childTab.getUserData().toString().equals(childId) &&
                     tabPane.getTabs().contains(childTab)) {
-                    System.out.println("DEBUG: Found existing child tab in registered relations: " + childId + " for parent: " + parentId);
-                    return childTab;
+                    
+                    // Verificar que la pestaña hija realmente pertenezca al grupo correcto
+                    if (verificarPestañaPerteneceAGrupo(childTab, grupoDelPadre, parentId)) {
+                        System.out.println("DEBUG: Found existing child tab in registered relations: " + childId + " for parent: " + parentId);
+                        return childTab;
+                    }
                 }
             }
         }
         
-        // Si no se encuentra en las relaciones registradas, buscar por patrón de ID
-        // pero solo si el childId realmente pertenece a este grupo
-        if (isChildIdBelongsToParent(childId, parentId)) {
-            System.out.println("DEBUG: Child belongs to parent by pattern, searching in all tabs...");
-            for (Tab tab : tabPane.getTabs()) {
-                if (tab.getUserData() != null && 
-                    tab.getUserData().toString().equals(childId)) {
-                    System.out.println("DEBUG: Found child tab by pattern matching: " + childId + " for parent: " + parentId);
-                    return tab;
-                }
-            }
-        } else {
-            System.out.println("DEBUG: Child ID " + childId + " does NOT belong to parent " + parentId + " by pattern");
-        }
-        
-        System.out.println("DEBUG: No existing child tab found for: " + childId + " in group: " + parentId);
+        // Si no se encuentra en las relaciones registradas, NO buscar más
+        // Esto evita la detección cruzada entre grupos
+        System.out.println("DEBUG: No existing child tab found for: " + childId + " in group: " + grupoDelPadre);
         return null;
+    }
+    
+    /**
+     * Verifica que una pestaña hija realmente pertenezca al grupo del padre especificado.
+     */
+    private static boolean verificarPestañaPerteneceAGrupo(Tab childTab, String grupoDelPadre, String parentId) {
+        if (childTab.getUserData() == null || grupoDelPadre == null) {
+            return false;
+        }
+        
+        String childId = childTab.getUserData().toString();
+        
+        // Para pestañas de gramática y funciones de error de simuladores
+        if (childId.startsWith("gramatica_") || childId.startsWith("funciones_error_")) {
+            // Extraer el simuladorId del childId
+            String simuladorIdFromChild = childId.substring(childId.lastIndexOf("_") + 1);
+            if (childId.startsWith("gramatica_simulador_")) {
+                simuladorIdFromChild = childId.replace("gramatica_", "");
+            } else if (childId.startsWith("funciones_error_simulador_")) {
+                simuladorIdFromChild = childId.replace("funciones_error_", "");
+            }
+            
+            // Verificar que el simulador del childId pertenezca al mismo grupo
+            String grupoDelSimulador = obtenerGrupoDeElemento(childTab.getTabPane(), simuladorIdFromChild);
+            boolean pertenece = grupoDelPadre.equals(grupoDelSimulador);
+            System.out.println("DEBUG: Child " + childId + " simulator group: " + grupoDelSimulador + 
+                             ", parent group: " + grupoDelPadre + ", belongs: " + pertenece);
+            return pertenece;
+        }
+        
+        // Para pestañas de creación y símbolos de editores
+        return isChildIdBelongsToParent(childId, parentId);
     }
     
     /**
@@ -473,73 +662,90 @@ public class TabManager {
 
     /**
      * Reasigna los números de los grupos de gramática según su orden en el TabPane.
-     * Cada grupo está encabezado por un Editor y contiene todas sus pestañas relacionadas.
+     * Cada grupo puede contener editores, simuladores y sus pestañas relacionadas.
      */
     public static void reasignarNumerosGruposGramatica(TabPane tabPane) {
         if (tabPane == null) return;
         
         System.out.println("DEBUG: reasignarNumerosGruposGramatica called");
         
-        // Recopilar todos los editores en orden de aparición
-        List<Tab> editoresOrdenados = new ArrayList<>();
-        List<String> editorIdsOrdenados = new ArrayList<>();
+        // Recopilar todos los elementos (editores y simuladores) en orden de aparición
+        List<Tab> elementosOrdenados = new ArrayList<>();
+        List<String> elementoIdsOrdenados = new ArrayList<>();
         
         for (Tab tab : tabPane.getTabs()) {
-            if (isEditorContent(tab.getContent())) {
-                editoresOrdenados.add(tab);
-                String editorId = (String) tab.getUserData();
-                if (editorId != null) {
-                    editorIdsOrdenados.add(editorId);
+            if (isEditorContent(tab.getContent()) || isSimuladorContent(tab.getContent())) {
+                elementosOrdenados.add(tab);
+                String elementoId = (String) tab.getUserData();
+                if (elementoId != null) {
+                    elementoIdsOrdenados.add(elementoId);
                 }
-                System.out.println("DEBUG: Found editor tab: " + tab.getText() + ", userData: " + tab.getUserData());
+                System.out.println("DEBUG: Found element tab: " + tab.getText() + ", userData: " + tab.getUserData());
             }
         }
         
-        System.out.println("DEBUG: Total editors found: " + editoresOrdenados.size());
+        System.out.println("DEBUG: Total elements found: " + elementosOrdenados.size());
         
-        // Actualizar el mapa de grupos con la nueva numeración
+        // Reasignar números de grupo basado en el orden de aparición
+        Map<String, String> elementos = elementoToGrupo.get(tabPane);
         Map<String, Integer> grupos = gruposGramatica.get(tabPane);
-        if (grupos != null) {
-            grupos.clear();
-            for (int i = 0; i < editorIdsOrdenados.size(); i++) {
-                String editorId = editorIdsOrdenados.get(i);
-                grupos.put(editorId, i + 1);
-                System.out.println("DEBUG: Assigned group number " + (i + 1) + " to editor " + editorId);
-            }
-        }
         
-        // Actualizar títulos de todas las pestañas según su grupo
-        if (editoresOrdenados.size() > 1) {
-            // Solo mostrar numeración si hay más de un grupo
-            for (int i = 0; i < editoresOrdenados.size(); i++) {
-                Tab editorTab = editoresOrdenados.get(i);
-                String editorId = editorIdsOrdenados.get(i);
-                int numeroGrupo = i + 1;
-                
-                // Actualizar título del editor
-                actualizarTituloEditor(editorTab, numeroGrupo);
-                
-                // Actualizar todas las pestañas que pertenecen a este grupo
-                actualizarPestañasDelGrupo(tabPane, editorId, numeroGrupo);
-            }
-        } else if (editoresOrdenados.size() == 1) {
-            // Si solo hay un grupo, remover numeración
-            Tab editorTab = editoresOrdenados.get(0);
-            String editorId = editorIdsOrdenados.get(0);
+        if (elementos != null && grupos != null) {
+            // Limpiar numeración actual
+            grupos.clear();
             
-            actualizarTituloEditor(editorTab, -1); // -1 indica sin numeración
-            actualizarPestañasDelGrupo(tabPane, editorId, -1);
+            // Reagrupar elementos por su grupo
+            Map<String, List<String>> grupoAElementos = new HashMap<>();
+            Map<String, Integer> grupoAPosicion = new HashMap<>();
+            
+            for (int i = 0; i < elementoIdsOrdenados.size(); i++) {
+                String elementoId = elementoIdsOrdenados.get(i);
+                String grupoId = elementos.get(elementoId);
+                
+                if (grupoId != null) {
+                    grupoAElementos.computeIfAbsent(grupoId, k -> new ArrayList<>()).add(elementoId);
+                    
+                    // Solo registrar la posición del primer elemento de cada grupo
+                    if (!grupoAPosicion.containsKey(grupoId)) {
+                        grupoAPosicion.put(grupoId, i);
+                    }
+                }
+            }
+            
+            // Ordenar grupos por posición de aparición y asignar números
+            grupoAPosicion.entrySet().stream()
+                .sorted(Map.Entry.comparingByValue())
+                .forEach(entry -> {
+                    String grupoId = entry.getKey();
+                    int numeroGrupo = grupos.size() + 1;
+                    grupos.put(grupoId, numeroGrupo);
+                    System.out.println("DEBUG: Assigned group number " + numeroGrupo + " to group " + grupoId);
+                });
+            
+            // Actualizar títulos de todas las pestañas según su grupo
+            if (elementosOrdenados.size() > 1) {
+                // Solo mostrar numeración si hay más de un elemento
+                for (String grupoId : grupoAElementos.keySet()) {
+                    int numeroGrupo = grupos.get(grupoId);
+                    List<String> elementosDelGrupo = grupoAElementos.get(grupoId);
+                    
+                    for (String elementoId : elementosDelGrupo) {
+                        actualizarPestañasDelGrupo(tabPane, elementoId, numeroGrupo);
+                    }
+                }
+            } else if (elementosOrdenados.size() == 1) {
+                // Si solo hay un elemento, remover numeración
+                String elementoId = elementoIdsOrdenados.get(0);
+                actualizarPestañasDelGrupo(tabPane, elementoId, -1);
+            }
         }
     }
     
     /**
      * Actualiza todas las pestañas que pertenecen a un grupo de gramática específico.
      */
-    private static void actualizarPestañasDelGrupo(TabPane tabPane, String editorId, int numeroGrupo) {
-        System.out.println("DEBUG: Updating group " + numeroGrupo + " for editor " + editorId);
-        
-        // Obtener el ID de creación esperado para este editor
-        String expectedCreacionId = "creacion_" + editorId.replace("editor_", "");
+    private static void actualizarPestañasDelGrupo(TabPane tabPane, String elementoId, int numeroGrupo) {
+        System.out.println("DEBUG: Updating group " + numeroGrupo + " for element " + elementoId);
         
         // Actualizar todas las pestañas del TabPane que pertenezcan a este grupo
         for (Tab tab : tabPane.getTabs()) {
@@ -547,28 +753,77 @@ public class TabManager {
                 String userData = tab.getUserData().toString();
                 System.out.println("DEBUG: Checking tab userData: " + userData + " for group " + numeroGrupo);
                 
-                // Pestañas de creación (hijas directas del editor)
-                if (userData.equals(expectedCreacionId)) {
-                    String tituloBase = obtenerTituloBaseCreacion(tab, tabPane);
-                    if (numeroGrupo > 0) {
-                        tab.setText("Creación " + numeroGrupo + ": " + tituloBase);
-                        System.out.println("DEBUG: Updated creation tab to: Creación " + numeroGrupo + ": " + tituloBase);
-                    } else {
-                        tab.setText(tituloBase);
+                // Actualizar título del elemento principal (editor o simulador)
+                if (userData.equals(elementoId)) {
+                    if (elementoId.startsWith("editor_")) {
+                        String tituloBase = obtenerTituloBaseEditor(tabPane);
+                        if (numeroGrupo > 0) {
+                            tab.setText(tituloBase + " " + numeroGrupo);
+                        } else {
+                            tab.setText(tituloBase);
+                        }
+                    } else if (elementoId.startsWith("simulador_")) {
+                        String tituloBase = obtenerTituloBaseSimulador(tabPane);
+                        if (numeroGrupo > 0) {
+                            tab.setText(tituloBase + " " + numeroGrupo);
+                        } else {
+                            tab.setText(tituloBase);
+                        }
                     }
                 }
                 
-                // Pestañas de símbolos y producciones (nietas del editor)
-                else if (userData.startsWith("terminales_" + expectedCreacionId) || 
-                         userData.startsWith("no_terminales_" + expectedCreacionId) || 
-                         userData.startsWith("producciones_" + expectedCreacionId)) {
+                // Para editores: actualizar pestañas de creación y símbolos
+                if (elementoId.startsWith("editor_")) {
+                    String expectedCreacionId = "creacion_" + elementoId.replace("editor_", "");
                     
-                    String tituloBase = obtenerTituloBaseSimbolos(userData, tabPane);
-                    if (numeroGrupo > 0) {
-                        tab.setText("Edición " + numeroGrupo + ": " + tituloBase);
-                        System.out.println("DEBUG: Updated symbol tab to: Edición " + numeroGrupo + ": " + tituloBase);
-                    } else {
-                        tab.setText(tituloBase);
+                    // Pestañas de creación (hijas directas del editor)
+                    if (userData.equals(expectedCreacionId)) {
+                        String tituloBase = obtenerTituloBaseCreacion(tab, tabPane);
+                        if (numeroGrupo > 0) {
+                            tab.setText("Creación " + numeroGrupo + ": " + tituloBase);
+                            System.out.println("DEBUG: Updated creation tab to: Creación " + numeroGrupo + ": " + tituloBase);
+                        } else {
+                            tab.setText(tituloBase);
+                        }
+                    }
+                    
+                    // Pestañas de símbolos y producciones (nietas del editor)
+                    else if (userData.startsWith("terminales_" + expectedCreacionId) || 
+                             userData.startsWith("no_terminales_" + expectedCreacionId) || 
+                             userData.startsWith("producciones_" + expectedCreacionId)) {
+                        
+                        String tituloBase = obtenerTituloBaseSimbolos(userData, tabPane);
+                        if (numeroGrupo > 0) {
+                            tab.setText("Edición " + numeroGrupo + ": " + tituloBase);
+                            System.out.println("DEBUG: Updated symbol tab to: Edición " + numeroGrupo + ": " + tituloBase);
+                        } else {
+                            tab.setText(tituloBase);
+                        }
+                    }
+                }
+                
+                // Para simuladores: actualizar pestañas de gramática y funciones de error
+                else if (elementoId.startsWith("simulador_")) {
+                    // Pestañas de gramática original
+                    if (userData.equals("gramatica_" + elementoId)) {
+                        String tituloBase = obtenerTituloBaseGramaticaOriginal(tabPane);
+                        if (numeroGrupo > 0) {
+                            tab.setText("Gramática " + numeroGrupo + ": " + tituloBase);
+                            System.out.println("DEBUG: Updated grammar tab to: Gramática " + numeroGrupo + ": " + tituloBase);
+                        } else {
+                            tab.setText(tituloBase);
+                        }
+                    }
+                    
+                    // Pestañas de funciones de error
+                    else if (userData.equals("funciones_error_" + elementoId)) {
+                        String tituloBase = obtenerTituloBaseFuncionesError(tabPane);
+                        if (numeroGrupo > 0) {
+                            tab.setText("Funciones Error " + numeroGrupo + ": " + tituloBase);
+                            System.out.println("DEBUG: Updated error functions tab to: Funciones Error " + numeroGrupo + ": " + tituloBase);
+                        } else {
+                            tab.setText(tituloBase);
+                        }
                     }
                 }
             }
@@ -576,14 +831,14 @@ public class TabManager {
     }
     
     /**
-     * Actualiza el título de un editor con numeración de grupo.
+     * Actualiza el título de un elemento con numeración de grupo.
      */
-    private static void actualizarTituloEditor(Tab editorTab, int numeroGrupo) {
-        String tituloBase = obtenerTituloBaseEditor(editorTab.getTabPane());
+    private static void actualizarTituloElemento(Tab elementoTab, int numeroGrupo) {
+        String tituloBase = obtenerTituloBaseEditor(elementoTab.getTabPane());
         if (numeroGrupo > 0) {
-            editorTab.setText(tituloBase + " " + numeroGrupo);
+            elementoTab.setText(tituloBase + " " + numeroGrupo);
         } else {
-            editorTab.setText(tituloBase);
+            elementoTab.setText(tituloBase);
         }
     }
     
@@ -600,6 +855,51 @@ public class TabManager {
             // Si no se puede obtener del bundle, usar valor por defecto
         }
         return "Editor de Gramáticas";
+    }
+    
+    /**
+     * Obtiene el título base para simuladores.
+     */
+    private static String obtenerTituloBaseSimulador(TabPane tabPane) {
+        try {
+            java.util.ResourceBundle bundle = resourceBundles.get(tabPane);
+            if (bundle != null) {
+                return bundle.getString("simulador.tab.paso6");
+            }
+        } catch (Exception e) {
+            // Si no se puede obtener del bundle, usar valor por defecto
+        }
+        return "Simulación";
+    }
+    
+    /**
+     * Obtiene el título base para pestañas de gramática original.
+     */
+    private static String obtenerTituloBaseGramaticaOriginal(TabPane tabPane) {
+        try {
+            java.util.ResourceBundle bundle = resourceBundles.get(tabPane);
+            if (bundle != null) {
+                return bundle.getString("simulador.gramatica.original");
+            }
+        } catch (Exception e) {
+            // Si no se puede obtener del bundle, usar valor por defecto
+        }
+        return "Gramática Original";
+    }
+    
+    /**
+     * Obtiene el título base para pestañas de funciones de error.
+     */
+    private static String obtenerTituloBaseFuncionesError(TabPane tabPane) {
+        try {
+            java.util.ResourceBundle bundle = resourceBundles.get(tabPane);
+            if (bundle != null) {
+                return bundle.getString("simulador.paso4.btn.nueva");
+            }
+        } catch (Exception e) {
+            // Si no se puede obtener del bundle, usar valor por defecto
+        }
+        return "Funciones de Error";
     }
     
     /**
@@ -677,13 +977,96 @@ public class TabManager {
     }
     
     /**
-     * Obtiene el número de grupo asignado a un editor específico.
+     * Obtiene el número de grupo asignado a un elemento específico.
      */
-    public static int obtenerNumeroGrupo(TabPane tabPane, String editorId) {
+    public static int obtenerNumeroGrupo(TabPane tabPane, String elementoId) {
+        Map<String, String> elementos = elementoToGrupo.get(tabPane);
         Map<String, Integer> grupos = gruposGramatica.get(tabPane);
-        if (grupos != null && grupos.containsKey(editorId)) {
-            return grupos.get(editorId);
+        
+        if (elementos != null && grupos != null) {
+            String grupoId = elementos.get(elementoId);
+            if (grupoId != null && grupos.containsKey(grupoId)) {
+                return grupos.get(grupoId);
+            }
         }
         return -1; // Sin numeración
+    }
+
+    /**
+     * Calcula la posición correcta para un Simulador independiente (después del menú principal y todos los elementos existentes).
+     */
+    private static int calcularPosicionSimulador(TabPane tabPane) {
+        int menuPosition = -1;
+        
+        System.out.println("DEBUG: calcularPosicionSimulador - Looking for menu position...");
+        
+        // Buscar la pestaña del menú principal
+        for (int i = 0; i < tabPane.getTabs().size(); i++) {
+            Tab tab = tabPane.getTabs().get(i);
+            String tabText = tab.getText();
+            
+            // Identificar el menú principal por su título
+            if (tabText != null && (tabText.contains("Menú") || tabText.contains("Menu") || 
+                                   tabText.contains("Principal") || tabText.contains("Main"))) {
+                menuPosition = i;
+                System.out.println("DEBUG: Found menu at position: " + i + " with title: " + tabText);
+                break;
+            }
+        }
+        
+        if (menuPosition != -1) {
+            // Buscar la última pestaña relacionada con cualquier elemento raíz (editor o simulador)
+            int lastElementRelatedPosition = menuPosition;
+            
+            System.out.println("DEBUG: Searching for element-related tabs after menu position " + menuPosition + "...");
+            
+            for (int i = menuPosition + 1; i < tabPane.getTabs().size(); i++) {
+                Tab tab = tabPane.getTabs().get(i);
+                if (isTabRelatedToElementoRaiz(tab)) {
+                    lastElementRelatedPosition = i;
+                    System.out.println("DEBUG: Found element-related tab at position " + i + ": " + tab.getText() + " (userData: " + tab.getUserData() + ")");
+                }
+            }
+            
+            int newPosition = lastElementRelatedPosition + 1;
+            System.out.println("DEBUG: New simulator will be positioned at: " + newPosition);
+            return newPosition;
+        }
+        
+        // Si no encontramos el menú principal, colocar al principio
+        System.out.println("DEBUG: Menu not found, positioning at beginning");
+        return 0;
+    }
+    
+    /**
+     * Verifica si una pestaña está relacionada con un elemento raíz (editor o simulador) y sus hijos.
+     */
+    private static boolean isTabRelatedToElementoRaiz(Tab tab) {
+        // Si el contenido es un editor o simulador
+        if (isEditorContent(tab.getContent()) || isSimuladorContent(tab.getContent())) {
+            return true;
+        }
+        
+        // Si es una pestaña hija de un editor
+        if (tab.getUserData() != null) {
+            String userData = tab.getUserData().toString();
+            // Las pestañas hijas de editores tienen IDs que contienen "editor_", "creacion_", 
+            // o son pestañas auxiliares (terminales, no terminales, producciones)
+            if (userData.contains("editor_") || 
+                userData.startsWith("creacion_") ||
+                userData.startsWith("terminales_") ||
+                userData.startsWith("no_terminales_") ||
+                userData.startsWith("producciones_")) {
+                return true;
+            }
+            
+            // Las pestañas hijas de simuladores tienen IDs específicos
+            if (userData.startsWith("gramatica_simulador_") ||
+                userData.startsWith("funciones_error_simulador_")) {
+                return true;
+            }
+        }
+        
+        return false;
     }
 } 

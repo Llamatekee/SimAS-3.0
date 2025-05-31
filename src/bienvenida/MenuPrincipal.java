@@ -17,6 +17,8 @@ import java.util.ResourceBundle;
 import editor.ActualizableTextos;
 import simulador.SimulacionFinal;
 import editor.TabManager;
+import gramatica.Gramatica;
+import simulador.PanelSimuladorDesc;
 
 public class MenuPrincipal extends Application {
 
@@ -146,7 +148,7 @@ public class MenuPrincipal extends Application {
                 }
                 
                 // Reasignar numeración de editores con nuevos títulos
-                TabManager.reasignarNumerosEditores(tabPane);
+                TabManager.reasignarNumerosGruposGramatica(tabPane);
             }
         } catch (Exception e) {
             System.err.println("Error al actualizar textos: " + e.getMessage());
@@ -184,12 +186,18 @@ public class MenuPrincipal extends Application {
         // Crear un nuevo editor usando TabManager para posicionamiento correcto
         Editor editor = new Editor(tabPane, this, bundle);
         
-        // Usar TabManager para crear la pestaña del editor con posicionamiento adecuado
+        // CREAR NUEVO GRUPO: Editor independiente desde menú principal
+        // parentId = editorId, childId = null → Esto creará un NUEVO GRUPO automáticamente
         Tab editorTab = TabManager.getOrCreateTab(tabPane, Editor.class, 
             bundle.getString("editor.title"), editor, editor.getEditorId(), null);
         
         // Asegurar que el editorId esté configurado como userData
         editorTab.setUserData(editor.getEditorId());
+        
+        // Reasignar numeración para reflejar los cambios
+        TabManager.reasignarNumerosGruposGramatica(tabPane);
+        
+        System.out.println("MAIN MENU: Created new EDITOR with ID: " + editor.getEditorId());
     }
 
     @FXML
@@ -226,6 +234,110 @@ public class MenuPrincipal extends Application {
         } else {
             onMostrarErrorAction(bundle.getString("msg.error.archivo"));
         }
+    }
+
+    @FXML
+    private void onBtnSimuladorAction() {
+        // Implementar funcionalidad del simulador descendente directo
+        cargarGramaticaYSimularDirectamente();
+    }
+    
+    /**
+     * Carga una gramática desde archivo y va directamente al paso 6 de la simulación.
+     */
+    private void cargarGramaticaYSimularDirectamente() {
+        try {
+            // Crear una nueva gramática
+            Gramatica nuevaGramatica = new Gramatica();
+            
+            // Cargar gramática desde archivo (esto abrirá el selector de archivos)
+            Gramatica gramaticaCargada = nuevaGramatica.cargarGramatica(null);
+            
+            if (gramaticaCargada != null) {
+                // Validar la gramática cargada
+                javafx.collections.ObservableList<String> errores = gramaticaCargada.validarGramatica();
+                
+                if (gramaticaCargada.getEstado() == 1) {
+                    // Gramática válida - proceder con la simulación
+                    crearSimuladorDirectoAlPaso6(gramaticaCargada);
+                } else {
+                    // Gramática inválida - mostrar errores
+                    mostrarErroresValidacion(errores);
+                }
+            }
+            // Si gramaticaCargada es null, significa que el usuario canceló la selección
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            mostrarError("Error", "No se pudo cargar la gramática: " + e.getMessage());
+        }
+    }
+    
+    /**
+     * Crea un simulador y lo lleva directamente al paso 6.
+     */
+    private void crearSimuladorDirectoAlPaso6(Gramatica gramatica) {
+        try {
+            // Establecer el ResourceBundle en TabManager para internacionalización
+            TabManager.setResourceBundle(tabPane, bundle);
+            
+            // Generar ID único para el simulador
+            String simuladorId = "simulador_" + System.currentTimeMillis();
+            
+            // Crear el simulador descendente
+            PanelSimuladorDesc simulador = new PanelSimuladorDesc(gramatica, tabPane, bundle, simuladorId);
+            
+            // Saltar directamente al paso 6 (índice 5)
+            simulador.cambiarPaso(5);
+            
+            // Log para debug
+            System.out.println("MAIN MENU: Created new SIMULATOR with ID: " + simuladorId);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    /**
+     * Muestra los errores de validación de la gramática.
+     */
+    private void mostrarErroresValidacion(javafx.collections.ObservableList<String> errores) {
+        StringBuilder mensaje = new StringBuilder(bundle.getString("editor.msg.validar.errores") + "\n\n");
+        for (int i = 0; i < errores.size(); i++) {
+            mensaje.append(i + 1).append(". ").append(errores.get(i)).append("\n\n");
+        }
+        
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error de Validación");
+        alert.setHeaderText("La gramática seleccionada contiene errores");
+        alert.setContentText(mensaje.toString());
+        
+        // Expandir el diálogo para mostrar todo el texto
+        TextArea textArea = new TextArea(mensaje.toString());
+        textArea.setEditable(false);
+        textArea.setWrapText(true);
+        textArea.setMaxWidth(Double.MAX_VALUE);
+        textArea.setMaxHeight(Double.MAX_VALUE);
+        javafx.scene.layout.GridPane.setVgrow(textArea, javafx.scene.layout.Priority.ALWAYS);
+        javafx.scene.layout.GridPane.setHgrow(textArea, javafx.scene.layout.Priority.ALWAYS);
+        
+        javafx.scene.layout.GridPane gridPane = new javafx.scene.layout.GridPane();
+        gridPane.setMaxWidth(Double.MAX_VALUE);
+        gridPane.add(textArea, 0, 0);
+        
+        alert.getDialogPane().setExpandableContent(gridPane);
+        alert.showAndWait();
+    }
+    
+    /**
+     * Muestra un mensaje de error simple.
+     */
+    private void mostrarError(String titulo, String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
     }
 
     @FXML

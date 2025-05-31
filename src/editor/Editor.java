@@ -277,14 +277,19 @@ public class Editor extends VBox implements ActualizableTextos {
 
     @FXML
     private void onBtnSimularAction() {
-        if (TabManager.hasTab(tabPane, PanelSimuladorDesc.class)) {
-            // Si ya existe una pestaña de simulación, seleccionarla
-            TabManager.getOrCreateTab(tabPane, PanelSimuladorDesc.class, bundle.getString("simulador.tab.paso1"), null);
-        } else {
-            // Si no existe, crear una nueva
-            PanelSimuladorDesc simulador = new PanelSimuladorDesc(gramatica, tabPane, bundle);
-            TabManager.getOrCreateTab(tabPane, PanelSimuladorDesc.class, bundle.getString("simulador.tab.paso1"), simulador.getRoot());
-        }
+        // Generar ID único para el simulador
+        String simuladorId = "simulador_" + System.currentTimeMillis();
+        
+        // Crear un simulador que pertenezca al mismo grupo que este editor
+        PanelSimuladorDesc simulador = new PanelSimuladorDesc(gramatica, tabPane, bundle, simuladorId);
+        
+        // ASIGNAR AL GRUPO EXISTENTE: Simulador desde editor → mismo grupo que el editor
+        TabManager.asignarSimuladorAGrupoDeEditor(tabPane, simuladorId, this.editorId);
+        
+        // Empezar desde el paso 1 (índice 0) usando cambiarPaso
+        simulador.cambiarPaso(0);
+        
+        System.out.println("EDITOR: Created SIMULATOR " + simuladorId + " in same group as EDITOR " + this.editorId);
     }
 
     @FXML

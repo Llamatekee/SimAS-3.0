@@ -54,12 +54,22 @@ public class PanelSimuladorDesc {
     }
 
     public PanelSimuladorDesc(Gramatica gramatica, TabPane tabPane, ResourceBundle bundle) {
+        this(gramatica, tabPane, bundle, null);
+    }
+    
+    public PanelSimuladorDesc(Gramatica gramatica, TabPane tabPane, ResourceBundle bundle, String simuladorIdPersonalizado) {
         this.gramatica = gramatica;
         this.gramaticaOriginal = gramatica;
         this.tabPane = tabPane;
         this.bundle = bundle;
         this.pasoActual = 0;
-        this.simuladorId = "simulador_" + System.currentTimeMillis() + "_" + (++contadorSimuladores);
+        
+        // Usar ID personalizado si se proporciona, sino generar uno nuevo
+        if (simuladorIdPersonalizado != null && !simuladorIdPersonalizado.isEmpty()) {
+            this.simuladorId = simuladorIdPersonalizado;
+        } else {
+            this.simuladorId = "simulador_" + System.currentTimeMillis() + "_" + (++contadorSimuladores);
+        }
         
         // Inicializar funciones de error y tabla predictiva extendida
         inicializarTablaPredictivaYFuncionesError();
@@ -77,8 +87,8 @@ public class PanelSimuladorDesc {
             pasos.add(new PanelNuevaSimDescPaso5(this));
             pasos.add(new PanelNuevaSimDescPaso6(this.gramatica, this));
             
-            // Mostrar el primer paso
-            mostrarPasoActual();
+            // NO llamar a mostrarPasoActual() aquí automáticamente
+            // Será llamado explícitamente cuando sea necesario
         } catch (Exception e) {
             e.printStackTrace();
             // Si hay un error, cerrar la pestaña
@@ -152,32 +162,6 @@ public class PanelSimuladorDesc {
      */
     public void setTablaPredictivaExtendidaGlobal(TablaPredictivaPaso5 tabla) {
         this.tablaPredictivaExtendidaGlobal = tabla;
-    }
-    
-    private void mostrarPasoActual() {
-        String tituloPestaña;
-        if (pasoActual == 5) {
-            tituloPestaña = bundle.getString("simulador.tab.paso6");
-        } else {
-            tituloPestaña = bundle.getString("simulador.tab.paso1").replace("1", String.valueOf(pasoActual + 1));
-        }
-        
-        if (pasoActual == 4) {
-            // Para el paso 5 (análisis de cadenas), permitir múltiples pestañas
-            pestañaSimulacion = new Tab(tituloPestaña);
-            pestañaSimulacion.setClosable(true);
-            pestañaSimulacion.setContent(pasos.get(pasoActual).getRoot());
-            pestañaSimulacion.setUserData(simuladorId);
-            tabPane.getTabs().add(pestañaSimulacion);
-            tabPane.getSelectionModel().select(pestañaSimulacion);
-        } else {
-            // Para los demás pasos, usar TabManager para asegurar una única instancia
-            Tab tab = TabManager.getOrCreateTab(tabPane, PanelSimuladorDesc.class, 
-                tituloPestaña, pasos.get(pasoActual).getRoot());
-            pestañaSimulacion = tab;
-            // Asegurar que el userData esté configurado correctamente
-            pestañaSimulacion.setUserData(simuladorId);
-        }
     }
 
     /**
@@ -253,19 +237,16 @@ public class PanelSimuladorDesc {
             ((editor.ActualizableTextos) pasoActual).actualizarTextos(bundle);
         }
         
-        // Actualizar la pestaña existente o crear una nueva si no existe
-        if (pestañaSimulacion != null) {
-            pestañaSimulacion.setText(tituloPestaña);
-            pestañaSimulacion.setContent(pasoActual.getRoot());
-            tabPane.getSelectionModel().select(pestañaSimulacion);
-        } else {
-            // Si no existe la pestaña, crear una nueva
-            pestañaSimulacion = new Tab(tituloPestaña);
-            pestañaSimulacion.setContent(pasoActual.getRoot());
-            pestañaSimulacion.setUserData(simuladorId);
-            tabPane.getTabs().add(pestañaSimulacion);
-            tabPane.getSelectionModel().select(pestañaSimulacion);
-        }
+        // Usar TabManager para crear/obtener la pestaña, asegurando asignación correcta a grupos
+        Tab tab = TabManager.getOrCreateTab(tabPane, PanelSimuladorDesc.class, 
+            tituloPestaña, pasoActual.getRoot(), simuladorId, null);
+        pestañaSimulacion = tab;
+        
+        // Asegurar que el userData esté configurado correctamente
+        pestañaSimulacion.setUserData(simuladorId);
+        
+        // Seleccionar la pestaña
+        tabPane.getSelectionModel().select(pestañaSimulacion);
     }
     
     /**
