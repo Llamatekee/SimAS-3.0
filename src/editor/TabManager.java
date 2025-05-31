@@ -1173,4 +1173,27 @@ public class TabManager {
         
         return tituloCompleto;
     }
+
+    /**
+     * Elimina un elemento de su grupo y limpia el grupo si queda vacío.
+     */
+    public static void eliminarElementoDeGrupo(TabPane tabPane, String elementId, String grupoId) {
+        if (elementId == null) return;
+        
+        Map<String, String> elementos = elementoToGrupo.get(tabPane);
+        Map<String, Integer> grupos = gruposGramatica.get(tabPane);
+        
+        if (elementos != null && grupos != null) {
+            // Remove the element from its group
+            elementos.remove(elementId);
+            
+            // If the group is now empty, remove it
+            if (grupoId != null) {
+                boolean grupoVacio = elementos.values().stream().noneMatch(g -> g.equals(grupoId));
+                if (grupoVacio) {
+                    grupos.remove(grupoId);
+                }
+            }
+        }
+    }
 } 

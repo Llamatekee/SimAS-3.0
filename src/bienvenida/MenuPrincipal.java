@@ -17,6 +17,9 @@ import editor.ActualizableTextos;
 import editor.TabManager;
 import gramatica.Gramatica;
 import simulador.PanelSimuladorDesc;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 
 public class MenuPrincipal extends Application {
 
@@ -54,6 +57,94 @@ public class MenuPrincipal extends Application {
             primaryStage.setMinWidth(600);
             primaryStage.setMinHeight(700);
             
+            // Configurar atajos de teclado
+            scene.getAccelerators().put(
+                new KeyCodeCombination(KeyCode.N, KeyCombination.SHORTCUT_DOWN),
+                () -> onBtnEditorAction()
+            );
+            
+            scene.getAccelerators().put(
+                new KeyCodeCombination(KeyCode.S, KeyCombination.SHORTCUT_DOWN),
+                () -> onBtnSimuladorAction()
+            );
+            
+            scene.getAccelerators().put(
+                new KeyCodeCombination(KeyCode.H, KeyCombination.SHORTCUT_DOWN),
+                () -> onBtnAyudaAction()
+            );
+            
+            scene.getAccelerators().put(
+                new KeyCodeCombination(KeyCode.T, KeyCombination.SHORTCUT_DOWN),
+                () -> onBtnTutorialAction()
+            );
+            
+            scene.getAccelerators().put(
+                new KeyCodeCombination(KeyCode.Q, KeyCombination.SHORTCUT_DOWN),
+                () -> onBtnSalirAction()
+            );
+            
+            scene.getAccelerators().put(
+                new KeyCodeCombination(KeyCode.W, KeyCombination.SHORTCUT_DOWN),
+                () -> {
+                    if (tabPane != null) {
+                        Tab selectedTab = tabPane.getSelectionModel().getSelectedItem();
+                        if (selectedTab != null && selectedTab.isClosable()) {
+                            
+                            // Get the tab's userData (which contains the editor/simulator ID)
+                            String elementId = selectedTab.getUserData() != null ? selectedTab.getUserData().toString() : null;
+                            
+                            // Close child tabs first if this is a parent tab
+                            if (elementId != null) {
+                                TabManager.closeChildTabs(tabPane, elementId);
+                                
+                                // Get the group ID before removing the tab
+                                String grupoId = TabManager.obtenerGrupoDeElemento(tabPane, elementId);
+                                
+                                // Remove the tab
+                                tabPane.getTabs().remove(selectedTab);
+                                
+                                // Clean up the element from group management
+                                TabManager.eliminarElementoDeGrupo(tabPane, elementId, grupoId);
+                                
+                                // Force immediate renumbering
+                                TabManager.reasignarNumerosGruposGramatica(tabPane);
+                            } else {
+                                // For non-group tabs, just remove them
+                                tabPane.getTabs().remove(selectedTab);
+                            }
+                        }
+                    }
+                }
+            );
+            
+            // Add shortcuts for Cmd/Ctrl + number (1-9)
+            KeyCode[] numberKeys = {
+                KeyCode.DIGIT0, // Add 0 for main menu
+                KeyCode.DIGIT1, KeyCode.DIGIT2, KeyCode.DIGIT3, KeyCode.DIGIT4, KeyCode.DIGIT5,
+                KeyCode.DIGIT6, KeyCode.DIGIT7, KeyCode.DIGIT8, KeyCode.DIGIT9
+            };
+            
+            for (int i = 0; i < numberKeys.length; i++) {
+                final int groupNumber = i;  // Now starts from 0
+                scene.getAccelerators().put(
+                    new KeyCodeCombination(numberKeys[i], KeyCombination.SHORTCUT_DOWN),
+                    () -> {
+                        if (tabPane != null) {
+                            if (groupNumber == 0) {
+                                // For 0, select the main menu (first tab)
+                                tabPane.getSelectionModel().selectFirst();
+                            } else {
+                                // For 1-9, find the first tab of the specified group
+                                Tab firstGroupTab = findFirstTabInGroup(tabPane, groupNumber);
+                                if (firstGroupTab != null) {
+                                    tabPane.getSelectionModel().select(firstGroupTab);
+                                }
+                            }
+                        }
+                    }
+                );
+            }
+            
             primaryStage.show();
             
         } catch (IOException e) {
@@ -79,6 +170,16 @@ public class MenuPrincipal extends Application {
         tabPane.getSelectionModel().selectedItemProperty().addListener((obs, oldTab, newTab) -> {
             if (newTab != null) {
                 lastSelectedTab = newTab;
+            }
+        });
+
+        // Añadir listener para detectar cuando se cierran pestañas
+        tabPane.getTabs().addListener((javafx.collections.ListChangeListener.Change<? extends Tab> change) -> {
+            while (change.next()) {
+                if (change.wasRemoved()) {
+                    // Forzar renumeración de grupos cuando se cierra una pestaña
+                    TabManager.reasignarNumerosGruposGramatica(tabPane);
+                }
             }
         });
     }
@@ -410,5 +511,23 @@ public class MenuPrincipal extends Application {
     public static void reasignarNumerosSimulaciones(TabPane tabPane) {
         if (tabPane == null) return;
         // ... (resto del código igual, pero usando el tabPane recibido)
+    }
+
+    /**
+     * Finds the first tab belonging to the specified group number.
+     */
+    private Tab findFirstTabInGroup(TabPane tabPane, int groupNumber) {
+        // First, find all tabs in the specified group
+        for (Tab tab : tabPane.getTabs()) {
+            if (tab.getUserData() != null) {
+                String elementId = tab.getUserData().toString();
+                // Get the group number for this tab
+                int tabGroupNumber = TabManager.obtenerNumeroGrupo(tabPane, elementId);
+                if (tabGroupNumber == groupNumber) {
+                    return tab;
+                }
+            }
+        }
+        return null;
     }
 }
