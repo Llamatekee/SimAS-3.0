@@ -144,7 +144,8 @@ public class PanelCreacionGramatica extends BorderPane implements ActualizableTe
         // Actualizar el título de la pestaña
         for (Tab tab : tabPane.getTabs()) {
             if (tab.getContent() == this) {
-                tab.setText(bundle.getString("creacion.tab.paso" + paso));
+                // Usar la nueva clave consistente para asistente de editor
+                tab.setText(bundle.getString("editor.asistente"));
             }
         }
         
@@ -258,12 +259,8 @@ public class PanelCreacionGramatica extends BorderPane implements ActualizableTe
         // Actualizar el título de la pestaña
         for (Tab tab : tabPane.getTabs()) {
             if (tab.getContent() == this) {
-                int pasoActual = 1;
-                if (getCenter() == paso2) pasoActual = 2;
-                else if (getCenter() == paso3) pasoActual = 3;
-                else if (getCenter() == paso4) pasoActual = 4;
-                
-                tab.setText(bundle.getString("creacion.tab.paso" + pasoActual));
+                // Usar la nueva clave consistente para asistente de editor
+                tab.setText(bundle.getString("editor.asistente"));
             }
         }
     }

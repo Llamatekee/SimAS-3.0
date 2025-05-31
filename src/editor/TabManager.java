@@ -121,12 +121,14 @@ public class TabManager {
             }
             
             // LIMPIAR SOLO EL ELEMENTO INDIVIDUAL DEL GRUPO (no eliminar todo el grupo)
+            boolean necesitaRenumeracion = false;
             if (parentId != null && (isEditorType(tabType) || isSimuladorType(tabType))) {
                 Map<String, String> elementos = elementoToGrupo.get(tabPane);
                 if (elementos != null) {
                     String grupoId = elementos.get(parentId);
                     System.out.println("DEBUG CLOSE: Removing element " + parentId + " from group " + grupoId);
                     elementos.remove(parentId); // Solo quitar este elemento, no todo el grupo
+                    necesitaRenumeracion = true;
                     
                     // Verificar si el grupo queda vacío DESPUÉS de quitar este elemento
                     boolean grupoVacio = elementos.values().stream().noneMatch(g -> g.equals(grupoId));
@@ -142,11 +144,20 @@ public class TabManager {
                 }
             }
             
-            // Reasignar numeración de grupos después de cerrar CUALQUIER elemento del grupo
-            if (parentId != null && (isEditorType(tabType) || isSimuladorType(tabType) || isChildOfEditor)) {
+            // Si se eliminó un elemento del grupo o es una pestaña hija relacionada, forzar renumeración
+            if (necesitaRenumeracion || (childId != null && (isChildOfEditor || isSimuladorChild(childId)))) {
+                // *** MEJORADO: Usar doble llamada para asegurar la actualización ***
+                System.out.println("DEBUG CLOSE: Triggering IMMEDIATE group renumbering after closing " + 
+                                 (parentId != null ? parentId : childId));
+                
+                // Llamada inmediata
+                reasignarNumerosGruposGramatica(tabPane);
+                
+                // Llamada asíncrona como respaldo para asegurar que se ejecute
                 javafx.application.Platform.runLater(() -> {
-                    System.out.println("DEBUG CLOSE: Triggering group renumbering after closing " + parentId);
                     reasignarNumerosGruposGramatica(tabPane);
+                    System.out.println("DEBUG CLOSE: Secondary renumbering completed for " + 
+                                     (parentId != null ? parentId : childId));
                 });
             }
         });
@@ -368,6 +379,21 @@ public class TabManager {
         }
         
         return false;
+    }
+    
+    /**
+     * Verifica si un childId pertenece a un simulador.
+     */
+    private static boolean isSimuladorChild(String childId) {
+        if (childId == null) {
+            return false;
+        }
+        
+        // Pestañas hijas típicas de simuladores
+        return childId.startsWith("gramatica_simulador_") ||
+               childId.startsWith("funciones_error_simulador_") ||
+               (childId.startsWith("gramatica_") && childId.contains("simulador_")) ||
+               (childId.startsWith("funciones_error_") && childId.contains("simulador_"));
     }
     
     /**
@@ -1041,7 +1067,7 @@ public class TabManager {
                 String userData = tab.getUserData().toString();
                 System.out.println("DEBUG: Checking tab userData: " + userData + " for group " + numeroGrupo);
                 
-                // Actualizar título del elemento principal
+                // 1. ACTUALIZAR ELEMENTO PRINCIPAL (editor o simulador)
                 if (userData.equals(elementoId)) {
                     if (elementoId.startsWith("editor_")) {
                         // Actualizar editores automáticamente
@@ -1057,7 +1083,10 @@ public class TabManager {
                         
                         if (tituloActual.contains("Simulador de gramáticas") || 
                             tituloActual.contains("Grammar Simulator") ||
-                            tituloActual.contains("Simulateur de grammaires")) {
+                            tituloActual.contains("Simulateur de grammaires") ||
+                            tituloActual.contains("Simulador") ||
+                            tituloActual.contains("Simulator") ||
+                            tituloActual.contains("Simulateur")) {
                             
                             // Es un simulador independiente (paso 6) - SIEMPRE actualizar
                             String tituloBase = obtenerTituloBaseSimulador(tabPane);
@@ -1069,82 +1098,52 @@ public class TabManager {
                                 System.out.println("DEBUG: Updated independent simulator title to: " + tituloBase);
                             }
                             
-                        } else if (tituloActual.contains("Asistente de simulación") ||
-                                   tituloActual.contains("Simulation Wizard") ||
-                                   tituloActual.contains("Assistant de simulation")) {
+                        } else if (tituloActual.contains("Asistente") ||
+                                   tituloActual.contains("Assistant") ||
+                                   tituloActual.contains("Simulation") ||
+                                   tituloActual.contains("Simulación") ||
+                                   tituloActual.contains("Wizard")) {
                             
-                            // Es un simulador de editor (Asistente) - SOLO actualizar si cambia la política de numeración
-                            boolean tieneNumeroActualmente = tituloActual.matches(".*\\s\\d+$"); // Termina con espacio + número
-                            boolean deberiaNumero = (numeroGrupo > 0);
-                            
-                            if (tieneNumeroActualmente != deberiaNumero) {
-                                // Hay cambio en la política de numeración - actualizar
-                                String tituloBase = extraerTituloBaseAsistente(tituloActual);
-                                if (numeroGrupo > 0) {
-                                    tab.setText(tituloBase + " " + numeroGrupo);
-                                    System.out.println("DEBUG: Updated assistant simulator numbering to: " + tituloBase + " " + numeroGrupo);
-                                } else {
-                                    tab.setText(tituloBase);
-                                    System.out.println("DEBUG: Removed assistant simulator numbering to: " + tituloBase);
-                                }
-                            }
-                            // Si no hay cambio en la política, NO tocar el título
-                        }
-                    }
-                    
-                    // Para editores: actualizar pestañas de creación y símbolos
-                    if (elementoId.startsWith("editor_")) {
-                        String expectedCreacionId = "creacion_" + elementoId.replace("editor_", "");
-                        
-                        // Pestañas de creación (hijas directas del editor)
-                        if (userData.equals(expectedCreacionId)) {
-                            String tituloBase = obtenerTituloBaseCreacion(tab, tabPane);
+                            // Es un simulador de editor (Asistente) - SIEMPRE actualizar para asegurar sincronización
+                            String tituloBase = extraerTituloBaseAsistente(tabPane);
                             if (numeroGrupo > 0) {
-                                tab.setText("Creación " + numeroGrupo + ": " + tituloBase);
-                                System.out.println("DEBUG: Updated creation tab to: Creación " + numeroGrupo + ": " + tituloBase);
+                                tab.setText(tituloBase + " " + numeroGrupo);
+                                System.out.println("DEBUG: Updated assistant simulator title to: " + tituloBase + " " + numeroGrupo);
                             } else {
                                 tab.setText(tituloBase);
-                            }
-                        }
-                        
-                        // Pestañas de símbolos y producciones (nietas del editor)
-                        else if (userData.startsWith("terminales_" + expectedCreacionId) || 
-                                 userData.startsWith("no_terminales_" + expectedCreacionId) || 
-                                 userData.startsWith("producciones_" + expectedCreacionId)) {
-                            
-                            String tituloBase = obtenerTituloBaseSimbolos(userData, tabPane);
-                            if (numeroGrupo > 0) {
-                                tab.setText("Edición " + numeroGrupo + ": " + tituloBase);
-                                System.out.println("DEBUG: Updated symbol tab to: Edición " + numeroGrupo + ": " + tituloBase);
-                            } else {
-                                tab.setText(tituloBase);
+                                System.out.println("DEBUG: Updated assistant simulator title to: " + tituloBase);
                             }
                         }
                     }
+                }
+                
+                // 2. ACTUALIZAR PESTAÑAS HIJAS DE EDITORES (FUERA del if principal)
+                if (elementoId.startsWith("editor_")) {
+                    String expectedCreacionId = "creacion_" + elementoId.replace("editor_", "");
                     
-                    // Para simuladores: solo actualizar pestañas hijas (gramática y funciones de error)
-                    // NO actualizar la pestaña principal del simulador
-                    else if (elementoId.startsWith("simulador_")) {
-                        // Pestañas de gramática original
-                        if (userData.equals("gramatica_" + elementoId)) {
-                            String tituloBase = obtenerTituloBaseGramaticaOriginal(tabPane);
-                            if (numeroGrupo > 0) {
-                                tab.setText("Gramática " + numeroGrupo + ": " + tituloBase);
-                                System.out.println("DEBUG: Updated grammar tab to: Gramática " + numeroGrupo + ": " + tituloBase);
-                            } else {
-                                tab.setText(tituloBase);
-                            }
+                    // Pestañas de creación (hijas directas del editor)
+                    if (userData.equals(expectedCreacionId)) {
+                        // Usar el título correcto del ResourceBundle basado en el paso actual
+                        String tituloCorrectoConPaso = obtenerTituloCreacionActual(tabPane, tab);
+                        if (numeroGrupo > 0) {
+                            // Extraer solo la base del título (sin "Edición:" parte)
+                            String tituloBase = extraerTituloBaseCreacion(tituloCorrectoConPaso);
+                            tab.setText(tituloBase + " " + numeroGrupo);
+                            System.out.println("DEBUG: Updated creation tab to: " + tituloBase + " " + numeroGrupo);
+                        } else {
+                            tab.setText(tituloCorrectoConPaso);
+                            System.out.println("DEBUG: Updated creation tab to: " + tituloCorrectoConPaso);
                         }
-                        
-                        // Pestañas de funciones de error
-                        else if (userData.equals("funciones_error_" + elementoId)) {
-                            String tituloBase = obtenerTituloBaseFuncionesError(tabPane);
-                            if (numeroGrupo > 0) {
-                                tab.setText("Funciones Error " + numeroGrupo + ": " + tituloBase);
-                                System.out.println("DEBUG: Updated error functions tab to: Funciones Error " + numeroGrupo + ": " + tituloBase);
-                            } else {
-                                tab.setText(tituloBase);
-                            }
+                    }
+                    
+                    // Pestañas de funciones de error
+                    else if (userData.equals("funciones_error_" + elementoId)) {
+                        String tituloBase = obtenerTituloBaseFuncionesError(tabPane);
+                        if (numeroGrupo > 0) {
+                            tab.setText(tituloBase + " " + numeroGrupo);
+                            System.out.println("DEBUG: Updated error functions tab to: " + tituloBase + " " + numeroGrupo);
+                        } else {
+                            tab.setText(tituloBase);
                         }
                     }
                 }
@@ -1168,6 +1167,7 @@ public class TabManager {
      * Obtiene el título base para editores.
      */
     private static String obtenerTituloBaseEditor(TabPane tabPane) {
+        // Intentar usar el ResourceBundle si está disponible
         try {
             java.util.ResourceBundle bundle = resourceBundles.get(tabPane);
             if (bundle != null) {
@@ -1176,13 +1176,15 @@ public class TabManager {
         } catch (Exception e) {
             // Si no se puede obtener del bundle, usar valor por defecto
         }
-        return "Editor de Gramáticas";
+        // Usar directamente el nombre corto como fallback
+        return "Editor";
     }
     
     /**
      * Obtiene el título base para simuladores.
      */
     private static String obtenerTituloBaseSimulador(TabPane tabPane) {
+        // Intentar usar el ResourceBundle si está disponible
         try {
             java.util.ResourceBundle bundle = resourceBundles.get(tabPane);
             if (bundle != null) {
@@ -1191,13 +1193,15 @@ public class TabManager {
         } catch (Exception e) {
             // Si no se puede obtener del bundle, usar valor por defecto
         }
-        return "Simulación";
+        // Usar directamente el nombre corto como fallback
+        return "Simulador";
     }
     
     /**
      * Obtiene el título base para pestañas de gramática original.
      */
     private static String obtenerTituloBaseGramaticaOriginal(TabPane tabPane) {
+        // Intentar usar el ResourceBundle si está disponible
         try {
             java.util.ResourceBundle bundle = resourceBundles.get(tabPane);
             if (bundle != null) {
@@ -1206,6 +1210,7 @@ public class TabManager {
         } catch (Exception e) {
             // Si no se puede obtener del bundle, usar valor por defecto
         }
+        // Usar directamente el nombre corto como fallback
         return "Gramática Original";
     }
     
@@ -1213,6 +1218,7 @@ public class TabManager {
      * Obtiene el título base para pestañas de funciones de error.
      */
     private static String obtenerTituloBaseFuncionesError(TabPane tabPane) {
+        // Intentar usar el ResourceBundle si está disponible
         try {
             java.util.ResourceBundle bundle = resourceBundles.get(tabPane);
             if (bundle != null) {
@@ -1221,7 +1227,25 @@ public class TabManager {
         } catch (Exception e) {
             // Si no se puede obtener del bundle, usar valor por defecto
         }
-        return "Funciones de Error";
+        // Usar directamente el nombre corto como fallback
+        return "Nueva Función Error";
+    }
+    
+    /**
+     * Extrae el título base de un asistente de simulación, removiendo la numeración si existe.
+     */
+    private static String extraerTituloBaseAsistente(TabPane tabPane) {
+        // Intentar usar el ResourceBundle si está disponible
+        try {
+            java.util.ResourceBundle bundle = resourceBundles.get(tabPane);
+            if (bundle != null) {
+                return bundle.getString("simulador.asistente");
+            }
+        } catch (Exception e) {
+            // Si no se puede obtener del bundle, usar valor por defecto
+        }
+        // Usar directamente el nombre corto como fallback
+        return "Asistente Simulación";
     }
     
     /**
@@ -1412,16 +1436,48 @@ public class TabManager {
     }
 
     /**
-     * Extrae el título base de un asistente de simulación, removiendo la numeración si existe.
+     * Obtiene el título correcto de una pestaña de creación basado en su paso actual.
      */
-    private static String extraerTituloBaseAsistente(String tituloActual) {
-        // Remover numeración del final (formato: "Asistente de simulación 1" -> "Asistente de simulación")
-        if (tituloActual.matches(".*\\s\\d+$")) {
-            // El título termina con espacio + número
-            return tituloActual.replaceAll("\\s\\d+$", "");
+    private static String obtenerTituloCreacionActual(TabPane tabPane, Tab tab) {
+        try {
+            java.util.ResourceBundle bundle = resourceBundles.get(tabPane);
+            if (bundle != null) {
+                // Usar la nueva clave específica para asistente de editor
+                return bundle.getString("editor.asistente");
+            }
+        } catch (Exception e) {
+            System.out.println("DEBUG: Error obtaining creation title from ResourceBundle: " + e.getMessage());
         }
         
-        // Si no tiene numeración, devolver el título tal como está
-        return tituloActual;
+        // Fallback: usar título genérico en español
+        return "Asistente Editor";
+    }
+    
+    /**
+     * Extrae el título base de una pestaña de creación, removiendo la numeración de grupo si existe.
+     */
+    private static String extraerTituloBaseCreacion(String tituloCompleto) {
+        if (tituloCompleto == null) return "";
+        
+        // Si el título ya tiene formato "Titulo Numero", remover el número del final
+        String[] partes = tituloCompleto.trim().split("\\s+");
+        if (partes.length >= 2) {
+            String ultimaParte = partes[partes.length - 1];
+            // Si la última parte es un número, removerla
+            try {
+                Integer.parseInt(ultimaParte);
+                // Es un número, reconstruir título sin el número
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < partes.length - 1; i++) {
+                    if (i > 0) sb.append(" ");
+                    sb.append(partes[i]);
+                }
+                return sb.toString();
+            } catch (NumberFormatException e) {
+                // No es un número, usar título completo
+            }
+        }
+        
+        return tituloCompleto;
     }
 } 

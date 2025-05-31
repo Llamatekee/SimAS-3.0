@@ -71,6 +71,12 @@ public class MenuPrincipal extends Application {
         comboIdioma.setOnAction(e -> cambiarIdioma());
         cargarBundle(currentLocale);
         
+        // Actualizar el título inicial de la pestaña principal
+        if (tabPane != null && !tabPane.getTabs().isEmpty()) {
+            Tab mainTab = tabPane.getTabs().get(0);
+            mainTab.setText(bundle.getString("title.menu"));
+        }
+        
         // Guardar la última pestaña seleccionada
         tabPane.getSelectionModel().selectedItemProperty().addListener((obs, oldTab, newTab) -> {
             if (newTab != null) {
@@ -127,12 +133,15 @@ public class MenuPrincipal extends Application {
             // Actualizar textos de las pestañas
             if (tabPane != null) {
                 for (Tab tab : tabPane.getTabs()) {
-                    // Título de la pestaña principal
+                    // Título de la pestaña principal - verificar por posición también
                     if (tab.getText().equals("Menú Principal") || 
                         tab.getText().equals("Main Menu") || 
-                        tab.getText().equals("Menu Principal")) {
+                        tab.getText().equals("Menu Principal") ||
+                        tab.getText().equals("Menu") ||
+                        tab == tabPane.getTabs().get(0)) {  // Primera pestaña es siempre el menú principal
                         tab.setText(bundle.getString("title.menu"));
                     }
+                    
                     // Actualizar textos de cualquier panel que implemente ActualizableTextos
                     if (tab.getContent() instanceof ActualizableTextos) {
                         ((ActualizableTextos) tab.getContent()).actualizarTextos(bundle);
@@ -147,6 +156,9 @@ public class MenuPrincipal extends Application {
                     }
                 }
                 
+                // Actualizar todos los simuladores directamente buscando en los objetos guardados
+                actualizarTodosLosSimuladores();
+                
                 // Reasignar numeración de editores con nuevos títulos
                 TabManager.reasignarNumerosGruposGramatica(tabPane);
             }
@@ -154,6 +166,14 @@ public class MenuPrincipal extends Application {
             System.err.println("Error al actualizar textos: " + e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Actualiza el bundle de todos los simuladores activos
+     */
+    private void actualizarTodosLosSimuladores() {
+        // Usar el nuevo método estático para actualizar todos los simuladores
+        simulador.PanelSimuladorDesc.actualizarTodosLosSimuladores(bundle);
     }
 
     @FXML

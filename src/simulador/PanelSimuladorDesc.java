@@ -42,6 +42,9 @@ public class PanelSimuladorDesc {
     private String simuladorId;
     private static int contadorSimuladores = 0;
 
+    // *** NUEVO: Registro estático de simuladores activos ***
+    private static final java.util.Map<String, PanelSimuladorDesc> simuladoresActivos = new java.util.HashMap<>();
+
     // Clase interna para almacenar los componentes de la pestaña de gramática
     private static class GramaticaTabData {
         public final ListView<String> listView;
@@ -70,6 +73,11 @@ public class PanelSimuladorDesc {
         } else {
             this.simuladorId = "simulador_" + System.currentTimeMillis() + "_" + (++contadorSimuladores);
         }
+        
+        // *** NUEVO: Registrar este simulador en el registro estático ***
+        simuladoresActivos.put(this.simuladorId, this);
+
+        System.out.println("DEBUG: Created simulator with ID: " + this.simuladorId);
         
         // Inicializar funciones de error y tabla predictiva extendida
         inicializarTablaPredictivaYFuncionesError();
@@ -198,6 +206,10 @@ public class PanelSimuladorDesc {
     }
 
     public void cancelarSimulacion() {
+        // Desregistrar este simulador del registro estático
+        System.out.println("DEBUG: Deregistering simulator " + simuladorId + " due to cancellation");
+        desregistrarSimulador(simuladorId);
+        
         // Cerrar todas las pestañas hijas usando el TabManager
         TabManager.closeChildTabs(tabPane, simuladorId);
         
@@ -208,6 +220,12 @@ public class PanelSimuladorDesc {
                 break;
             }
         }
+        
+        // *** NUEVO: Forzar actualización inmediata de numeración ***
+        javafx.application.Platform.runLater(() -> {
+            TabManager.reasignarNumerosGruposGramatica(tabPane);
+            System.out.println("DEBUG: Forced renumbering after simulator " + simuladorId + " cancellation");
+        });
     }
 
     public void cambiarPaso(int paso) {
@@ -409,9 +427,18 @@ public class PanelSimuladorDesc {
                         for (Tab tab : change.getRemoved()) {
                             if (tab.getUserData() != null && 
                                 tab.getUserData().toString().equals(simuladorId)) {
+                                
+                                // Desregistrar este simulador del registro estático
+                                System.out.println("DEBUG: Deregistering simulator " + simuladorId + " due to tab closure");
+                                desregistrarSimulador(simuladorId);
+                                
                                 // Cerrar las pestañas hijas
                                 javafx.application.Platform.runLater(() -> {
                                     TabManager.closeChildTabs(tabPane, simuladorId);
+                                    
+                                    // *** NUEVO: Forzar actualización inmediata de numeración ***
+                                    TabManager.reasignarNumerosGruposGramatica(tabPane);
+                                    System.out.println("DEBUG: Forced renumbering after simulator " + simuladorId + " closure");
                                 });
                             }
                         }
@@ -426,5 +453,34 @@ public class PanelSimuladorDesc {
      */
     public String getSimuladorId() {
         return simuladorId;
+    }
+    
+    /**
+     * *** NUEVO: Método estático para actualizar todos los simuladores activos ***
+     */
+    public static void actualizarTodosLosSimuladores(ResourceBundle bundle) {
+        for (PanelSimuladorDesc simulador : simuladoresActivos.values()) {
+            try {
+                simulador.setBundle(bundle);
+                System.out.println("DEBUG: Updated simulator " + simulador.simuladorId + " with new bundle");
+            } catch (Exception e) {
+                System.err.println("Error updating simulator " + simulador.simuladorId + ": " + e.getMessage());
+            }
+        }
+    }
+    
+    /**
+     * *** NUEVO: Método para desregistrar un simulador cuando se cierra ***
+     */
+    public static void desregistrarSimulador(String simuladorId) {
+        simuladoresActivos.remove(simuladorId);
+        System.out.println("DEBUG: Unregistered simulator " + simuladorId);
+    }
+    
+    /**
+     * *** NUEVO: Obtener simulador activo por ID ***
+     */
+    public static PanelSimuladorDesc obtenerSimulador(String simuladorId) {
+        return simuladoresActivos.get(simuladorId);
     }
 }
