@@ -82,28 +82,13 @@ public class TabManager {
         int insertPosition = tabPane.getTabs().size();
         
         if (parentId != null && childId != null) {
-            // Es una pestaña hija, colocarla después del padre
+            // Es una pestaña hija, colocarla después del padre con prioridades
             Tab parentTab = findTabByUserData(tabPane, parentId);
             if (parentTab != null) {
-                int parentIndex = tabPane.getTabs().indexOf(parentTab);
-                
-                // Buscar la última pestaña hija de este padre
-                Map<String, List<Tab>> relations = parentChildRelations.get(tabPane);
-                if (relations.containsKey(parentId)) {
-                    List<Tab> siblings = relations.get(parentId);
-                    int lastChildIndex = parentIndex;
-                    for (Tab sibling : siblings) {
-                        int siblingIndex = tabPane.getTabs().indexOf(sibling);
-                        if (siblingIndex > lastChildIndex) {
-                            lastChildIndex = siblingIndex;
-                        }
-                    }
-                    insertPosition = lastChildIndex + 1;
-                } else {
-                    insertPosition = parentIndex + 1;
-                }
+                insertPosition = calcularPosicionHija(tabPane, parentTab, childId, parentId);
                 
                 // Registrar la relación padre-hijo
+                Map<String, List<Tab>> relations = parentChildRelations.get(tabPane);
                 relations.computeIfAbsent(parentId, k -> new ArrayList<>()).add(newTab);
             }
         }
@@ -117,6 +102,58 @@ public class TabManager {
         
         tabPane.getSelectionModel().select(newTab);
         return newTab;
+    }
+    
+    /**
+     * Calcula la posición correcta para una pestaña hija basada en prioridades.
+     */
+    private static int calcularPosicionHija(TabPane tabPane, Tab parentTab, String childId, String parentId) {
+        int parentIndex = tabPane.getTabs().indexOf(parentTab);
+        int insertPosition = parentIndex + 1;
+        
+        // Definir prioridades para diferentes tipos de pestañas hijas
+        int prioridad = obtenerPrioridadPestaña(childId);
+        
+        // Buscar la posición correcta entre las pestañas hijas existentes
+        Map<String, List<Tab>> relations = parentChildRelations.get(tabPane);
+        if (relations.containsKey(parentId)) {
+            List<Tab> siblings = relations.get(parentId);
+            
+            for (Tab sibling : siblings) {
+                int siblingIndex = tabPane.getTabs().indexOf(sibling);
+                if (siblingIndex > parentIndex) {
+                    String siblingId = sibling.getUserData().toString();
+                    int siblingPrioridad = obtenerPrioridadPestaña(siblingId);
+                    
+                    if (prioridad <= siblingPrioridad) {
+                        // Esta pestaña tiene mayor o igual prioridad, insertarla aquí
+                        break;
+                    } else {
+                        // La pestaña hermana tiene mayor prioridad, continuar buscando
+                        insertPosition = siblingIndex + 1;
+                    }
+                }
+            }
+        }
+        
+        return insertPosition;
+    }
+    
+    /**
+     * Obtiene la prioridad de una pestaña basada en su identificador.
+     * Menor número = mayor prioridad (más cerca del padre).
+     */
+    private static int obtenerPrioridadPestaña(String childId) {
+        if (childId.startsWith("funciones_error_")) {
+            return 1; // Alta prioridad - va justo después del simulador
+        } else if (childId.startsWith("gramatica_")) {
+            return 2; // Prioridad media - va después de funciones de error
+        } else if (childId.startsWith("creacion_")) {
+            return 1; // Alta prioridad para pestañas de creación
+        } else if (childId.startsWith("no_terminales_") || childId.startsWith("terminales_") || childId.startsWith("producciones_")) {
+            return 2; // Prioridad media para pestañas de modificación
+        }
+        return 999; // Prioridad baja por defecto
     }
 
     public static void closeTab(TabPane tabPane, Class<?> tabType) {

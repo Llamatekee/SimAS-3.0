@@ -187,6 +187,9 @@ public class PanelNuevaSimDescPaso4 implements PanelNuevaSimDescPaso, Actualizab
             this.buttonFinalizar.setVisible(true);
             this.buttonUltimo.setDisable(true);
             this.buttonSiguiente.setDisable(true);
+            
+            // Cerrar la pestaña de funciones de error si está abierta
+            cerrarPestañaFuncionesError();
         } else {
             if (!this.listViewFuncionesError.getItems().isEmpty()) {
                 this.buttonFinalizar.setVisible(false);
@@ -203,21 +206,28 @@ public class PanelNuevaSimDescPaso4 implements PanelNuevaSimDescPaso, Actualizab
             }
         }
     }
+    
+    /**
+     * 🔹 Cierra la pestaña de funciones de error si está abierta.
+     */
+    private void cerrarPestañaFuncionesError() {
+        panelPadre.cerrarPestañaFuncionesError();
+    }
 
     @FXML
     private void handleNueva() {
         // Asegurarse de que las funciones predefinidas estén presentes
         inicializarFuncionesError();
         
-        // Usar TabManager para obtener o crear la pestaña
+        // Usar TabManager para obtener o crear la pestaña como hija del simulador
+        String childId = "funciones_error_" + panelPadre.getSimuladorId();
         Tab tab = TabManager.getOrCreateTab(panelPadre.tabPane, NuevaFuncionError.class, 
-            bundle.getString("simulador.paso4.btn.nueva"), null);
+            bundle.getString("simulador.paso4.btn.nueva"), null, panelPadre.getSimuladorId(), childId);
             
         // Si la pestaña es nueva, configurar su contenido
         if (tab.getContent() == null) {
             NuevaFuncionError nuevaFuncionError = new NuevaFuncionError(this.gramatica, this, bundle);
             tab.setContent(nuevaFuncionError.getRoot());
-            tab.setUserData(nuevaFuncionError);
         }
         
         // Seleccionar la pestaña
