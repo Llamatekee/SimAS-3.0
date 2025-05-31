@@ -141,11 +141,24 @@ public class PanelCreacionGramatica extends BorderPane implements ActualizableTe
                 break;
         }
         
-        // Actualizar el título de la pestaña
+        // Actualizar el título de la pestaña manteniendo la relación con el grupo
         for (Tab tab : tabPane.getTabs()) {
             if (tab.getContent() == this) {
+                // Obtener el editorId del padre
+                String editorId = "editor_" + creacionId.replace("creacion_", "");
+                
+                // Obtener el número de grupo actual usando el editorId
+                int numeroGrupo = TabManager.obtenerNumeroGrupo(tabPane, editorId);
+                
                 // Usar la nueva clave consistente para asistente de editor
-                tab.setText(bundle.getString("editor.asistente"));
+                String tituloBase = bundle.getString("editor.asistente");
+                
+                // Aplicar la numeración si corresponde
+                if (numeroGrupo > 0) {
+                    tab.setText(numeroGrupo + "-" + tituloBase);
+                } else {
+                    tab.setText(tituloBase);
+                }
             }
         }
         
@@ -256,11 +269,24 @@ public class PanelCreacionGramatica extends BorderPane implements ActualizableTe
         if (paso3 != null) paso3.actualizarTextos(bundle);
         if (paso4 != null) paso4.actualizarTextos(bundle);
 
-        // Actualizar el título de la pestaña
+        // Actualizar el título de la pestaña manteniendo la numeración del grupo
         for (Tab tab : tabPane.getTabs()) {
             if (tab.getContent() == this) {
+                // Obtener el editorId del padre
+                String editorId = "editor_" + creacionId.replace("creacion_", "");
+                
+                // Obtener el número de grupo actual usando el editorId
+                int numeroGrupo = TabManager.obtenerNumeroGrupo(tabPane, editorId);
+                
                 // Usar la nueva clave consistente para asistente de editor
-                tab.setText(bundle.getString("editor.asistente"));
+                String tituloBase = bundle.getString("editor.asistente");
+                
+                // Aplicar la numeración si corresponde
+                if (numeroGrupo > 0) {
+                    tab.setText(numeroGrupo + "-" + tituloBase);
+                } else {
+                    tab.setText(tituloBase);
+                }
             }
         }
     }

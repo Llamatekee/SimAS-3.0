@@ -738,16 +738,6 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso, Actualizab
         if (buttonUltimo != null) buttonUltimo.setText(bundle.getString("simulador.paso5.btn.ultimo"));
         if (buttonSimulacion != null) buttonSimulacion.setText(bundle.getString("simulador.paso5.btn.simulacion"));
 
-        // Actualizar el título de la pestaña de simulación
-        if (panelPadre != null && panelPadre.tabPane != null) {
-            for (Tab tab : panelPadre.tabPane.getTabs()) {
-                if (tab.getContent() == this.getRoot()) {
-                    tab.setText(bundle.getString("simulador.tab.paso1").replace("1", "5"));
-                    break;
-                }
-            }
-        }
-
         // Actualizar el ComboBox de funciones de error
         actualizarComboBoxFuncionesError();
 

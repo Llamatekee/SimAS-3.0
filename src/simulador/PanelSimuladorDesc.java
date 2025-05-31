@@ -197,7 +197,7 @@ public class PanelSimuladorDesc {
             // Usar TabManager para obtener o crear la pestaña como hija del simulador
             String childId = "gramatica_" + simuladorId;
             Tab tab = TabManager.getOrCreateTab(tabPane, GramaticaTabData.class, 
-                bundle.getString("simulador.gramatica.original"), content, simuladorId, childId);
+                bundle.getString("simulador.gramatica.titulo"), content, simuladorId, childId);
             tab.setUserData(childId);
             
         } catch (Exception e) {
@@ -298,7 +298,7 @@ public class PanelSimuladorDesc {
         
         // Construir el título final con numeración si corresponde
         if (numeroGrupo > 0 && numeroGrupo != -1) {
-            return tituloBase + " " + numeroGrupo;
+            return numeroGrupo + "-" + tituloBase;
         } else {
             return tituloBase;
         }
@@ -390,7 +390,7 @@ public class PanelSimuladorDesc {
                     // Aplicar numeración de grupo si corresponde
                     int numeroGrupo = TabManager.obtenerNumeroGrupo(tabPane, simuladorId);
                     if (numeroGrupo > 0 && numeroGrupo != -1) {
-                        tab.setText("Gramática " + numeroGrupo + ": " + tituloBase);
+                        tab.setText(numeroGrupo + "-" + tituloBase);
                     } else {
                         tab.setText(tituloBase);
                     }
@@ -402,7 +402,7 @@ public class PanelSimuladorDesc {
                     // Aplicar numeración de grupo si corresponde
                     int numeroGrupo = TabManager.obtenerNumeroGrupo(tabPane, simuladorId);
                     if (numeroGrupo > 0 && numeroGrupo != -1) {
-                        tab.setText("Funciones Error " + numeroGrupo + ": " + tituloBase);
+                        tab.setText(numeroGrupo + "-" + tituloBase);
                     } else {
                         tab.setText(tituloBase);
                     }

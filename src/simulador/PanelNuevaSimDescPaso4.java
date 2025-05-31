@@ -222,7 +222,7 @@ public class PanelNuevaSimDescPaso4 implements PanelNuevaSimDescPaso, Actualizab
         // Usar TabManager para obtener o crear la pestaña como hija del simulador
         String childId = "funciones_error_" + panelPadre.getSimuladorId();
         Tab tab = TabManager.getOrCreateTab(panelPadre.tabPane, NuevaFuncionError.class, 
-            bundle.getString("simulador.paso4.btn.nueva"), null, panelPadre.getSimuladorId(), childId);
+            bundle.getString("simulador.paso4.btn.nueva.funcion"), null, panelPadre.getSimuladorId(), childId);
             
         // Si la pestaña es nueva, configurar su contenido
         if (tab.getContent() == null) {
