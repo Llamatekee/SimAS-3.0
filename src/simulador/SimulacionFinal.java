@@ -28,9 +28,15 @@ import javafx.scene.control.TabPane;
 import javafx.scene.layout.Priority;
 import java.io.File;
 import editor.ActualizableTextos;
+import editor.TabManager;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import java.util.Collections;
+import java.awt.image.BufferedImage;
+import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.image.ImageView;
+import java.util.Map;
+import java.util.HashMap;
 
 public class SimulacionFinal extends BorderPane implements ActualizableTextos {
     @FXML private TextField campoEntrada;
@@ -72,9 +78,11 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
     private List<EstadoSimulacion> estadosAnteriores = new ArrayList<>();
 
     private String simulacionId; // Identificador único para esta simulación
-    private static int contadorSimulaciones = 0; // Contador estático para numerar las simulaciones
+    private static int contadorSimulaciones = 0; // Contador global para numerar simulaciones
+    private static Map<Integer, List<Integer>> numerosDisponiblesPorGrupo = new HashMap<>(); // Números disponibles por grupo
+    private static Map<Integer, Integer> contadoresPorGrupo = new HashMap<>(); // Contadores por grupo
     private int numeroSimulacion; // Número de esta simulación específica
-    private static List<Integer> numerosDisponibles = new ArrayList<>(); // Lista de números disponibles
+    private String simuladorPadreId; // Nuevo campo para almacenar el ID del simulador padre
 
     // Clase para almacenar el estado de la simulación
     private static class EstadoSimulacion {
@@ -97,34 +105,43 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         this.bundle = bundle;
         this.simulacionId = "sim_" + System.currentTimeMillis(); // Generar ID único
         
-        // Asignar número de simulación
-        if (numerosDisponibles.isEmpty()) {
-            this.numeroSimulacion = ++contadorSimulaciones;
-        } else {
-            this.numeroSimulacion = numerosDisponibles.remove(0);
+        // Obtener el simulador padre de la pestaña actualmente seleccionada
+        Tab selectedTab = tabPane.getSelectionModel().getSelectedItem();
+        if (selectedTab != null && selectedTab.getUserData() != null && 
+            selectedTab.getUserData().toString().startsWith("simulador_")) {
+            this.simuladorPadreId = selectedTab.getUserData().toString();
         }
         
-        cargarFXML();
+        System.out.println("DEBUG: SimulacionFinal constructor - Selected simulador: " + this.simuladorPadreId);
         
-        // Actualizar títulos de las pestañas
+        // Contar simulaciones específicamente para este simulador
+        int simulacionesEnGrupo = 0;
+        for (Tab tab : tabPane.getTabs()) {
+            if (tab.getContent() instanceof SimulacionFinal) {
+                SimulacionFinal otraSim = (SimulacionFinal) tab.getContent();
+                if (otraSim.simuladorPadreId != null && 
+                    otraSim.simuladorPadreId.equals(this.simuladorPadreId)) {
+                    simulacionesEnGrupo++;
+                }
+            }
+        }
+        
+        // Asignar número de simulación
+        this.numeroSimulacion = simulacionesEnGrupo + 1;
+        System.out.println("DEBUG: SimulacionFinal constructor - Número asignado: " + this.numeroSimulacion);
+        
+        cargarFXML();
         actualizarTitulosPestañas();
         
-        // Añadir listener para cerrar pestañas hijas cuando se cierre la pestaña de simulación
+        // Añadir listener para cerrar pestañas hijas
         if (tabPane != null) {
             tabPane.getTabs().addListener((javafx.collections.ListChangeListener.Change<? extends Tab> change) -> {
                 while (change.next()) {
                     if (change.wasRemoved()) {
                         for (Tab tab : change.getRemoved()) {
                             if (tab.getContent() == this) {
-                                // Liberar el número de esta simulación
-                                numerosDisponibles.add(this.numeroSimulacion);
-                                Collections.sort(numerosDisponibles);
-                                
-                                // Reasignar números a las simulaciones restantes
-                                reasignarNumerosSimulaciones(tabPane);
-                                
                                 // Cerrar las pestañas hijas
-                                javafx.application.Platform.runLater(() -> {
+                                Platform.runLater(() -> {
                                     List<Tab> tabsToRemove = new ArrayList<>();
                                     for (Tab t : tabPane.getTabs()) {
                                         if (t.getUserData() != null) {
@@ -138,6 +155,9 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
                                     for (Tab t : tabsToRemove) {
                                         tabPane.getTabs().remove(t);
                                     }
+                                    
+                                    // Reasignar números después de cerrar
+                                    reasignarNumerosSimulaciones(tabPane);
                                 });
                             }
                         }
@@ -147,30 +167,41 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         }
     }
 
-    private void actualizarTitulosPestañas() {
-        if (tabPane == null) return;
+    /**
+     * Actualiza los títulos de todas las pestañas relacionadas con esta simulación.
+     */
+    public void actualizarTitulosPestañas() {
+        if (tabPane == null || simuladorPadreId == null) return;
         
-        // Contar cuántas simulaciones hay
-        int numSimulaciones = 0;
-        for (Tab tab : tabPane.getTabs()) {
-            if (tab.getContent() instanceof SimulacionFinal) {
-                numSimulaciones++;
-            }
-        }
+        // Obtener el número de grupo del simulador padre
+        int numeroGrupo = TabManager.obtenerNumeroGrupo(tabPane, simuladorPadreId);
+        System.out.println("DEBUG: actualizarTitulosPestañas - Grupo del simulador padre " + simuladorPadreId + ": " + numeroGrupo);
+        
+        // Determinar si hay más de un grupo
+        boolean mostrarGrupo = TabManager.contarGruposActivos(tabPane) > 1;
+        System.out.println("DEBUG: actualizarTitulosPestañas - Mostrar grupo: " + mostrarGrupo);
         
         // Actualizar títulos
         for (Tab tab : tabPane.getTabs()) {
             if (tab.getContent() == this) {
-                tab.setText(bundle.getString("simulador.paso6.simulacion.final") + 
-                          (numSimulaciones > 1 ? " " + numeroSimulacion : ""));
+                String tituloBase = bundle.getString("simulador.paso6.simulacion");
+                String nuevoTitulo = mostrarGrupo ? 
+                    numeroGrupo + "-" + tituloBase + " " + numeroSimulacion :
+                    tituloBase + " " + numeroSimulacion;
+                System.out.println("DEBUG: actualizarTitulosPestañas - Nuevo título: " + nuevoTitulo);
+                tab.setText(nuevoTitulo);
             } else if (tab.getUserData() != null) {
                 String userData = tab.getUserData().toString();
                 if (userData.startsWith("derivacion_") && userData.endsWith(simulacionId)) {
-                    tab.setText(bundle.getString("simulacionfinal.tab.derivacion") + 
-                              (numSimulaciones > 1 ? " " + numeroSimulacion : ""));
+                    String tituloBase = bundle.getString("simulacionfinal.tab.derivacion");
+                    tab.setText(mostrarGrupo ? 
+                        numeroGrupo + "-" + tituloBase + " " + numeroSimulacion :
+                        tituloBase + " " + numeroSimulacion);
                 } else if (userData.startsWith("arbol_") && userData.endsWith(simulacionId)) {
-                    tab.setText(bundle.getString("simulacionfinal.tab.arbol") + 
-                              (numSimulaciones > 1 ? " " + numeroSimulacion : ""));
+                    String tituloBase = bundle.getString("simulacionfinal.tab.arbol");
+                    tab.setText(mostrarGrupo ? 
+                        numeroGrupo + "-" + tituloBase + " " + numeroSimulacion :
+                        tituloBase + " " + numeroSimulacion);
                 }
             }
         }
@@ -178,24 +209,46 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
 
     public static void reasignarNumerosSimulaciones(TabPane tabPane) {
         if (tabPane == null) return;
-        // Obtener todas las simulaciones activas
-        List<SimulacionFinal> simulacionesActivas = new ArrayList<>();
+        
+        // Agrupar simulaciones por simulador padre
+        Map<String, List<SimulacionFinal>> simulacionesPorSimulador = new HashMap<>();
+        
+        // Recolectar todas las simulaciones y agruparlas por simulador padre
         for (Tab tab : tabPane.getTabs()) {
             if (tab.getContent() instanceof SimulacionFinal) {
-                simulacionesActivas.add((SimulacionFinal) tab.getContent());
+                SimulacionFinal sim = (SimulacionFinal) tab.getContent();
+                if (sim.simuladorPadreId != null) {
+                    simulacionesPorSimulador
+                        .computeIfAbsent(sim.simuladorPadreId, k -> new ArrayList<>())
+                        .add(sim);
+                }
             }
         }
-        // Ordenar por número actual
-        simulacionesActivas.sort((s1, s2) -> Integer.compare(s1.numeroSimulacion, s2.numeroSimulacion));
-        // Reasignar números
-        for (int i = 0; i < simulacionesActivas.size(); i++) {
-            SimulacionFinal sim = simulacionesActivas.get(i);
-            sim.numeroSimulacion = i + 1;
+        
+        // Reasignar números para cada simulador
+        for (List<SimulacionFinal> simulaciones : simulacionesPorSimulador.values()) {
+            // Ordenar por posición en el TabPane para mantener el orden visual
+            simulaciones.sort((s1, s2) -> {
+                int pos1 = tabPane.getTabs().indexOf(findTabForSimulacion(tabPane, s1));
+                int pos2 = tabPane.getTabs().indexOf(findTabForSimulacion(tabPane, s2));
+                return Integer.compare(pos1, pos2);
+            });
+            
+            // Reasignar números
+            for (int i = 0; i < simulaciones.size(); i++) {
+                simulaciones.get(i).numeroSimulacion = i + 1;
+                simulaciones.get(i).actualizarTitulosPestañas();
+            }
         }
-        // Actualizar títulos de todas las simulaciones
-        for (SimulacionFinal sim : simulacionesActivas) {
-            sim.actualizarTitulosPestañas();
+    }
+
+    private static Tab findTabForSimulacion(TabPane tabPane, SimulacionFinal sim) {
+        for (Tab tab : tabPane.getTabs()) {
+            if (tab.getContent() == sim) {
+                return tab;
+            }
         }
+        return null;
     }
 
     private void cargarFXML() {
@@ -220,7 +273,7 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         btnFinal.setOnAction(e -> avanzarAlFinal());
         btnInicio.setOnAction(e -> retrocederAlInicio());
         btnRetroceso.setOnAction(e -> retrocederPaso());
-        btnDerivacion.setOnAction(e -> mostrarDerivacionGenerada());
+        btnDerivacion.setOnAction(e -> mostrarDerivacion());
         btnArbol.setOnAction(e -> mostrarArbolSintactico());
         
         // Inicializar áreas de texto
@@ -540,102 +593,82 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         historialObservable.add(new HistorialPaso(String.valueOf(pasoActual), pilaStr, entradaStr, accion));
     }
 
-    private void mostrarDerivacionGenerada() {
-        // Construir la derivación a partir del historial
-        List<String> derivacion = new ArrayList<>();
-        if (historialObservable.isEmpty()) {
-            derivacion.add(bundle.getString("simulacionfinal.tab.derivacion"));
-        } else {
-            // Tomar el símbolo inicial
-            String actual = gramatica.getSimbInicial();
-            derivacion.add(actual + " => " + actual);
-            // Recorrer el historial y aplicar producciones
-            for (HistorialPaso paso : historialObservable) {
-                String accion = paso.getAccion();
-                if (accion.contains("→")) {
-                    String[] partes = accion.split("→");
-                    if (partes.length == 2) {
-                        String izquierda = partes[0].replaceAll("^[0-9. ]*", "").trim();
-                        String derecha = partes[1].trim();
-                        actual = actual.replaceFirst(izquierda.replace("'", "\\'"), derecha);
-                        derivacion.add("=> " + actual);
-                    }
-                }
-            }
-        }
-        if (tabPane != null) {
-            String tituloDerivacion = bundle.getString("simulacionfinal.tab.derivacion") + " " + numeroSimulacion;
-            Tab tabDerivacion = null;
-            
-            // Buscar la pestaña de derivación asociada a esta simulación
+    private void mostrarDerivacion() {
+        try {
+            // Obtener el simuladorId del padre
+            String simuladorId = null;
             for (Tab tab : tabPane.getTabs()) {
-                if (tab.getUserData() != null && 
-                    tab.getUserData().toString().startsWith("derivacion_") && 
-                    tab.getUserData().toString().endsWith(simulacionId)) {
-                    tabDerivacion = tab;
+                if (tab.getUserData() != null && tab.getUserData().toString().startsWith("simulador_")) {
+                    simuladorId = tab.getUserData().toString();
                     break;
                 }
             }
-
-            TextArea area = new TextArea(String.join("\n", derivacion));
-            area.setEditable(false);
-            area.setWrapText(true);
-            area.setStyle(
-                "-fx-font-size: 18px;" +
-                "-fx-font-family: 'Consolas', 'monospace';" +
-                "-fx-background-color: #f8f9fa;" +
-                "-fx-text-fill: #222;" +
-                "-fx-border-radius: 12px;" +
-                "-fx-background-radius: 12px;" +
-                "-fx-border-color: #d0d0d0;" +
-                "-fx-border-width: 1.5px;" +
-                "-fx-padding: 24px;" +
-                "-fx-effect: dropshadow(gaussian, #b0b0b0, 12, 0.2, 0, 2);"
-            );
-            area.setMaxWidth(900);
-            area.setMaxHeight(Double.MAX_VALUE);
-            VBox layout = new VBox(15);
-            layout.setPadding(new Insets(40, 0, 0, 0));
-            layout.setAlignment(Pos.TOP_CENTER);
-            layout.setStyle(
-                "-fx-background-color: transparent;" +
-                "-fx-padding: 0 0 0 0;"
-            );
-            Label labelTitulo = new Label(tituloDerivacion);
-            labelTitulo.setStyle(
-                "-fx-font-size: 30px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-text-fill: #3498db;" +
-                "-fx-padding: 0 0 32 0;"
-            );
-            VBox.setVgrow(area, Priority.ALWAYS);
-            layout.getChildren().addAll(labelTitulo, area);
-
-            if (tabDerivacion == null) {
-                tabDerivacion = new Tab(tituloDerivacion, layout);
-                tabDerivacion.setClosable(true);
-                tabDerivacion.setUserData("derivacion_" + simulacionId);
+            
+            if (simuladorId != null) {
+                // Obtener el número de grupo
+                int numeroGrupo = TabManager.obtenerNumeroGrupo(tabPane, simuladorId);
+                String tituloBase = bundle.getString("simulacionfinal.tab.derivacion");
+                String tituloDerivacion = numeroGrupo > 0 ? 
+                    numeroGrupo + "-" + tituloBase + " " + numeroSimulacion :
+                    tituloBase + " " + numeroSimulacion;
                 
-                // Encontrar la posición de la pestaña de simulación actual
-                int simIndex = -1;
-                for (int i = 0; i < tabPane.getTabs().size(); i++) {
-                    if (tabPane.getTabs().get(i).getContent() == this) {
-                        simIndex = i;
+                // Buscar si ya existe una pestaña de derivación
+                Tab tabDerivacion = null;
+                for (Tab tab : tabPane.getTabs()) {
+                    if (tab.getUserData() != null && 
+                        tab.getUserData().toString().equals("derivacion_" + simulacionId)) {
+                        tabDerivacion = tab;
                         break;
                     }
                 }
                 
-                // Insertar la pestaña de derivación justo después de la pestaña de simulación
-                if (simIndex != -1) {
-                    tabPane.getTabs().add(simIndex + 1, tabDerivacion);
-                } else {
-                    tabPane.getTabs().add(tabDerivacion);
+                // Si no existe, crear una nueva
+                if (tabDerivacion == null) {
+                    final Tab newTab = new Tab(tituloDerivacion);
+                    newTab.setUserData("derivacion_" + simulacionId);
+                    newTab.setClosable(true);
+                    newTab.setOnCloseRequest(e -> {
+                        e.consume();
+                        tabPane.getTabs().remove(newTab);
+                    });
+                    tabPane.getTabs().add(newTab);
+                    tabDerivacion = newTab;
                 }
-            } else {
+                
+                // Crear el contenido de la derivación
+                VBox layout = new VBox(10);
+                layout.setPadding(new javafx.geometry.Insets(20));
+                layout.setAlignment(javafx.geometry.Pos.TOP_LEFT);
+                layout.setStyle("-fx-background-color: white;");
+                
+                Label titulo = new Label(bundle.getString("simulacionfinal.tab.derivacion"));
+                titulo.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #3498DB;");
+                
+                TextArea areaDerivacion = new TextArea();
+                areaDerivacion.setEditable(false);
+                areaDerivacion.setWrapText(true);
+                areaDerivacion.setStyle("-fx-font-family: monospace; -fx-font-size: 14px;");
+                areaDerivacion.setPrefRowCount(20);
+                
+                // Generar la derivación
+                StringBuilder derivacion = new StringBuilder();
+                for (int i = 0; i < historialObservable.size(); i++) {
+                    HistorialPaso paso = historialObservable.get(i);
+                    derivacion.append("Paso ").append(i + 1).append(":\n");
+                    derivacion.append("Pila: ").append(paso.getPila()).append("\n");
+                    derivacion.append("Entrada: ").append(paso.getEntrada()).append("\n");
+                    derivacion.append("Acción: ").append(paso.getAccion()).append("\n\n");
+                }
+                
+                areaDerivacion.setText(derivacion.toString());
+                
+                layout.getChildren().addAll(titulo, areaDerivacion);
                 tabDerivacion.setContent(layout);
                 tabDerivacion.setText(tituloDerivacion);
+                tabPane.getSelectionModel().select(tabDerivacion);
             }
-            tabPane.getSelectionModel().select(tabDerivacion);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -673,63 +706,7 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
             );
             layout.getChildren().addAll(labelTitulo, imageView);
 
-            if (tabPane != null) {
-                Tab tabArbol = null;
-                
-                // Buscar la pestaña de árbol asociada a esta simulación
-                for (Tab tab : tabPane.getTabs()) {
-                    if (tab.getUserData() != null && 
-                        tab.getUserData().toString().startsWith("arbol_") && 
-                        tab.getUserData().toString().endsWith(simulacionId)) {
-                        tabArbol = tab;
-                        break;
-                    }
-                }
-
-                if (tabArbol == null) {
-                    tabArbol = new Tab(tituloArbol, layout);
-                    tabArbol.setClosable(true);
-                    tabArbol.setUserData("arbol_" + simulacionId);
-                    
-                    // Encontrar la posición de la pestaña de simulación actual
-                    int simIndex = -1;
-                    for (int i = 0; i < tabPane.getTabs().size(); i++) {
-                        if (tabPane.getTabs().get(i).getContent() == this) {
-                            simIndex = i;
-                            break;
-                        }
-                    }
-                    
-                    // Insertar la pestaña de árbol después de la pestaña de derivación (si existe)
-                    if (simIndex != -1) {
-                        // Buscar la pestaña de derivación asociada
-                        Tab tabDerivacion = null;
-                        for (Tab tab : tabPane.getTabs()) {
-                            if (tab.getUserData() != null && 
-                                tab.getUserData().toString().startsWith("derivacion_") && 
-                                tab.getUserData().toString().endsWith(simulacionId)) {
-                                tabDerivacion = tab;
-                                break;
-                            }
-                        }
-                        
-                        if (tabDerivacion != null) {
-                            // Insertar después de la pestaña de derivación
-                            int derivIndex = tabPane.getTabs().indexOf(tabDerivacion);
-                            tabPane.getTabs().add(derivIndex + 1, tabArbol);
-                        } else {
-                            // Si no hay pestaña de derivación, insertar después de la simulación
-                            tabPane.getTabs().add(simIndex + 1, tabArbol);
-                        }
-                    } else {
-                        tabPane.getTabs().add(tabArbol);
-                    }
-                } else {
-                    tabArbol.setContent(layout);
-                    tabArbol.setText(tituloArbol);
-                }
-                tabPane.getSelectionModel().select(tabArbol);
-            }
+            mostrarArbol(raiz);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -825,26 +802,122 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
     @Override
     public void actualizarTextos(ResourceBundle bundle) {
         this.bundle = bundle;
-        if (labelEntrada != null) labelEntrada.setText(bundle.getString("simulacionfinal.label.entrada"));
-        if (campoEntrada != null) campoEntrada.setPromptText(bundle.getString("simulacionfinal.prompt.entrada"));
-        if (btnEditarCadena != null) btnEditarCadena.setText(bundle.getString("simulacionfinal.btn.editar"));
-        if (btnIniciar != null) btnIniciar.setText(bundle.getString("simulacionfinal.btn.iniciar"));
-        if (btnInicio != null) btnInicio.setText(bundle.getString("simulacionfinal.btn.inicio"));
-        if (btnRetroceso != null) btnRetroceso.setText(bundle.getString("simulacionfinal.btn.retroceso"));
-        if (btnPaso != null) btnPaso.setText(bundle.getString("simulacionfinal.btn.paso"));
-        if (btnFinal != null) btnFinal.setText(bundle.getString("simulacionfinal.btn.final"));
-        if (labelPila != null) labelPila.setText(bundle.getString("simulacionfinal.label.pila"));
-        if (labelEntradaStack != null) labelEntradaStack.setText(bundle.getString("simulacionfinal.label.entrada.stack"));
-        if (labelAccion != null) labelAccion.setText(bundle.getString("simulacionfinal.label.accion"));
-        if (labelHistorial != null) labelHistorial.setText(bundle.getString("simulacionfinal.label.historial"));
-        if (colPaso != null) colPaso.setText(bundle.getString("simulacionfinal.col.paso"));
-        if (colPila != null) colPila.setText(bundle.getString("simulacionfinal.col.pila"));
-        if (colEntrada != null) colEntrada.setText(bundle.getString("simulacionfinal.col.entrada"));
-        if (colAccion != null) colAccion.setText(bundle.getString("simulacionfinal.col.accion"));
-        if (btnDerivacion != null) btnDerivacion.setText(bundle.getString("simulacionfinal.btn.derivacion"));
-        if (btnArbol != null) btnArbol.setText(bundle.getString("simulacionfinal.btn.arbol"));
+        
+        // Actualizar textos de los controles
+        labelEntrada.setText(bundle.getString("simulacionfinal.label.entrada"));
+        labelPila.setText(bundle.getString("simulacionfinal.label.pila"));
+        labelEntradaStack.setText(bundle.getString("simulacionfinal.label.entrada"));
+        labelAccion.setText(bundle.getString("simulacionfinal.label.accion"));
+        labelHistorial.setText(bundle.getString("simulacionfinal.label.historial"));
+        
+        btnIniciar.setText(bundle.getString("simulacionfinal.btn.iniciar"));
+        btnPaso.setText(bundle.getString("simulacionfinal.btn.paso"));
+        btnFinal.setText(bundle.getString("simulacionfinal.btn.final"));
+        btnRetroceso.setText(bundle.getString("simulacionfinal.btn.retroceso"));
+        btnInicio.setText(bundle.getString("simulacionfinal.btn.inicio"));
+        btnEditarCadena.setText(bundle.getString("simulacionfinal.btn.editar.cadena"));
+        btnDerivacion.setText(bundle.getString("simulacionfinal.btn.derivacion"));
+        btnArbol.setText(bundle.getString("simulacionfinal.btn.arbol"));
         
         // Actualizar títulos de las pestañas
         actualizarTitulosPestañas();
+    }
+
+    private void mostrarArbol(NodoArbol raiz) {
+        try {
+            // Obtener el simuladorId del padre
+            String simuladorId = null;
+            for (Tab tab : tabPane.getTabs()) {
+                if (tab.getUserData() != null && tab.getUserData().toString().startsWith("simulador_")) {
+                    simuladorId = tab.getUserData().toString();
+                    break;
+                }
+            }
+            
+            if (simuladorId != null) {
+                // Obtener el número de grupo
+                int numeroGrupo = TabManager.obtenerNumeroGrupo(tabPane, simuladorId);
+                String tituloBase = bundle.getString("simulacionfinal.tab.arbol");
+                String tituloArbol = numeroGrupo > 0 ? 
+                    numeroGrupo + "-" + tituloBase + " " + numeroSimulacion :
+                    tituloBase + " " + numeroSimulacion;
+                
+                // Buscar si ya existe una pestaña de árbol
+                Tab tabArbol = null;
+                for (Tab tab : tabPane.getTabs()) {
+                    if (tab.getUserData() != null && 
+                        tab.getUserData().toString().equals("arbol_" + simulacionId)) {
+                        tabArbol = tab;
+                        break;
+                    }
+                }
+                
+                // Si no existe, crear una nueva
+                if (tabArbol == null) {
+                    final Tab newTab = new Tab(tituloArbol);
+                    newTab.setUserData("arbol_" + simulacionId);
+                    newTab.setClosable(true);
+                    newTab.setOnCloseRequest(e -> {
+                        e.consume();
+                        tabPane.getTabs().remove(newTab);
+                    });
+                    tabPane.getTabs().add(newTab);
+                    tabArbol = newTab;
+                }
+                
+                // Crear el contenido del árbol
+                VBox layout = new VBox(10);
+                layout.setPadding(new javafx.geometry.Insets(20));
+                layout.setAlignment(javafx.geometry.Pos.TOP_LEFT);
+                layout.setStyle("-fx-background-color: white;");
+                
+                Label titulo = new Label(bundle.getString("simulacionfinal.tab.arbol"));
+                titulo.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #3498DB;");
+                
+                // Crear la imagen del árbol
+                javafx.scene.image.ImageView imageView = new javafx.scene.image.ImageView();
+                imageView.setFitWidth(800);
+                imageView.setPreserveRatio(true);
+                imageView.setSmooth(true);
+                
+                // Generar la imagen del árbol y convertirla a Image de JavaFX
+                BufferedImage bufferedImage = generarImagenArbol(raiz);
+                javafx.scene.image.Image fxImage = SwingFXUtils.toFXImage(bufferedImage, null);
+                imageView.setImage(fxImage);
+                
+                layout.getChildren().addAll(titulo, imageView);
+                tabArbol.setContent(layout);
+                tabArbol.setText(tituloArbol);
+                tabPane.getSelectionModel().select(tabArbol);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private BufferedImage generarImagenArbol(NodoArbol raiz) {
+        // Implementa la lógica para generar una imagen del árbol a partir del nodo raíz
+        // Puedes usar bibliotecas como JavaFX o Swing para crear la imagen
+        // Aquí se usa un ejemplo simple con JavaFX
+        javafx.scene.image.WritableImage writableImage = new javafx.scene.image.WritableImage(800, 800);
+        javafx.scene.image.PixelWriter pixelWriter = writableImage.getPixelWriter();
+        generarImagenRec(raiz, 0, 0, 800, 800, pixelWriter);
+        return SwingFXUtils.fromFXImage(writableImage, null);
+    }
+
+    private void generarImagenRec(NodoArbol nodo, int x, int y, int width, int height, javafx.scene.image.PixelWriter pixelWriter) {
+        if (nodo == null) return;
+        
+        // Dibujar el nodo actual
+        int color = 0xFF000000; // Negro
+        pixelWriter.setArgb(x, y, color);
+        
+        // Dibujar los hijos
+        int childWidth = width / (nodo.hijos.size() + 1);
+        for (int i = 0; i < nodo.hijos.size(); i++) {
+            int childX = x + (i + 1) * childWidth;
+            int childY = y + 50;
+            generarImagenRec(nodo.hijos.get(i), childX, childY, childWidth, height - 50, pixelWriter);
+        }
     }
 } 

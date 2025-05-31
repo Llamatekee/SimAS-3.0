@@ -303,7 +303,7 @@ public class TabManager {
     /**
      * Cuenta el número de grupos activos (grupos que tienen al menos un elemento asignado).
      */
-    private static int contarGruposActivos(TabPane tabPane) {
+    public static int contarGruposActivos(TabPane tabPane) {
         Map<String, String> elementos = elementoToGrupo.get(tabPane);
         if (elementos == null) {
             return 0;
@@ -1002,7 +1002,16 @@ public class TabManager {
                     actualizarPestañasDelGrupo(tabPane, userData, numeroGrupo);
                 }
             }
+            
+            // Actualizar simulaciones si el contenido es una SimulacionFinal
+            if (tab.getContent() instanceof simulador.SimulacionFinal) {
+                simulador.SimulacionFinal sim = (simulador.SimulacionFinal) tab.getContent();
+                sim.actualizarTitulosPestañas();
+            }
         }
+        
+        // Reasignar números de simulaciones dentro de cada grupo
+        simulador.SimulacionFinal.reasignarNumerosSimulaciones(tabPane);
     }
     
     /**
@@ -1025,7 +1034,17 @@ public class TabManager {
      * Actualiza todas las pestañas que pertenecen a un grupo de gramática específico.
      */
     private static void actualizarPestañasDelGrupo(TabPane tabPane, String elementoId, int numeroGrupo) {
-        System.out.println("DEBUG: Updating group " + numeroGrupo + " for element " + elementoId);
+        // Si el número de grupo es inválido, intentar obtenerlo
+        if (numeroGrupo < 0) {
+            numeroGrupo = obtenerNumeroGrupo(tabPane, elementoId);
+            System.out.println("DEBUG actualizarPestañasDelGrupo: Recalculated group number for " + elementoId + ": " + numeroGrupo);
+        }
+
+        // Determinar si hay más de un grupo
+        boolean mostrarGrupo = contarGruposActivos(tabPane) > 1;
+
+        System.out.println("DEBUG: Updating group " + numeroGrupo + " for element " + elementoId + 
+                         ", showing group numbers: " + mostrarGrupo);
         
         // Actualizar todas las pestañas del TabPane que pertenezcan a este grupo
         for (Tab tab : tabPane.getTabs()) {
@@ -1038,10 +1057,12 @@ public class TabManager {
                     if (elementoId.startsWith("editor_")) {
                         // Actualizar editores automáticamente
                         String tituloBase = obtenerTituloBaseEditor(tabPane);
-                        if (numeroGrupo > 0) {
+                        if (mostrarGrupo && numeroGrupo > 0) {
                             tab.setText(numeroGrupo + "-" + tituloBase);
+                            System.out.println("DEBUG: Updated editor title to: " + numeroGrupo + "-" + tituloBase);
                         } else {
                             tab.setText(tituloBase);
+                            System.out.println("DEBUG: Updated editor title to: " + tituloBase);
                         }
                     } else if (elementoId.startsWith("simulador_")) {
                         // Lógica de actualización para simuladores
@@ -1056,7 +1077,7 @@ public class TabManager {
                             
                             // Es un simulador independiente (paso 6) - SIEMPRE actualizar
                             String tituloBase = obtenerTituloBaseSimulador(tabPane);
-                            if (numeroGrupo > 0) {
+                            if (mostrarGrupo && numeroGrupo > 0) {
                                 tab.setText(numeroGrupo + "-" + tituloBase);
                                 System.out.println("DEBUG: Updated independent simulator title to: " + numeroGrupo + "-" + tituloBase);
                             } else {
@@ -1072,7 +1093,7 @@ public class TabManager {
                             
                             // Es un simulador de editor (Asistente) - SIEMPRE actualizar para asegurar sincronización
                             String tituloBase = extraerTituloBaseAsistente(tabPane);
-                            if (numeroGrupo > 0) {
+                            if (mostrarGrupo && numeroGrupo > 0) {
                                 tab.setText(numeroGrupo + "-" + tituloBase);
                                 System.out.println("DEBUG: Updated assistant simulator title to: " + numeroGrupo + "-" + tituloBase);
                             } else {
@@ -1083,7 +1104,7 @@ public class TabManager {
                     }
                 }
                 
-                // 2. ACTUALIZAR PESTAÑAS HIJAS DE EDITORES (FUERA del if principal)
+                // 2. ACTUALIZAR PESTAÑAS HIJAS DE EDITORES
                 if (elementoId.startsWith("editor_")) {
                     String expectedCreacionId = "creacion_" + elementoId.replace("editor_", "");
                     
@@ -1091,7 +1112,7 @@ public class TabManager {
                     if (userData.equals(expectedCreacionId)) {
                         // Usar el título correcto del ResourceBundle basado en el paso actual
                         String tituloCorrectoConPaso = obtenerTituloCreacionActual(tabPane, tab);
-                        if (numeroGrupo > 0) {
+                        if (mostrarGrupo && numeroGrupo > 0) {
                             // Extraer solo la base del título (sin "Edición:" parte)
                             String tituloBase = extraerTituloBaseCreacion(tituloCorrectoConPaso);
                             tab.setText(numeroGrupo + "-" + tituloBase);
@@ -1117,7 +1138,7 @@ public class TabManager {
                             nombreSimple = "Producciones";
                         }
                         
-                        if (numeroGrupo > 0) {
+                        if (mostrarGrupo && numeroGrupo > 0) {
                             tab.setText(numeroGrupo + "-" + nombreSimple);
                             System.out.println("DEBUG: Updated symbol tab to: " + numeroGrupo + "-" + nombreSimple);
                         } else {
@@ -1126,12 +1147,12 @@ public class TabManager {
                     }
                 }
                 
-                // 3. ACTUALIZAR PESTAÑAS HIJAS DE SIMULADORES (FUERA del if principal)
+                // 3. ACTUALIZAR PESTAÑAS HIJAS DE SIMULADORES
                 if (elementoId.startsWith("simulador_")) {
                     // Pestañas de gramática original
                     if (userData.equals("gramatica_" + elementoId)) {
                         String tituloBase = obtenerTituloBaseGramaticaOriginal(tabPane);
-                        if (numeroGrupo > 0) {
+                        if (mostrarGrupo && numeroGrupo > 0) {
                             tab.setText(numeroGrupo + "-" + tituloBase);
                             System.out.println("DEBUG: Updated grammar tab to: " + numeroGrupo + "-" + tituloBase);
                         } else {
@@ -1142,7 +1163,7 @@ public class TabManager {
                     // Pestañas de funciones de error
                     else if (userData.equals("funciones_error_" + elementoId)) {
                         String tituloBase = obtenerTituloBaseFuncionesError(tabPane);
-                        if (numeroGrupo > 0) {
+                        if (mostrarGrupo && numeroGrupo > 0) {
                             tab.setText(numeroGrupo + "-" + tituloBase);
                             System.out.println("DEBUG: Updated error functions tab to: " + numeroGrupo + "-" + tituloBase);
                         } else {
@@ -1158,11 +1179,20 @@ public class TabManager {
      * Actualiza el título de un elemento con numeración de grupo.
      */
     private static void actualizarTituloElemento(Tab elementoTab, int numeroGrupo) {
+        // Obtener el número de grupo actual si no se proporciona uno válido
+        if (numeroGrupo < 0 && elementoTab.getUserData() != null) {
+            String elementoId = elementoTab.getUserData().toString();
+            numeroGrupo = obtenerNumeroGrupo(elementoTab.getTabPane(), elementoId);
+            System.out.println("DEBUG actualizarTituloElemento: Recalculated group number for " + elementoId + ": " + numeroGrupo);
+        }
+
         String tituloBase = obtenerTituloBaseEditor(elementoTab.getTabPane());
         if (numeroGrupo > 0) {
             elementoTab.setText(numeroGrupo + "-" + tituloBase);
+            System.out.println("DEBUG actualizarTituloElemento: Updated title with group: " + numeroGrupo + "-" + tituloBase);
         } else {
             elementoTab.setText(tituloBase);
+            System.out.println("DEBUG actualizarTituloElemento: Updated title without group: " + tituloBase);
         }
     }
     
@@ -1327,37 +1357,26 @@ public class TabManager {
     
     /**
      * Obtiene el número de grupo asignado a un elemento específico.
-     * Devuelve -1 si solo hay un grupo (no debe mostrar numeración).
+     * Devuelve 0 si no hay grupo o si el elemento no está asignado a ningún grupo.
      */
     public static int obtenerNumeroGrupo(TabPane tabPane, String elementoId) {
         Map<String, String> elementos = elementoToGrupo.get(tabPane);
         Map<String, Integer> grupos = gruposGramatica.get(tabPane);
         
         if (elementos != null && grupos != null) {
-            // Contar cuántos grupos diferentes existen
-            Set<String> gruposActivos = new HashSet<>(elementos.values());
-            int totalGrupos = gruposActivos.size();
-            
-            System.out.println("DEBUG: obtenerNumeroGrupo - elementoId: " + elementoId + 
-                             ", totalGrupos: " + totalGrupos);
-            
-            // Solo mostrar numeración si hay más de un grupo
-            if (totalGrupos <= 1) {
-                System.out.println("DEBUG: obtenerNumeroGrupo - Only " + totalGrupos + " group(s), returning -1 (no numbering)");
-                return -1;
-            }
-            
-            // Hay múltiples grupos, devolver el número del grupo
             String grupoId = elementos.get(elementoId);
-            if (grupoId != null && grupos.containsKey(grupoId)) {
-                int numeroGrupo = grupos.get(grupoId);
-                System.out.println("DEBUG: obtenerNumeroGrupo - Multiple groups, returning group number: " + numeroGrupo);
-                return numeroGrupo;
+            if (grupoId != null) {
+                // Solo retornar el número de grupo si hay más de un grupo activo
+                if (contarGruposActivos(tabPane) > 1) {
+                    Integer numeroGrupo = grupos.get(grupoId);
+                    if (numeroGrupo != null) {
+                        return numeroGrupo;
+                    }
+                }
             }
         }
         
-        System.out.println("DEBUG: obtenerNumeroGrupo - No group found, returning -1");
-        return -1; // Sin numeración
+        return 0;
     }
 
     /**

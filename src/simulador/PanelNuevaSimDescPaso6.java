@@ -16,6 +16,9 @@ import java.io.IOException;
 import javafx.scene.Parent;
 import editor.ActualizableTextos;
 import java.util.ResourceBundle;
+import editor.TabManager;
+import javafx.application.Platform;
+import java.util.Collections;
 
 /**
  * Controlador para la simulación descendente en JavaFX.
@@ -320,16 +323,28 @@ public class PanelNuevaSimDescPaso6 extends BorderPane implements PanelNuevaSimD
             panelSimuladorDesc.getBundle()
         );
 
-        // Crear una nueva pestaña y añadirla al TabPane principal
-        Tab nuevaPestana = new Tab(bundle.getString("simulador.paso6.simulacion.final"));
-        nuevaPestana.setContent(simulacionFinal);
-        nuevaPestana.setClosable(true);
-
-        panelSimuladorDesc.tabPane.getTabs().add(nuevaPestana);
-        panelSimuladorDesc.tabPane.getSelectionModel().select(nuevaPestana);
+        // Obtener el número de grupo del simulador
+        int numeroGrupo = TabManager.obtenerNumeroGrupo(panelSimuladorDesc.tabPane, panelSimuladorDesc.getSimuladorId());
         
-        // Actualizar la numeración de las simulaciones
-        simulador.SimulacionFinal.reasignarNumerosSimulaciones(panelSimuladorDesc.tabPane);
+        // Construir el título base
+        String tituloBase = bundle.getString("simulador.paso6.simulacion");
+        
+        // Añadir el número de grupo si es válido
+        String tituloFinal = numeroGrupo > 0 ? numeroGrupo + "-" + tituloBase : tituloBase;
+
+        // Usar TabManager para crear la pestaña como hija del simulador
+        String childId = "simulacion_" + panelSimuladorDesc.getSimuladorId();
+        Tab nuevaPestana = TabManager.getOrCreateTab(
+            panelSimuladorDesc.tabPane,
+            SimulacionFinal.class,
+            tituloFinal,
+            simulacionFinal,
+            panelSimuladorDesc.getSimuladorId(),
+            childId
+        );
+        
+        // Seleccionar la nueva pestaña
+        panelSimuladorDesc.tabPane.getSelectionModel().select(nuevaPestana);
     }
 
     @FXML
