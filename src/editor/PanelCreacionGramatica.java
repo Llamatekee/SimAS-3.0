@@ -26,6 +26,10 @@ public class PanelCreacionGramatica extends BorderPane implements ActualizableTe
     private final MenuPrincipal menuPane;
     private Gramatica gramaticaTemporal;
     private ResourceBundle bundle;
+    
+    // Sistema de identificación para relaciones padre-hijo
+    private String creacionId;
+    private static int contadorCreaciones = 0;
 
     public PanelCreacionGramatica(Editor ventanaPadre, TabPane tabPane, Gramatica gr, MenuPrincipal menuPane) {
         this.tabPane = tabPane;
@@ -33,6 +37,7 @@ public class PanelCreacionGramatica extends BorderPane implements ActualizableTe
         this.menuPane = menuPane;
         this.gramaticaTemporal = (gr != null) ? new Gramatica(gr) : new Gramatica();
         this.bundle = panelPadre.getBundle();
+        this.creacionId = "creacion_" + System.currentTimeMillis() + "_" + (++contadorCreaciones);
 
         // Inicializar paneles del asistente
         this.paso1 = new PanelCreacionGramaticaPaso1(this, this.bundle);
@@ -63,6 +68,40 @@ public class PanelCreacionGramatica extends BorderPane implements ActualizableTe
 
         // Mostrar el Paso 1 en el centro del asistente
         this.setCenter(this.paso1);
+        
+        // Configurar relaciones padre-hijo
+        configurarRelacionesPadreHijo();
+    }
+    
+    /**
+     * 🔹 Configura las relaciones padre-hijo para cerrar pestañas hijas cuando se cierre la creación.
+     */
+    private void configurarRelacionesPadreHijo() {
+        if (tabPane != null) {
+            // Añadir listener para cerrar pestañas hijas cuando se cierre la pestaña de creación
+            tabPane.getTabs().addListener((javafx.collections.ListChangeListener.Change<? extends Tab> change) -> {
+                while (change.next()) {
+                    if (change.wasRemoved()) {
+                        for (Tab tab : change.getRemoved()) {
+                            if (tab.getContent() == this && tab.getUserData() != null && 
+                                tab.getUserData().toString().contains(creacionId)) {
+                                // Cerrar las pestañas hijas
+                                javafx.application.Platform.runLater(() -> {
+                                    TabManager.closeChildTabs(tabPane, creacionId);
+                                });
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    }
+    
+    /**
+     * 🔹 Obtiene el ID único de esta creación.
+     */
+    public String getCreacionId() {
+        return creacionId;
     }
 
     public Gramatica getGramatica() {
@@ -74,6 +113,9 @@ public class PanelCreacionGramatica extends BorderPane implements ActualizableTe
     }
 
     public void cambiarPaso(int paso) {
+        // Cerrar pestañas específicas del paso anterior
+        cerrarPestañasEspecificasPaso();
+        
         switch (paso) {
             case 1:
                 this.setCenter(this.paso1);
@@ -98,6 +140,45 @@ public class PanelCreacionGramatica extends BorderPane implements ActualizableTe
         
         actualizarTextos(bundle);
     }
+    
+    /**
+     * 🔹 Cierra las pestañas específicas del paso actual antes de cambiar de paso.
+     */
+    private void cerrarPestañasEspecificasPaso() {
+        if (tabPane == null) return;
+        
+        // Determinar qué paso estamos dejando
+        int pasoActual = 1;
+        if (getCenter() == paso2) pasoActual = 2;
+        else if (getCenter() == paso3) pasoActual = 3;
+        else if (getCenter() == paso4) pasoActual = 4;
+        
+        // Cerrar pestañas específicas según el paso que se está dejando
+        java.util.List<Tab> tabsToRemove = new java.util.ArrayList<>();
+        
+        for (Tab tab : tabPane.getTabs()) {
+            if (tab.getUserData() != null) {
+                String userData = tab.getUserData().toString();
+                
+                // Si estamos saliendo del paso 2, cerrar pestañas de símbolos
+                if (pasoActual == 2 && 
+                    (userData.startsWith("no_terminales_" + creacionId) || 
+                     userData.startsWith("terminales_" + creacionId))) {
+                    tabsToRemove.add(tab);
+                }
+                
+                // Si estamos saliendo del paso 3, cerrar pestañas de producciones
+                if (pasoActual == 3 && userData.startsWith("producciones_" + creacionId)) {
+                    tabsToRemove.add(tab);
+                }
+            }
+        }
+        
+        // Cerrar las pestañas encontradas
+        for (Tab tab : tabsToRemove) {
+            tabPane.getTabs().remove(tab);
+        }
+    }
 
     public MenuPrincipal getMenuPane() {
         return menuPane;
@@ -119,6 +200,9 @@ public class PanelCreacionGramatica extends BorderPane implements ActualizableTe
         stage.toFront(); // Asegura que la alerta esté al frente
         confirm.showAndWait().ifPresent(result -> {
             if (result == btnSi) {
+                // Cerrar todas las pestañas hijas antes de cerrar la principal
+                TabManager.closeChildTabs(tabPane, creacionId);
+                
                 // Encontrar la pestaña actual
                 Tab currentTab = null;
                 for (Tab tab : tabPane.getTabs()) {

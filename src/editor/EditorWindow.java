@@ -41,6 +41,7 @@ public class EditorWindow {
     public void addEditor(Editor editor) {
         Tab editorTab = new Tab(bundle.getString("editor.title"), editor);
         editorTab.setClosable(true);
+        editorTab.setUserData(editor.getEditorId());
         tabPane.getTabs().add(editorTab);
         tabPane.getSelectionModel().select(editorTab);
     }

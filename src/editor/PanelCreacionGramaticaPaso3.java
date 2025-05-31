@@ -91,9 +91,11 @@ public class PanelCreacionGramaticaPaso3 extends VBox implements ActualizableTex
             // Si ya existe una pestaña de producciones, seleccionarla
             TabManager.getOrCreateTab(tabPane, PanelProducciones.class, bundle.getString("creacion3.tab.modificar.producciones"), null);
         } else {
-            // Si no existe, crear una nueva
+            // Si no existe, crear una nueva como pestaña hija de la creación
             PanelProducciones panel = new PanelProducciones(this, producciones, tabPane);
-            TabManager.getOrCreateTab(tabPane, PanelProducciones.class, bundle.getString("creacion3.tab.modificar.producciones"), panel);
+            String childId = "producciones_" + panelPadre.getCreacionId();
+            TabManager.getOrCreateTab(tabPane, PanelProducciones.class, 
+                bundle.getString("creacion3.tab.modificar.producciones"), panel, panelPadre.getCreacionId(), childId);
         }
     }
 

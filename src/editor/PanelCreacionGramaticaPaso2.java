@@ -111,9 +111,11 @@ public class PanelCreacionGramaticaPaso2 extends VBox implements ActualizableTex
             // Si ya existe una pestaña de no terminales, seleccionarla
             TabManager.getOrCreateTab(tabPane, PanelSimbolosNoTerminales.class, bundle.getString("creacion2.tab.modificar.no.terminales"), null);
         } else {
-            // Si no existe, crear una nueva
+            // Si no existe, crear una nueva como pestaña hija de la creación
             PanelSimbolosNoTerminales panel = new PanelSimbolosNoTerminales(simbolosNoTerminales, tabPane, this);
-            TabManager.getOrCreateTab(tabPane, PanelSimbolosNoTerminales.class, bundle.getString("creacion2.tab.modificar.no.terminales"), panel);
+            String childId = "no_terminales_" + panelPadre.getCreacionId();
+            TabManager.getOrCreateTab(tabPane, PanelSimbolosNoTerminales.class, 
+                bundle.getString("creacion2.tab.modificar.no.terminales"), panel, panelPadre.getCreacionId(), childId);
         }
     }
 
@@ -124,9 +126,11 @@ public class PanelCreacionGramaticaPaso2 extends VBox implements ActualizableTex
             // Si ya existe una pestaña de terminales, seleccionarla
             TabManager.getOrCreateTab(tabPane, PanelSimbolosTerminales.class, bundle.getString("creacion2.tab.modificar.terminales"), null);
         } else {
-            // Si no existe, crear una nueva
+            // Si no existe, crear una nueva como pestaña hija de la creación
             PanelSimbolosTerminales panel = new PanelSimbolosTerminales(simbolosTerminales, tabPane, this);
-            TabManager.getOrCreateTab(tabPane, PanelSimbolosTerminales.class, bundle.getString("creacion2.tab.modificar.terminales"), panel);
+            String childId = "terminales_" + panelPadre.getCreacionId();
+            TabManager.getOrCreateTab(tabPane, PanelSimbolosTerminales.class, 
+                bundle.getString("creacion2.tab.modificar.terminales"), panel, panelPadre.getCreacionId(), childId);
         }
     }
 

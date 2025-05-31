@@ -196,6 +196,8 @@ public class MenuPrincipal extends Application {
             Editor editor = new Editor(tabPane, this, bundle);
             Tab editorTab = new Tab(bundle.getString("editor.title"), editor);
             editorTab.setClosable(true);
+            // Establecer el editorId como userData para habilitar relaciones padre-hijo
+            editorTab.setUserData(editor.getEditorId());
             tabPane.getTabs().add(editorTab);
             tabPane.getSelectionModel().select(editorTab);
             SimulacionFinal.reasignarNumerosSimulaciones(tabPane);

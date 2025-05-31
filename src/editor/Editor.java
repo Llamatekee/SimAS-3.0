@@ -20,6 +20,8 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.List;
+import java.util.ArrayList;
 
 public class Editor extends VBox implements ActualizableTextos {
 
@@ -57,6 +59,11 @@ public class Editor extends VBox implements ActualizableTextos {
     @FXML private Label labelProducciones;
 
     private ResourceBundle bundle;
+    
+    // Sistema de identificación para relaciones padre-hijo
+    private String editorId;
+    private static int contadorEditores = 0;
+    private boolean listenerConfigured = false;
 
     // ==========================
     // CONSTRUCTORES
@@ -68,7 +75,9 @@ public class Editor extends VBox implements ActualizableTextos {
      */
     public Editor() {
         this.gramatica = new Gramatica();
+        this.editorId = "editor_" + System.currentTimeMillis() + "_" + (++contadorEditores);
         cargarFXML();
+        configurarRelacionesPadreHijo();
     }
 
     /**
@@ -78,7 +87,9 @@ public class Editor extends VBox implements ActualizableTextos {
         this.tabPane = tabPane;
         this.menuPane = menuPane;
         this.gramatica = new Gramatica();
+        this.editorId = "editor_" + System.currentTimeMillis() + "_" + (++contadorEditores);
         cargarFXML();
+        configurarRelacionesPadreHijo();
     }
 
     /**
@@ -88,7 +99,9 @@ public class Editor extends VBox implements ActualizableTextos {
         this.tabPane = tabPane;
         this.menuPane = menuPane;
         this.gramatica = gramatica;
+        this.editorId = "editor_" + System.currentTimeMillis() + "_" + (++contadorEditores);
         cargarFXML();
+        configurarRelacionesPadreHijo();
     }
 
     /**
@@ -99,12 +112,39 @@ public class Editor extends VBox implements ActualizableTextos {
         this.menuPane = menuPane;
         this.gramatica = new Gramatica();
         this.bundle = bundle;
+        this.editorId = "editor_" + System.currentTimeMillis() + "_" + (++contadorEditores);
         cargarFXML();
+        configurarRelacionesPadreHijo();
     }
 
     // ==========================
     // MÉTODOS DE INICIALIZACIÓN
     // ==========================
+    
+    /**
+     * 🔹 Configura las relaciones padre-hijo para cerrar pestañas hijas cuando se cierre el editor.
+     */
+    private void configurarRelacionesPadreHijo() {
+        if (tabPane != null && !listenerConfigured) {
+            // Añadir listener para cerrar pestañas hijas cuando se cierre la pestaña de editor
+            tabPane.getTabs().addListener((javafx.collections.ListChangeListener.Change<? extends Tab> change) -> {
+                while (change.next()) {
+                    if (change.wasRemoved()) {
+                        for (Tab tab : change.getRemoved()) {
+                            if (tab.getContent() == this && tab.getUserData() != null && 
+                                tab.getUserData().toString().equals(editorId)) {
+                                // Cerrar las pestañas hijas
+                                javafx.application.Platform.runLater(() -> {
+                                    TabManager.closeChildTabs(tabPane, editorId);
+                                });
+                            }
+                        }
+                    }
+                }
+            });
+            listenerConfigured = true;
+        }
+    }
 
     /**
      * 🔹 Carga la interfaz desde el archivo FXML.
@@ -122,6 +162,13 @@ public class Editor extends VBox implements ActualizableTextos {
             e.printStackTrace();
             mostrarError("Error al cargar la interfaz", e.getMessage());
         }
+    }
+    
+    /**
+     * 🔹 Obtiene el ID único de este editor.
+     */
+    public String getEditorId() {
+        return editorId;
     }
 
     public Gramatica getGramatica() {
@@ -148,6 +195,8 @@ public class Editor extends VBox implements ActualizableTextos {
     // Métodos para inyectar dependencias (si se crean desde MenuPrincipal)
     public void setTabPane(TabPane tabPane) {
         this.tabPane = tabPane;
+        // Configurar relaciones padre-hijo si aún no se ha hecho
+        configurarRelacionesPadreHijo();
     }
 
     public void setMenuPane(MenuPrincipal menuPane) {
@@ -174,9 +223,11 @@ public class Editor extends VBox implements ActualizableTextos {
             // Si ya existe una pestaña de creación, seleccionarla
             TabManager.getOrCreateTab(tabPane, PanelCreacionGramatica.class, bundle.getString("creacion.tab.paso1"), null);
         } else {
-            // Si no existe, crear una nueva
+            // Si no existe, crear una nueva como pestaña hija del editor
             PanelCreacionGramatica asistente = new PanelCreacionGramatica(this, tabPane, null, menuPane);
-            TabManager.getOrCreateTab(tabPane, PanelCreacionGramatica.class, bundle.getString("creacion.tab.paso1"), asistente);
+            String childId = "creacion_" + editorId;
+            TabManager.getOrCreateTab(tabPane, PanelCreacionGramatica.class, 
+                bundle.getString("creacion.tab.paso1"), asistente, editorId, childId);
         }
     }
 
@@ -200,9 +251,11 @@ public class Editor extends VBox implements ActualizableTextos {
             // Si ya existe una pestaña de edición, seleccionarla
             TabManager.getOrCreateTab(tabPane, PanelCreacionGramatica.class, bundle.getString("creacion.tab.paso1"), null);
         } else {
-            // Si no existe, crear una nueva
+            // Si no existe, crear una nueva como pestaña hija del editor
             PanelCreacionGramatica asistente = new PanelCreacionGramatica(this, tabPane, this.gramatica, menuPane);
-            TabManager.getOrCreateTab(tabPane, PanelCreacionGramatica.class, bundle.getString("creacion.tab.paso1"), asistente);
+            String childId = "creacion_" + editorId;
+            TabManager.getOrCreateTab(tabPane, PanelCreacionGramatica.class, 
+                bundle.getString("creacion.tab.paso1"), asistente, editorId, childId);
         }
     }
 
