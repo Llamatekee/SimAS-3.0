@@ -145,6 +145,9 @@ public class MenuPrincipal extends Application {
                 );
             }
             
+            // Enable tab dragging
+            tabPane.setTabDragPolicy(TabPane.TabDragPolicy.REORDER);
+            
             primaryStage.show();
             
         } catch (IOException e) {
@@ -159,6 +162,9 @@ public class MenuPrincipal extends Application {
         comboIdioma.setValue("Español");
         comboIdioma.setOnAction(e -> cambiarIdioma());
         cargarBundle(currentLocale);
+        
+        // Enable tab dragging
+        tabPane.setTabDragPolicy(TabPane.TabDragPolicy.REORDER);
         
         // Actualizar el título inicial de la pestaña principal
         if (tabPane != null && !tabPane.getTabs().isEmpty()) {
