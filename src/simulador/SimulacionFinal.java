@@ -25,16 +25,13 @@ import javafx.beans.property.SimpleStringProperty;
 import java.util.ArrayList;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.layout.Priority;
 import java.io.File;
 import editor.ActualizableTextos;
 import editor.TabManager;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
-import java.util.Collections;
 import java.awt.image.BufferedImage;
 import javafx.embed.swing.SwingFXUtils;
-import javafx.scene.image.ImageView;
 import java.util.Map;
 import java.util.HashMap;
 
@@ -78,9 +75,6 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
     private List<EstadoSimulacion> estadosAnteriores = new ArrayList<>();
 
     private String simulacionId; // Identificador único para esta simulación
-    private static int contadorSimulaciones = 0; // Contador global para numerar simulaciones
-    private static Map<Integer, List<Integer>> numerosDisponiblesPorGrupo = new HashMap<>(); // Números disponibles por grupo
-    private static Map<Integer, Integer> contadoresPorGrupo = new HashMap<>(); // Contadores por grupo
     private int numeroSimulacion; // Número de esta simulación específica
     private String simuladorPadreId; // Nuevo campo para almacenar el ID del simulador padre
 
@@ -112,7 +106,6 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
             this.simuladorPadreId = selectedTab.getUserData().toString();
         }
         
-        System.out.println("DEBUG: SimulacionFinal constructor - Selected simulador: " + this.simuladorPadreId);
         
         // Contar simulaciones específicamente para este simulador
         int simulacionesEnGrupo = 0;
@@ -128,7 +121,6 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         
         // Asignar número de simulación
         this.numeroSimulacion = simulacionesEnGrupo + 1;
-        System.out.println("DEBUG: SimulacionFinal constructor - Número asignado: " + this.numeroSimulacion);
         
         cargarFXML();
         actualizarTitulosPestañas();
@@ -175,11 +167,9 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         
         // Obtener el número de grupo del simulador padre
         int numeroGrupo = TabManager.obtenerNumeroGrupo(tabPane, simuladorPadreId);
-        System.out.println("DEBUG: actualizarTitulosPestañas - Grupo del simulador padre " + simuladorPadreId + ": " + numeroGrupo);
         
         // Determinar si hay más de un grupo
         boolean mostrarGrupo = TabManager.contarGruposActivos(tabPane) > 1;
-        System.out.println("DEBUG: actualizarTitulosPestañas - Mostrar grupo: " + mostrarGrupo);
         
         // Actualizar títulos
         for (Tab tab : tabPane.getTabs()) {
@@ -188,7 +178,6 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
                 String nuevoTitulo = mostrarGrupo ? 
                     numeroGrupo + "-" + tituloBase + " " + numeroSimulacion :
                     tituloBase + " " + numeroSimulacion;
-                System.out.println("DEBUG: actualizarTitulosPestañas - Nuevo título: " + nuevoTitulo);
                 tab.setText(nuevoTitulo);
             } else if (tab.getUserData() != null) {
                 String userData = tab.getUserData().toString();

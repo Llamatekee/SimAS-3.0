@@ -20,8 +20,6 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.List;
-import java.util.ArrayList;
 
 public class Editor extends VBox implements ActualizableTextos {
 
@@ -277,7 +275,23 @@ public class Editor extends VBox implements ActualizableTextos {
 
     @FXML
     private void onBtnSimularAction() {
-        // Generar ID único para el simulador
+        // Verificar si ya existe un simulador en este grupo
+        String grupoEditor = TabManager.obtenerGrupoDeElemento(tabPane, this.editorId);
+        if (grupoEditor != null) {
+            // Buscar si ya hay un simulador en este grupo
+            for (Tab tab : tabPane.getTabs()) {
+                if (tab.getUserData() != null && 
+                    tab.getUserData().toString().startsWith("simulador_")) {
+                    String grupoSimulador = TabManager.obtenerGrupoDeElemento(tabPane, tab.getUserData().toString());
+                    if (grupoEditor.equals(grupoSimulador)) {
+                        tabPane.getSelectionModel().select(tab);
+                        return;
+                    }
+                }
+            }
+        }
+
+        // Si no existe un simulador, crear uno nuevo
         String simuladorId = "simulador_" + System.currentTimeMillis();
         
         // ASIGNAR AL GRUPO EXISTENTE ANTES de crear la pestaña: Simulador desde editor → mismo grupo que el editor
@@ -288,8 +302,6 @@ public class Editor extends VBox implements ActualizableTextos {
         
         // Empezar desde el paso 1 (índice 0) usando cambiarPaso
         simulador.cambiarPaso(0);
-        
-        System.out.println("EDITOR: Created SIMULATOR " + simuladorId + " in same group as EDITOR " + this.editorId);
     }
 
     @FXML

@@ -17,8 +17,6 @@ import javafx.scene.Parent;
 import editor.ActualizableTextos;
 import java.util.ResourceBundle;
 import editor.TabManager;
-import javafx.application.Platform;
-import java.util.Collections;
 
 /**
  * Controlador para la simulación descendente en JavaFX.

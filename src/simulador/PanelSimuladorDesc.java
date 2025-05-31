@@ -45,17 +45,6 @@ public class PanelSimuladorDesc {
     // *** NUEVO: Registro estático de simuladores activos ***
     private static final java.util.Map<String, PanelSimuladorDesc> simuladoresActivos = new java.util.HashMap<>();
 
-    // Clase interna para almacenar los componentes de la pestaña de gramática
-    private static class GramaticaTabData {
-        public final ListView<String> listView;
-        public final Button btnCerrar;
-        
-        public GramaticaTabData(ListView<String> listView, Button btnCerrar) {
-            this.listView = listView;
-            this.btnCerrar = btnCerrar;
-        }
-    }
-
     public PanelSimuladorDesc(Gramatica gramatica, TabPane tabPane, ResourceBundle bundle) {
         this(gramatica, tabPane, bundle, null);
     }
@@ -77,7 +66,6 @@ public class PanelSimuladorDesc {
         // *** NUEVO: Registrar este simulador en el registro estático ***
         simuladoresActivos.put(this.simuladorId, this);
 
-        System.out.println("DEBUG: Created simulator with ID: " + this.simuladorId);
         
         // Inicializar funciones de error y tabla predictiva extendida
         inicializarTablaPredictivaYFuncionesError();
@@ -196,7 +184,7 @@ public class PanelSimuladorDesc {
             
             // Usar TabManager para obtener o crear la pestaña como hija del simulador
             String childId = "gramatica_" + simuladorId;
-            Tab tab = TabManager.getOrCreateTab(tabPane, GramaticaTabData.class, 
+            Tab tab = TabManager.getOrCreateTab(tabPane, Parent.class, 
                 bundle.getString("simulador.gramatica.titulo"), content, simuladorId, childId);
             tab.setUserData(childId);
             
@@ -207,7 +195,6 @@ public class PanelSimuladorDesc {
 
     public void cancelarSimulacion() {
         // Desregistrar este simulador del registro estático
-        System.out.println("DEBUG: Deregistering simulator " + simuladorId + " due to cancellation");
         desregistrarSimulador(simuladorId);
         
         // Cerrar todas las pestañas hijas usando el TabManager
@@ -224,7 +211,6 @@ public class PanelSimuladorDesc {
         // *** NUEVO: Forzar actualización inmediata de numeración ***
         javafx.application.Platform.runLater(() -> {
             TabManager.reasignarNumerosGruposGramatica(tabPane);
-            System.out.println("DEBUG: Forced renumbering after simulator " + simuladorId + " cancellation");
         });
     }
 
@@ -254,9 +240,6 @@ public class PanelSimuladorDesc {
         // Construir el título final - siempre aplicamos la numeración si está disponible
         String tituloPestaña = construirTituloConNumeracion(tituloBase);
         
-        System.out.println("DEBUG: cambiarPaso - paso: " + paso + ", simuladorId: " + simuladorId + 
-                         ", titulo: " + tituloPestaña);
-        
         // Actualizar el paso actual con el bundle actual
         PanelNuevaSimDescPaso pasoActual = pasos.get(paso);
         if (pasoActual instanceof editor.ActualizableTextos) {
@@ -272,7 +255,6 @@ public class PanelSimuladorDesc {
             // Seleccionar la pestaña existente
             tabPane.getSelectionModel().select(pestañaSimulacion);
             
-            System.out.println("DEBUG: Updated existing simulator tab to step " + (paso + 1) + " with title: " + tituloPestaña);
         } else {
             // Solo crear una nueva pestaña si no existe una
             Tab tab = TabManager.getOrCreateTab(tabPane, PanelSimuladorDesc.class, 
@@ -284,8 +266,6 @@ public class PanelSimuladorDesc {
             
             // Seleccionar la pestaña
             tabPane.getSelectionModel().select(pestañaSimulacion);
-            
-            System.out.println("DEBUG: Created new simulator tab for step " + (paso + 1) + " with title: " + tituloPestaña);
         }
     }
     
@@ -429,7 +409,6 @@ public class PanelSimuladorDesc {
                                 tab.getUserData().toString().equals(simuladorId)) {
                                 
                                 // Desregistrar este simulador del registro estático
-                                System.out.println("DEBUG: Deregistering simulator " + simuladorId + " due to tab closure");
                                 desregistrarSimulador(simuladorId);
                                 
                                 // Cerrar las pestañas hijas
@@ -438,7 +417,6 @@ public class PanelSimuladorDesc {
                                     
                                     // *** NUEVO: Forzar actualización inmediata de numeración ***
                                     TabManager.reasignarNumerosGruposGramatica(tabPane);
-                                    System.out.println("DEBUG: Forced renumbering after simulator " + simuladorId + " closure");
                                 });
                             }
                         }
@@ -462,7 +440,6 @@ public class PanelSimuladorDesc {
         for (PanelSimuladorDesc simulador : simuladoresActivos.values()) {
             try {
                 simulador.setBundle(bundle);
-                System.out.println("DEBUG: Updated simulator " + simulador.simuladorId + " with new bundle");
             } catch (Exception e) {
                 System.err.println("Error updating simulator " + simulador.simuladorId + ": " + e.getMessage());
             }
@@ -474,7 +451,6 @@ public class PanelSimuladorDesc {
      */
     public static void desregistrarSimulador(String simuladorId) {
         simuladoresActivos.remove(simuladorId);
-        System.out.println("DEBUG: Unregistered simulator " + simuladorId);
     }
     
     /**

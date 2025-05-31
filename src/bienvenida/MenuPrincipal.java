@@ -1,7 +1,6 @@
 package bienvenida;
 
 import editor.Editor;
-import editor.EditorWindow;
 import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,7 +14,6 @@ import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import editor.ActualizableTextos;
-import simulador.SimulacionFinal;
 import editor.TabManager;
 import gramatica.Gramatica;
 import simulador.PanelSimuladorDesc;
@@ -216,8 +214,6 @@ public class MenuPrincipal extends Application {
         
         // Reasignar numeración para reflejar los cambios
         TabManager.reasignarNumerosGruposGramatica(tabPane);
-        
-        System.out.println("MAIN MENU: Created new EDITOR with ID: " + editor.getEditorId());
     }
 
     @FXML
@@ -316,9 +312,6 @@ public class MenuPrincipal extends Application {
             
             // Reasignar numeración para reflejar los cambios
             TabManager.reasignarNumerosGruposGramatica(tabPane);
-            
-            // Log para debug
-            System.out.println("MAIN MENU: Created new INDEPENDENT SIMULATOR with ID: " + simuladorId);
             
         } catch (Exception e) {
             e.printStackTrace();
