@@ -284,14 +284,21 @@ public class MenuPrincipal extends Application {
             // Generar ID único para el simulador
             String simuladorId = "simulador_" + System.currentTimeMillis();
             
+            // ASIGNAR A NUEVO GRUPO ANTES de crear la pestaña: Simulador independiente desde menú principal
+            // Esto asegura que la numeración y posicionamiento sean correctos
+            TabManager.asignarElementoANuevoGrupo(tabPane, simuladorId);
+            
             // Crear el simulador descendente
             PanelSimuladorDesc simulador = new PanelSimuladorDesc(gramatica, tabPane, bundle, simuladorId);
             
             // Saltar directamente al paso 6 (índice 5)
             simulador.cambiarPaso(5);
             
+            // Reasignar numeración para reflejar los cambios
+            TabManager.reasignarNumerosGruposGramatica(tabPane);
+            
             // Log para debug
-            System.out.println("MAIN MENU: Created new SIMULATOR with ID: " + simuladorId);
+            System.out.println("MAIN MENU: Created new INDEPENDENT SIMULATOR with ID: " + simuladorId);
             
         } catch (Exception e) {
             e.printStackTrace();

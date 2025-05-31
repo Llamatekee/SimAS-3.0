@@ -280,11 +280,11 @@ public class Editor extends VBox implements ActualizableTextos {
         // Generar ID único para el simulador
         String simuladorId = "simulador_" + System.currentTimeMillis();
         
+        // ASIGNAR AL GRUPO EXISTENTE ANTES de crear la pestaña: Simulador desde editor → mismo grupo que el editor
+        TabManager.asignarSimuladorAGrupoDeEditor(tabPane, simuladorId, this.editorId);
+        
         // Crear un simulador que pertenezca al mismo grupo que este editor
         PanelSimuladorDesc simulador = new PanelSimuladorDesc(gramatica, tabPane, bundle, simuladorId);
-        
-        // ASIGNAR AL GRUPO EXISTENTE: Simulador desde editor → mismo grupo que el editor
-        TabManager.asignarSimuladorAGrupoDeEditor(tabPane, simuladorId, this.editorId);
         
         // Empezar desde el paso 1 (índice 0) usando cambiarPaso
         simulador.cambiarPaso(0);

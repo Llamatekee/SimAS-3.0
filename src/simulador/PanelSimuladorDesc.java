@@ -223,13 +223,21 @@ public class PanelSimuladorDesc {
         
         this.pasoActual = paso;
         
-        // Actualizar el título de la pestaña según el paso
-        String tituloPestaña;
+        // Determinar el título base según el paso
+        String tituloBase;
         if (paso == 5) {
-            tituloPestaña = bundle.getString("simulador.tab.paso6");
+            // Paso 6: "Simulador de gramáticas"
+            tituloBase = bundle.getString("simulador.tab.paso6");
         } else {
-            tituloPestaña = bundle.getString("simulador.tab.paso1").replace("1", String.valueOf(paso + 1));
+            // Pasos 1-5: "Asistente de simulación"
+            tituloBase = bundle.getString("simulador.asistente");
         }
+        
+        // Construir el título final - siempre aplicamos la numeración si está disponible
+        String tituloPestaña = construirTituloConNumeracion(tituloBase);
+        
+        System.out.println("DEBUG: cambiarPaso - paso: " + paso + ", simuladorId: " + simuladorId + 
+                         ", titulo: " + tituloPestaña);
         
         // Actualizar el paso actual con el bundle actual
         PanelNuevaSimDescPaso pasoActual = pasos.get(paso);
@@ -237,16 +245,45 @@ public class PanelSimuladorDesc {
             ((editor.ActualizableTextos) pasoActual).actualizarTextos(bundle);
         }
         
-        // Usar TabManager para crear/obtener la pestaña, asegurando asignación correcta a grupos
-        Tab tab = TabManager.getOrCreateTab(tabPane, PanelSimuladorDesc.class, 
-            tituloPestaña, pasoActual.getRoot(), simuladorId, null);
-        pestañaSimulacion = tab;
+        // Si ya existe una pestaña de simulación, actualizarla en lugar de crear una nueva
+        if (pestañaSimulacion != null && tabPane.getTabs().contains(pestañaSimulacion)) {
+            // Actualizar el contenido y título de la pestaña existente
+            pestañaSimulacion.setText(tituloPestaña);
+            pestañaSimulacion.setContent(pasoActual.getRoot());
+            
+            // Seleccionar la pestaña existente
+            tabPane.getSelectionModel().select(pestañaSimulacion);
+            
+            System.out.println("DEBUG: Updated existing simulator tab to step " + (paso + 1) + " with title: " + tituloPestaña);
+        } else {
+            // Solo crear una nueva pestaña si no existe una
+            Tab tab = TabManager.getOrCreateTab(tabPane, PanelSimuladorDesc.class, 
+                tituloPestaña, pasoActual.getRoot(), simuladorId, null);
+            pestañaSimulacion = tab;
+            
+            // Asegurar que el userData esté configurado correctamente
+            pestañaSimulacion.setUserData(simuladorId);
+            
+            // Seleccionar la pestaña
+            tabPane.getSelectionModel().select(pestañaSimulacion);
+            
+            System.out.println("DEBUG: Created new simulator tab for step " + (paso + 1) + " with title: " + tituloPestaña);
+        }
+    }
+    
+    /**
+     * Construye el título con numeración de grupo si es necesario.
+     */
+    private String construirTituloConNumeracion(String tituloBase) {
+        // Obtener el número de grupo para la numeración
+        int numeroGrupo = TabManager.obtenerNumeroGrupo(tabPane, simuladorId);
         
-        // Asegurar que el userData esté configurado correctamente
-        pestañaSimulacion.setUserData(simuladorId);
-        
-        // Seleccionar la pestaña
-        tabPane.getSelectionModel().select(pestañaSimulacion);
+        // Construir el título final con numeración si corresponde
+        if (numeroGrupo > 0 && numeroGrupo != -1) {
+            return tituloBase + " " + numeroGrupo;
+        } else {
+            return tituloBase;
+        }
     }
     
     /**
@@ -304,13 +341,22 @@ public class PanelSimuladorDesc {
             }
         }
         
-        // Update tab title and content if it exists
+        // Actualizar título de la pestaña principal del simulador con el nuevo idioma
         if (pestañaSimulacion != null) {
+            // Determinar el título base según el paso actual
+            String tituloBase;
             if (this.pasoActual == 5) {
-                pestañaSimulacion.setText(bundle.getString("simulador.tab.paso6"));
+                // Paso 6: "Simulador de gramáticas"
+                tituloBase = bundle.getString("simulador.tab.paso6");
             } else {
-                pestañaSimulacion.setText(bundle.getString("simulador.tab.paso1").replace("1", String.valueOf(this.pasoActual + 1)));
+                // Pasos 1-5: "Asistente de simulación"
+                tituloBase = bundle.getString("simulador.asistente");
             }
+            
+            // Aplicar numeración si corresponde
+            String tituloFinal = construirTituloConNumeracion(tituloBase);
+            pestañaSimulacion.setText(tituloFinal);
+            
             // Refresh the content of the current step
             pestañaSimulacion.setContent(pasos.get(this.pasoActual).getRoot());
         }
@@ -322,12 +368,26 @@ public class PanelSimuladorDesc {
                 
                 // Actualizar pestaña de gramática
                 if (userData.equals("gramatica_" + simuladorId)) {
-                    tab.setText(bundle.getString("simulador.gramatica.original"));
+                    String tituloBase = bundle.getString("simulador.gramatica.original");
+                    // Aplicar numeración de grupo si corresponde
+                    int numeroGrupo = TabManager.obtenerNumeroGrupo(tabPane, simuladorId);
+                    if (numeroGrupo > 0 && numeroGrupo != -1) {
+                        tab.setText("Gramática " + numeroGrupo + ": " + tituloBase);
+                    } else {
+                        tab.setText(tituloBase);
+                    }
                 }
                 
                 // Actualizar pestaña de funciones de error
                 if (userData.equals("funciones_error_" + simuladorId)) {
-                    tab.setText(bundle.getString("simulador.paso4.btn.nueva"));
+                    String tituloBase = bundle.getString("simulador.paso4.btn.nueva");
+                    // Aplicar numeración de grupo si corresponde
+                    int numeroGrupo = TabManager.obtenerNumeroGrupo(tabPane, simuladorId);
+                    if (numeroGrupo > 0 && numeroGrupo != -1) {
+                        tab.setText("Funciones Error " + numeroGrupo + ": " + tituloBase);
+                    } else {
+                        tab.setText(tituloBase);
+                    }
                 }
             }
         }
