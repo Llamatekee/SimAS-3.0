@@ -909,4 +909,61 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
             generarImagenRec(nodo.hijos.get(i), childX, childY, childWidth, height - 50, pixelWriter);
         }
     }
+
+    /**
+     * Verifica si esta simulación pertenece a un simulador específico.
+     * @param simuladorId El ID del simulador a verificar
+     * @return true si la simulación pertenece al simulador especificado
+     */
+    public boolean perteneceASimulador(String simuladorId) {
+        return this.simuladorPadreId != null && this.simuladorPadreId.equals(simuladorId);
+    }
+    
+    /**
+     * Verifica si una pestaña es hija de esta simulación.
+     * @param tab La pestaña a verificar
+     * @return true si la pestaña es una derivación o árbol sintáctico de esta simulación
+     */
+    public boolean esHijaDeLaSimulacion(Tab tab) {
+        if (tab == null || tab.getUserData() == null) return false;
+        
+        String userData = tab.getUserData().toString();
+        return (userData.startsWith("derivacion_") || userData.startsWith("arbol_")) && 
+               userData.endsWith(this.simulacionId);
+    }
+
+    /**
+     * Obtiene el ID del simulador padre de esta simulación.
+     * @return El ID del simulador padre
+     */
+    public String getSimuladorPadreId() {
+        return simuladorPadreId;
+    }
+
+    /**
+     * Actualiza los títulos de las pestañas de derivación y árbol sintáctico.
+     * @param numeroGrupo El número del grupo al que pertenece la simulación
+     * @param mostrarGrupo Si se debe mostrar el número de grupo en los títulos
+     */
+    public void actualizarTitulosPestañas(Integer numeroGrupo, boolean mostrarGrupo) {
+        if (tabPane == null) return;
+        
+        // Actualizar títulos
+        for (Tab tab : tabPane.getTabs()) {
+            if (tab.getUserData() != null) {
+                String userData = tab.getUserData().toString();
+                
+                // Actualizar pestaña de derivación
+                if (userData.equals("derivacion_" + simulacionId)) {
+                    String tituloBase = bundle.getString("simulacionfinal.tab.derivacion");
+                    tab.setText(mostrarGrupo ? numeroGrupo + "-" + tituloBase + " " + numeroSimulacion : tituloBase + " " + numeroSimulacion);
+                }
+                // Actualizar pestaña de árbol sintáctico
+                else if (userData.equals("arbol_" + simulacionId)) {
+                    String tituloBase = bundle.getString("simulacionfinal.tab.arbol");
+                    tab.setText(mostrarGrupo ? numeroGrupo + "-" + tituloBase + " " + numeroSimulacion : tituloBase + " " + numeroSimulacion);
+                }
+            }
+        }
+    }
 } 

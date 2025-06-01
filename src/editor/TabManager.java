@@ -814,198 +814,129 @@ public class TabManager {
     /**
      * Reasigna los números de los grupos de gramática según su orden de creación, no su posición en el TabPane.
      * Cada grupo puede contener editores, simuladores y sus pestañas relacionadas.
+     * La numeración es independiente para cada ventana.
      */
     public static void reasignarNumerosGruposGramatica(TabPane tabPane) {
-        Map<String, Integer> gruposNumerados = new HashMap<>();
-        List<String> gruposOrdenados = new ArrayList<>();
+        if (tabPane == null) return;
         
-        // Primero, recolectar todos los grupos y sus timestamps
-        for (Map.Entry<String, Integer> entry : gruposGramatica.get(tabPane).entrySet()) {
-            String grupoId = entry.getKey();
-            gruposOrdenados.add(grupoId);
+        // Recolectar todos los grupos activos en esta ventana
+        Set<String> gruposActivos = new HashSet<>();
+        Map<String, String> elementos = elementoToGrupo.get(tabPane);
+        if (elementos != null) {
+            gruposActivos.addAll(elementos.values());
         }
         
         // Ordenar los grupos por timestamp
+        List<String> gruposOrdenados = new ArrayList<>(gruposActivos);
         Collections.sort(gruposOrdenados, (g1, g2) -> {
             long t1 = extraerTimestampDeGrupoId(g1);
             long t2 = extraerTimestampDeGrupoId(g2);
             return Long.compare(t1, t2);
         });
         
-        // Asignar números a los grupos
+        // Asignar nuevos números secuenciales empezando desde 1
+        Map<String, Integer> nuevosNumeros = new HashMap<>();
         for (int i = 0; i < gruposOrdenados.size(); i++) {
-            String grupoId = gruposOrdenados.get(i);
-            gruposNumerados.put(grupoId, i + 1);
+            nuevosNumeros.put(gruposOrdenados.get(i), i + 1);
         }
         
-        // Actualizar los números en el mapa de grupos
-        gruposGramatica.get(tabPane).clear();
-        gruposGramatica.get(tabPane).putAll(gruposNumerados);
+        // Actualizar el mapa de números de grupos
+        Map<String, Integer> grupos = gruposGramatica.get(tabPane);
+        if (grupos != null) {
+            grupos.clear();
+            grupos.putAll(nuevosNumeros);
+        }
         
-        // Determinar si debemos mostrar numeración (solo si hay más de un grupo)
-        boolean mostrarNumeracion = gruposOrdenados.size() > 1;
-        
-        // Actualizar los títulos de las pestañas
+        // Actualizar los títulos de todas las pestañas
         for (Tab tab : tabPane.getTabs()) {
-            String userData = (String) tab.getUserData();
-            if (userData != null) {
-                String grupoId = elementoToGrupo.get(tabPane).get(userData);
+            // Actualizar pestañas de editor y simulador
+            if (tab.getUserData() != null) {
+                String elementId = tab.getUserData().toString();
+                String grupoId = elementos != null ? elementos.get(elementId) : null;
+                
                 if (grupoId != null) {
-                    int numeroGrupo = mostrarNumeracion ? gruposNumerados.get(grupoId) : -1;
-                    actualizarPestañasDelGrupo(tabPane, userData, numeroGrupo);
+                    // Es un elemento principal (editor o simulador)
+                    if (elementId.startsWith("editor_")) {
+                        actualizarTituloEditor(tab, nuevosNumeros.get(grupoId), gruposOrdenados.size() > 1);
+                    } else if (elementId.startsWith("simulador_")) {
+                        actualizarTituloSimulador(tab, nuevosNumeros.get(grupoId), gruposOrdenados.size() > 1);
+                    }
+                    
+                    // Actualizar sus pestañas hijas
+                    actualizarTitulosPestañasHijas(tabPane, elementId, nuevosNumeros.get(grupoId), gruposOrdenados.size() > 1);
                 }
             }
             
-            // Actualizar simulaciones si el contenido es una SimulacionFinal
+            // Actualizar pestañas de simulación
             if (tab.getContent() instanceof simulador.SimulacionFinal) {
                 simulador.SimulacionFinal sim = (simulador.SimulacionFinal) tab.getContent();
-                sim.actualizarTitulosPestañas();
+                String simuladorId = sim.getSimuladorPadreId();
+                if (simuladorId != null) {
+                    String grupoId = elementos != null ? elementos.get(simuladorId) : null;
+                    if (grupoId != null) {
+                        sim.actualizarTitulosPestañas(nuevosNumeros.get(grupoId), gruposOrdenados.size() > 1);
+                    }
+                }
             }
         }
-        
-        // Reasignar números de simulaciones dentro de cada grupo
-        simulador.SimulacionFinal.reasignarNumerosSimulaciones(tabPane);
     }
     
     /**
-     * Extrae el timestamp de un grupoId (formato: grupo_TIMESTAMP_CONTADOR).
+     * Actualiza el título de un editor con su número de grupo.
      */
-    private static long extraerTimestampDeGrupoId(String grupoId) {
-        try {
-            // Formato esperado: "grupo_1748704312294_1"
-            String[] parts = grupoId.split("_");
-            if (parts.length >= 2) {
-                return Long.parseLong(parts[1]);
-            }
-        } catch (NumberFormatException e) {
-        }
-        return 0; // Fallback timestamp
+    private static void actualizarTituloEditor(Tab tab, Integer numeroGrupo, boolean mostrarGrupo) {
+        if (tab == null || numeroGrupo == null) return;
+        String tituloBase = obtenerTituloBaseEditor(tab.getTabPane());
+        tab.setText(mostrarGrupo ? numeroGrupo + "-" + tituloBase : tituloBase);
     }
     
     /**
-     * Actualiza todas las pestañas que pertenecen a un grupo de gramática específico.
+     * Actualiza el título de un simulador con su número de grupo.
      */
-    private static void actualizarPestañasDelGrupo(TabPane tabPane, String elementoId, int numeroGrupo) {
-        // Si el número de grupo es inválido, intentar obtenerlo
-        if (numeroGrupo < 0) {
-            numeroGrupo = obtenerNumeroGrupo(tabPane, elementoId);
-        }
-
-        // Determinar si hay más de un grupo
-        boolean mostrarGrupo = contarGruposActivos(tabPane) > 1;
-
+    private static void actualizarTituloSimulador(Tab tab, Integer numeroGrupo, boolean mostrarGrupo) {
+        if (tab == null || numeroGrupo == null) return;
+        String tituloBase = obtenerTituloBaseSimulador(tab.getTabPane());
+        tab.setText(mostrarGrupo ? numeroGrupo + "-" + tituloBase : tituloBase);
+    }
+    
+    /**
+     * Actualiza los títulos de las pestañas hijas de un elemento.
+     */
+    private static void actualizarTitulosPestañasHijas(TabPane tabPane, String elementId, Integer numeroGrupo, boolean mostrarGrupo) {
+        if (tabPane == null || elementId == null || numeroGrupo == null) return;
         
-        // Actualizar todas las pestañas del TabPane que pertenezcan a este grupo
         for (Tab tab : tabPane.getTabs()) {
             if (tab.getUserData() != null) {
-                String userData = tab.getUserData().toString();
+                String childId = tab.getUserData().toString();
                 
-                // 1. ACTUALIZAR ELEMENTO PRINCIPAL (editor o simulador)
-                if (userData.equals(elementoId)) {
-                    if (elementoId.startsWith("editor_")) {
-                        // Actualizar editores automáticamente
-                        String tituloBase = obtenerTituloBaseEditor(tabPane);
-                        if (mostrarGrupo && numeroGrupo > 0) {
-                            tab.setText(numeroGrupo + "-" + tituloBase);
-                        } else {
-                            tab.setText(tituloBase);
-                        }
-                    } else if (elementoId.startsWith("simulador_")) {
-                        // Lógica de actualización para simuladores
-                        String tituloActual = tab.getText();
-                        
-                        if (tituloActual.contains("Simulador de gramáticas") || 
-                            tituloActual.contains("Grammar Simulator") ||
-                            tituloActual.contains("Simulateur de grammaires") ||
-                            tituloActual.contains("Simulador") ||
-                            tituloActual.contains("Simulator") ||
-                            tituloActual.contains("Simulateur")) {
-                            
-                            // Es un simulador independiente (paso 6) - SIEMPRE actualizar
-                            String tituloBase = obtenerTituloBaseSimulador(tabPane);
-                            if (mostrarGrupo && numeroGrupo > 0) {
-                                tab.setText(numeroGrupo + "-" + tituloBase);
-                            } else {
-                                tab.setText(tituloBase);
-                            }
-                            
-                        } else if (tituloActual.contains("Asistente") ||
-                                   tituloActual.contains("Assistant") ||
-                                   tituloActual.contains("Simulation") ||
-                                   tituloActual.contains("Simulación") ||
-                                   tituloActual.contains("Wizard")) {
-                            
-                            // Es un simulador de editor (Asistente) - SIEMPRE actualizar para asegurar sincronización
-                            String tituloBase = extraerTituloBaseAsistente(tabPane);
-                            if (mostrarGrupo && numeroGrupo > 0) {
-                                tab.setText(numeroGrupo + "-" + tituloBase);
-                            } else {
-                                tab.setText(tituloBase);
-                            }
-                        }
+                // Pestañas hijas de editor
+                if (elementId.startsWith("editor_")) {
+                    String editorBaseId = elementId.replace("editor_", "");
+                    String creacionId = "creacion_" + editorBaseId;
+                    
+                    if (childId.equals(creacionId)) {
+                        String tituloBase = obtenerTituloCreacionActual(tabPane, tab);
+                        tab.setText(mostrarGrupo ? numeroGrupo + "-" + tituloBase : tituloBase);
+                    } else if (childId.startsWith("terminales_" + creacionId)) {
+                        String tituloBase = "Terminales";
+                        tab.setText(mostrarGrupo ? numeroGrupo + "-" + tituloBase : tituloBase);
+                    } else if (childId.startsWith("no_terminales_" + creacionId)) {
+                        String tituloBase = "No Terminales";
+                        tab.setText(mostrarGrupo ? numeroGrupo + "-" + tituloBase : tituloBase);
+                    } else if (childId.startsWith("producciones_" + creacionId)) {
+                        String tituloBase = "Producciones";
+                        tab.setText(mostrarGrupo ? numeroGrupo + "-" + tituloBase : tituloBase);
                     }
                 }
                 
-                // 2. ACTUALIZAR PESTAÑAS HIJAS DE EDITORES
-                if (elementoId.startsWith("editor_")) {
-                    String expectedCreacionId = "creacion_" + elementoId.replace("editor_", "");
-                    
-                    // Pestañas de creación (hijas directas del editor)
-                    if (userData.equals(expectedCreacionId)) {
-                        // Usar el título correcto del ResourceBundle basado en el paso actual
-                        String tituloCorrectoConPaso = obtenerTituloCreacionActual(tabPane, tab);
-                        if (mostrarGrupo && numeroGrupo > 0) {
-                            // Extraer solo la base del título (sin "Edición:" parte)
-                            String tituloBase = extraerTituloBaseCreacion(tituloCorrectoConPaso);
-                            tab.setText(numeroGrupo + "-" + tituloBase);
-                        } else {
-                            tab.setText(tituloCorrectoConPaso);
-                        }
-                    }
-                    
-                    // Pestañas de símbolos y producciones (nietas del editor)
-                    else if (userData.startsWith("terminales_" + expectedCreacionId) || 
-                             userData.startsWith("no_terminales_" + expectedCreacionId) || 
-                             userData.startsWith("producciones_" + expectedCreacionId)) {
-                        
-                        // Usar nombres simplificados
-                        String nombreSimple;
-                        if (userData.startsWith("terminales_")) {
-                            nombreSimple = "Terminales";
-                        } else if (userData.startsWith("no_terminales_")) {
-                            nombreSimple = "No Terminales";
-                        } else {
-                            nombreSimple = "Producciones";
-                        }
-                        
-                        if (mostrarGrupo && numeroGrupo > 0) {
-                            tab.setText(numeroGrupo + "-" + nombreSimple);
-                        } else {
-                            tab.setText(nombreSimple);
-                        }
-                    }
-                }
-                
-                // 3. ACTUALIZAR PESTAÑAS HIJAS DE SIMULADORES
-                if (elementoId.startsWith("simulador_")) {
-                    // Pestañas de gramática original
-                    if (userData.equals("gramatica_" + elementoId)) {
+                // Pestañas hijas de simulador
+                else if (elementId.startsWith("simulador_")) {
+                    if (childId.equals("gramatica_" + elementId)) {
                         String tituloBase = obtenerTituloBaseGramaticaOriginal(tabPane);
-                        if (mostrarGrupo && numeroGrupo > 0) {
-                            tab.setText(numeroGrupo + "-" + tituloBase);
-                        } else {
-                            tab.setText(tituloBase);
-                        }
-                    }
-                    
-                    // Pestañas de funciones de error
-                    else if (userData.equals("funciones_error_" + elementoId)) {
+                        tab.setText(mostrarGrupo ? numeroGrupo + "-" + tituloBase : tituloBase);
+                    } else if (childId.equals("funciones_error_" + elementId)) {
                         String tituloBase = obtenerTituloBaseFuncionesError(tabPane);
-                        if (mostrarGrupo && numeroGrupo > 0) {
-                            tab.setText(numeroGrupo + "-" + tituloBase);
-                        } else {
-                            tab.setText(tituloBase);
-                        }
+                        tab.setText(mostrarGrupo ? numeroGrupo + "-" + tituloBase : tituloBase);
                     }
                 }
             }
@@ -1195,5 +1126,41 @@ public class TabManager {
                 }
             }
         }
+    }
+
+    /**
+     * Reinicia la numeración de grupos, útil cuando se cierran todas las pestañas.
+     */
+    public static void resetGrupos(TabPane tabPane) {
+        if (tabPane == null) return;
+        
+        // Limpiar los mapas de este TabPane
+        elementoToGrupo.computeIfPresent(tabPane, (key, elementos) -> {
+            elementos.clear();
+            return elementos;
+        });
+        
+        gruposGramatica.computeIfPresent(tabPane, (key, grupos) -> {
+            grupos.clear();
+            return grupos;
+        });
+        
+        // Reiniciar el contador de grupos
+        contadorGrupos = 0;
+    }
+
+    /**
+     * Extrae el timestamp de un grupoId (formato: grupo_TIMESTAMP_CONTADOR).
+     */
+    private static long extraerTimestampDeGrupoId(String grupoId) {
+        try {
+            // Formato esperado: "grupo_1748704312294_1"
+            String[] parts = grupoId.split("_");
+            if (parts.length >= 2) {
+                return Long.parseLong(parts[1]);
+            }
+        } catch (NumberFormatException e) {
+        }
+        return 0; // Fallback timestamp
     }
 } 

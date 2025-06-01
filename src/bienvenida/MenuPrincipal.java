@@ -1,6 +1,7 @@
 package bienvenida;
 
 import editor.Editor;
+import editor.EditorWindow;
 import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,6 +21,8 @@ import simulador.PanelSimuladorDesc;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class MenuPrincipal extends Application {
 
@@ -117,6 +120,12 @@ public class MenuPrincipal extends Application {
                 }
             );
             
+            // Add Ctrl/Cmd+Shift+W shortcut to close all tabs
+            scene.getAccelerators().put(
+                new KeyCodeCombination(KeyCode.W, KeyCombination.SHORTCUT_DOWN, KeyCombination.SHIFT_DOWN),
+                () -> onBtnCerrarTabsAction()
+            );
+            
             // Add shortcuts for Cmd/Ctrl + number (1-9)
             KeyCode[] numberKeys = {
                 KeyCode.DIGIT0, // Add 0 for main menu
@@ -145,8 +154,99 @@ public class MenuPrincipal extends Application {
                 );
             }
             
-            // Enable tab dragging
+            // Enable tab dragging and detaching
             tabPane.setTabDragPolicy(TabPane.TabDragPolicy.REORDER);
+            
+            // Setup drag and drop handling for tabs
+            tabPane.setOnDragDetected(event -> {
+                if (event.isShortcutDown()) {  // Ctrl/Cmd is pressed
+                    Tab selectedTab = tabPane.getSelectionModel().getSelectedItem();
+                    if (selectedTab != null && selectedTab.isClosable()) {
+                        // Start drag operation
+                        javafx.scene.input.Dragboard db = tabPane.startDragAndDrop(javafx.scene.input.TransferMode.MOVE);
+                        
+                        // Put a string on dragboard (needed for the drag operation)
+                        javafx.scene.input.ClipboardContent content = new javafx.scene.input.ClipboardContent();
+                        content.putString("tab-transfer");
+                        db.setContent(content);
+                        
+                        // Store the tab temporarily
+                        event.consume();
+                        
+                        // Create new window
+                        EditorWindow newWindow = new EditorWindow(bundle);
+                        
+                        // Encontrar el grupo al que pertenece la pestaña
+                        String grupoId = null;
+                        if (selectedTab.getUserData() != null) {
+                            String elementId = selectedTab.getUserData().toString();
+                            
+                            // Si es una pestaña de simulación, buscar su simulador padre
+                            if (selectedTab.getContent() instanceof simulador.SimulacionFinal) {
+                                simulador.SimulacionFinal sim = (simulador.SimulacionFinal) selectedTab.getContent();
+                                if (sim.perteneceASimulador(sim.getSimuladorPadreId())) {
+                                    grupoId = TabManager.obtenerGrupoDeElemento(tabPane, sim.getSimuladorPadreId());
+                                }
+                            } else {
+                                // Para otros tipos de pestañas
+                                String potentialParentId = elementId; // Inicializar con el ID actual
+                                
+                                // Si es una pestaña hija, buscar el ID del padre
+                                if (elementId.contains("_")) {
+                                    if (elementId.startsWith("gramatica_simulador_") || 
+                                        elementId.startsWith("funciones_error_simulador_")) {
+                                        // Para pestañas hijas de simulador
+                                        potentialParentId = elementId.substring(elementId.indexOf("simulador_"));
+                                    } else if (elementId.startsWith("creacion_")) {
+                                        // Para pestañas de creación
+                                        potentialParentId = "editor_" + elementId.substring("creacion_".length());
+                                    } else if (elementId.startsWith("terminales_") || 
+                                             elementId.startsWith("no_terminales_") || 
+                                             elementId.startsWith("producciones_")) {
+                                        // Para pestañas de símbolos
+                                        String creacionId = elementId.substring(elementId.indexOf("creacion_"));
+                                        potentialParentId = "editor_" + creacionId.substring("creacion_".length());
+                                    } else if (elementId.startsWith("derivacion_") || elementId.startsWith("arbol_")) {
+                                        // Para pestañas de derivación o árbol, buscar la simulación padre
+                                        String simulacionId = elementId.substring(elementId.indexOf("_") + 1);
+                                        // Buscar la simulación padre
+                                        for (Tab tab : tabPane.getTabs()) {
+                                            if (tab.getContent() instanceof simulador.SimulacionFinal) {
+                                                simulador.SimulacionFinal sim = (simulador.SimulacionFinal) tab.getContent();
+                                                if (sim.esHijaDeLaSimulacion(selectedTab)) {
+                                                    // Encontramos la simulación padre, ahora buscar su simulador padre
+                                                    if (sim.perteneceASimulador(sim.getSimuladorPadreId())) {
+                                                        potentialParentId = sim.getSimuladorPadreId();
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                
+                                // Obtener el grupo usando el ID del padre
+                                grupoId = TabManager.obtenerGrupoDeElemento(tabPane, potentialParentId);
+                            }
+                        }
+                        
+                        // Si la pestaña pertenece a un grupo, mover todo el grupo
+                        if (grupoId != null) {
+                            newWindow.moveGroupToWindow(tabPane, grupoId, selectedTab);
+                        } else {
+                            // Si no pertenece a un grupo, mover solo la pestaña
+                            newWindow.addTab(selectedTab);
+                            tabPane.getTabs().remove(selectedTab);
+                        }
+                        
+                        // Show the new window at the cursor position
+                        newWindow.show();
+                        Stage stage = (Stage) newWindow.getTabPane().getScene().getWindow();
+                        stage.setX(event.getScreenX() - 100);
+                        stage.setY(event.getScreenY() - 50);
+                    }
+                }
+            });
             
             primaryStage.show();
             
@@ -163,8 +263,99 @@ public class MenuPrincipal extends Application {
         comboIdioma.setOnAction(e -> cambiarIdioma());
         cargarBundle(currentLocale);
         
-        // Enable tab dragging
+        // Enable tab dragging and detaching
         tabPane.setTabDragPolicy(TabPane.TabDragPolicy.REORDER);
+        
+        // Setup drag and drop handling for tabs
+        tabPane.setOnDragDetected(event -> {
+            if (event.isShortcutDown()) {  // Ctrl/Cmd is pressed
+                Tab selectedTab = tabPane.getSelectionModel().getSelectedItem();
+                if (selectedTab != null && selectedTab.isClosable()) {
+                    // Start drag operation
+                    javafx.scene.input.Dragboard db = tabPane.startDragAndDrop(javafx.scene.input.TransferMode.MOVE);
+                    
+                    // Put a string on dragboard (needed for the drag operation)
+                    javafx.scene.input.ClipboardContent content = new javafx.scene.input.ClipboardContent();
+                    content.putString("tab-transfer");
+                    db.setContent(content);
+                    
+                    // Store the tab temporarily
+                    event.consume();
+                    
+                    // Create new window
+                    EditorWindow newWindow = new EditorWindow(bundle);
+                    
+                    // Encontrar el grupo al que pertenece la pestaña
+                    String grupoId = null;
+                    if (selectedTab.getUserData() != null) {
+                        String elementId = selectedTab.getUserData().toString();
+                        
+                        // Si es una pestaña de simulación, buscar su simulador padre
+                        if (selectedTab.getContent() instanceof simulador.SimulacionFinal) {
+                            simulador.SimulacionFinal sim = (simulador.SimulacionFinal) selectedTab.getContent();
+                            if (sim.perteneceASimulador(sim.getSimuladorPadreId())) {
+                                grupoId = TabManager.obtenerGrupoDeElemento(tabPane, sim.getSimuladorPadreId());
+                            }
+                        } else {
+                            // Para otros tipos de pestañas
+                            String potentialParentId = elementId; // Inicializar con el ID actual
+                            
+                            // Si es una pestaña hija, buscar el ID del padre
+                            if (elementId.contains("_")) {
+                                if (elementId.startsWith("gramatica_simulador_") || 
+                                    elementId.startsWith("funciones_error_simulador_")) {
+                                    // Para pestañas hijas de simulador
+                                    potentialParentId = elementId.substring(elementId.indexOf("simulador_"));
+                                } else if (elementId.startsWith("creacion_")) {
+                                    // Para pestañas de creación
+                                    potentialParentId = "editor_" + elementId.substring("creacion_".length());
+                                } else if (elementId.startsWith("terminales_") || 
+                                         elementId.startsWith("no_terminales_") || 
+                                         elementId.startsWith("producciones_")) {
+                                    // Para pestañas de símbolos
+                                    String creacionId = elementId.substring(elementId.indexOf("creacion_"));
+                                    potentialParentId = "editor_" + creacionId.substring("creacion_".length());
+                                } else if (elementId.startsWith("derivacion_") || elementId.startsWith("arbol_")) {
+                                    // Para pestañas de derivación o árbol, buscar la simulación padre
+                                    String simulacionId = elementId.substring(elementId.indexOf("_") + 1);
+                                    // Buscar la simulación padre
+                                    for (Tab tab : tabPane.getTabs()) {
+                                        if (tab.getContent() instanceof simulador.SimulacionFinal) {
+                                            simulador.SimulacionFinal sim = (simulador.SimulacionFinal) tab.getContent();
+                                            if (sim.esHijaDeLaSimulacion(selectedTab)) {
+                                                // Encontramos la simulación padre, ahora buscar su simulador padre
+                                                if (sim.perteneceASimulador(sim.getSimuladorPadreId())) {
+                                                    potentialParentId = sim.getSimuladorPadreId();
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            
+                            // Obtener el grupo usando el ID del padre
+                            grupoId = TabManager.obtenerGrupoDeElemento(tabPane, potentialParentId);
+                        }
+                    }
+                    
+                    // Si la pestaña pertenece a un grupo, mover todo el grupo
+                    if (grupoId != null) {
+                        newWindow.moveGroupToWindow(tabPane, grupoId, selectedTab);
+                    } else {
+                        // Si no pertenece a un grupo, mover solo la pestaña
+                        newWindow.addTab(selectedTab);
+                        tabPane.getTabs().remove(selectedTab);
+                    }
+                    
+                    // Show the new window at the cursor position
+                    newWindow.show();
+                    Stage stage = (Stage) newWindow.getTabPane().getScene().getWindow();
+                    stage.setX(event.getScreenX() - 100);
+                    stage.setY(event.getScreenY() - 50);
+                }
+            }
+        });
         
         // Actualizar el título inicial de la pestaña principal
         if (tabPane != null && !tabPane.getTabs().isEmpty()) {
@@ -295,6 +486,8 @@ public class MenuPrincipal extends Application {
             if (response == btnCerrar) {
                 tabPane.getSelectionModel().selectFirst();
                 tabPane.getTabs().removeIf(Tab::isClosable);
+                // Reiniciar la numeración de grupos
+                TabManager.resetGrupos(tabPane);
             } else {
                 if (lastSelectedTab != null) {
                     tabPane.getSelectionModel().select(lastSelectedTab);
