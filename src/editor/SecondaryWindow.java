@@ -32,6 +32,25 @@ public class SecondaryWindow extends EditorWindow {
         System.err.println("\n¡CLASE SecondaryWindow CARGADA!\n");
     }
     
+    /**
+     * Obtiene una copia del mapa de ventanas secundarias activas.
+     * @return Un mapa con las ventanas secundarias activas, donde la clave es el ID de la ventana
+     */
+    public static Map<String, SecondaryWindow> getActiveWindows() {
+        // Limpiar ventanas que ya no están visibles
+        activeWindows.entrySet().removeIf(entry -> {
+            SecondaryWindow window = entry.getValue();
+            if (window == null || window.getStage() == null || !window.getStage().isShowing()) {
+                System.err.println("\n>>> Eliminando ventana inactiva: " + entry.getKey() + " <<<\n");
+                return true;
+            }
+            return false;
+        });
+        
+        // Devolver una copia del mapa para evitar modificaciones concurrentes
+        return new ConcurrentHashMap<>(activeWindows);
+    }
+    
     private void printTabCount(String action) {
         System.err.println("\n=== Ventana Secundaria [" + windowId + "] ===");
         System.err.println("Acción: " + action);
@@ -257,7 +276,11 @@ public class SecondaryWindow extends EditorWindow {
     
     @Override
     public void show() {
-        stage.show();
+        if (!stage.isShowing()) {
+            stage.show();
+            // Asegurarse de que la ventana está registrada
+            activeWindows.put(windowId, this);
+        }
     }
     
     @Override
@@ -355,6 +378,7 @@ public class SecondaryWindow extends EditorWindow {
                         // Asegurarnos de que el diálogo se muestre en el thread de JavaFX
                         alert.showAndWait().ifPresent(response -> {
                             if (response == ButtonType.OK) {
+                                activeWindows.remove(windowId); // Eliminar del registro antes de cerrar
                                 stage.close();
                             }
                         });

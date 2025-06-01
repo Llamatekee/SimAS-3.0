@@ -1438,6 +1438,140 @@ public class TabManager {
             }
         });
         
+        // Crear el menú para abrir en ventanas existentes
+        javafx.scene.control.Menu openInExistingWindowMenu = new javafx.scene.control.Menu("Abrir en ventana existente");
+        
+        // Añadir el listener para mostrar el menú contextual
+        tabPane.setOnContextMenuRequested(event -> {
+            // Obtener la pestaña en la posición del clic
+            Node clickedNode = event.getPickResult().getIntersectedNode();
+            Tab clickedTab = findTabFromNode(clickedNode);
+            
+            if (clickedTab != null && clickedTab.isClosable()) {
+                // Actualizar el submenú de ventanas existentes antes de mostrar el menú contextual
+                openInExistingWindowMenu.getItems().clear();
+                
+                // Obtener las ventanas secundarias activas
+                Map<String, SecondaryWindow> activeWindows = SecondaryWindow.getActiveWindows();
+                
+                System.err.println("\n=== DIAGNÓSTICO DE VENTANAS SECUNDARIAS (OnContextMenuRequested) ===");
+                System.err.println("Número de ventanas activas detectadas: " + activeWindows.size());
+                for (Map.Entry<String, SecondaryWindow> entry : activeWindows.entrySet()) {
+                    SecondaryWindow window = entry.getValue();
+                    String windowId = entry.getKey();
+                    String firstTabTitle = "sin pestañas";
+                    if (!window.getTabPane().getTabs().isEmpty()) {
+                        firstTabTitle = window.getTabPane().getTabs().get(0).getText();
+                    }
+                    System.err.println("- Ventana [" + windowId + "] - Primera pestaña: " + firstTabTitle);
+                }
+                System.err.println("=========================================\n");
+                
+                if (activeWindows.isEmpty()) {
+                    javafx.scene.control.MenuItem noWindowsItem = new javafx.scene.control.MenuItem("No hay ventanas disponibles");
+                    noWindowsItem.setDisable(true);
+                    openInExistingWindowMenu.getItems().add(noWindowsItem);
+                } else {
+                    // Crear un ítem de menú para cada ventana activa
+                    for (Map.Entry<String, SecondaryWindow> entry : activeWindows.entrySet()) {
+                        SecondaryWindow window = entry.getValue();
+                        String windowId = entry.getKey();
+                        
+                        // Obtener el título de la primera pestaña como identificador de la ventana
+                        String windowTitle = "Ventana " + windowId.replace("SecondaryWindow-", "");
+                        if (!window.getTabPane().getTabs().isEmpty()) {
+                            Tab firstTab = window.getTabPane().getTabs().get(0);
+                            windowTitle += " (" + firstTab.getText() + ")";
+                        }
+                        
+                        javafx.scene.control.MenuItem windowItem = new javafx.scene.control.MenuItem(windowTitle);
+                        windowItem.setOnAction(e -> {
+                            System.err.println("\n>>> Moviendo pestaña a ventana: " + windowId + " <<<");
+                            Tab selectedTab = tabPane.getSelectionModel().getSelectedItem();
+                            if (selectedTab != null && selectedTab.isClosable()) {
+                                // Obtener el contenido y datos de la pestaña actual
+                                Node content = selectedTab.getContent();
+                                String title = selectedTab.getText();
+                                Object userData = selectedTab.getUserData();
+                                
+                                // Si es una pestaña padre, también mover sus pestañas hijas
+                                if (userData != null) {
+                                    String elementId = userData.toString();
+                                    
+                                    // Obtener el grupo antes de mover
+                                    String grupoId = obtenerGrupoDeElemento(tabPane, elementId);
+                                    
+                                    // Crear la pestaña en la ventana existente
+                                    Tab newTab = new Tab(title, content);
+                                    newTab.setUserData(userData);
+                                    window.getTabPane().getTabs().add(newTab);
+                                    
+                                    // Mover las pestañas hijas
+                                    Map<String, List<Tab>> relations = getParentChildRelations(tabPane);
+                                    if (relations.containsKey(elementId)) {
+                                        List<Tab> childTabs = new ArrayList<>(relations.get(elementId));
+                                        for (Tab childTab : childTabs) {
+                                            // Crear nueva pestaña hija en la ventana existente
+                                            Tab newChildTab = new Tab(childTab.getText(), childTab.getContent());
+                                            newChildTab.setUserData(childTab.getUserData());
+                                            window.getTabPane().getTabs().add(newChildTab);
+                                            
+                                            // Eliminar la pestaña hija de la ventana original
+                                            tabPane.getTabs().remove(childTab);
+                                        }
+                                        // Limpiar las relaciones en la ventana original
+                                        relations.remove(elementId);
+                                    }
+                                    
+                                    // Mover el grupo a la ventana existente
+                                    if (grupoId != null) {
+                                        // Eliminar de la ventana original
+                                        eliminarElementoDeGrupo(tabPane, elementId, grupoId);
+                                        // Añadir a la ventana existente
+                                        asignarElementoAGrupo(window.getTabPane(), elementId, grupoId);
+                                    }
+                                    
+                                } else {
+                                    // Para pestañas simples, solo crear la nueva pestaña
+                                    Tab newTab = new Tab(title, content);
+                                    newTab.setUserData(userData);
+                                    window.getTabPane().getTabs().add(newTab);
+                                }
+                                
+                                // Eliminar la pestaña de la ventana original
+                                tabPane.getTabs().remove(selectedTab);
+                                
+                                // Forzar renumeración en ambas ventanas
+                                reasignarNumerosGruposGramatica(tabPane);
+                                reasignarNumerosGruposGramatica(window.getTabPane());
+                                
+                                // Traer la ventana al frente
+                                window.getStage().toFront();
+                            }
+                        });
+                        
+                        openInExistingWindowMenu.getItems().add(windowItem);
+                    }
+                }
+                
+                // Seleccionar la pestaña clicada
+                tabPane.getSelectionModel().select(clickedTab);
+                // Mostrar el menú contextual
+                contextMenu.show(clickedNode, event.getScreenX(), event.getScreenY());
+            }
+            event.consume();
+        });
+        
+        // También añadir un listener para cuando se muestre
+        openInExistingWindowMenu.setOnShowing(event -> {
+            System.err.println("\n>>> Mostrando menú de ventanas existentes <<<");
+        });
+        
+        // Y otro para cuando se oculte
+        openInExistingWindowMenu.setOnHiding(event -> {
+            System.err.println("\n>>> Ocultando menú de ventanas existentes <<<");
+        });
+
         // Crear el ítem de menú para cerrar la pestaña actual
         javafx.scene.control.MenuItem closeMenuItem = new javafx.scene.control.MenuItem("Cerrar pestaña");
         closeMenuItem.setOnAction(event -> {
@@ -1495,22 +1629,13 @@ public class TabManager {
         });
         
         // Añadir los items al menú contextual
-        contextMenu.getItems().addAll(openInNewWindowMenuItem, closeMenuItem, closeAllMenuItem);
-        
-        // Añadir el listener para mostrar el menú contextual
-        tabPane.setOnContextMenuRequested(event -> {
-            // Obtener la pestaña en la posición del clic
-            Node clickedNode = event.getPickResult().getIntersectedNode();
-            Tab clickedTab = findTabFromNode(clickedNode);
-            
-            if (clickedTab != null && clickedTab.isClosable()) {
-                // Seleccionar la pestaña clicada
-                tabPane.getSelectionModel().select(clickedTab);
-                // Mostrar el menú contextual
-                contextMenu.show(clickedNode, event.getScreenX(), event.getScreenY());
-            }
-            event.consume();
-        });
+        contextMenu.getItems().addAll(
+            openInNewWindowMenuItem,
+            openInExistingWindowMenu,
+            closeMenuItem,
+            closeAllMenuItem
+        );
+        System.err.println(">>> Menú contextual configurado con " + contextMenu.getItems().size() + " opciones <<<");
     }
     
     /**
