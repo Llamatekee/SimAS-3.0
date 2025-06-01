@@ -896,7 +896,34 @@ public class TabManager {
      */
     private static void actualizarTituloSimulador(Tab tab, Integer numeroGrupo, boolean mostrarGrupo) {
         if (tab == null || numeroGrupo == null) return;
-        String tituloBase = obtenerTituloBaseSimulador(tab.getTabPane());
+        
+        // Obtener el título base específico para este simulador
+        String tituloBase;
+        try {
+            java.util.ResourceBundle bundle = resourceBundles.get(tab.getTabPane());
+            if (bundle != null && tab.getUserData() != null) {
+                String userData = tab.getUserData().toString();
+                // Si es un simulador, verificar si está en el paso 6 por el título actual
+                if (userData.startsWith("simulador_")) {
+                    String currentTitle = tab.getText();
+                    // Si el título actual contiene "Simulador" sin "Asistente", mantenerlo como paso 6
+                    if (currentTitle != null && 
+                        currentTitle.contains(bundle.getString("simulador.tab.paso6")) && 
+                        !currentTitle.contains(bundle.getString("simulador.asistente"))) {
+                        tituloBase = bundle.getString("simulador.tab.paso6");
+                    } else {
+                        tituloBase = bundle.getString("simulador.asistente");
+                    }
+                } else {
+                    tituloBase = bundle.getString("simulador.asistente");
+                }
+            } else {
+                tituloBase = "Simulador"; // Fallback
+            }
+        } catch (Exception e) {
+            tituloBase = "Simulador"; // Fallback en caso de error
+        }
+        
         tab.setText(mostrarGrupo ? numeroGrupo + "-" + tituloBase : tituloBase);
     }
     
@@ -969,7 +996,25 @@ public class TabManager {
         try {
             java.util.ResourceBundle bundle = resourceBundles.get(tabPane);
             if (bundle != null) {
-                return bundle.getString("simulador.tab.paso6");
+                // Buscar la pestaña del simulador que tenga userData que comience con "simulador_"
+                for (Tab tab : tabPane.getTabs()) {
+                    if (tab.getUserData() != null && tab.getUserData().toString().startsWith("simulador_")) {
+                        Object content = tab.getContent();
+                        if (content instanceof simulador.PanelSimuladorDesc) {
+                            simulador.PanelSimuladorDesc simulador = (simulador.PanelSimuladorDesc) content;
+                            // Determinar el título base según el paso actual
+                            if (simulador.getPasoActual() == 5) {
+                                // Paso 6: "Simulador"
+                                return bundle.getString("simulador.tab.paso6");
+                            } else {
+                                // Pasos 1-5 (índices 0-4) son el asistente
+                                return bundle.getString("simulador.asistente");
+                            }
+                        }
+                    }
+                }
+                // Si no encontramos el simulador, usar el título por defecto del asistente
+                return bundle.getString("simulador.asistente");
             }
         } catch (Exception e) {
             // Si no se puede obtener del bundle, usar valor por defecto

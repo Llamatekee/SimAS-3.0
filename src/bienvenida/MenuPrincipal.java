@@ -608,7 +608,8 @@ public class MenuPrincipal extends Application {
             PanelSimuladorDesc simulador = new PanelSimuladorDesc(gramatica, tabPane, bundle, simuladorId);
             
             // Crear la pestaña del simulador con el título correcto
-            String tituloBase = bundle.getString("simulador.asistente");
+            // Como vamos directamente al paso 6, usamos el título de simulador
+            String tituloBase = bundle.getString("simulador.tab.paso6");
             int numeroGrupo = TabManager.obtenerNumeroGrupo(tabPane, simuladorId);
             String tituloFinal = numeroGrupo > 0 ? numeroGrupo + "-" + tituloBase : tituloBase;
             
@@ -633,10 +634,8 @@ public class MenuPrincipal extends Application {
             
             // Reasignar numeración para reflejar los cambios
             TabManager.reasignarNumerosGruposGramatica(tabPane);
-            
         } catch (Exception e) {
             e.printStackTrace();
-            mostrarError("Error", "No se pudo crear el simulador: " + e.getMessage());
         }
     }
     

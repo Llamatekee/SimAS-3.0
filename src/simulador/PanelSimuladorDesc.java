@@ -392,8 +392,8 @@ public class PanelSimuladorDesc {
                 // Paso 6: "Simulador"
                 tituloBase = bundle.getString("simulador.tab.paso6");
             } else {
-                // Pasos 1-5: Usar la clave específica para cada paso
-                tituloBase = bundle.getString("simulador.tab.paso" + (this.pasoActual + 1));
+                // Pasos 1-5 (índices 0-4) son el asistente
+                tituloBase = bundle.getString("simulador.asistente");
             }
             
             // Aplicar numeración si corresponde
@@ -446,6 +446,14 @@ public class PanelSimuladorDesc {
             return new javafx.scene.layout.VBox();
         }
         return (Parent) pestañaSimulacion.getContent();
+    }
+
+    /**
+     * Obtiene el paso actual del simulador.
+     * @return El índice del paso actual (0-5).
+     */
+    public int getPasoActual() {
+        return pasoActual;
     }
 
     /**
