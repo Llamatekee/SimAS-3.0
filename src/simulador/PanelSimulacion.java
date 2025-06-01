@@ -15,6 +15,8 @@ import java.io.IOException;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
+import editor.SecondaryWindow;
+import java.util.ResourceBundle;
 
 public class PanelSimulacion extends VBox {
     @FXML private VBox root;
@@ -51,8 +53,11 @@ public class PanelSimulacion extends VBox {
     private ObservableList<String> pilaList;
     private ObservableList<String> entradaList;
     
-    public PanelSimulacion(Gramatica gramatica) {
+    private ResourceBundle bundle;
+    
+    public PanelSimulacion(Gramatica gramatica, ResourceBundle bundle) {
         this.gramatica = gramatica;
+        this.bundle = bundle;
         this.tablaPredictiva = (TablaPredictivaPaso5) gramatica.getTPredictiva();
         this.funcionesError = tablaPredictiva.getFuncionesError();
         this.pilaList = FXCollections.observableArrayList();
@@ -330,19 +335,24 @@ public class PanelSimulacion extends VBox {
             // Cargar el FXML
             VBox root = loader.load();
             
-            // Crear y configurar la ventana
-            Stage stage = new Stage();
-            stage.setTitle("Editor de Cadena de Entrada");
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setScene(new Scene(root));
+            // Crear y configurar la ventana secundaria
+            SecondaryWindow secondaryWindow = new SecondaryWindow(bundle, "Editor de Cadena de Entrada");
+            secondaryWindow.getTabPane().getTabs().add(new Tab("Editor", root));
+            secondaryWindow.setSize(600, 400);
+            
+            // Centrar la ventana en la pantalla
+            Stage parentStage = (Stage) getScene().getWindow();
+            double centerX = parentStage.getX() + (parentStage.getWidth() - 600) / 2;
+            double centerY = parentStage.getY() + (parentStage.getHeight() - 400) / 2;
+            secondaryWindow.setPosition(centerX, centerY);
             
             // Configurar el controlador
-            controller.setStage(stage);
+            controller.setStage(secondaryWindow.getStage());
             controller.setTerminales(gramatica.getTerminales());
             controller.setCadenaInicial(inputField.getText());
             
             // Mostrar la ventana y esperar
-            stage.showAndWait();
+            secondaryWindow.getStage().showAndWait();
             
             // Actualizar el campo de entrada si se aceptó
             String resultado = controller.getResultado();

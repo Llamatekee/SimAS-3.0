@@ -12,7 +12,7 @@ public class TabManager {
     private static final Map<TabPane, java.util.ResourceBundle> resourceBundles = new HashMap<>();
     
     // Contador global para generar IDs únicos de grupo
-    private static int contadorGrupos = 0;
+    public static int contadorGrupos = 0;
 
     public static Tab getOrCreateTab(TabPane tabPane, Class<?> tabType, String title, Object content) {
         return getOrCreateTab(tabPane, tabType, title, content, null, null);
@@ -505,7 +505,7 @@ public class TabManager {
     /**
      * Calcula una posición segura después del menú principal.
      */
-    private static int calcularPosicionSeguaDespuesDelMenu(TabPane tabPane) {
+    public static int calcularPosicionSeguaDespuesDelMenu(TabPane tabPane) {
         // Buscar la posición del menú principal
         for (int i = 0; i < tabPane.getTabs().size(); i++) {
             Tab tab = tabPane.getTabs().get(i);
@@ -523,30 +523,31 @@ public class TabManager {
     }
     
     /**
-     * Verifica si una pestaña es hija de un elemento específico.
+     * Verifica si un childId realmente pertenece a un parentId específico basado en los patrones de ID.
      */
-    private static boolean isPestañaHijaDeElemento(String pestañaUserData, String elementoId) {
-        if (pestañaUserData == null || elementoId == null) {
+    public static boolean isPestañaHijaDeElemento(String childId, String parentId) {
+        if (childId == null || parentId == null) {
             return false;
         }
         
-        // Para pestañas de creación directas (ej: "creacion_1234" es hija de "editor_1234")
-        if (elementoId.startsWith("editor_")) {
-            String baseId = elementoId.replace("editor_", "");
-            String expectedCreacionId = "creacion_" + baseId;
-            
-            if (pestañaUserData.equals(expectedCreacionId) || 
-                pestañaUserData.startsWith("terminales_" + expectedCreacionId) ||
-                pestañaUserData.startsWith("no_terminales_" + expectedCreacionId) ||
-                pestañaUserData.startsWith("producciones_" + expectedCreacionId)) {
-                return true;
-            }
+        // Extraer el identificador base del parentId (ej: "editor_1234" -> "1234")
+        String parentBaseId = extractBaseId(parentId);
+        
+        // Para pestañas de creación directas (ej: "creacion_1234")
+        if (childId.startsWith("creacion_") && childId.contains(parentBaseId)) {
+            return true;
         }
         
-        // Para pestañas de simulador (ej: "gramatica_simulador_123" es hija de "simulador_123")
-        if (elementoId.startsWith("simulador_")) {
-            if (pestañaUserData.equals("gramatica_" + elementoId) ||
-                pestañaUserData.equals("funciones_error_" + elementoId)) {
+        // Para pestañas de símbolos (ej: "terminales_creacion_1234")
+        if ((childId.startsWith("terminales_") || childId.startsWith("no_terminales_") || childId.startsWith("producciones_")) &&
+            childId.contains("creacion_" + parentBaseId)) {
+            return true;
+        }
+        
+        // Para pestañas de simulador
+        if (parentId.startsWith("simulador_")) {
+            if (childId.equals("gramatica_" + parentId) ||
+                childId.equals("funciones_error_" + parentId)) {
                 return true;
             }
         }
@@ -1162,5 +1163,37 @@ public class TabManager {
         } catch (NumberFormatException e) {
         }
         return 0; // Fallback timestamp
+    }
+
+    /**
+     * Asigna un elemento a un grupo específico.
+     * @param tabPane El TabPane donde está el elemento
+     * @param elementoId El ID del elemento a asignar
+     * @param grupoId El ID del grupo al que asignar
+     */
+    public static void asignarElementoAGrupo(TabPane tabPane, String elementoId, String grupoId) {
+        elementoToGrupo.computeIfAbsent(tabPane, k -> new HashMap<>());
+        gruposGramatica.computeIfAbsent(tabPane, k -> new HashMap<>());
+        
+        Map<String, String> elementos = elementoToGrupo.get(tabPane);
+        Map<String, Integer> grupos = gruposGramatica.get(tabPane);
+        
+        if (elementos != null && grupos != null) {
+            // Asignar el elemento al grupo
+            elementos.put(elementoId, grupoId);
+            
+            // Si el grupo no tiene número asignado, asignarle uno
+            if (!grupos.containsKey(grupoId)) {
+                int numeroGrupo = contarGruposActivos(tabPane) + 1;
+                grupos.put(grupoId, numeroGrupo);
+            }
+        }
+    }
+
+    /**
+     * Obtiene el mapa de relaciones padre-hijo para un TabPane específico.
+     */
+    public static Map<String, List<Tab>> getParentChildRelations(TabPane tabPane) {
+        return parentChildRelations.computeIfAbsent(tabPane, k -> new HashMap<>());
     }
 } 

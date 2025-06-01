@@ -26,7 +26,7 @@ import java.util.ResourceBundle;
 public class PanelSimuladorDesc {
 
     @FXML
-    public final TabPane tabPane;
+    public TabPane tabPane;
 
     public Gramatica gramatica;
     private final Gramatica gramaticaOriginal;
@@ -34,6 +34,7 @@ public class PanelSimuladorDesc {
     private int pasoActual;
     private ArrayList<PanelNuevaSimDescPaso> pasos;
     private ResourceBundle bundle;
+    private bienvenida.MenuPrincipal menuPane;
     
     // Referencia global a la tabla predictiva extendida (para pasos 5 y 6)
     private TablaPredictivaPaso5 tablaPredictivaExtendidaGlobal;
@@ -66,6 +67,43 @@ public class PanelSimuladorDesc {
         // *** NUEVO: Registrar este simulador en el registro estático ***
         simuladoresActivos.put(this.simuladorId, this);
 
+        
+        // Inicializar funciones de error y tabla predictiva extendida
+        inicializarTablaPredictivaYFuncionesError();
+        
+        // Configurar relaciones padre-hijo
+        configurarRelacionesPadreHijo();
+        
+        // Inicializar pasos
+        pasos = new ArrayList<>();
+        try {
+            pasos.add(new PanelNuevaSimDescPaso1(this));
+            pasos.add(new PanelNuevaSimDescPaso2(this));
+            pasos.add(new PanelNuevaSimDescPaso3(this));
+            pasos.add(new PanelNuevaSimDescPaso4(this));
+            pasos.add(new PanelNuevaSimDescPaso5(this));
+            pasos.add(new PanelNuevaSimDescPaso6(this.gramatica, this));
+            
+            // NO llamar a mostrarPasoActual() aquí automáticamente
+            // Será llamado explícitamente cuando sea necesario
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Si hay un error, cerrar la pestaña
+            cancelarSimulacion();
+        }
+    }
+
+    public PanelSimuladorDesc(Gramatica gramatica, TabPane tabPane, bienvenida.MenuPrincipal menuPane, String simuladorId, ResourceBundle bundle) {
+        this.gramatica = gramatica;
+        this.gramaticaOriginal = gramatica;
+        this.tabPane = tabPane;
+        this.menuPane = menuPane;
+        this.bundle = bundle;
+        this.pasoActual = 0;
+        this.simuladorId = simuladorId;
+        
+        // *** NUEVO: Registrar este simulador en el registro estático ***
+        simuladoresActivos.put(this.simuladorId, this);
         
         // Inicializar funciones de error y tabla predictiva extendida
         inicializarTablaPredictivaYFuncionesError();
@@ -396,9 +434,9 @@ public class PanelSimuladorDesc {
     }
 
     /**
-     * 🔹 Configura las relaciones padre-hijo para cerrar pestañas hijas cuando se cierre el simulador.
+     * Configura las relaciones padre-hijo para cerrar pestañas hijas cuando se cierre el simulador.
      */
-    private void configurarRelacionesPadreHijo() {
+    public void configurarRelacionesPadreHijo() {
         if (tabPane != null) {
             // Añadir listener para cerrar pestañas hijas cuando se cierre la pestaña de simulador
             tabPane.getTabs().addListener((javafx.collections.ListChangeListener.Change<? extends Tab> change) -> {
@@ -407,16 +445,9 @@ public class PanelSimuladorDesc {
                         for (Tab tab : change.getRemoved()) {
                             if (tab.getUserData() != null && 
                                 tab.getUserData().toString().equals(simuladorId)) {
-                                
-                                // Desregistrar este simulador del registro estático
-                                desregistrarSimulador(simuladorId);
-                                
                                 // Cerrar las pestañas hijas
                                 javafx.application.Platform.runLater(() -> {
                                     TabManager.closeChildTabs(tabPane, simuladorId);
-                                    
-                                    // *** NUEVO: Forzar actualización inmediata de numeración ***
-                                    TabManager.reasignarNumerosGruposGramatica(tabPane);
                                 });
                             }
                         }
@@ -458,5 +489,15 @@ public class PanelSimuladorDesc {
      */
     public static PanelSimuladorDesc obtenerSimulador(String simuladorId) {
         return simuladoresActivos.get(simuladorId);
+    }
+
+    public bienvenida.MenuPrincipal getMenuPane() {
+        return menuPane;
+    }
+
+    public void setTabPane(TabPane tabPane) {
+        this.tabPane = tabPane;
+        // Reconfigurar relaciones padre-hijo con el nuevo TabPane
+        configurarRelacionesPadreHijo();
     }
 }

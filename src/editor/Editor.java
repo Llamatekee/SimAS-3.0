@@ -122,21 +122,14 @@ public class Editor extends VBox implements ActualizableTextos {
     /**
      * 🔹 Configura las relaciones padre-hijo para cerrar pestañas hijas cuando se cierre el editor.
      */
-    private void configurarRelacionesPadreHijo() {
+    public void configurarRelacionesPadreHijo() {
         if (tabPane != null && !listenerConfigured) {
-            // Añadir listener para cerrar pestañas hijas cuando se cierre la pestaña de editor
+            // Configurar listener para detectar cuando se cierran pestañas
             tabPane.getTabs().addListener((javafx.collections.ListChangeListener.Change<? extends Tab> change) -> {
                 while (change.next()) {
                     if (change.wasRemoved()) {
-                        for (Tab tab : change.getRemoved()) {
-                            if (tab.getContent() == this && tab.getUserData() != null && 
-                                tab.getUserData().toString().equals(editorId)) {
-                                // Cerrar las pestañas hijas
-                                javafx.application.Platform.runLater(() -> {
-                                    TabManager.closeChildTabs(tabPane, editorId);
-                                });
-                            }
-                        }
+                        // Forzar renumeración de grupos cuando se cierra una pestaña
+                        TabManager.reasignarNumerosGruposGramatica(tabPane);
                     }
                 }
             });
@@ -149,16 +142,13 @@ public class Editor extends VBox implements ActualizableTextos {
      */
     private void cargarFXML() {
         try {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("/vistas/Editor.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/Editor.fxml"));
             loader.setController(this);
             loader.setResources(bundle);
             Parent root = loader.load();
-            this.getChildren().clear();
-            this.getChildren().add(root);
+            this.getChildren().setAll(root);
         } catch (IOException e) {
             e.printStackTrace();
-            mostrarError("Error al cargar la interfaz", e.getMessage());
         }
     }
     
@@ -275,33 +265,24 @@ public class Editor extends VBox implements ActualizableTextos {
 
     @FXML
     private void onBtnSimularAction() {
-        // Verificar si ya existe un simulador en este grupo
-        String grupoEditor = TabManager.obtenerGrupoDeElemento(tabPane, this.editorId);
-        if (grupoEditor != null) {
-            // Buscar si ya hay un simulador en este grupo
-            for (Tab tab : tabPane.getTabs()) {
-                if (tab.getUserData() != null && 
-                    tab.getUserData().toString().startsWith("simulador_")) {
-                    String grupoSimulador = TabManager.obtenerGrupoDeElemento(tabPane, tab.getUserData().toString());
-                    if (grupoEditor.equals(grupoSimulador)) {
-                        tabPane.getSelectionModel().select(tab);
-                        return;
-                    }
-                }
-            }
+        if (this.tabPane == null || this.menuPane == null) {
+            mostrarError("Error", "No se puede iniciar la simulación en este momento.");
+            return;
         }
-
-        // Si no existe un simulador, crear uno nuevo
-        String simuladorId = "simulador_" + System.currentTimeMillis();
         
-        // ASIGNAR AL GRUPO EXISTENTE ANTES de crear la pestaña: Simulador desde editor → mismo grupo que el editor
-        TabManager.asignarSimuladorAGrupoDeEditor(tabPane, simuladorId, this.editorId);
+        // Validar la gramática antes de simular
+        validarGramatica(this.gramatica);
+        if (this.gramatica.getEstado() != 1) {
+            return;
+        }
         
-        // Crear un simulador que pertenezca al mismo grupo que este editor
-        PanelSimuladorDesc simulador = new PanelSimuladorDesc(gramatica, tabPane, bundle, simuladorId);
+        // Crear un nuevo simulador como hijo del editor
+        String simuladorId = "simulador_" + editorId.replace("editor_", "");
+        PanelSimuladorDesc simulador = new PanelSimuladorDesc(this.gramatica, this.tabPane, this.menuPane, simuladorId, bundle);
         
-        // Empezar desde el paso 1 (índice 0) usando cambiarPaso
-        simulador.cambiarPaso(0);
+        // Crear la pestaña del simulador
+        TabManager.getOrCreateTab(tabPane, PanelSimuladorDesc.class, 
+            bundle.getString("simulador.tab.titulo"), simulador, editorId, simuladorId);
     }
 
     @FXML
