@@ -1287,12 +1287,60 @@ public class TabManager {
      * @param tabPane El TabPane al que se le configurará el menú contextual
      * @param bundle El ResourceBundle para internacionalización
      */
-    public static void configurarMenuContextual(TabPane tabPane, ResourceBundle bundle) {
+    public static void configurarMenuContextual(TabPane tabPane, ResourceBundle initialBundle) {
+        // Determinar el bundle a usar
+        final ResourceBundle bundle;
+        if (initialBundle == null) {
+            // Si no hay bundle inicial, usar el último bundle guardado
+            ResourceBundle savedBundle = resourceBundles.get(tabPane);
+            if (savedBundle == null) {
+                // Si aún no hay bundle, usar uno por defecto en español
+                bundle = ResourceBundle.getBundle("messages", new Locale("es"));
+            } else {
+                bundle = savedBundle;
+            }
+        } else {
+            bundle = initialBundle;
+        }
+        
         // Crear un ContextMenu que se mostrará al hacer clic derecho
         javafx.scene.control.ContextMenu contextMenu = new javafx.scene.control.ContextMenu();
+        contextMenu.getStyleClass().add("context-menu");
         
         // Crear el ítem de menú para abrir en nueva ventana
-        javafx.scene.control.MenuItem openInNewWindowMenuItem = new javafx.scene.control.MenuItem("Abrir en nueva ventana");
+        javafx.scene.control.MenuItem openInNewWindowMenuItem = new javafx.scene.control.MenuItem(
+            bundle.getString("tab.context.open.new.window")
+        );
+        openInNewWindowMenuItem.getStyleClass().addAll("menu-item", "open-new-window-item");
+
+        // Crear el menú para abrir en ventanas existentes
+        javafx.scene.control.Menu openInExistingWindowMenu = new javafx.scene.control.Menu(
+            bundle.getString("tab.context.open.existing.window")
+        );
+        openInExistingWindowMenu.getStyleClass().addAll("menu", "open-existing-window-menu");
+
+        // Crear el ítem de menú para cerrar la pestaña actual
+        javafx.scene.control.MenuItem closeMenuItem = new javafx.scene.control.MenuItem(
+            bundle.getString("tab.context.close")
+        );
+        closeMenuItem.getStyleClass().addAll("menu-item", "close-tab-item");
+
+        // Crear el ítem de menú para cerrar todas las pestañas
+        javafx.scene.control.MenuItem closeAllMenuItem = new javafx.scene.control.MenuItem(
+            bundle.getString("tab.context.close.all")
+        );
+        closeAllMenuItem.getStyleClass().addAll("menu-item", "close-all-tabs-item");
+
+        // Añadir los items al menú contextual
+        contextMenu.getItems().addAll(
+            openInNewWindowMenuItem,
+            openInExistingWindowMenu,
+            new javafx.scene.control.SeparatorMenuItem(),
+            closeMenuItem,
+            closeAllMenuItem
+        );
+
+        // Configurar las acciones de los items del menú
         openInNewWindowMenuItem.setOnAction(event -> {
             Tab selectedTab = tabPane.getSelectionModel().getSelectedItem();
             if (selectedTab != null && selectedTab.isClosable()) {
@@ -1342,10 +1390,40 @@ public class TabManager {
                 stage.setY(mouseLocation.getY() - 50);
             }
         });
-        
-        // Crear el menú para abrir en ventanas existentes
-        javafx.scene.control.Menu openInExistingWindowMenu = new javafx.scene.control.Menu("Abrir en ventana existente");
-        
+
+        closeMenuItem.setOnAction(event -> {
+            Tab selectedTab = tabPane.getSelectionModel().getSelectedItem();
+            if (selectedTab != null && selectedTab.isClosable()) {
+                String elementId = selectedTab.getUserData() != null ? selectedTab.getUserData().toString() : null;
+                
+                if (elementId != null) {
+                    closeChildTabs(tabPane, elementId);
+                    String grupoId = obtenerGrupoDeElemento(tabPane, elementId);
+                    tabPane.getTabs().remove(selectedTab);
+                    eliminarElementoDeGrupo(tabPane, elementId, grupoId);
+                    reasignarNumerosGruposGramatica(tabPane);
+                } else {
+                    tabPane.getTabs().remove(selectedTab);
+                }
+            }
+        });
+
+        closeAllMenuItem.setOnAction(event -> {
+            List<Tab> tabs = new ArrayList<>(tabPane.getTabs());
+            for (Tab tab : tabs) {
+                if (tab.isClosable()) {
+                    String elementId = tab.getUserData() != null ? tab.getUserData().toString() : null;
+                    if (elementId != null) {
+                        closeChildTabs(tabPane, elementId);
+                        String grupoId = obtenerGrupoDeElemento(tabPane, elementId);
+                        eliminarElementoDeGrupo(tabPane, elementId, grupoId);
+                    }
+                    tabPane.getTabs().remove(tab);
+                }
+            }
+            resetGrupos(tabPane);
+        });
+
         // Añadir el listener para mostrar el menú contextual
         tabPane.setOnContextMenuRequested(event -> {
             // Obtener la pestaña en la posición del clic
@@ -1360,7 +1438,10 @@ public class TabManager {
                 Map<String, SecondaryWindow> activeWindows = SecondaryWindow.getActiveWindows();
                 
                 if (activeWindows.isEmpty()) {
-                    javafx.scene.control.MenuItem noWindowsItem = new javafx.scene.control.MenuItem("No hay ventanas disponibles");
+                    javafx.scene.control.MenuItem noWindowsItem = new javafx.scene.control.MenuItem(
+                        bundle.getString("tab.context.no.windows")
+                    );
+                    noWindowsItem.getStyleClass().add("menu-item");
                     noWindowsItem.setDisable(true);
                     openInExistingWindowMenu.getItems().add(noWindowsItem);
                 } else {
@@ -1370,13 +1451,15 @@ public class TabManager {
                         String windowId = entry.getKey();
                         
                         // Obtener el título de la primera pestaña como identificador de la ventana
-                        String windowTitle = "Ventana " + windowId.replace("SecondaryWindow-", "");
+                        String windowTitle = bundle.getString("window.title") + " " + 
+                            windowId.replace("SecondaryWindow-", "");
                         if (!window.getTabPane().getTabs().isEmpty()) {
                             Tab firstTab = window.getTabPane().getTabs().get(0);
                             windowTitle += " (" + firstTab.getText() + ")";
                         }
                         
                         javafx.scene.control.MenuItem windowItem = new javafx.scene.control.MenuItem(windowTitle);
+                        windowItem.getStyleClass().add("menu-item");
                         windowItem.setOnAction(e -> {
                             Tab selectedTab = tabPane.getSelectionModel().getSelectedItem();
                             if (selectedTab != null && selectedTab.isClosable()) {
@@ -1440,72 +1523,55 @@ public class TabManager {
             }
             event.consume();
         });
-        
-        // Crear el ítem de menú para cerrar la pestaña actual
-        javafx.scene.control.MenuItem closeMenuItem = new javafx.scene.control.MenuItem("Cerrar pestaña");
-        closeMenuItem.setOnAction(event -> {
-            Tab selectedTab = tabPane.getSelectionModel().getSelectedItem();
-            if (selectedTab != null && selectedTab.isClosable()) {
-                // Get the tab's userData (which contains the editor/simulator ID)
-                String elementId = selectedTab.getUserData() != null ? selectedTab.getUserData().toString() : null;
-                
-                // Close child tabs first if this is a parent tab
-                if (elementId != null) {
-                    closeChildTabs(tabPane, elementId);
-                    
-                    // Get the group ID before removing the tab
-                    String grupoId = obtenerGrupoDeElemento(tabPane, elementId);
-                    
-                    // Remove the tab
-                    tabPane.getTabs().remove(selectedTab);
-                    
-                    // Clean up the element from group management
-                    eliminarElementoDeGrupo(tabPane, elementId, grupoId);
-                    
-                    // Force immediate renumbering
-                    reasignarNumerosGruposGramatica(tabPane);
-                } else {
-                    // For non-group tabs, just remove them
-                    tabPane.getTabs().remove(selectedTab);
-                }
-            }
-        });
-        
-        // Crear el ítem de menú para cerrar todas las pestañas
-        javafx.scene.control.MenuItem closeAllMenuItem = new javafx.scene.control.MenuItem("Cerrar todas las pestañas");
-        closeAllMenuItem.setOnAction(event -> {
-            // Crear una copia de la lista de pestañas para evitar ConcurrentModificationException
-            List<Tab> tabs = new ArrayList<>(tabPane.getTabs());
-            
-            // Cerrar cada pestaña que sea cerrable
-            for (Tab tab : tabs) {
-                if (tab.isClosable()) {
-                    String elementId = tab.getUserData() != null ? tab.getUserData().toString() : null;
-                    
-                    if (elementId != null) {
-                        // Para pestañas padre, limpiar sus grupos y pestañas hijas
-                        closeChildTabs(tabPane, elementId);
-                        String grupoId = obtenerGrupoDeElemento(tabPane, elementId);
-                        eliminarElementoDeGrupo(tabPane, elementId, grupoId);
-                    }
-                    
-                    tabPane.getTabs().remove(tab);
-                }
-            }
-            
-            // Resetear los grupos después de cerrar todas las pestañas
-            resetGrupos(tabPane);
-        });
-        
-        // Añadir los items al menú contextual
-        contextMenu.getItems().addAll(
-            openInNewWindowMenuItem,
-            openInExistingWindowMenu,
-            closeMenuItem,
-            closeAllMenuItem
-        );
+
+        // Guardar el menú contextual en el TabPane
+        tabPane.setContextMenu(contextMenu);
     }
-    
+
+    /**
+     * Actualiza el menú contextual de un TabPane con el nuevo ResourceBundle.
+     * @param tabPane El TabPane cuyo menú contextual se actualizará
+     * @param bundle El nuevo ResourceBundle con las traducciones
+     */
+    public static void actualizarMenuContextual(TabPane tabPane, ResourceBundle bundle) {
+        javafx.scene.control.ContextMenu contextMenu = tabPane.getContextMenu();
+        if (contextMenu == null) {
+            configurarMenuContextual(tabPane, bundle);
+            return;
+        }
+
+        // Actualizar los textos de los items existentes usando las clases de estilo
+        for (javafx.scene.control.MenuItem item : contextMenu.getItems()) {
+            if (item instanceof javafx.scene.control.Menu && item.getStyleClass().contains("open-existing-window-menu")) {
+                // Actualizar el menú de ventanas existentes
+                javafx.scene.control.Menu menu = (javafx.scene.control.Menu) item;
+                menu.setText(bundle.getString("tab.context.open.existing.window"));
+                
+                // Actualizar los items dinámicos del submenú
+                menu.getItems().clear();
+                if (SecondaryWindow.getActiveWindows().isEmpty()) {
+                    javafx.scene.control.MenuItem noWindowsItem = new javafx.scene.control.MenuItem(
+                        bundle.getString("tab.context.no.windows")
+                    );
+                    noWindowsItem.setDisable(true);
+                    menu.getItems().add(noWindowsItem);
+                }
+                
+            } else if (item instanceof javafx.scene.control.MenuItem && !(item instanceof javafx.scene.control.SeparatorMenuItem)) {
+                javafx.scene.control.MenuItem menuItem = (javafx.scene.control.MenuItem) item;
+                
+                // Actualizar según la clase de estilo
+                if (menuItem.getStyleClass().contains("open-new-window-item")) {
+                    menuItem.setText(bundle.getString("tab.context.open.new.window"));
+                } else if (menuItem.getStyleClass().contains("close-tab-item")) {
+                    menuItem.setText(bundle.getString("tab.context.close"));
+                } else if (menuItem.getStyleClass().contains("close-all-tabs-item")) {
+                    menuItem.setText(bundle.getString("tab.context.close.all"));
+                }
+            }
+        }
+    }
+
     /**
      * Encuentra la pestaña asociada a un nodo del TabPane.
      */

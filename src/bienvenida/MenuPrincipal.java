@@ -427,10 +427,13 @@ public class MenuPrincipal extends Application {
             if (labelSubtitulo != null) labelSubtitulo.setText(bundle.getString("label.subtitulo"));
             if (labelDesarrollado != null) labelDesarrollado.setText(bundle.getString("label.desarrollado"));
             
-            // Actualizar textos de las pestañas
+            // Actualizar textos de las pestañas y contenido
             if (tabPane != null) {
+                // Actualizar el menú contextual del TabPane
+                TabManager.actualizarMenuContextual(tabPane, bundle);
+                
                 for (Tab tab : tabPane.getTabs()) {
-                    // Título de la pestaña principal - verificar por posición también
+                    // Título de la pestaña principal
                     if (tab.getText().equals("Menú Principal") || 
                         tab.getText().equals("Main Menu") || 
                         tab.getText().equals("Menu Principal") ||
@@ -442,7 +445,7 @@ public class MenuPrincipal extends Application {
                     // Actualizar textos de cualquier panel que implemente ActualizableTextos
                     if (tab.getContent() instanceof ActualizableTextos) {
                         ((ActualizableTextos) tab.getContent()).actualizarTextos(bundle);
-                        // Si es Editor, actualiza el título
+                        // Actualizar títulos específicos
                         if (tab.getContent() instanceof editor.Editor) {
                             tab.setText(bundle.getString("editor.title"));
                         } else if (tab.getContent() instanceof editor.PanelSimbolosNoTerminales) {
@@ -453,7 +456,7 @@ public class MenuPrincipal extends Application {
                     }
                 }
                 
-                // Actualizar todos los simuladores directamente buscando en los objetos guardados
+                // Actualizar todos los simuladores
                 actualizarTodosLosSimuladores();
                 
                 // Reasignar numeración de editores con nuevos títulos
