@@ -18,6 +18,9 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -128,11 +131,32 @@ public class Editor extends VBox implements ActualizableTextos {
             tabPane.getTabs().addListener((javafx.collections.ListChangeListener.Change<? extends Tab> change) -> {
                 while (change.next()) {
                     if (change.wasRemoved()) {
-                        // Forzar renumeración de grupos cuando se cierra una pestaña
-                        TabManager.reasignarNumerosGruposGramatica(tabPane);
+                        for (Tab tab : change.getRemoved()) {
+                            if (tab.getContent() == this && tab.getUserData() != null) {
+                                String elementId = tab.getUserData().toString();
+                                // Cerrar las pestañas hijas
+                                TabManager.closeChildTabs(tabPane, elementId);
+                                // Forzar renumeración de grupos
+                                TabManager.reasignarNumerosGruposGramatica(tabPane);
+                            }
+                        }
                     }
                 }
             });
+            
+            // Buscar la pestaña que contiene este editor
+            for (Tab tab : tabPane.getTabs()) {
+                if (tab.getContent() == this && tab.getUserData() != null) {
+                    String elementId = tab.getUserData().toString();
+                    // Registrar las relaciones padre-hijo existentes
+                    Map<String, List<Tab>> relations = TabManager.getParentChildRelations(tabPane);
+                    if (!relations.containsKey(elementId)) {
+                        relations.put(elementId, new ArrayList<>());
+                    }
+                    break;
+                }
+            }
+            
             listenerConfigured = true;
         }
     }

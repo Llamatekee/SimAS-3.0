@@ -691,9 +691,10 @@ public class TabManager {
         
         // Si hay pestañas hijas para este padre en este TabPane específico
         if (relations.containsKey(parentId)) {
-            List<Tab> childTabs = relations.get(parentId);
+            // Crear una copia de la lista para evitar ConcurrentModificationException
+            List<Tab> childTabs = new ArrayList<>(relations.get(parentId));
             // Cerrar cada pestaña hija
-            for (Tab childTab : new ArrayList<>(childTabs)) {
+            for (Tab childTab : childTabs) {
                 if (tabPane.getTabs().contains(childTab)) {
                     tabPane.getTabs().remove(childTab);
                 }
@@ -1374,48 +1375,39 @@ public class TabManager {
                 SecondaryWindow newWindow = new SecondaryWindow(bundle, "SimAS 3.0");
                 
                 // Obtener el grupo de la pestaña seleccionada
-                String grupoId = obtenerGrupoDePestaña(tabPane, selectedTab);
-                
-                // Lista para almacenar todas las pestañas a mover
-                List<Tab> pestañasAMover = new ArrayList<>();
+                String grupoId = null;
+                if (selectedTab.getUserData() != null) {
+                    String elementId = selectedTab.getUserData().toString();
+                    grupoId = obtenerGrupoDeElemento(tabPane, elementId);
+                    
+                    // Si no tiene grupo directo, puede ser una pestaña hija
+                    if (grupoId == null) {
+                        // Buscar el padre de esta pestaña
+                        for (Tab tab : tabPane.getTabs()) {
+                            if (tab.getUserData() != null) {
+                                String potentialParentId = tab.getUserData().toString();
+                                String parentGrupoId = obtenerGrupoDeElemento(tabPane, potentialParentId);
+                                
+                                if (parentGrupoId != null) {
+                                    // Verificar si esta pestaña es hija del elemento principal
+                                    if (isPestañaHijaDeElemento(elementId, potentialParentId)) {
+                                        grupoId = parentGrupoId;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
                 
                 if (grupoId != null) {
-                    // Si pertenece a un grupo, mover todas las pestañas del grupo
-                    for (Tab tab : new ArrayList<>(tabPane.getTabs())) {
-                        String tabGrupoId = obtenerGrupoDePestaña(tabPane, tab);
-                        if (grupoId.equals(tabGrupoId)) {
-                            pestañasAMover.add(tab);
-                        }
-                    }
+                    // Si pertenece a un grupo, mover todo el grupo
+                    newWindow.moveGroupToWindow(tabPane, grupoId, selectedTab);
                 } else {
-                    // Si no pertenece a un grupo, mover solo la pestaña seleccionada
-                    pestañasAMover.add(selectedTab);
+                    // Si no pertenece a un grupo, mover solo la pestaña
+                    newWindow.addTab(selectedTab);
+                    tabPane.getTabs().remove(selectedTab);
                 }
-                
-                // Mover todas las pestañas recopiladas
-                for (Tab tab : pestañasAMover) {
-                    // Crear nueva pestaña en la ventana secundaria
-                    Tab newTab = new Tab(tab.getText(), tab.getContent());
-                    newTab.setUserData(tab.getUserData());
-                    newWindow.getTabPane().getTabs().add(newTab);
-                    
-                    // Eliminar la pestaña de la ventana original
-                    tabPane.getTabs().remove(tab);
-                    
-                    // Si la pestaña tiene un grupo, mover la información del grupo
-                    if (tab.getUserData() != null) {
-                        String tabElementId = tab.getUserData().toString();
-                        String elementGrupoId = obtenerGrupoDeElemento(tabPane, tabElementId);
-                        if (elementGrupoId != null) {
-                            eliminarElementoDeGrupo(tabPane, tabElementId, elementGrupoId);
-                            asignarElementoAGrupo(newWindow.getTabPane(), tabElementId, elementGrupoId);
-                        }
-                    }
-                }
-                
-                // Forzar renumeración en ambas ventanas
-                reasignarNumerosGruposGramatica(tabPane);
-                reasignarNumerosGruposGramatica(newWindow.getTabPane());
                 
                 // Mostrar la nueva ventana en la posición del cursor
                 newWindow.show();
