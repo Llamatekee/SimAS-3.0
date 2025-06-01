@@ -5,6 +5,7 @@ import javafx.scene.control.TabPane;
 import java.util.*;
 import javafx.scene.Node;
 import javafx.stage.Stage;
+import javafx.application.Platform;
 
 public class TabManager {
     private static final Map<TabPane, Map<Class<?>, Tab>> tabInstances = new HashMap<>();
@@ -693,14 +694,18 @@ public class TabManager {
         if (relations.containsKey(parentId)) {
             // Crear una copia de la lista para evitar ConcurrentModificationException
             List<Tab> childTabs = new ArrayList<>(relations.get(parentId));
-            // Cerrar cada pestaña hija
-            for (Tab childTab : childTabs) {
-                if (tabPane.getTabs().contains(childTab)) {
-                    tabPane.getTabs().remove(childTab);
+            
+            // Usar Platform.runLater para modificar la UI thread de manera segura
+            Platform.runLater(() -> {
+                // Cerrar cada pestaña hija
+                for (Tab childTab : childTabs) {
+                    if (tabPane.getTabs().contains(childTab)) {
+                        tabPane.getTabs().remove(childTab);
+                    }
                 }
-            }
-            // Limpiar la relación
-            relations.remove(parentId);
+                // Limpiar la relación después de cerrar todas las pestañas
+                relations.remove(parentId);
+            });
         }
     }
     

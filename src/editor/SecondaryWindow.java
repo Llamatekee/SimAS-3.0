@@ -276,55 +276,43 @@ public class SecondaryWindow extends EditorWindow {
         System.err.println("\n--- ESTADO INICIAL VENTANA ORIGEN ---");
         System.err.println("Total pestañas en origen: " + sourceTabPane.getTabs().size());
         Map<String, List<Tab>> sourceRelations = TabManager.getParentChildRelations(sourceTabPane);
-        for (Map.Entry<String, List<Tab>> entry : sourceRelations.entrySet()) {
-            System.err.println("Padre: " + entry.getKey());
-            for (Tab childTab : entry.getValue()) {
-                System.err.println("  └─ Hijo: " + (childTab.getUserData() != null ? childTab.getUserData().toString() : "sin ID"));
-            }
-        }
         
-        // Mantener el orden original del grupo y recolectar relaciones existentes
-        for (Tab tab : sourceTabPane.getTabs()) {
+        // Primero, recolectar todas las pestañas padre del grupo
+        for (Tab tab : new ArrayList<>(sourceTabPane.getTabs())) {
             if (tab.getUserData() != null) {
                 String elementId = tab.getUserData().toString();
                 String elementGrupoId = TabManager.obtenerGrupoDeElemento(sourceTabPane, elementId);
                 
                 if (grupoId.equals(elementGrupoId)) {
-                    groupTabs.add(tab);
-                    elementIds.add(elementId);
-                    
-                    System.err.println("\nEncontrada pestaña del grupo: " + elementId);
-                    
-                    // Recolectar pestañas hijas existentes
+                    // Es una pestaña padre del grupo
                     if (elementId.startsWith("editor_") || elementId.startsWith("simulador_")) {
-                        // Obtener relaciones existentes del TabPane origen
-                        if (sourceRelations.containsKey(elementId)) {
-                            List<Tab> existingChildren = sourceRelations.get(elementId);
-                            if (!existingChildren.isEmpty()) {
-                                System.err.println("  Hijos encontrados para " + elementId + ":");
-                                for (Tab childTab : existingChildren) {
-                                    System.err.println("    └─ " + (childTab.getUserData() != null ? childTab.getUserData().toString() : "sin ID"));
-                                }
-                                groupTabs.addAll(existingChildren);
-                                parentChildMap.put(elementId, new ArrayList<>(existingChildren));
-                            }
-                        }
-                        
-                        // También buscar pestañas hijas que pudieran no estar en las relaciones
-                        for (Tab potentialChild : sourceTabPane.getTabs()) {
-                            if (potentialChild.getUserData() != null) {
-                                String childId = potentialChild.getUserData().toString();
-                                if (TabManager.isPestañaHijaDeElemento(childId, elementId) && 
-                                    !groupTabs.contains(potentialChild)) {
-                                    System.err.println("  Hijo adicional encontrado: " + childId);
-                                    groupTabs.add(potentialChild);
-                                    parentChildMap.computeIfAbsent(elementId, k -> new ArrayList<>())
-                                                .add(potentialChild);
-                                }
-                            }
-                        }
+                        groupTabs.add(tab);
+                        elementIds.add(elementId);
+                        System.err.println("\nEncontrada pestaña padre del grupo: " + elementId);
                     }
                 }
+            }
+        }
+
+        // Luego, para cada padre, recolectar sus hijos
+        for (Tab parentTab : new ArrayList<>(groupTabs)) {
+            String parentId = parentTab.getUserData().toString();
+            List<Tab> childTabs = new ArrayList<>();
+            
+            // Buscar todas las pestañas hijas
+            for (Tab tab : new ArrayList<>(sourceTabPane.getTabs())) {
+                if (tab.getUserData() != null) {
+                    String childId = tab.getUserData().toString();
+                    if (TabManager.isPestañaHijaDeElemento(childId, parentId)) {
+                        childTabs.add(tab);
+                        System.err.println("  Hijo encontrado para " + parentId + ": " + childId);
+                    }
+                }
+            }
+            
+            if (!childTabs.isEmpty()) {
+                parentChildMap.put(parentId, childTabs);
+                groupTabs.addAll(childTabs);
             }
         }
 
@@ -334,6 +322,11 @@ public class SecondaryWindow extends EditorWindow {
             System.err.println("• " + (tab.getUserData() != null ? tab.getUserData().toString() : "sin ID") + " - " + tab.getText());
         }
 
+        // Limpiar las referencias del grupo en la ventana origen
+        for (String elementId : elementIds) {
+            TabManager.eliminarElementoDeGrupo(sourceTabPane, elementId, grupoId);
+        }
+
         // Mantener el mismo grupoId en la ventana destino
         for (String elementId : elementIds) {
             TabManager.asignarElementoAGrupo(localTabPane, elementId, grupoId);
@@ -341,12 +334,19 @@ public class SecondaryWindow extends EditorWindow {
 
         // Mover las pestañas manteniendo sus referencias originales
         Map<String, List<Tab>> destRelations = TabManager.getParentChildRelations(localTabPane);
+        
+        // Primero limpiar las relaciones existentes en el destino para este grupo
+        for (String parentId : parentChildMap.keySet()) {
+            destRelations.remove(parentId);
+        }
+
+        // Ahora mover las pestañas y establecer las nuevas relaciones
         for (Tab tab : groupTabs) {
             sourceTabPane.getTabs().remove(tab);
             localTabPane.getTabs().add(tab);
             updateTabPaneReferences(tab);
             
-            // Si es una pestaña padre, transferir sus relaciones
+            // Si es una pestaña padre, establecer sus relaciones
             if (tab.getUserData() != null) {
                 String elementId = tab.getUserData().toString();
                 if (parentChildMap.containsKey(elementId)) {
@@ -370,10 +370,22 @@ public class SecondaryWindow extends EditorWindow {
             localTabPane.getSelectionModel().select(selectedTab);
         }
 
-        // Reasignar números en ambas ventanas
+        // Forzar renumeración inmediata en ambas ventanas
         Platform.runLater(() -> {
+            // Primero limpiar cualquier referencia residual
+            for (String elementId : elementIds) {
+                TabManager.eliminarElementoDeGrupo(sourceTabPane, elementId, grupoId);
+            }
+            
+            // Luego renumerar
             TabManager.reasignarNumerosGruposGramatica(sourceTabPane);
             TabManager.reasignarNumerosGruposGramatica(localTabPane);
+            
+            // Programar una segunda renumeración para asegurar que todo se actualice
+            Platform.runLater(() -> {
+                TabManager.reasignarNumerosGruposGramatica(sourceTabPane);
+                TabManager.reasignarNumerosGruposGramatica(localTabPane);
+            });
         });
 
         System.err.println("\n=== FIN MOVIMIENTO DE GRUPO ===\n");
