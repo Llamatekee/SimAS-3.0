@@ -6,6 +6,7 @@ import java.util.*;
 import javafx.scene.Node;
 import javafx.stage.Stage;
 import javafx.application.Platform;
+import javafx.stage.Window;
 
 public class TabManager {
     private static final Map<TabPane, Map<Class<?>, Tab>> tabInstances = new HashMap<>();
@@ -885,51 +886,54 @@ public class TabManager {
     public static void reasignarNumerosGruposGramatica(TabPane tabPane) {
         if (tabPane == null) return;
         
-        // Recolectar todos los grupos activos en esta ventana
-        Set<String> gruposActivos = new HashSet<>();
         Map<String, String> elementos = elementoToGrupo.get(tabPane);
-        if (elementos != null) {
-            gruposActivos.addAll(elementos.values());
+        if (elementos == null) return;
+        
+        // Usar LinkedHashSet para mantener el orden de inserción
+        Set<String> gruposActivos = new LinkedHashSet<>();
+        
+        // Recolectar grupos en el orden en que aparecen las pestañas
+        for (Tab tab : tabPane.getTabs()) {
+            if (tab.getUserData() != null) {
+                String elementId = tab.getUserData().toString();
+                String grupoId = elementos.get(elementId);
+                if (grupoId != null) {
+                    gruposActivos.add(grupoId);
+                }
+            }
         }
         
-        // Ordenar los grupos por timestamp
-        List<String> gruposOrdenados = new ArrayList<>(gruposActivos);
-        Collections.sort(gruposOrdenados, (g1, g2) -> {
-            long t1 = extraerTimestampDeGrupoId(g1);
-            long t2 = extraerTimestampDeGrupoId(g2);
-            return Long.compare(t1, t2);
-        });
-        
-        // Asignar nuevos números secuenciales empezando desde 1
-        Map<String, Integer> nuevosNumeros = new HashMap<>();
-        for (int i = 0; i < gruposOrdenados.size(); i++) {
-            nuevosNumeros.put(gruposOrdenados.get(i), i + 1);
-        }
-        
-        // Actualizar el mapa de números de grupos
+        // Reasignar números secuencialmente
         Map<String, Integer> grupos = gruposGramatica.get(tabPane);
         if (grupos != null) {
-            grupos.clear();
-            grupos.putAll(nuevosNumeros);
+            grupos.clear(); // Limpiar números antiguos
+            int numeroGrupo = 1;
+            for (String grupoId : gruposActivos) {
+                grupos.put(grupoId, numeroGrupo++);
+            }
         }
         
         // Actualizar los títulos de todas las pestañas
+        boolean hayMultiplesGrupos = gruposActivos.size() > 1;
         for (Tab tab : tabPane.getTabs()) {
             // Actualizar pestañas de editor y simulador
             if (tab.getUserData() != null) {
                 String elementId = tab.getUserData().toString();
-                String grupoId = elementos != null ? elementos.get(elementId) : null;
+                String grupoId = elementos.get(elementId);
                 
-                if (grupoId != null) {
-                    // Es un elemento principal (editor o simulador)
-                    if (elementId.startsWith("editor_")) {
-                        actualizarTituloEditor(tab, nuevosNumeros.get(grupoId), gruposOrdenados.size() > 1);
-                    } else if (elementId.startsWith("simulador_")) {
-                        actualizarTituloSimulador(tab, nuevosNumeros.get(grupoId), gruposOrdenados.size() > 1);
+                if (grupoId != null && grupos != null) {
+                    Integer numero = grupos.get(grupoId);
+                    if (numero != null) {
+                        // Es un elemento principal (editor o simulador)
+                        if (elementId.startsWith("editor_")) {
+                            actualizarTituloEditor(tab, numero, hayMultiplesGrupos);
+                        } else if (elementId.startsWith("simulador_")) {
+                            actualizarTituloSimulador(tab, numero, hayMultiplesGrupos);
+                        }
+                        
+                        // Actualizar sus pestañas hijas
+                        actualizarTitulosPestañasHijas(tabPane, elementId, numero, hayMultiplesGrupos);
                     }
-                    
-                    // Actualizar sus pestañas hijas
-                    actualizarTitulosPestañasHijas(tabPane, elementId, nuevosNumeros.get(grupoId), gruposOrdenados.size() > 1);
                 }
             }
             
@@ -938,9 +942,12 @@ public class TabManager {
                 simulador.SimulacionFinal sim = (simulador.SimulacionFinal) tab.getContent();
                 String simuladorId = sim.getSimuladorPadreId();
                 if (simuladorId != null) {
-                    String grupoId = elementos != null ? elementos.get(simuladorId) : null;
-                    if (grupoId != null) {
-                        sim.actualizarTitulosPestañas(nuevosNumeros.get(grupoId), gruposOrdenados.size() > 1);
+                    String grupoId = elementos.get(simuladorId);
+                    if (grupoId != null && grupos != null) {
+                        Integer numero = grupos.get(grupoId);
+                        if (numero != null) {
+                            sim.actualizarTitulosPestañas(numero, hayMultiplesGrupos);
+                        }
                     }
                 }
             }
@@ -1437,30 +1444,56 @@ public class TabManager {
                 // Obtener las ventanas secundarias activas
                 Map<String, SecondaryWindow> activeWindows = SecondaryWindow.getActiveWindows();
                 
-                if (activeWindows.isEmpty()) {
-                    javafx.scene.control.MenuItem noWindowsItem = new javafx.scene.control.MenuItem(
-                        bundle.getString("tab.context.no.windows")
-                    );
-                    noWindowsItem.getStyleClass().add("menu-item");
-                    noWindowsItem.setDisable(true);
-                    openInExistingWindowMenu.getItems().add(noWindowsItem);
-                } else {
-                    // Crear un ítem de menú para cada ventana activa
-                    for (Map.Entry<String, SecondaryWindow> entry : activeWindows.entrySet()) {
-                        SecondaryWindow window = entry.getValue();
-                        String windowId = entry.getKey();
-                        
-                        // Obtener el título de la primera pestaña como identificador de la ventana
-                        String windowTitle = bundle.getString("window.title") + " " + 
-                            windowId.replace("SecondaryWindow-", "");
-                        if (!window.getTabPane().getTabs().isEmpty()) {
-                            Tab firstTab = window.getTabPane().getTabs().get(0);
-                            windowTitle += " (" + firstTab.getText() + ")";
+                // Obtener la ventana actual
+                Window currentWindow = tabPane.getScene().getWindow();
+                Stage currentStage = (Stage) currentWindow;
+                String currentTitle = currentStage.getTitle();
+                
+                // Contador de ventanas disponibles
+                int availableWindows = 0;
+                
+                // Buscar la ventana principal (será la que tenga el título exacto "SimAS 3.0")
+                final Stage mainStage;
+                Stage tempMainStage = null;
+                for (Window window : Window.getWindows()) {
+                    if (window instanceof Stage) {
+                        Stage stage = (Stage) window;
+                        // La ventana principal es la que tiene exactamente el título "SimAS 3.0"
+                        if (stage.getTitle().equals("SimAS 3.0")) {
+                            tempMainStage = stage;
+                            break;
                         }
-                        
-                        javafx.scene.control.MenuItem windowItem = new javafx.scene.control.MenuItem(windowTitle);
-                        windowItem.getStyleClass().add("menu-item");
-                        windowItem.setOnAction(e -> {
+                    }
+                }
+                mainStage = tempMainStage;
+                
+                // Si estamos en una ventana secundaria y existe la ventana principal, añadirla como opción
+                if (mainStage != null && currentStage != mainStage) {
+                    availableWindows++;
+                    String mainWindowTitle;
+                    try {
+                        mainWindowTitle = bundle.getString("window.main");
+                    } catch (MissingResourceException e) {
+                        // Fallback a texto en español
+                        mainWindowTitle = "Ventana Principal";
+                    }
+                    mainWindowTitle += " (Principal)";
+                    
+                    javafx.scene.control.MenuItem mainWindowItem = new javafx.scene.control.MenuItem(mainWindowTitle);
+                    mainWindowItem.getStyleClass().add("menu-item");
+                    
+                    // Obtener el TabPane de la ventana principal
+                    TabPane mainTabPane = null;
+                    for (Node node : mainStage.getScene().getRoot().lookupAll(".tab-pane")) {
+                        if (node instanceof TabPane) {
+                            mainTabPane = (TabPane)node;
+                            break;
+                        }
+                    }
+                    
+                    final TabPane targetTabPane = mainTabPane;
+                    mainWindowItem.setOnAction(e -> {
+                        if (targetTabPane != null) {
                             Tab selectedTab = tabPane.getSelectionModel().getSelectedItem();
                             if (selectedTab != null && selectedTab.isClosable()) {
                                 // Obtener el grupo de la pestaña seleccionada
@@ -1484,10 +1517,10 @@ public class TabManager {
                                 
                                 // Mover todas las pestañas recopiladas
                                 for (Tab tab : pestañasAMover) {
-                                    // Crear nueva pestaña en la ventana existente
+                                    // Crear nueva pestaña en la ventana principal
                                     Tab newTab = new Tab(tab.getText(), tab.getContent());
                                     newTab.setUserData(tab.getUserData());
-                                    window.getTabPane().getTabs().add(newTab);
+                                    targetTabPane.getTabs().add(newTab);
                                     
                                     // Eliminar la pestaña de la ventana original
                                     tabPane.getTabs().remove(tab);
@@ -1498,22 +1531,110 @@ public class TabManager {
                                         String elementGrupoId = obtenerGrupoDeElemento(tabPane, tabElementId);
                                         if (elementGrupoId != null) {
                                             eliminarElementoDeGrupo(tabPane, tabElementId, elementGrupoId);
-                                            asignarElementoAGrupo(window.getTabPane(), tabElementId, elementGrupoId);
+                                            asignarElementoAGrupo(targetTabPane, tabElementId, elementGrupoId);
                                         }
                                     }
                                 }
                                 
                                 // Forzar renumeración en ambas ventanas
                                 reasignarNumerosGruposGramatica(tabPane);
-                                reasignarNumerosGruposGramatica(window.getTabPane());
+                                reasignarNumerosGruposGramatica(targetTabPane);
                                 
-                                // Traer la ventana al frente
-                                window.getStage().toFront();
+                                // Traer la ventana principal al frente
+                                mainStage.toFront();
                             }
-                        });
-                        
-                        openInExistingWindowMenu.getItems().add(windowItem);
+                        }
+                    });
+                    
+                    openInExistingWindowMenu.getItems().add(mainWindowItem);
+                }
+                
+                // Añadir las ventanas secundarias que no sean la actual
+                for (Map.Entry<String, SecondaryWindow> entry : activeWindows.entrySet()) {
+                    SecondaryWindow window = entry.getValue();
+                    String windowId = entry.getKey();
+                    
+                    // Saltar esta ventana si es la actual
+                    if (window.getStage() == currentWindow) {
+                        continue;
                     }
+                    
+                    availableWindows++;
+                    // Obtener el título de la primera pestaña como identificador de la ventana
+                    String windowTitle = bundle.getString("window.title") + " " + 
+                        windowId.replace("SecondaryWindow-", "");
+                    if (!window.getTabPane().getTabs().isEmpty()) {
+                        Tab firstTab = window.getTabPane().getTabs().get(0);
+                        windowTitle += " (" + firstTab.getText() + ")";
+                    }
+                    
+                    javafx.scene.control.MenuItem windowItem = new javafx.scene.control.MenuItem(windowTitle);
+                    windowItem.getStyleClass().add("menu-item");
+                    
+                    // Configurar la acción para mover la pestaña a la ventana seleccionada
+                    windowItem.setOnAction(e -> {
+                        Tab selectedTab = tabPane.getSelectionModel().getSelectedItem();
+                        if (selectedTab != null && selectedTab.isClosable()) {
+                            // Obtener el grupo de la pestaña seleccionada
+                            String grupoId = obtenerGrupoDePestaña(tabPane, selectedTab);
+                            
+                            // Lista para almacenar todas las pestañas a mover
+                            List<Tab> pestañasAMover = new ArrayList<>();
+                            
+                            if (grupoId != null) {
+                                // Si pertenece a un grupo, mover todas las pestañas del grupo
+                                for (Tab tab : new ArrayList<>(tabPane.getTabs())) {
+                                    String tabGrupoId = obtenerGrupoDePestaña(tabPane, tab);
+                                    if (grupoId.equals(tabGrupoId)) {
+                                        pestañasAMover.add(tab);
+                                    }
+                                }
+                            } else {
+                                // Si no pertenece a un grupo, mover solo la pestaña seleccionada
+                                pestañasAMover.add(selectedTab);
+                            }
+                            
+                            // Mover todas las pestañas recopiladas
+                            for (Tab tab : pestañasAMover) {
+                                // Crear nueva pestaña en la ventana destino
+                                Tab newTab = new Tab(tab.getText(), tab.getContent());
+                                newTab.setUserData(tab.getUserData());
+                                window.getTabPane().getTabs().add(newTab);
+                                
+                                // Eliminar la pestaña de la ventana original
+                                tabPane.getTabs().remove(tab);
+                                
+                                // Si la pestaña tiene un grupo, mover la información del grupo
+                                if (tab.getUserData() != null) {
+                                    String tabElementId = tab.getUserData().toString();
+                                    String elementGrupoId = obtenerGrupoDeElemento(tabPane, tabElementId);
+                                    if (elementGrupoId != null) {
+                                        eliminarElementoDeGrupo(tabPane, tabElementId, elementGrupoId);
+                                        asignarElementoAGrupo(window.getTabPane(), tabElementId, elementGrupoId);
+                                    }
+                                }
+                            }
+                            
+                            // Forzar renumeración en ambas ventanas
+                            reasignarNumerosGruposGramatica(tabPane);
+                            reasignarNumerosGruposGramatica(window.getTabPane());
+                            
+                            // Traer la ventana destino al frente
+                            window.getStage().toFront();
+                        }
+                    });
+                    
+                    openInExistingWindowMenu.getItems().add(windowItem);
+                }
+                
+                // Si no hay ventanas disponibles, mostrar mensaje
+                if (availableWindows == 0) {
+                    javafx.scene.control.MenuItem noWindowsItem = new javafx.scene.control.MenuItem(
+                        bundle.getString("tab.context.no.windows")
+                    );
+                    noWindowsItem.getStyleClass().add("menu-item");
+                    noWindowsItem.setDisable(true);
+                    openInExistingWindowMenu.getItems().add(noWindowsItem);
                 }
                 
                 // Seleccionar la pestaña clicada
