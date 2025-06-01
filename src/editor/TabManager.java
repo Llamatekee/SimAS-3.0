@@ -351,11 +351,65 @@ public class TabManager {
     }
     
     /**
+     * Calcula la posición correcta para una nueva simulación.
+     */
+    private static int calcularPosicionSimulacion(TabPane tabPane, String simuladorId) {
+        // Buscar el simulador padre
+        Tab simuladorTab = null;
+        Tab ultimaSimulacionTab = null;
+        
+        for (Tab tab : tabPane.getTabs()) {
+            if (tab.getUserData() != null) {
+                String userData = tab.getUserData().toString();
+                // Encontrar el simulador padre
+                if (userData.equals(simuladorId)) {
+                    simuladorTab = tab;
+                }
+                // Encontrar la última simulación de este simulador
+                if (tab.getContent() instanceof simulador.SimulacionFinal) {
+                    simulador.SimulacionFinal sim = (simulador.SimulacionFinal) tab.getContent();
+                    if (sim.getSimuladorPadreId() != null && sim.getSimuladorPadreId().equals(simuladorId)) {
+                        ultimaSimulacionTab = tab;
+                    }
+                }
+            }
+        }
+        
+        if (simuladorTab == null) return tabPane.getTabs().size();
+        
+        // Si no hay simulaciones previas, insertar después del simulador
+        if (ultimaSimulacionTab == null) {
+            return tabPane.getTabs().indexOf(simuladorTab) + 1;
+        }
+        
+        // Si hay simulaciones existentes, insertar después de la última y sus auxiliares
+        int insertPos = tabPane.getTabs().indexOf(ultimaSimulacionTab) + 1;
+        
+        // Buscar pestañas auxiliares de la última simulación
+        for (Tab tab : tabPane.getTabs()) {
+            if (tab.getUserData() != null) {
+                String userData = tab.getUserData().toString();
+                if ((userData.startsWith("derivacion_") || userData.startsWith("arbol_")) &&
+                    userData.endsWith(((simulador.SimulacionFinal)ultimaSimulacionTab.getContent()).simulacionId)) {
+                    insertPos = tabPane.getTabs().indexOf(tab) + 1;
+                }
+            }
+        }
+        
+        return insertPos;
+    }
+
+    /**
      * Calcula la posición de inserción para diferentes tipos de pestañas.
      */
-    public static int calcularPosicionInsercion(TabPane tabPane, Class<?> tabType, String parentId, String childId) {
+    private static int calcularPosicionInsercion(TabPane tabPane, Class<?> tabType, String parentId, String childId) {
         // Si es una pestaña hija, usar la lógica existente
         if (parentId != null && childId != null) {
+            // Si es una simulación, usar la lógica específica
+            if (childId.startsWith("simulacion_")) {
+                return calcularPosicionSimulacion(tabPane, parentId);
+            }
+            
             Tab parentTab = findTabByUserData(tabPane, parentId);
             if (parentTab != null) {
                 return calcularPosicionHija(tabPane, parentTab, childId, parentId);
@@ -946,13 +1000,13 @@ public class TabManager {
                         String tituloBase = obtenerTituloCreacionActual(tabPane, tab);
                         tab.setText(mostrarGrupo ? numeroGrupo + "-" + tituloBase : tituloBase);
                     } else if (childId.startsWith("terminales_" + creacionId)) {
-                        String tituloBase = "Terminales";
+                        String tituloBase = obtenerTituloBaseTerminales(tabPane);
                         tab.setText(mostrarGrupo ? numeroGrupo + "-" + tituloBase : tituloBase);
                     } else if (childId.startsWith("no_terminales_" + creacionId)) {
-                        String tituloBase = "No Terminales";
+                        String tituloBase = obtenerTituloBaseNoTerminales(tabPane);
                         tab.setText(mostrarGrupo ? numeroGrupo + "-" + tituloBase : tituloBase);
                     } else if (childId.startsWith("producciones_" + creacionId)) {
-                        String tituloBase = "Producciones";
+                        String tituloBase = obtenerTituloBaseProducciones(tabPane);
                         tab.setText(mostrarGrupo ? numeroGrupo + "-" + tituloBase : tituloBase);
                     }
                 }
@@ -1240,5 +1294,50 @@ public class TabManager {
      */
     public static Map<String, List<Tab>> getParentChildRelations(TabPane tabPane) {
         return parentChildRelations.computeIfAbsent(tabPane, k -> new HashMap<>());
+    }
+
+    /**
+     * Obtiene el título base para pestañas de terminales.
+     */
+    private static String obtenerTituloBaseTerminales(TabPane tabPane) {
+        try {
+            java.util.ResourceBundle bundle = resourceBundles.get(tabPane);
+            if (bundle != null) {
+                return bundle.getString("creacion2.tab.modificar.terminales");
+            }
+        } catch (Exception e) {
+            // Si no se puede obtener del bundle, usar valor por defecto
+        }
+        return "Terminales";
+    }
+
+    /**
+     * Obtiene el título base para pestañas de no terminales.
+     */
+    private static String obtenerTituloBaseNoTerminales(TabPane tabPane) {
+        try {
+            java.util.ResourceBundle bundle = resourceBundles.get(tabPane);
+            if (bundle != null) {
+                return bundle.getString("creacion2.tab.modificar.no.terminales");
+            }
+        } catch (Exception e) {
+            // Si no se puede obtener del bundle, usar valor por defecto
+        }
+        return "No Terminales";
+    }
+
+    /**
+     * Obtiene el título base para pestañas de producciones.
+     */
+    private static String obtenerTituloBaseProducciones(TabPane tabPane) {
+        try {
+            java.util.ResourceBundle bundle = resourceBundles.get(tabPane);
+            if (bundle != null) {
+                return bundle.getString("creacion3.tab.modificar.producciones");
+            }
+        } catch (Exception e) {
+            // Si no se puede obtener del bundle, usar valor por defecto
+        }
+        return "Producciones";
     }
 } 

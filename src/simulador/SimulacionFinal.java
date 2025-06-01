@@ -74,9 +74,9 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
     // Lista para almacenar los estados anteriores
     private List<EstadoSimulacion> estadosAnteriores = new ArrayList<>();
 
-    private String simulacionId; // Identificador único para esta simulación
-    private int numeroSimulacion; // Número de esta simulación específica
     private String simuladorPadreId; // Nuevo campo para almacenar el ID del simulador padre
+    private int numeroSimulacion; // Número de esta simulación específica
+    public String simulacionId; // Identificador único para esta simulación
 
     // Clase para almacenar el estado de la simulación
     private static class EstadoSimulacion {
@@ -106,8 +106,7 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
             this.simuladorPadreId = selectedTab.getUserData().toString();
         }
         
-        
-        // Contar simulaciones específicamente para este simulador
+        // Contar simulaciones específicamente para este simulador y encontrar la última
         int simulacionesEnGrupo = 0;
         for (Tab tab : tabPane.getTabs()) {
             if (tab.getContent() instanceof SimulacionFinal) {
@@ -171,26 +170,62 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         // Determinar si hay más de un grupo
         boolean mostrarGrupo = TabManager.contarGruposActivos(tabPane) > 1;
         
+        // Contar simulaciones en este grupo
+        int simulacionesEnGrupo = 0;
+        for (Tab tab : tabPane.getTabs()) {
+            if (tab.getContent() instanceof SimulacionFinal) {
+                SimulacionFinal sim = (SimulacionFinal) tab.getContent();
+                if (sim.simuladorPadreId != null && sim.simuladorPadreId.equals(this.simuladorPadreId)) {
+                    simulacionesEnGrupo++;
+                }
+            }
+        }
+        
         // Actualizar títulos
         for (Tab tab : tabPane.getTabs()) {
             if (tab.getContent() == this) {
-                String tituloBase = bundle.getString("simulador.tab.paso6");
-                String nuevoTitulo = mostrarGrupo ? 
-                    numeroGrupo + "-" + tituloBase + " " + numeroSimulacion :
-                    tituloBase + " " + numeroSimulacion;
+                String tituloBase = bundle.getString("simulador.paso6.simulacion.final");
+                String nuevoTitulo;
+                if (simulacionesEnGrupo > 1) {
+                    // Solo mostrar número si hay más de una simulación
+                    nuevoTitulo = mostrarGrupo ? 
+                        numeroGrupo + "-" + tituloBase + " " + numeroSimulacion :
+                        tituloBase + " " + numeroSimulacion;
+                } else {
+                    // Si solo hay una simulación, no mostrar número
+                    nuevoTitulo = mostrarGrupo ? 
+                        numeroGrupo + "-" + tituloBase :
+                        tituloBase;
+                }
                 tab.setText(nuevoTitulo);
             } else if (tab.getUserData() != null) {
                 String userData = tab.getUserData().toString();
                 if (userData.startsWith("derivacion_") && userData.endsWith(simulacionId)) {
                     String tituloBase = bundle.getString("simulacionfinal.tab.derivacion");
-                    tab.setText(mostrarGrupo ? 
-                        numeroGrupo + "-" + tituloBase + " " + numeroSimulacion :
-                        tituloBase + " " + numeroSimulacion);
+                    String nuevoTitulo;
+                    if (simulacionesEnGrupo > 1) {
+                        nuevoTitulo = mostrarGrupo ? 
+                            numeroGrupo + "-" + tituloBase + " " + numeroSimulacion :
+                            tituloBase + " " + numeroSimulacion;
+                    } else {
+                        nuevoTitulo = mostrarGrupo ? 
+                            numeroGrupo + "-" + tituloBase :
+                            tituloBase;
+                    }
+                    tab.setText(nuevoTitulo);
                 } else if (userData.startsWith("arbol_") && userData.endsWith(simulacionId)) {
                     String tituloBase = bundle.getString("simulacionfinal.tab.arbol");
-                    tab.setText(mostrarGrupo ? 
-                        numeroGrupo + "-" + tituloBase + " " + numeroSimulacion :
-                        tituloBase + " " + numeroSimulacion);
+                    String nuevoTitulo;
+                    if (simulacionesEnGrupo > 1) {
+                        nuevoTitulo = mostrarGrupo ? 
+                            numeroGrupo + "-" + tituloBase + " " + numeroSimulacion :
+                            tituloBase + " " + numeroSimulacion;
+                    } else {
+                        nuevoTitulo = mostrarGrupo ? 
+                            numeroGrupo + "-" + tituloBase :
+                            tituloBase;
+                    }
+                    tab.setText(nuevoTitulo);
                 }
             }
         }
@@ -601,6 +636,17 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
                     numeroGrupo + "-" + tituloBase + " " + numeroSimulacion :
                     tituloBase + " " + numeroSimulacion;
                 
+                // Buscar la pestaña de simulación actual
+                Tab simulacionTab = null;
+                for (Tab tab : tabPane.getTabs()) {
+                    if (tab.getContent() == this) {
+                        simulacionTab = tab;
+                        break;
+                    }
+                }
+                
+                if (simulacionTab == null) return;
+                
                 // Buscar si ya existe una pestaña de derivación
                 Tab tabDerivacion = null;
                 for (Tab tab : tabPane.getTabs()) {
@@ -620,7 +666,20 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
                         e.consume();
                         tabPane.getTabs().remove(newTab);
                     });
-                    tabPane.getTabs().add(newTab);
+                    
+                    // Encontrar la posición correcta para insertar
+                    int insertPos = tabPane.getTabs().indexOf(simulacionTab) + 1;
+                    
+                    // Si hay un árbol sintáctico después de la simulación, insertar antes
+                    for (Tab tab : tabPane.getTabs()) {
+                        if (tab.getUserData() != null && 
+                            tab.getUserData().toString().equals("arbol_" + simulacionId)) {
+                            insertPos = tabPane.getTabs().indexOf(tab);
+                            break;
+                        }
+                    }
+                    
+                    tabPane.getTabs().add(insertPos, newTab);
                     tabDerivacion = newTab;
                 }
                 
@@ -831,6 +890,17 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
                     numeroGrupo + "-" + tituloBase + " " + numeroSimulacion :
                     tituloBase + " " + numeroSimulacion;
                 
+                // Buscar la pestaña de simulación actual
+                Tab simulacionTab = null;
+                for (Tab tab : tabPane.getTabs()) {
+                    if (tab.getContent() == this) {
+                        simulacionTab = tab;
+                        break;
+                    }
+                }
+                
+                if (simulacionTab == null) return;
+                
                 // Buscar si ya existe una pestaña de árbol
                 Tab tabArbol = null;
                 for (Tab tab : tabPane.getTabs()) {
@@ -850,7 +920,20 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
                         e.consume();
                         tabPane.getTabs().remove(newTab);
                     });
-                    tabPane.getTabs().add(newTab);
+                    
+                    // Encontrar la posición correcta para insertar
+                    int insertPos = tabPane.getTabs().indexOf(simulacionTab) + 1;
+                    
+                    // Si hay una derivación después de la simulación, insertar después de ella
+                    for (Tab tab : tabPane.getTabs()) {
+                        if (tab.getUserData() != null && 
+                            tab.getUserData().toString().equals("derivacion_" + simulacionId)) {
+                            insertPos = tabPane.getTabs().indexOf(tab) + 1;
+                            break;
+                        }
+                    }
+                    
+                    tabPane.getTabs().add(insertPos, newTab);
                     tabArbol = newTab;
                 }
                 
@@ -948,20 +1031,66 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
     public void actualizarTitulosPestañas(Integer numeroGrupo, boolean mostrarGrupo) {
         if (tabPane == null) return;
         
+        // Contar simulaciones en este grupo
+        int simulacionesEnGrupo = 0;
+        for (Tab tab : tabPane.getTabs()) {
+            if (tab.getContent() instanceof SimulacionFinal) {
+                SimulacionFinal sim = (SimulacionFinal) tab.getContent();
+                if (sim.simuladorPadreId != null && sim.simuladorPadreId.equals(this.simuladorPadreId)) {
+                    simulacionesEnGrupo++;
+                }
+            }
+        }
+        
         // Actualizar títulos
         for (Tab tab : tabPane.getTabs()) {
-            if (tab.getUserData() != null) {
+            if (tab.getContent() == this) {
+                String tituloBase = bundle.getString("simulador.paso6.simulacion.final");
+                String nuevoTitulo;
+                if (simulacionesEnGrupo > 1) {
+                    // Solo mostrar número si hay más de una simulación
+                    nuevoTitulo = mostrarGrupo ? 
+                        numeroGrupo + "-" + tituloBase + " " + numeroSimulacion :
+                        tituloBase + " " + numeroSimulacion;
+                } else {
+                    // Si solo hay una simulación, no mostrar número
+                    nuevoTitulo = mostrarGrupo ? 
+                        numeroGrupo + "-" + tituloBase :
+                        tituloBase;
+                }
+                tab.setText(nuevoTitulo);
+            } else if (tab.getUserData() != null) {
                 String userData = tab.getUserData().toString();
                 
                 // Actualizar pestaña de derivación
                 if (userData.equals("derivacion_" + simulacionId)) {
                     String tituloBase = bundle.getString("simulacionfinal.tab.derivacion");
-                    tab.setText(mostrarGrupo ? numeroGrupo + "-" + tituloBase + " " + numeroSimulacion : tituloBase + " " + numeroSimulacion);
+                    String nuevoTitulo;
+                    if (simulacionesEnGrupo > 1) {
+                        nuevoTitulo = mostrarGrupo ? 
+                            numeroGrupo + "-" + tituloBase + " " + numeroSimulacion :
+                            tituloBase + " " + numeroSimulacion;
+                    } else {
+                        nuevoTitulo = mostrarGrupo ? 
+                            numeroGrupo + "-" + tituloBase :
+                            tituloBase;
+                    }
+                    tab.setText(nuevoTitulo);
                 }
                 // Actualizar pestaña de árbol sintáctico
                 else if (userData.equals("arbol_" + simulacionId)) {
                     String tituloBase = bundle.getString("simulacionfinal.tab.arbol");
-                    tab.setText(mostrarGrupo ? numeroGrupo + "-" + tituloBase + " " + numeroSimulacion : tituloBase + " " + numeroSimulacion);
+                    String nuevoTitulo;
+                    if (simulacionesEnGrupo > 1) {
+                        nuevoTitulo = mostrarGrupo ? 
+                            numeroGrupo + "-" + tituloBase + " " + numeroSimulacion :
+                            tituloBase + " " + numeroSimulacion;
+                    } else {
+                        nuevoTitulo = mostrarGrupo ? 
+                            numeroGrupo + "-" + tituloBase :
+                            tituloBase;
+                    }
+                    tab.setText(nuevoTitulo);
                 }
             }
         }
