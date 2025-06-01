@@ -2,6 +2,7 @@ package bienvenida;
 
 import editor.Editor;
 import editor.EditorWindow;
+import editor.SecondaryWindow;
 import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -174,7 +175,7 @@ public class MenuPrincipal extends Application {
                         event.consume();
                         
                         // Create new window
-                        EditorWindow newWindow = new EditorWindow(bundle);
+                        EditorWindow newWindow = new SecondaryWindow(bundle, "SimAS 3.0");
                         
                         // Encontrar el grupo al que pertenece la pestaña
                         String grupoId = null;
@@ -283,7 +284,7 @@ public class MenuPrincipal extends Application {
                     event.consume();
                     
                     // Create new window
-                    EditorWindow newWindow = new EditorWindow(bundle);
+                    EditorWindow newWindow = new SecondaryWindow(bundle, "SimAS 3.0");
                     
                     // Encontrar el grupo al que pertenece la pestaña
                     String grupoId = null;

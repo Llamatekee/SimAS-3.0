@@ -8,260 +8,300 @@ import javafx.stage.Stage;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.TransferMode;
 import java.util.ResourceBundle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.application.Platform;
 
 public class SecondaryWindow extends EditorWindow {
     
+    private static final Map<String, SecondaryWindow> activeWindows = new ConcurrentHashMap<>();
+    private final String windowId;
+    private static int windowCounter = 0;
+    private final TabPane localTabPane;
+    private final Stage stage;
+    private final ResourceBundle bundle;
+    
+    static {
+        System.err.println("\n¡CLASE SecondaryWindow CARGADA!\n");
+    }
+    
+    private void printTabCount(String action) {
+        System.err.println("\n=== Ventana Secundaria [" + windowId + "] ===");
+        System.err.println("Acción: " + action);
+        System.err.println("Número de pestañas: " + localTabPane.getTabs().size());
+        System.err.println("========================\n");
+    }
+    
     public SecondaryWindow(ResourceBundle bundle, String title) {
-        super(bundle);
-        Stage stage = getStage();
+        super(null); // No inicializar la ventana en la clase padre
+        
+        this.bundle = bundle;
+        System.err.println("\n>>> CREANDO NUEVA VENTANA SECUNDARIA <<<\n");
+        
+        windowId = "SecondaryWindow-" + (++windowCounter);
+        activeWindows.put(windowId, this);
+        
+        // Crear un nuevo TabPane local para esta ventana
+        localTabPane = new TabPane();
+        localTabPane.setTabDragPolicy(TabPane.TabDragPolicy.REORDER);
+        
+        // Configurar la ventana
+        stage = new Stage();
+        Scene scene = new Scene(localTabPane);
+        stage.setScene(scene);
         stage.setTitle(title);
-        stage.initModality(Modality.NONE); // Permite interactuar con la ventana principal
+        stage.initModality(Modality.NONE);
         
-        // Configurar el TabPane para gestión de grupos
-        TabPane tabPane = getTabPane();
+        // Configurar el tamaño de la ventana
+        stage.setWidth(800);
+        stage.setHeight(900);
+        stage.setMinWidth(600);
+        stage.setMinHeight(700);
         
-        // Inicializar mapas en TabManager para este TabPane
-        TabManager.setResourceBundle(tabPane, bundle);
+        // Aplicar estilos CSS si existen
+        try {
+            scene.getStylesheets().add(getClass().getResource("/vistas/styles.css").toExternalForm());
+        } catch (Exception e) {
+            System.err.println("No se pudieron cargar los estilos CSS");
+        }
         
-        // Configurar drag & drop de pestañas
-        tabPane.setTabDragPolicy(TabPane.TabDragPolicy.REORDER);
+        // Configurar los atajos de teclado específicos para esta ventana
+        configureKeyboardShortcuts(stage, scene, bundle);
         
-        // Setup drag and drop handling for tabs
-        tabPane.setOnDragDetected(event -> {
-            if (event.isShortcutDown()) {  // Ctrl/Cmd is pressed
-                Tab selectedTab = tabPane.getSelectionModel().getSelectedItem();
-                if (selectedTab != null && selectedTab.isClosable()) {
-                    // Start drag operation
-                    javafx.scene.input.Dragboard db = tabPane.startDragAndDrop(javafx.scene.input.TransferMode.MOVE);
-                    
-                    // Put a string on dragboard (needed for the drag operation)
-                    javafx.scene.input.ClipboardContent content = new javafx.scene.input.ClipboardContent();
-                    content.putString("tab-transfer");
-                    db.setContent(content);
-                    
-                    // Store the tab temporarily
-                    event.consume();
-                    
-                    // Create new window
-                    EditorWindow newWindow = new EditorWindow(bundle);
-                    
-                    // Encontrar el grupo al que pertenece la pestaña
-                    String grupoId = null;
-                    String elementId = null;
-                    
-                    if (selectedTab.getUserData() != null) {
-                        elementId = selectedTab.getUserData().toString();
-                        
-                        // Primero intentar obtener el grupo directamente si es un elemento principal
-                        grupoId = TabManager.obtenerGrupoDeElemento(tabPane, elementId);
-                        
-                        // Si no tiene grupo directo, puede ser una pestaña hija
-                        if (grupoId == null) {
-                            // Buscar el padre de esta pestaña
-                            for (Tab tab : tabPane.getTabs()) {
-                                if (tab.getUserData() != null) {
-                                    String potentialParentId = tab.getUserData().toString();
-                                    String parentGrupoId = TabManager.obtenerGrupoDeElemento(tabPane, potentialParentId);
-                                    
-                                    if (parentGrupoId != null) {
-                                        // Verificar si esta pestaña es hija del elemento principal
-                                        if (TabManager.isPestañaHijaDeElemento(elementId, potentialParentId)) {
-                                            grupoId = parentGrupoId;
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    
-                    if (grupoId != null) {
-                        newWindow.moveGroupToWindow(tabPane, grupoId, selectedTab);
-                    } else {
-                        // Si no pertenece a un grupo, mover solo la pestaña
-                        newWindow.addTab(selectedTab);
-                        tabPane.getTabs().remove(selectedTab);
-                    }
-                    
-                    // Show the new window at the cursor position
-                    newWindow.show();
-                    Stage newStage = (Stage) newWindow.getTabPane().getScene().getWindow();
-                    newStage.setX(event.getScreenX() - 100);
-                    newStage.setY(event.getScreenY() - 50);
-                }
-            }
-        });
+        // Configurar el manejo de arrastre
+        configureDragAndDrop();
         
-        // Listener para cierre de pestañas y actualización de grupos
-        tabPane.getTabs().addListener((javafx.collections.ListChangeListener.Change<? extends Tab> change) -> {
+        printTabCount("Ventana creada");
+        
+        // Listener para monitorear cambios en las pestañas
+        localTabPane.getTabs().addListener((javafx.collections.ListChangeListener<Tab>) change -> {
             while (change.next()) {
+                if (change.wasAdded()) {
+                    printTabCount("Pestaña(s) añadida(s)");
+                }
                 if (change.wasRemoved()) {
-                    for (Tab tab : change.getRemoved()) {
-                        // Si la pestaña es parte de un grupo, limpiar su grupo
-                        if (tab.getUserData() != null) {
-                            String elementId = tab.getUserData().toString();
-                            String grupoId = TabManager.obtenerGrupoDeElemento(tabPane, elementId);
-                            if (grupoId != null) {
-                                TabManager.eliminarElementoDeGrupo(tabPane, elementId, grupoId);
-                            }
-                            // Si es una pestaña padre, cerrar sus hijas
-                            TabManager.closeChildTabs(tabPane, elementId);
-                        }
+                    printTabCount("Pestaña(s) eliminada(s)");
+                    if (localTabPane.getTabs().isEmpty()) {
+                        System.err.println("\n¡VENTANA [" + windowId + "] VACÍA! Cerrando...\n");
+                        Platform.runLater(() -> stage.close());
                     }
-                    // Reasignar números de grupos
-                    TabManager.reasignarNumerosGruposGramatica(tabPane);
                 }
             }
         });
         
-        // Configurar cierre de ventana
         stage.setOnCloseRequest(event -> {
-            // Cerrar todas las pestañas y limpiar grupos
-            if (tabPane != null) {
-                // Primero cerrar las pestañas hijas para evitar problemas de dependencias
-                for (Tab tab : new ArrayList<>(tabPane.getTabs())) {
-                    if (tab.getUserData() != null) {
-                        String elementId = tab.getUserData().toString();
-                        TabManager.closeChildTabs(tabPane, elementId);
-                    }
+            printTabCount("Ventana cerrándose");
+            if (localTabPane != null) {
+                // Cerrar pestañas localmente
+                for (Tab tab : new ArrayList<>(localTabPane.getTabs())) {
+                    localTabPane.getTabs().remove(tab);
                 }
-                // Luego cerrar todas las pestañas y resetear grupos
-                tabPane.getTabs().clear();
-                TabManager.resetGrupos(tabPane);
             }
+            activeWindows.remove(windowId);
+            System.err.println("\n>>> VENTANA [" + windowId + "] ELIMINADA DEL REGISTRO <<<\n");
         });
     }
     
     @Override
-    public void addTab(Tab tab) {
-        TabPane tabPane = getTabPane();
-        
-        // Preserve the tab's properties
-        String title = tab.getText();
-        javafx.scene.Node content = tab.getContent();
-        Object userData = tab.getUserData();
-        boolean closable = tab.isClosable();
-        
-        // Create a new tab with the same properties
-        Tab newTab = new Tab(title);
-        newTab.setContent(content);
-        newTab.setClosable(closable);
-        newTab.setUserData(userData);
-        
-        // Configurar el listener de cierre para manejar pestañas hijas
-        newTab.setOnClosed(event -> {
-            // Si es una pestaña padre, cerrar también las hijas
-            if (userData != null) {
-                String elementId = userData.toString();
-                
-                // Cerrar las pestañas hijas
-                TabManager.closeChildTabs(tabPane, elementId);
-                
-                // Si es parte de un grupo, limpiar el grupo
-                String grupoId = TabManager.obtenerGrupoDeElemento(tabPane, elementId);
-                if (grupoId != null) {
-                    TabManager.eliminarElementoDeGrupo(tabPane, elementId, grupoId);
-                }
-                
-                // Forzar renumeración de grupos
-                TabManager.reasignarNumerosGruposGramatica(tabPane);
+    public void show() {
+        stage.show();
+    }
+    
+    private void configureDragAndDrop() {
+        // Permitir que el TabPane acepte pestañas arrastradas
+        localTabPane.setOnDragOver(event -> {
+            if (event.getGestureSource() instanceof Tab) {
+                event.acceptTransferModes(TransferMode.MOVE);
+                event.consume();
             }
         });
         
-        // Actualizar referencias al TabPane en el contenido
-        if (content instanceof Editor) {
-            Editor editor = (Editor) content;
-            editor.setTabPane(tabPane);
-            editor.configurarRelacionesPadreHijo();
-        } else if (TabManager.isSimuladorContent(content)) {
-            try {
-                // Actualizar el tabPane directamente en el simulador
-                java.lang.reflect.Method setTabPaneMethod = content.getClass().getMethod("setTabPane", TabPane.class);
-                setTabPaneMethod.invoke(content, tabPane);
+        // Manejar el drop de pestañas
+        localTabPane.setOnDragDropped(event -> {
+            if (event.getGestureSource() instanceof Tab) {
+                Tab draggedTab = (Tab) event.getGestureSource();
                 
-                // Configurar relaciones padre-hijo si el método existe
-                try {
-                    java.lang.reflect.Method configureMethod = content.getClass().getMethod("configurarRelacionesPadreHijo");
-                    configureMethod.invoke(content);
-                } catch (NoSuchMethodException e) {
-                    // El método no existe, ignorar
+                // Crear una copia de la pestaña para esta ventana
+                Tab newTab = new Tab(draggedTab.getText());
+                newTab.setContent(draggedTab.getContent());
+                newTab.setClosable(true);
+                if (draggedTab.getUserData() != null) {
+                    newTab.setUserData(draggedTab.getUserData().toString());
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
+                
+                // Añadir la pestaña al TabPane local
+                localTabPane.getTabs().add(newTab);
+                localTabPane.getSelectionModel().select(newTab);
+                
+                event.setDropCompleted(true);
+                event.consume();
+                
+                printTabCount("Pestaña añadida mediante arrastre");
             }
+        });
+    }
+    
+    private void configureKeyboardShortcuts(Stage stage, Scene scene, ResourceBundle bundle) {
+        // Cmd+W: Cerrar pestaña actual
+        KeyCombination closeTabKeyComb = new KeyCodeCombination(KeyCode.W, KeyCombination.SHORTCUT_DOWN);
+        scene.getAccelerators().put(closeTabKeyComb, () -> {
+            Tab selectedTab = localTabPane.getSelectionModel().getSelectedItem();
+            if (selectedTab != null) {
+                localTabPane.getTabs().remove(selectedTab);
+            }
+        });
+        
+        // Cmd+Shift+W: Cerrar ventana con confirmación
+        KeyCombination closeWindowKeyComb = new KeyCodeCombination(KeyCode.W, KeyCombination.SHORTCUT_DOWN, KeyCombination.SHIFT_DOWN);
+        scene.getAccelerators().put(closeWindowKeyComb, () -> {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Cerrar ventana");
+            alert.setHeaderText("¿Cerrar todas las pestañas?");
+            alert.setContentText("Se cerrarán todas las pestañas de esta ventana.");
+            alert.initOwner(stage);
+            
+            alert.showAndWait().ifPresent(response -> {
+                if (response == ButtonType.OK) {
+                    stage.close();
+                }
+            });
+        });
+    }
+    
+    @Override
+    public TabPane getTabPane() {
+        return localTabPane;
+    }
+    
+    @Override
+    public void addTab(Tab tab) {
+        System.err.println("\n>>> Añadiendo pestaña a ventana secundaria [" + windowId + "] <<<");
+        System.err.println("Título de la pestaña: " + tab.getText());
+        System.err.println("UserData: " + (tab.getUserData() != null ? tab.getUserData().toString() : "null"));
+        
+        // Crear una copia de la pestaña para esta ventana
+        Tab newTab = new Tab(tab.getText(), tab.getContent());
+        newTab.setClosable(true);
+        if (tab.getUserData() != null) {
+            newTab.setUserData(tab.getUserData().toString());
         }
         
-        // Si la pestaña tiene userData, es parte de un grupo
-        if (userData != null) {
-            String elementId = userData.toString();
-            String grupoId = TabManager.obtenerGrupoDeElemento(tabPane, elementId);
-            
-            // Si es un editor o simulador independiente y no tiene grupo, crear uno nuevo
-            if ((elementId.startsWith("editor_") || elementId.startsWith("simulador_")) && grupoId == null) {
-                TabManager.asignarElementoANuevoGrupo(tabPane, elementId);
-                grupoId = TabManager.obtenerGrupoDeElemento(tabPane, elementId);
-            }
-            
-            // Si es una pestaña hija, registrar la relación padre-hijo
-            if (elementId.contains("creacion_") || 
-                elementId.contains("terminales_") || 
-                elementId.contains("no_terminales_") || 
-                elementId.contains("producciones_") ||
-                elementId.startsWith("gramatica_") ||
-                elementId.startsWith("funciones_error_")) {
+        // Añadir la pestaña al TabPane local
+        localTabPane.getTabs().add(newTab);
+        localTabPane.getSelectionModel().select(newTab);
+        
+        printTabCount("Pestaña añadida mediante addTab");
+    }
+    
+    @Override
+    public void moveGroupToWindow(TabPane sourceTabPane, String grupoId, Tab selectedTab) {
+        System.err.println("\n>>> Moviendo grupo a ventana secundaria [" + windowId + "] <<<");
+        System.err.println("ID del grupo: " + grupoId);
+        System.err.println("Pestaña seleccionada: " + (selectedTab != null ? selectedTab.getText() : "null"));
+        
+        if (grupoId == null) {
+            // Si no hay grupo, solo mover la pestaña seleccionada
+            addTab(selectedTab);
+            sourceTabPane.getTabs().remove(selectedTab);
+            return;
+        }
+
+        // Recolectar todas las pestañas del grupo
+        List<Tab> groupTabs = new ArrayList<>();
+        List<String> elementIds = new ArrayList<>();
+        
+        // Primero encontrar los elementos principales del grupo
+        for (Tab tab : new ArrayList<>(sourceTabPane.getTabs())) {
+            if (tab.getUserData() != null) {
+                String elementId = tab.getUserData().toString();
+                String elementGrupoId = TabManager.obtenerGrupoDeElemento(sourceTabPane, elementId);
                 
-                // Buscar el padre de esta pestaña
-                for (Tab existingTab : tabPane.getTabs()) {
-                    if (existingTab.getUserData() != null) {
-                        String potentialParentId = existingTab.getUserData().toString();
-                        if (TabManager.isPestañaHijaDeElemento(elementId, potentialParentId)) {
-                            // Registrar la relación padre-hijo
-                            Map<String, List<Tab>> relations = TabManager.getParentChildRelations(tabPane);
-                            if (relations != null) {
-                                relations.computeIfAbsent(potentialParentId, k -> new ArrayList<>()).add(newTab);
+                if (grupoId.equals(elementGrupoId)) {
+                    groupTabs.add(tab);
+                    elementIds.add(elementId);
+                    
+                    // Buscar pestañas hijas
+                    if (elementId.startsWith("editor_")) {
+                        // Buscar pestañas de creación y símbolos
+                        for (Tab potentialChild : sourceTabPane.getTabs()) {
+                            if (potentialChild.getUserData() != null) {
+                                String childId = potentialChild.getUserData().toString();
+                                if (TabManager.isPestañaHijaDeElemento(childId, elementId)) {
+                                    groupTabs.add(potentialChild);
+                                }
                             }
-                            break;
+                        }
+                    } else if (elementId.startsWith("simulador_")) {
+                        // Buscar pestañas de gramática y funciones de error
+                        for (Tab potentialChild : sourceTabPane.getTabs()) {
+                            if (potentialChild.getUserData() != null) {
+                                String childId = potentialChild.getUserData().toString();
+                                if (childId.equals("gramatica_" + elementId) ||
+                                    childId.equals("funciones_error_" + elementId)) {
+                                    groupTabs.add(potentialChild);
+                                }
+                            }
                         }
                     }
                 }
             }
-            
-            // Añadir la pestaña en la posición correcta según el grupo
-            if (grupoId != null) {
-                int posicion = TabManager.calcularPosicionSeguaDespuesDelMenu(tabPane);
-                if (posicion >= 0 && posicion <= tabPane.getTabs().size()) {
-                    tabPane.getTabs().add(posicion, newTab);
-                } else {
-                    tabPane.getTabs().add(newTab);
+        }
+
+        // Crear un nuevo grupo en la ventana destino
+        String nuevoGrupoId = "grupo_secundario_" + windowId + "_" + System.currentTimeMillis();
+        
+        // Mover cada pestaña a la nueva ventana
+        for (Tab tab : groupTabs) {
+            // Crear una copia de la pestaña
+            Tab newTab = new Tab(tab.getText(), tab.getContent());
+            newTab.setClosable(true);
+            if (tab.getUserData() != null) {
+                newTab.setUserData(tab.getUserData().toString());
+                
+                // Si es un elemento principal, asignarlo al nuevo grupo
+                String elementId = tab.getUserData().toString();
+                if (elementId.startsWith("editor_") || elementId.startsWith("simulador_")) {
+                    TabManager.asignarElementoAGrupo(localTabPane, elementId, nuevoGrupoId);
                 }
-            } else {
-                tabPane.getTabs().add(newTab);
             }
-        } else {
-            tabPane.getTabs().add(newTab);
+            
+            // Añadir la pestaña a la ventana secundaria
+            localTabPane.getTabs().add(newTab);
+            
+            // Remover la pestaña original
+            sourceTabPane.getTabs().remove(tab);
         }
         
-        tabPane.getSelectionModel().select(newTab);
-        TabManager.reasignarNumerosGruposGramatica(tabPane);
+        // Seleccionar la pestaña que se arrastró inicialmente
+        if (selectedTab != null) {
+            for (Tab tab : localTabPane.getTabs()) {
+                if (tab.getUserData() != null && 
+                    tab.getUserData().equals(selectedTab.getUserData())) {
+                    localTabPane.getSelectionModel().select(tab);
+                    break;
+                }
+            }
+        }
+        
+        // Reasignar números de grupos en ambas ventanas
+        TabManager.reasignarNumerosGruposGramatica(sourceTabPane);
+        TabManager.reasignarNumerosGruposGramatica(localTabPane);
+        
+        printTabCount("Grupo movido a ventana secundaria");
     }
     
     public Stage getStage() {
-        return (Stage) getTabPane().getScene().getWindow();
+        return stage;
     }
     
-    public void setPosition(double x, double y) {
-        Stage stage = getStage();
-        stage.setX(x);
-        stage.setY(y);
-    }
-    
-    public void setSize(double width, double height) {
-        Stage stage = getStage();
-        stage.setWidth(width);
-        stage.setHeight(height);
+    public static int getActiveWindowCount() {
+        return activeWindows.size();
     }
 } 

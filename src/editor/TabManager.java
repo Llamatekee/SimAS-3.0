@@ -677,23 +677,26 @@ public class TabManager {
         return false;
     }
     
+    /**
+     * Cierra todas las pestañas hijas asociadas a un elemento padre.
+     * Solo cierra las pestañas en el TabPane especificado.
+     */
     public static void closeChildTabs(TabPane tabPane, String parentId) {
-        Map<String, List<Tab>> relations = parentChildRelations.get(tabPane);
-        Map<Class<?>, Tab> paneTabs = tabInstances.get(tabPane);
+        if (tabPane == null || parentId == null) return;
         
-        if (relations != null && relations.containsKey(parentId)) {
-            List<Tab> childTabs = new ArrayList<>(relations.get(parentId));
-            for (Tab childTab : childTabs) {
+        // Obtener las relaciones padre-hijo para este TabPane específico
+        Map<String, List<Tab>> relations = getParentChildRelations(tabPane);
+        
+        // Si hay pestañas hijas para este padre en este TabPane específico
+        if (relations.containsKey(parentId)) {
+            List<Tab> childTabs = relations.get(parentId);
+            // Cerrar cada pestaña hija
+            for (Tab childTab : new ArrayList<>(childTabs)) {
                 if (tabPane.getTabs().contains(childTab)) {
                     tabPane.getTabs().remove(childTab);
-                    
-                    // También eliminar de tabInstances si es necesario
-                    if (paneTabs != null) {
-                        // Buscar y eliminar la entrada correspondiente en tabInstances
-                        paneTabs.entrySet().removeIf(entry -> entry.getValue() == childTab);
-                    }
                 }
             }
+            // Limpiar la relación
             relations.remove(parentId);
         }
     }
@@ -1206,22 +1209,32 @@ public class TabManager {
     }
 
     /**
-     * Elimina un elemento de su grupo y limpia el grupo si queda vacío.
+     * Elimina un elemento de un grupo.
+     * Solo afecta al TabPane especificado.
      */
     public static void eliminarElementoDeGrupo(TabPane tabPane, String elementId, String grupoId) {
-        if (elementId == null) return;
+        if (tabPane == null || elementId == null) return;
         
         Map<String, String> elementos = elementoToGrupo.get(tabPane);
-        Map<String, Integer> grupos = gruposGramatica.get(tabPane);
-        
-        if (elementos != null && grupos != null) {
-            // Remove the element from its group
+        if (elementos != null) {
             elementos.remove(elementId);
-            
-            // If the group is now empty, remove it
-            if (grupoId != null) {
-                boolean grupoVacio = elementos.values().stream().noneMatch(g -> g.equals(grupoId));
-                if (grupoVacio) {
+        }
+        
+        // Si el grupo se queda vacío, eliminarlo
+        if (grupoId != null) {
+            boolean grupoVacio = true;
+            if (elementos != null) {
+                for (String grupo : elementos.values()) {
+                    if (grupoId.equals(grupo)) {
+                        grupoVacio = false;
+                        break;
+                    }
+                }
+            }
+            if (grupoVacio) {
+                // Eliminar el grupo solo para este TabPane
+                Map<String, Integer> grupos = gruposGramatica.get(tabPane);
+                if (grupos != null) {
                     grupos.remove(grupoId);
                 }
             }

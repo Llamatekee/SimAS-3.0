@@ -82,7 +82,7 @@ public class EditorWindow {
                     event.consume();
                     
                     // Create new window
-                    EditorWindow newWindow = new EditorWindow(bundle);
+                    EditorWindow newWindow = new SecondaryWindow(bundle, "SimAS 3.0");
                     
                     // Encontrar el grupo al que pertenece la pestaña
                     String grupoId = null;
