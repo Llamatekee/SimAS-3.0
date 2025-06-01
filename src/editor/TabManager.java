@@ -4,6 +4,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import java.util.*;
 import javafx.scene.Node;
+import javafx.stage.Stage;
 
 public class TabManager {
     private static final Map<TabPane, Map<Class<?>, Tab>> tabInstances = new HashMap<>();
@@ -1364,7 +1365,80 @@ public class TabManager {
         // Crear un ContextMenu que se mostrará al hacer clic derecho
         javafx.scene.control.ContextMenu contextMenu = new javafx.scene.control.ContextMenu();
         
-        // Crear el ítem de menú para cerrar la pestaña
+        // Crear el ítem de menú para abrir en nueva ventana
+        javafx.scene.control.MenuItem openInNewWindowMenuItem = new javafx.scene.control.MenuItem("Abrir en nueva ventana");
+        openInNewWindowMenuItem.setOnAction(event -> {
+            Tab selectedTab = tabPane.getSelectionModel().getSelectedItem();
+            if (selectedTab != null && selectedTab.isClosable()) {
+                // Crear una nueva ventana secundaria
+                SecondaryWindow newWindow = new SecondaryWindow(bundle, "SimAS 3.0");
+                
+                // Obtener el contenido y datos de la pestaña actual
+                Node content = selectedTab.getContent();
+                String title = selectedTab.getText();
+                Object userData = selectedTab.getUserData();
+                
+                // Si es una pestaña padre, también mover sus pestañas hijas
+                if (userData != null) {
+                    String elementId = userData.toString();
+                    
+                    // Obtener el grupo antes de mover
+                    String grupoId = obtenerGrupoDeElemento(tabPane, elementId);
+                    
+                    // Crear la pestaña en la nueva ventana
+                    Tab newTab = new Tab(title, content);
+                    newTab.setUserData(userData);
+                    newWindow.getTabPane().getTabs().add(newTab);
+                    
+                    // Mover las pestañas hijas
+                    Map<String, List<Tab>> relations = getParentChildRelations(tabPane);
+                    if (relations.containsKey(elementId)) {
+                        List<Tab> childTabs = new ArrayList<>(relations.get(elementId));
+                        for (Tab childTab : childTabs) {
+                            // Crear nueva pestaña hija en la ventana secundaria
+                            Tab newChildTab = new Tab(childTab.getText(), childTab.getContent());
+                            newChildTab.setUserData(childTab.getUserData());
+                            newWindow.getTabPane().getTabs().add(newChildTab);
+                            
+                            // Eliminar la pestaña hija de la ventana original
+                            tabPane.getTabs().remove(childTab);
+                        }
+                        // Limpiar las relaciones en la ventana original
+                        relations.remove(elementId);
+                    }
+                    
+                    // Mover el grupo a la nueva ventana
+                    if (grupoId != null) {
+                        // Eliminar de la ventana original
+                        eliminarElementoDeGrupo(tabPane, elementId, grupoId);
+                        // Añadir a la nueva ventana
+                        asignarElementoAGrupo(newWindow.getTabPane(), elementId, grupoId);
+                    }
+                    
+                } else {
+                    // Para pestañas simples, solo crear la nueva pestaña
+                    Tab newTab = new Tab(title, content);
+                    newTab.setUserData(userData);
+                    newWindow.getTabPane().getTabs().add(newTab);
+                }
+                
+                // Eliminar la pestaña de la ventana original
+                tabPane.getTabs().remove(selectedTab);
+                
+                // Mostrar la nueva ventana en la posición del cursor
+                newWindow.show();
+                Stage stage = (Stage) newWindow.getTabPane().getScene().getWindow();
+                java.awt.Point mouseLocation = java.awt.MouseInfo.getPointerInfo().getLocation();
+                stage.setX(mouseLocation.getX() - 100);
+                stage.setY(mouseLocation.getY() - 50);
+                
+                // Forzar renumeración en ambas ventanas
+                reasignarNumerosGruposGramatica(tabPane);
+                reasignarNumerosGruposGramatica(newWindow.getTabPane());
+            }
+        });
+        
+        // Crear el ítem de menú para cerrar la pestaña actual
         javafx.scene.control.MenuItem closeMenuItem = new javafx.scene.control.MenuItem("Cerrar pestaña");
         closeMenuItem.setOnAction(event -> {
             Tab selectedTab = tabPane.getSelectionModel().getSelectedItem();
@@ -1394,7 +1468,34 @@ public class TabManager {
             }
         });
         
-        contextMenu.getItems().add(closeMenuItem);
+        // Crear el ítem de menú para cerrar todas las pestañas
+        javafx.scene.control.MenuItem closeAllMenuItem = new javafx.scene.control.MenuItem("Cerrar todas las pestañas");
+        closeAllMenuItem.setOnAction(event -> {
+            // Crear una copia de la lista de pestañas para evitar ConcurrentModificationException
+            List<Tab> tabs = new ArrayList<>(tabPane.getTabs());
+            
+            // Cerrar cada pestaña que sea cerrable
+            for (Tab tab : tabs) {
+                if (tab.isClosable()) {
+                    String elementId = tab.getUserData() != null ? tab.getUserData().toString() : null;
+                    
+                    if (elementId != null) {
+                        // Para pestañas padre, limpiar sus grupos y pestañas hijas
+                        closeChildTabs(tabPane, elementId);
+                        String grupoId = obtenerGrupoDeElemento(tabPane, elementId);
+                        eliminarElementoDeGrupo(tabPane, elementId, grupoId);
+                    }
+                    
+                    tabPane.getTabs().remove(tab);
+                }
+            }
+            
+            // Resetear los grupos después de cerrar todas las pestañas
+            resetGrupos(tabPane);
+        });
+        
+        // Añadir los items al menú contextual
+        contextMenu.getItems().addAll(openInNewWindowMenuItem, closeMenuItem, closeAllMenuItem);
         
         // Añadir el listener para mostrar el menú contextual
         tabPane.setOnContextMenuRequested(event -> {
