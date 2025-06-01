@@ -158,6 +158,9 @@ public class MenuPrincipal extends Application {
             // Enable tab dragging and detaching
             tabPane.setTabDragPolicy(TabPane.TabDragPolicy.REORDER);
             
+            // Configurar el menú contextual para las pestañas
+            TabManager.configurarMenuContextual(tabPane, bundle);
+            
             // Setup drag and drop handling for tabs
             tabPane.setOnDragDetected(event -> {
                 if (event.isShortcutDown()) {  // Ctrl/Cmd is pressed
@@ -266,6 +269,9 @@ public class MenuPrincipal extends Application {
         
         // Enable tab dragging and detaching
         tabPane.setTabDragPolicy(TabPane.TabDragPolicy.REORDER);
+        
+        // Configurar el menú contextual para las pestañas
+        TabManager.configurarMenuContextual(tabPane, bundle);
         
         // Setup drag and drop handling for tabs
         tabPane.setOnDragDetected(event -> {

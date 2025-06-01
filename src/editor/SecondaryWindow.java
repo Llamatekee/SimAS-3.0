@@ -52,6 +52,9 @@ public class SecondaryWindow extends EditorWindow {
         localTabPane = new TabPane();
         localTabPane.setTabDragPolicy(TabPane.TabDragPolicy.REORDER);
         
+        // Configurar el menú contextual para las pestañas
+        TabManager.configurarMenuContextual(localTabPane, bundle);
+        
         // Configurar la ventana
         stage = new Stage();
         Scene scene = new Scene(localTabPane);

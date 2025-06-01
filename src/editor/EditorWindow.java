@@ -55,6 +55,9 @@ public class EditorWindow {
         // Enable tab dragging within this window
         tabPane.setTabDragPolicy(TabPane.TabDragPolicy.REORDER);
         
+        // Configurar el menú contextual para las pestañas
+        TabManager.configurarMenuContextual(tabPane, bundle);
+        
         // Añadir listener para detectar cuando se cierran pestañas
         tabPane.getTabs().addListener((javafx.collections.ListChangeListener.Change<? extends Tab> change) -> {
             while (change.next()) {

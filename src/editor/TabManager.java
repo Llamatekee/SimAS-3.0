@@ -3,6 +3,7 @@ package editor;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import java.util.*;
+import javafx.scene.Node;
 
 public class TabManager {
     private static final Map<TabPane, Map<Class<?>, Tab>> tabInstances = new HashMap<>();
@@ -1352,5 +1353,143 @@ public class TabManager {
             // Si no se puede obtener del bundle, usar valor por defecto
         }
         return "Producciones";
+    }
+
+    /**
+     * Configura el menú contextual para las pestañas de un TabPane.
+     * @param tabPane El TabPane al que se le configurará el menú contextual
+     * @param bundle El ResourceBundle para internacionalización
+     */
+    public static void configurarMenuContextual(TabPane tabPane, ResourceBundle bundle) {
+        // Crear un ContextMenu que se mostrará al hacer clic derecho
+        javafx.scene.control.ContextMenu contextMenu = new javafx.scene.control.ContextMenu();
+        
+        // Crear el ítem de menú para cerrar la pestaña
+        javafx.scene.control.MenuItem closeMenuItem = new javafx.scene.control.MenuItem("Cerrar pestaña");
+        closeMenuItem.setOnAction(event -> {
+            Tab selectedTab = tabPane.getSelectionModel().getSelectedItem();
+            if (selectedTab != null && selectedTab.isClosable()) {
+                // Get the tab's userData (which contains the editor/simulator ID)
+                String elementId = selectedTab.getUserData() != null ? selectedTab.getUserData().toString() : null;
+                
+                // Close child tabs first if this is a parent tab
+                if (elementId != null) {
+                    closeChildTabs(tabPane, elementId);
+                    
+                    // Get the group ID before removing the tab
+                    String grupoId = obtenerGrupoDeElemento(tabPane, elementId);
+                    
+                    // Remove the tab
+                    tabPane.getTabs().remove(selectedTab);
+                    
+                    // Clean up the element from group management
+                    eliminarElementoDeGrupo(tabPane, elementId, grupoId);
+                    
+                    // Force immediate renumbering
+                    reasignarNumerosGruposGramatica(tabPane);
+                } else {
+                    // For non-group tabs, just remove them
+                    tabPane.getTabs().remove(selectedTab);
+                }
+            }
+        });
+        
+        contextMenu.getItems().add(closeMenuItem);
+        
+        // Añadir el listener para mostrar el menú contextual
+        tabPane.setOnContextMenuRequested(event -> {
+            // Obtener la pestaña en la posición del clic
+            Node clickedNode = event.getPickResult().getIntersectedNode();
+            Tab clickedTab = findTabFromNode(clickedNode);
+            
+            if (clickedTab != null && clickedTab.isClosable()) {
+                // Seleccionar la pestaña clicada
+                tabPane.getSelectionModel().select(clickedTab);
+                // Mostrar el menú contextual
+                contextMenu.show(clickedNode, event.getScreenX(), event.getScreenY());
+            }
+            event.consume();
+        });
+    }
+    
+    /**
+     * Encuentra la pestaña asociada a un nodo del TabPane.
+     */
+    private static Tab findTabFromNode(Node node) {
+        // Si el nodo es el texto, obtener su texto y buscar la pestaña correspondiente
+        if (node.getClass().getName().contains("LabeledText")) {
+            String clickedText = ((javafx.scene.text.Text) node).getText();
+            
+            // Buscar el TabPane padre
+            Node parent = node;
+            while (parent != null && !(parent instanceof TabPane)) {
+                parent = parent.getParent();
+            }
+            
+            if (parent instanceof TabPane) {
+                TabPane tabPane = (TabPane) parent;
+                // Buscar la pestaña que tenga este texto
+                for (Tab tab : tabPane.getTabs()) {
+                    if (tab.getText().equals(clickedText)) {
+                        return tab;
+                    }
+                }
+            }
+        }
+        
+        // Si el nodo es una etiqueta, obtener su texto
+        if (node instanceof javafx.scene.control.Label) {
+            javafx.scene.control.Label label = (javafx.scene.control.Label) node;
+            String labelText = label.getText();
+            
+            // Buscar el TabPane padre
+            Node parent = node;
+            while (parent != null && !(parent instanceof TabPane)) {
+                parent = parent.getParent();
+            }
+            
+            if (parent instanceof TabPane) {
+                TabPane tabPane = (TabPane) parent;
+                // Buscar la pestaña que tenga este texto
+                for (Tab tab : tabPane.getTabs()) {
+                    if (tab.getText().equals(labelText)) {
+                        return tab;
+                    }
+                }
+            }
+        }
+        
+        // Si el nodo es parte del header de una pestaña
+        if (node.getStyleClass().contains("tab")) {
+            // Buscar el TabPane padre
+            Node parent = node;
+            while (parent != null && !(parent instanceof TabPane)) {
+                parent = parent.getParent();
+            }
+            
+            if (parent instanceof TabPane) {
+                TabPane tabPane = (TabPane) parent;
+                
+                // Buscar el texto dentro de este nodo tab
+                javafx.scene.control.Label label = (javafx.scene.control.Label) node.lookup(".tab-label");
+                if (label != null) {
+                    String tabText = label.getText();
+                    
+                    // Buscar la pestaña con este texto
+                    for (Tab tab : tabPane.getTabs()) {
+                        if (tab.getText().equals(tabText)) {
+                            return tab;
+                        }
+                    }
+                }
+            }
+        }
+        
+        // Si no encontramos la pestaña y el nodo tiene padre, intentar con el padre
+        if (node.getParent() != null) {
+            return findTabFromNode(node.getParent());
+        }
+        
+        return null;
     }
 } 
