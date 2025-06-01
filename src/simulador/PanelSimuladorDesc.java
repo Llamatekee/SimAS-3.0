@@ -121,8 +121,14 @@ public class PanelSimuladorDesc {
             pasos.add(new PanelNuevaSimDescPaso5(this));
             pasos.add(new PanelNuevaSimDescPaso6(this.gramatica, this));
             
-            // NO llamar a mostrarPasoActual() aquí automáticamente
-            // Será llamado explícitamente cuando sea necesario
+            // Inicializar el contenido del primer paso sin crear una nueva pestaña
+            if (pasos.size() > 0) {
+                PanelNuevaSimDescPaso primerPaso = pasos.get(0);
+                if (primerPaso instanceof editor.ActualizableTextos) {
+                    ((editor.ActualizableTextos) primerPaso).actualizarTextos(bundle);
+                }
+            }
+            
         } catch (Exception e) {
             e.printStackTrace();
             // Si hay un error, cerrar la pestaña
@@ -294,14 +300,13 @@ public class PanelSimuladorDesc {
             }
         }
         
-        // Si aún no encontramos la pestaña, crearla
+        // Si aún no encontramos la pestaña, algo está mal porque debería haber sido creada por el Editor
         if (pestañaSimulacion == null) {
-            pestañaSimulacion = new Tab(tituloPestaña);
-            pestañaSimulacion.setUserData(simuladorId);
-            tabPane.getTabs().add(pestañaSimulacion);
+            System.err.println("Error: No se encontró la pestaña del simulador");
+            return;
         }
         
-        // Actualizar el contenido y título de la pestaña
+        // Actualizar el contenido y título de la pestaña existente
         pestañaSimulacion.setText(tituloPestaña);
         pestañaSimulacion.setContent(pasoActual.getRoot());
         
@@ -387,8 +392,8 @@ public class PanelSimuladorDesc {
                 // Paso 6: "Simulador"
                 tituloBase = bundle.getString("simulador.tab.paso6");
             } else {
-                // Pasos 1-5: "Asistente Simulador"
-                tituloBase = bundle.getString("simulador.asistente");
+                // Pasos 1-5: Usar la clave específica para cada paso
+                tituloBase = bundle.getString("simulador.tab.paso" + (this.pasoActual + 1));
             }
             
             // Aplicar numeración si corresponde

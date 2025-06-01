@@ -270,24 +270,49 @@ public class Editor extends VBox implements ActualizableTextos {
             return;
         }
         
-        // Validar la gramática antes de simular
-        validarGramatica(this.gramatica);
+        // Solo validar si no está ya validada
         if (this.gramatica.getEstado() != 1) {
-            return;
+            validarGramatica(this.gramatica);
+            if (this.gramatica.getEstado() != 1) {
+                return;
+            }
+        }
+        
+        // Verificar si ya existe un simulador para este editor
+        String simuladorId = "simulador_" + editorId.replace("editor_", "");
+        for (Tab tab : tabPane.getTabs()) {
+            if (tab.getUserData() != null && tab.getUserData().toString().equals(simuladorId)) {
+                // Si existe, mostrar mensaje y seleccionar la pestaña
+                Alert alert = new Alert(AlertType.INFORMATION);
+                alert.setTitle(bundle.getString("editor.simulador.existente.titulo"));
+                alert.setHeaderText(null);
+                alert.setContentText(bundle.getString("editor.simulador.existente.mensaje"));
+                alert.showAndWait();
+                tabPane.getSelectionModel().select(tab);
+                return;
+            }
         }
         
         // Crear un nuevo simulador como hijo del editor
-        String simuladorId = "simulador_" + editorId.replace("editor_", "");
         PanelSimuladorDesc simulador = new PanelSimuladorDesc(this.gramatica, this.tabPane, this.menuPane, simuladorId, bundle);
+        
+        // Asignar el simulador al mismo grupo que el editor
+        TabManager.asignarSimuladorAGrupoDeEditor(tabPane, simuladorId, editorId);
         
         // Crear la pestaña del simulador con el título correcto (Asistente Simulador)
         String tituloBase = bundle.getString("simulador.asistente");
-        // Obtener el número de grupo si es necesario
         int numeroGrupo = TabManager.obtenerNumeroGrupo(tabPane, simuladorId);
         String tituloFinal = numeroGrupo > 0 ? numeroGrupo + "-" + tituloBase : tituloBase;
         
-        TabManager.getOrCreateTab(tabPane, PanelSimuladorDesc.class, 
-            tituloFinal, simulador, editorId, simuladorId);
+        // Crear la pestaña y mostrar el primer paso
+        Tab tab = new Tab(tituloFinal);
+        tab.setContent(simulador.getRoot());
+        tab.setUserData(simuladorId);
+        
+        // Insertar la pestaña en la posición correcta
+        int posicion = TabManager.calcularPosicionInsercion(tabPane, PanelSimuladorDesc.class, editorId, simuladorId);
+        tabPane.getTabs().add(posicion, tab);
+        tabPane.getSelectionModel().select(tab);
     }
 
     @FXML

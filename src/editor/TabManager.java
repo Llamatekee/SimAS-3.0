@@ -353,7 +353,7 @@ public class TabManager {
     /**
      * Calcula la posición de inserción para diferentes tipos de pestañas.
      */
-    private static int calcularPosicionInsercion(TabPane tabPane, Class<?> tabType, String parentId, String childId) {
+    public static int calcularPosicionInsercion(TabPane tabPane, Class<?> tabType, String parentId, String childId) {
         // Si es una pestaña hija, usar la lógica existente
         if (parentId != null && childId != null) {
             Tab parentTab = findTabByUserData(tabPane, parentId);
