@@ -515,7 +515,6 @@ public class Editor extends VBox implements ActualizableTextos {
                 }
             }
         } catch (Exception e) {
-            System.err.println("Error al actualizar textos: " + e.getMessage());
             e.printStackTrace();
         }
     }

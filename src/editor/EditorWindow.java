@@ -1,13 +1,11 @@
 package editor;
 
-import bienvenida.MenuPrincipal;
 import javafx.scene.Scene;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.stage.Stage;
 import javafx.scene.Node;
 import java.util.ResourceBundle;
-import simulador.PanelSimuladorDesc;
 import java.util.List;
 import java.util.ArrayList;
 import javafx.scene.input.KeyCode;
@@ -15,7 +13,6 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import java.util.Map;
 import java.util.HashMap;
-import java.lang.reflect.Method;
 
 public class EditorWindow {
     private Stage stage;
@@ -429,7 +426,6 @@ public class EditorWindow {
             for (Tab childTab : childTabs) {
                 childTab.setOnClosed(event -> {
                     if (childTab.getUserData() != null) {
-                        String childId = childTab.getUserData().toString();
                         // Eliminar la pestaña de la lista de hijos
                         relations.get(parentId).remove(childTab);
                         if (relations.get(parentId).isEmpty()) {

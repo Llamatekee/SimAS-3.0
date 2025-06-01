@@ -302,7 +302,6 @@ public class PanelSimuladorDesc {
         
         // Si aún no encontramos la pestaña, algo está mal porque debería haber sido creada por el Editor
         if (pestañaSimulacion == null) {
-            System.err.println("Error: No se encontró la pestaña del simulador");
             return;
         }
         
@@ -495,7 +494,7 @@ public class PanelSimuladorDesc {
             try {
                 simulador.setBundle(bundle);
             } catch (Exception e) {
-                System.err.println("Error updating simulator " + simulador.simuladorId + ": " + e.getMessage());
+                e.printStackTrace();
             }
         }
     }

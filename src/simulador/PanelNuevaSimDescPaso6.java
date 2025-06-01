@@ -151,7 +151,7 @@ public class PanelNuevaSimDescPaso6 extends BorderPane implements PanelNuevaSimD
                 }
             } 
         } catch (MissingResourceException e) {
-            System.err.println("Error al cargar datos: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -403,7 +403,6 @@ public class PanelNuevaSimDescPaso6 extends BorderPane implements PanelNuevaSimD
             // Recargar datos para actualizar textos dinámicos y funciones de error
             cargarDatos();
         } catch (MissingResourceException e) {
-            System.err.println("Error al actualizar textos: " + e.getMessage());
             // Si falta alguna clave, intentar usar valores por defecto
             if (labelProducciones != null) labelProducciones.setText("Producciones");
             if (labelFuncionesError != null) labelFuncionesError.setText("Funciones de Error");

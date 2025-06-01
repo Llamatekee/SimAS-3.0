@@ -8,7 +8,6 @@ import javafx.stage.Stage;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
-import javafx.scene.input.DragEvent;
 import javafx.scene.input.TransferMode;
 import java.util.ResourceBundle;
 import java.util.ArrayList;
@@ -16,10 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.application.Platform;
-import javafx.scene.Node;
 
 public class SecondaryWindow extends EditorWindow {
     
@@ -31,7 +27,6 @@ public class SecondaryWindow extends EditorWindow {
     private final ResourceBundle bundle;
     
     static {
-        System.err.println("\n¡CLASE SecondaryWindow CARGADA!\n");
     }
     
     /**
@@ -43,7 +38,6 @@ public class SecondaryWindow extends EditorWindow {
         activeWindows.entrySet().removeIf(entry -> {
             SecondaryWindow window = entry.getValue();
             if (window == null || window.getStage() == null || !window.getStage().isShowing()) {
-                System.err.println("\n>>> Eliminando ventana inactiva: " + entry.getKey() + " <<<\n");
                 return true;
             }
             return false;
@@ -53,18 +47,10 @@ public class SecondaryWindow extends EditorWindow {
         return new ConcurrentHashMap<>(activeWindows);
     }
     
-    private void printTabCount(String action) {
-        System.err.println("\n=== Ventana Secundaria [" + windowId + "] ===");
-        System.err.println("Acción: " + action);
-        System.err.println("Número de pestañas: " + localTabPane.getTabs().size());
-        System.err.println("========================\n");
-    }
-    
     public SecondaryWindow(ResourceBundle bundle, String title) {
         super(null); // No inicializar la ventana en la clase padre
         
         this.bundle = bundle;
-        System.err.println("\n>>> CREANDO NUEVA VENTANA SECUNDARIA <<<\n");
         
         windowId = "SecondaryWindow-" + (++windowCounter);
         activeWindows.put(windowId, this);
@@ -90,7 +76,7 @@ public class SecondaryWindow extends EditorWindow {
         try {
             scene.getStylesheets().add(getClass().getResource("/vistas/styles.css").toExternalForm());
         } catch (Exception e) {
-            System.err.println("No se pudieron cargar los estilos CSS");
+            e.printStackTrace();
         }
         
         // Configurar los atajos de teclado específicos para esta ventana
@@ -99,10 +85,7 @@ public class SecondaryWindow extends EditorWindow {
         // Configurar el manejo de arrastre
         configureDragAndDrop();
         
-        printTabCount("Ventana creada");
-        
         stage.setOnCloseRequest(event -> {
-            printTabCount("Ventana cerrándose");
             if (localTabPane != null) {
                 // Cerrar pestañas localmente
                 for (Tab tab : new ArrayList<>(localTabPane.getTabs())) {
@@ -110,7 +93,6 @@ public class SecondaryWindow extends EditorWindow {
                 }
             }
             activeWindows.remove(windowId);
-            System.err.println("\n>>> VENTANA [" + windowId + "] ELIMINADA DEL REGISTRO <<<\n");
         });
     }
     
@@ -253,8 +235,6 @@ public class SecondaryWindow extends EditorWindow {
                 
                 event.setDropCompleted(true);
                 event.consume();
-                
-                printTabCount("Pestaña(s) añadida(s) mediante arrastre");
             }
         });
     }
@@ -263,19 +243,11 @@ public class SecondaryWindow extends EditorWindow {
     public void moveGroupToWindow(TabPane sourceTabPane, String grupoId, Tab selectedTab) {
         if (grupoId == null) return;
 
-        System.err.println("\n=== INICIO MOVIMIENTO DE GRUPO ===");
-        System.err.println("Moviendo desde: " + sourceTabPane);
-        System.err.println("Hacia: " + localTabPane);
-        System.err.println("ID del grupo: " + grupoId);
-
         List<Tab> groupTabs = new ArrayList<>();
         List<String> elementIds = new ArrayList<>();
         Map<String, List<Tab>> parentChildMap = new HashMap<>();
         
         // Analizar estado inicial de la ventana origen
-        System.err.println("\n--- ESTADO INICIAL VENTANA ORIGEN ---");
-        System.err.println("Total pestañas en origen: " + sourceTabPane.getTabs().size());
-        Map<String, List<Tab>> sourceRelations = TabManager.getParentChildRelations(sourceTabPane);
         
         // Primero, recolectar todas las pestañas padre del grupo
         for (Tab tab : new ArrayList<>(sourceTabPane.getTabs())) {
@@ -288,7 +260,6 @@ public class SecondaryWindow extends EditorWindow {
                     if (elementId.startsWith("editor_") || elementId.startsWith("simulador_")) {
                         groupTabs.add(tab);
                         elementIds.add(elementId);
-                        System.err.println("\nEncontrada pestaña padre del grupo: " + elementId);
                     }
                 }
             }
@@ -305,7 +276,6 @@ public class SecondaryWindow extends EditorWindow {
                     String childId = tab.getUserData().toString();
                     if (TabManager.isPestañaHijaDeElemento(childId, parentId)) {
                         childTabs.add(tab);
-                        System.err.println("  Hijo encontrado para " + parentId + ": " + childId);
                     }
                 }
             }
@@ -314,12 +284,6 @@ public class SecondaryWindow extends EditorWindow {
                 parentChildMap.put(parentId, childTabs);
                 groupTabs.addAll(childTabs);
             }
-        }
-
-        System.err.println("\n--- PESTAÑAS A MOVER ---");
-        System.err.println("Total pestañas a mover: " + groupTabs.size());
-        for (Tab tab : groupTabs) {
-            System.err.println("• " + (tab.getUserData() != null ? tab.getUserData().toString() : "sin ID") + " - " + tab.getText());
         }
 
         // Limpiar las referencias del grupo en la ventana origen
@@ -355,16 +319,6 @@ public class SecondaryWindow extends EditorWindow {
             }
         }
 
-        // Verificar estado final
-        System.err.println("\n--- ESTADO FINAL VENTANA DESTINO ---");
-        System.err.println("Total pestañas en destino: " + localTabPane.getTabs().size());
-        for (Map.Entry<String, List<Tab>> entry : destRelations.entrySet()) {
-            System.err.println("Padre: " + entry.getKey());
-            for (Tab childTab : entry.getValue()) {
-                System.err.println("  └─ Hijo: " + (childTab.getUserData() != null ? childTab.getUserData().toString() : "sin ID"));
-            }
-        }
-
         // Seleccionar la pestaña arrastrada
         if (selectedTab != null && localTabPane.getTabs().contains(selectedTab)) {
             localTabPane.getSelectionModel().select(selectedTab);
@@ -387,8 +341,6 @@ public class SecondaryWindow extends EditorWindow {
                 TabManager.reasignarNumerosGruposGramatica(localTabPane);
             });
         });
-
-        System.err.println("\n=== FIN MOVIMIENTO DE GRUPO ===\n");
     }
     
     @Override

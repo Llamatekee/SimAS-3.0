@@ -405,7 +405,7 @@ public class TabManager {
     /**
      * Calcula la posición de inserción para diferentes tipos de pestañas.
      */
-    private static int calcularPosicionInsercion(TabPane tabPane, Class<?> tabType, String parentId, String childId) {
+    public static int calcularPosicionInsercion(TabPane tabPane, Class<?> tabType, String parentId, String childId) {
         // Si es una pestaña hija, usar la lógica existente
         if (parentId != null && childId != null) {
             // Si es una simulación, usar la lógica específica
@@ -1054,41 +1054,6 @@ public class TabManager {
     }
     
     /**
-     * Obtiene el título base para simuladores.
-     */
-    private static String obtenerTituloBaseSimulador(TabPane tabPane) {
-        // Intentar usar el ResourceBundle si está disponible
-        try {
-            java.util.ResourceBundle bundle = resourceBundles.get(tabPane);
-            if (bundle != null) {
-                // Buscar la pestaña del simulador que tenga userData que comience con "simulador_"
-                for (Tab tab : tabPane.getTabs()) {
-                    if (tab.getUserData() != null && tab.getUserData().toString().startsWith("simulador_")) {
-                        Object content = tab.getContent();
-                        if (content instanceof simulador.PanelSimuladorDesc) {
-                            simulador.PanelSimuladorDesc simulador = (simulador.PanelSimuladorDesc) content;
-                            // Determinar el título base según el paso actual
-                            if (simulador.getPasoActual() == 5) {
-                                // Paso 6: "Simulador"
-                                return bundle.getString("simulador.tab.paso6");
-                            } else {
-                                // Pasos 1-5 (índices 0-4) son el asistente
-                                return bundle.getString("simulador.asistente");
-                            }
-                        }
-                    }
-                }
-                // Si no encontramos el simulador, usar el título por defecto del asistente
-                return bundle.getString("simulador.asistente");
-            }
-        } catch (Exception e) {
-            // Si no se puede obtener del bundle, usar valor por defecto
-        }
-        // Usar directamente el nombre corto como fallback
-        return "Simulador";
-    }
-    
-    /**
      * Obtiene el título base para pestañas de gramática original.
      */
     private static String obtenerTituloBaseGramaticaOriginal(TabPane tabPane) {
@@ -1120,23 +1085,6 @@ public class TabManager {
         }
         // Usar directamente el nombre corto como fallback
         return "Nueva Función Error";
-    }
-    
-    /**
-     * Extrae el título base de un asistente de simulación, removiendo la numeración si existe.
-     */
-    private static String extraerTituloBaseAsistente(TabPane tabPane) {
-        // Intentar usar el ResourceBundle si está disponible
-        try {
-            java.util.ResourceBundle bundle = resourceBundles.get(tabPane);
-            if (bundle != null) {
-                return bundle.getString("simulador.asistente");
-            }
-        } catch (Exception e) {
-            // Si no se puede obtener del bundle, usar valor por defecto
-        }
-        // Usar directamente el nombre corto como fallback
-        return "Asistente Simulación";
     }
     
     /**
@@ -1188,34 +1136,6 @@ public class TabManager {
         return "Asistente Editor";
     }
     
-    /**
-     * Extrae el título base de una pestaña de creación, removiendo la numeración de grupo si existe.
-     */
-    private static String extraerTituloBaseCreacion(String tituloCompleto) {
-        if (tituloCompleto == null) return "";
-        
-        // Si el título ya tiene formato "Titulo Numero", remover el número del final
-        String[] partes = tituloCompleto.trim().split("\\s+");
-        if (partes.length >= 2) {
-            String ultimaParte = partes[partes.length - 1];
-            // Si la última parte es un número, removerla
-            try {
-                Integer.parseInt(ultimaParte);
-                // Es un número, reconstruir título sin el número
-                StringBuilder sb = new StringBuilder();
-                for (int i = 0; i < partes.length - 1; i++) {
-                    if (i > 0) sb.append(" ");
-                    sb.append(partes[i]);
-                }
-                return sb.toString();
-            } catch (NumberFormatException e) {
-                // No es un número, usar título completo
-            }
-        }
-        
-        return tituloCompleto;
-    }
-
     /**
      * Elimina un elemento de un grupo.
      * Solo afecta al TabPane especificado.
@@ -1439,19 +1359,6 @@ public class TabManager {
                 // Obtener las ventanas secundarias activas
                 Map<String, SecondaryWindow> activeWindows = SecondaryWindow.getActiveWindows();
                 
-                System.err.println("\n=== DIAGNÓSTICO DE VENTANAS SECUNDARIAS (OnContextMenuRequested) ===");
-                System.err.println("Número de ventanas activas detectadas: " + activeWindows.size());
-                for (Map.Entry<String, SecondaryWindow> entry : activeWindows.entrySet()) {
-                    SecondaryWindow window = entry.getValue();
-                    String windowId = entry.getKey();
-                    String firstTabTitle = "sin pestañas";
-                    if (!window.getTabPane().getTabs().isEmpty()) {
-                        firstTabTitle = window.getTabPane().getTabs().get(0).getText();
-                    }
-                    System.err.println("- Ventana [" + windowId + "] - Primera pestaña: " + firstTabTitle);
-                }
-                System.err.println("=========================================\n");
-                
                 if (activeWindows.isEmpty()) {
                     javafx.scene.control.MenuItem noWindowsItem = new javafx.scene.control.MenuItem("No hay ventanas disponibles");
                     noWindowsItem.setDisable(true);
@@ -1471,7 +1378,6 @@ public class TabManager {
                         
                         javafx.scene.control.MenuItem windowItem = new javafx.scene.control.MenuItem(windowTitle);
                         windowItem.setOnAction(e -> {
-                            System.err.println("\n>>> Moviendo pestaña a ventana: " + windowId + " <<<");
                             Tab selectedTab = tabPane.getSelectionModel().getSelectedItem();
                             if (selectedTab != null && selectedTab.isClosable()) {
                                 // Obtener el grupo de la pestaña seleccionada
@@ -1535,16 +1441,6 @@ public class TabManager {
             event.consume();
         });
         
-        // También añadir un listener para cuando se muestre
-        openInExistingWindowMenu.setOnShowing(event -> {
-            System.err.println("\n>>> Mostrando menú de ventanas existentes <<<");
-        });
-        
-        // Y otro para cuando se oculte
-        openInExistingWindowMenu.setOnHiding(event -> {
-            System.err.println("\n>>> Ocultando menú de ventanas existentes <<<");
-        });
-
         // Crear el ítem de menú para cerrar la pestaña actual
         javafx.scene.control.MenuItem closeMenuItem = new javafx.scene.control.MenuItem("Cerrar pestaña");
         closeMenuItem.setOnAction(event -> {
@@ -1608,7 +1504,6 @@ public class TabManager {
             closeMenuItem,
             closeAllMenuItem
         );
-        System.err.println(">>> Menú contextual configurado con " + contextMenu.getItems().size() + " opciones <<<");
     }
     
     /**

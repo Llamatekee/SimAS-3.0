@@ -179,10 +179,8 @@ public class PanelSimbolosNoTerminales extends VBox implements ActualizableTexto
             if (tabActual != null) {
                 tabPane.getTabs().remove(tabActual); // Cierra la pestaña actual
             } else {
-                System.err.println("No se encontró la pestaña actual.");
             }
         } else {
-            System.err.println("TabPane es null, no se puede cerrar la pestaña.");
         }
     }
 

@@ -22,8 +22,6 @@ import simulador.PanelSimuladorDesc;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class MenuPrincipal extends Application {
 
@@ -211,8 +209,6 @@ public class MenuPrincipal extends Application {
                                         String creacionId = elementId.substring(elementId.indexOf("creacion_"));
                                         potentialParentId = "editor_" + creacionId.substring("creacion_".length());
                                     } else if (elementId.startsWith("derivacion_") || elementId.startsWith("arbol_")) {
-                                        // Para pestañas de derivación o árbol, buscar la simulación padre
-                                        String simulacionId = elementId.substring(elementId.indexOf("_") + 1);
                                         // Buscar la simulación padre
                                         for (Tab tab : tabPane.getTabs()) {
                                             if (tab.getContent() instanceof simulador.SimulacionFinal) {
@@ -323,8 +319,6 @@ public class MenuPrincipal extends Application {
                                     String creacionId = elementId.substring(elementId.indexOf("creacion_"));
                                     potentialParentId = "editor_" + creacionId.substring("creacion_".length());
                                 } else if (elementId.startsWith("derivacion_") || elementId.startsWith("arbol_")) {
-                                    // Para pestañas de derivación o árbol, buscar la simulación padre
-                                    String simulacionId = elementId.substring(elementId.indexOf("_") + 1);
                                     // Buscar la simulación padre
                                     for (Tab tab : tabPane.getTabs()) {
                                         if (tab.getContent() instanceof simulador.SimulacionFinal) {
@@ -466,7 +460,6 @@ public class MenuPrincipal extends Application {
                 TabManager.reasignarNumerosGruposGramatica(tabPane);
             }
         } catch (Exception e) {
-            System.err.println("Error al actualizar textos: " + e.getMessage());
             e.printStackTrace();
         }
     }
