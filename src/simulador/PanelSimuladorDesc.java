@@ -515,4 +515,12 @@ public class PanelSimuladorDesc {
         // Reconfigurar relaciones padre-hijo con el nuevo TabPane
         configurarRelacionesPadreHijo();
     }
+
+    /**
+     * Establece la pestaña de simulación asociada a este simulador.
+     * @param tab La pestaña que contiene este simulador.
+     */
+    public void setPestañaSimulacion(Tab tab) {
+        this.pestañaSimulacion = tab;
+    }
 }

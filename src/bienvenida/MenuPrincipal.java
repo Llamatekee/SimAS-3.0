@@ -607,7 +607,28 @@ public class MenuPrincipal extends Application {
             // Crear el simulador descendente
             PanelSimuladorDesc simulador = new PanelSimuladorDesc(gramatica, tabPane, bundle, simuladorId);
             
-            // Saltar directamente al paso 6 (índice 5)
+            // Crear la pestaña del simulador con el título correcto
+            String tituloBase = bundle.getString("simulador.asistente");
+            int numeroGrupo = TabManager.obtenerNumeroGrupo(tabPane, simuladorId);
+            String tituloFinal = numeroGrupo > 0 ? numeroGrupo + "-" + tituloBase : tituloBase;
+            
+            // Crear la pestaña usando TabManager
+            Tab pestañaSimulador = TabManager.getOrCreateTab(
+                tabPane,
+                PanelSimuladorDesc.class,
+                tituloFinal,
+                simulador,
+                simuladorId,
+                null
+            );
+            
+            // Establecer la pestaña en el simulador
+            simulador.setPestañaSimulacion(pestañaSimulador);
+            
+            // Asegurarse de que la pestaña esté seleccionada
+            tabPane.getSelectionModel().select(pestañaSimulador);
+            
+            // Ahora sí, saltar directamente al paso 6 (índice 5)
             simulador.cambiarPaso(5);
             
             // Reasignar numeración para reflejar los cambios
@@ -615,6 +636,7 @@ public class MenuPrincipal extends Application {
             
         } catch (Exception e) {
             e.printStackTrace();
+            mostrarError("Error", "No se pudo crear el simulador: " + e.getMessage());
         }
     }
     
