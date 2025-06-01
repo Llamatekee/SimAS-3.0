@@ -280,9 +280,14 @@ public class Editor extends VBox implements ActualizableTextos {
         String simuladorId = "simulador_" + editorId.replace("editor_", "");
         PanelSimuladorDesc simulador = new PanelSimuladorDesc(this.gramatica, this.tabPane, this.menuPane, simuladorId, bundle);
         
-        // Crear la pestaña del simulador
+        // Crear la pestaña del simulador con el título correcto (Asistente Simulador)
+        String tituloBase = bundle.getString("simulador.asistente");
+        // Obtener el número de grupo si es necesario
+        int numeroGrupo = TabManager.obtenerNumeroGrupo(tabPane, simuladorId);
+        String tituloFinal = numeroGrupo > 0 ? numeroGrupo + "-" + tituloBase : tituloBase;
+        
         TabManager.getOrCreateTab(tabPane, PanelSimuladorDesc.class, 
-            bundle.getString("simulador.tab.titulo"), simulador, editorId, simuladorId);
+            tituloFinal, simulador, editorId, simuladorId);
     }
 
     @FXML

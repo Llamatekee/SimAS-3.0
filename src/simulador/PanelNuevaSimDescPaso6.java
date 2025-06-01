@@ -17,6 +17,7 @@ import javafx.scene.Parent;
 import editor.ActualizableTextos;
 import java.util.ResourceBundle;
 import editor.TabManager;
+import java.util.MissingResourceException;
 
 /**
  * Controlador para la simulación descendente en JavaFX.
@@ -74,6 +75,10 @@ public class PanelNuevaSimDescPaso6 extends BorderPane implements PanelNuevaSimD
 
     private void cargarFXML() {
         try {
+            if (bundle == null) {
+                // Si no hay bundle, usar el bundle por defecto
+                bundle = ResourceBundle.getBundle("messages");
+            }
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/PanelNuevaSimDescPaso6.fxml"));
             loader.setController(this);
             loader.setResources(bundle);
@@ -82,7 +87,7 @@ public class PanelNuevaSimDescPaso6 extends BorderPane implements PanelNuevaSimD
             this.setCenter(root.getCenter());
             this.setBottom(root.getBottom());
             
-            // Inicializar los textos
+            // Actualizar los textos después de cargar el FXML
             actualizarTextos(bundle);
         } catch (IOException e) {
             e.printStackTrace();
@@ -90,58 +95,64 @@ public class PanelNuevaSimDescPaso6 extends BorderPane implements PanelNuevaSimD
     }
 
     private void cargarDatos() {
-        // Cargar producciones
-        producciones.setAll(gramatica.getProduccionesModel());
-        listProducciones.setItems(producciones);
+        try {
+            // Cargar producciones
+            producciones.setAll(gramatica.getProduccionesModel());
+            listProducciones.setItems(producciones);
 
-        // Cargar funciones de error
-        ObservableList<String> errores = FXCollections.observableArrayList();
-        if (funcionesError != null && !funcionesError.isEmpty()) {
-            for (FuncionError fe : funcionesError) {
-                errores.add(getDescripcionFuncionError(fe, bundle));
-            }
-        } else {
-            errores.add(bundle.getString("simulador.paso6.error.sin.funciones"));
-        }
-        listFuncionesError.setItems(errores);
-
-        // Cargar tabla predictiva
-        if (tablaPredictiva instanceof TablaPredictivaPaso5) {
-            
-            // Verificar si hay datos en la tabla global
-            if (panelSimuladorDesc != null && panelSimuladorDesc.getTablaPredictivaExtendidaGlobal() != null) {
-                TablaPredictivaPaso5 tablaGlobal = panelSimuladorDesc.getTablaPredictivaExtendidaGlobal();
-                
-                // Si la tabla no tiene columnas o filas, reconstruirla desde cero
-                if (tablePredictiva.getColumns().isEmpty() || 
-                    tablePredictiva.getItems() == null || 
-                    tablePredictiva.getItems().isEmpty()) {
-                    
-                    // Limpiar la tabla
-                    tablePredictiva.getColumns().clear();
-                    
-                    // Recrear columnas manualmente
-                    crearColumnasManualmente();
-                    
-                    // Copiar filas si existen
-                    if (tablaGlobal.getTablaPredictiva().getItems() != null) {
-                        // Crear una copia de los items para asegurar que los datos se mantengan
-                        ObservableList<FilaTablaPredictiva> items = tablaGlobal.getTablaPredictiva().getItems();
-                        tablePredictiva.setItems(items);
-                    }
+            // Cargar funciones de error
+            ObservableList<String> errores = FXCollections.observableArrayList();
+            if (funcionesError != null && !funcionesError.isEmpty()) {
+                for (FuncionError fe : funcionesError) {
+                    errores.add(getDescripcionFuncionError(fe, bundle));
                 }
-                
-                // Configurar la tabla para mantener el estilo y comportamiento
-                tablePredictiva.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-                tablePredictiva.setTableMenuButtonVisible(false);
-                
-                // Desactivar la edición (solo lectura)
-                tablePredictiva.setEditable(false);
-                
-                // Refrescar la vista
-                tablePredictiva.refresh();
+            } else {
+                errores.add(bundle != null ? 
+                    bundle.getString("simulador.paso6.error.sin.funciones") : 
+                    "No se están usando funciones de error");
             }
-        } 
+            listFuncionesError.setItems(errores);
+
+            // Cargar tabla predictiva
+            if (tablaPredictiva instanceof TablaPredictivaPaso5) {
+                
+                // Verificar si hay datos en la tabla global
+                if (panelSimuladorDesc != null && panelSimuladorDesc.getTablaPredictivaExtendidaGlobal() != null) {
+                    TablaPredictivaPaso5 tablaGlobal = panelSimuladorDesc.getTablaPredictivaExtendidaGlobal();
+                    
+                    // Si la tabla no tiene columnas o filas, reconstruirla desde cero
+                    if (tablePredictiva.getColumns().isEmpty() || 
+                        tablePredictiva.getItems() == null || 
+                        tablePredictiva.getItems().isEmpty()) {
+                        
+                        // Limpiar la tabla
+                        tablePredictiva.getColumns().clear();
+                        
+                        // Recrear columnas manualmente
+                        crearColumnasManualmente();
+                        
+                        // Copiar filas si existen
+                        if (tablaGlobal.getTablaPredictiva().getItems() != null) {
+                            // Crear una copia de los items para asegurar que los datos se mantengan
+                            ObservableList<FilaTablaPredictiva> items = tablaGlobal.getTablaPredictiva().getItems();
+                            tablePredictiva.setItems(items);
+                        }
+                    }
+                    
+                    // Configurar la tabla para mantener el estilo y comportamiento
+                    tablePredictiva.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+                    tablePredictiva.setTableMenuButtonVisible(false);
+                    
+                    // Desactivar la edición (solo lectura)
+                    tablePredictiva.setEditable(false);
+                    
+                    // Refrescar la vista
+                    tablePredictiva.refresh();
+                }
+            } 
+        } catch (MissingResourceException e) {
+            System.err.println("Error al cargar datos: " + e.getMessage());
+        }
     }
 
     /**
@@ -376,18 +387,28 @@ public class PanelNuevaSimDescPaso6 extends BorderPane implements PanelNuevaSimD
 
     @Override
     public void actualizarTextos(ResourceBundle bundle) {
-        this.bundle = bundle;
-        // Actualizar textos de los títulos y secciones
-        if (labelTitulo != null) labelTitulo.setText(bundle.getString("simulador.paso6.titulo"));
-        if (labelProducciones != null) labelProducciones.setText(bundle.getString("simulador.paso6.producciones.titulo"));
-        if (labelFuncionesError != null) labelFuncionesError.setText(bundle.getString("simulador.paso6.funciones.error.titulo"));
-        if (labelTabla != null) labelTabla.setText(bundle.getString("simulador.paso6.tabla.titulo"));
-        // Actualizar textos de los botones
-        if (btnSimular != null) btnSimular.setText(bundle.getString("simulador.paso6.btn.simular"));
-        if (btnModificarErrores != null) btnModificarErrores.setText(bundle.getString("simulador.paso6.btn.modificar.errores"));
-        if (btnGenerarInforme != null) btnGenerarInforme.setText(bundle.getString("simulador.paso6.btn.generar.informe"));
-        // Recargar datos para actualizar textos dinámicos y funciones de error
-        cargarDatos();
+        if (bundle == null) return;
+        
+        try {
+            this.bundle = bundle;
+            // Actualizar textos de los títulos y secciones
+            if (labelTitulo != null) labelTitulo.setText(bundle.getString("simulador.paso6.titulo"));
+            if (labelProducciones != null) labelProducciones.setText(bundle.getString("simulador.paso6.producciones.titulo"));
+            if (labelFuncionesError != null) labelFuncionesError.setText(bundle.getString("simulador.paso6.funciones.error.titulo"));
+            if (labelTabla != null) labelTabla.setText(bundle.getString("simulador.paso6.tabla.titulo"));
+            // Actualizar textos de los botones
+            if (btnSimular != null) btnSimular.setText(bundle.getString("simulador.paso6.btn.simular"));
+            if (btnModificarErrores != null) btnModificarErrores.setText(bundle.getString("simulador.paso6.btn.modificar.errores"));
+            if (btnGenerarInforme != null) btnGenerarInforme.setText(bundle.getString("simulador.paso6.btn.generar.informe"));
+            // Recargar datos para actualizar textos dinámicos y funciones de error
+            cargarDatos();
+        } catch (MissingResourceException e) {
+            System.err.println("Error al actualizar textos: " + e.getMessage());
+            // Si falta alguna clave, intentar usar valores por defecto
+            if (labelProducciones != null) labelProducciones.setText("Producciones");
+            if (labelFuncionesError != null) labelFuncionesError.setText("Funciones de Error");
+            if (labelTabla != null) labelTabla.setText("Tabla Predictiva");
+        }
     }
 
     private String getDescripcionFuncionError(FuncionError fe, ResourceBundle bundle) {

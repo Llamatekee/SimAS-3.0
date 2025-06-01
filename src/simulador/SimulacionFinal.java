@@ -174,7 +174,7 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         // Actualizar títulos
         for (Tab tab : tabPane.getTabs()) {
             if (tab.getContent() == this) {
-                String tituloBase = bundle.getString("simulador.paso6.simulacion");
+                String tituloBase = bundle.getString("simulador.tab.paso6");
                 String nuevoTitulo = mostrarGrupo ? 
                     numeroGrupo + "-" + tituloBase + " " + numeroSimulacion :
                     tituloBase + " " + numeroSimulacion;

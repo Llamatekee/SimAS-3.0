@@ -268,10 +268,10 @@ public class PanelSimuladorDesc {
         // Determinar el título base según el paso
         String tituloBase;
         if (paso == 5) {
-            // Paso 6: "Simulador de gramáticas"
+            // Paso 6: "Simulador"
             tituloBase = bundle.getString("simulador.tab.paso6");
         } else {
-            // Pasos 1-5: "Asistente de simulación"
+            // Pasos 1-5: "Asistente Simulador"
             tituloBase = bundle.getString("simulador.asistente");
         }
         
@@ -284,27 +284,29 @@ public class PanelSimuladorDesc {
             ((editor.ActualizableTextos) pasoActual).actualizarTextos(bundle);
         }
         
-        // Si ya existe una pestaña de simulación, actualizarla en lugar de crear una nueva
-        if (pestañaSimulacion != null && tabPane.getTabs().contains(pestañaSimulacion)) {
-            // Actualizar el contenido y título de la pestaña existente
-            pestañaSimulacion.setText(tituloPestaña);
-            pestañaSimulacion.setContent(pasoActual.getRoot());
-            
-            // Seleccionar la pestaña existente
-            tabPane.getSelectionModel().select(pestañaSimulacion);
-            
-        } else {
-            // Solo crear una nueva pestaña si no existe una
-            Tab tab = TabManager.getOrCreateTab(tabPane, PanelSimuladorDesc.class, 
-                tituloPestaña, pasoActual.getRoot(), simuladorId, null);
-            pestañaSimulacion = tab;
-            
-            // Asegurar que el userData esté configurado correctamente
-            pestañaSimulacion.setUserData(simuladorId);
-            
-            // Seleccionar la pestaña
-            tabPane.getSelectionModel().select(pestañaSimulacion);
+        // Buscar la pestaña existente por el simuladorId
+        if (pestañaSimulacion == null) {
+            for (Tab tab : tabPane.getTabs()) {
+                if (tab.getUserData() != null && tab.getUserData().toString().equals(simuladorId)) {
+                    pestañaSimulacion = tab;
+                    break;
+                }
+            }
         }
+        
+        // Si aún no encontramos la pestaña, crearla
+        if (pestañaSimulacion == null) {
+            pestañaSimulacion = new Tab(tituloPestaña);
+            pestañaSimulacion.setUserData(simuladorId);
+            tabPane.getTabs().add(pestañaSimulacion);
+        }
+        
+        // Actualizar el contenido y título de la pestaña
+        pestañaSimulacion.setText(tituloPestaña);
+        pestañaSimulacion.setContent(pasoActual.getRoot());
+        
+        // Seleccionar la pestaña
+        tabPane.getSelectionModel().select(pestañaSimulacion);
     }
     
     /**
@@ -382,10 +384,10 @@ public class PanelSimuladorDesc {
             // Determinar el título base según el paso actual
             String tituloBase;
             if (this.pasoActual == 5) {
-                // Paso 6: "Simulador de gramáticas"
+                // Paso 6: "Simulador"
                 tituloBase = bundle.getString("simulador.tab.paso6");
             } else {
-                // Pasos 1-5: "Asistente de simulación"
+                // Pasos 1-5: "Asistente Simulador"
                 tituloBase = bundle.getString("simulador.asistente");
             }
             
@@ -430,6 +432,14 @@ public class PanelSimuladorDesc {
     }
 
     public Parent getRoot() {
+        if (pestañaSimulacion == null) {
+            // Si no hay pestaña de simulación, devolver el contenido del paso actual
+            if (pasoActual >= 0 && pasoActual < pasos.size()) {
+                return pasos.get(pasoActual).getRoot();
+            }
+            // Si no hay paso actual, devolver un contenedor vacío
+            return new javafx.scene.layout.VBox();
+        }
         return (Parent) pestañaSimulacion.getContent();
     }
 
