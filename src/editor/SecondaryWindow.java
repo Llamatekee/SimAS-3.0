@@ -294,6 +294,21 @@ public class SecondaryWindow extends EditorWindow {
         // Mantener el mismo grupoId en la ventana destino
         for (String elementId : elementIds) {
             TabManager.asignarElementoAGrupo(localTabPane, elementId, grupoId);
+            
+            // Si es un simulador, actualizar sus simulaciones
+            if (elementId.startsWith("simulador_")) {
+                // Buscar simulaciones de este simulador
+                for (Tab tab : groupTabs) {
+                    if (tab.getContent() instanceof simulador.SimulacionFinal) {
+                        simulador.SimulacionFinal sim = (simulador.SimulacionFinal) tab.getContent();
+                        if (sim != null && sim.getSimuladorPadreId() != null && 
+                            sim.getSimuladorPadreId().equals(elementId)) {
+                            sim.setGrupoId(grupoId);
+                            sim.setNumeroGrupo(TabManager.obtenerNumeroGrupo(localTabPane, elementId));
+                        }
+                    }
+                }
+            }
         }
 
         // Mover las pestañas manteniendo sus referencias originales
@@ -325,21 +340,20 @@ public class SecondaryWindow extends EditorWindow {
         }
 
         // Forzar renumeración inmediata en ambas ventanas
-        Platform.runLater(() -> {
-            // Primero limpiar cualquier referencia residual
-            for (String elementId : elementIds) {
-                TabManager.eliminarElementoDeGrupo(sourceTabPane, elementId, grupoId);
-            }
-            
-            // Luego renumerar
+        TabManager.reasignarNumerosGruposGramatica(sourceTabPane);
+        TabManager.reasignarNumerosGruposGramatica(localTabPane);
+        
+        // Forzar actualización asíncrona como respaldo
+        javafx.application.Platform.runLater(() -> {
             TabManager.reasignarNumerosGruposGramatica(sourceTabPane);
             TabManager.reasignarNumerosGruposGramatica(localTabPane);
             
-            // Programar una segunda renumeración para asegurar que todo se actualice
-            Platform.runLater(() -> {
-                TabManager.reasignarNumerosGruposGramatica(sourceTabPane);
-                TabManager.reasignarNumerosGruposGramatica(localTabPane);
-            });
+            // Actualizar IDs de simulaciones
+            for (String elementId : elementIds) {
+                if (elementId.startsWith("simulador_")) {
+                    TabManager.actualizarIdsRelacionados(localTabPane, elementId, grupoId);
+                }
+            }
         });
     }
     

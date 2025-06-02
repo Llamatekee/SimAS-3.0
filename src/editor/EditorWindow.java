@@ -404,6 +404,19 @@ public class EditorWindow {
                     String elementId = tab.getUserData() != null ? tab.getUserData().toString() : null;
                     if (elementId != null && elementId.startsWith("simulador_")) {
                         TabManager.asignarElementoAGrupo(tabPane, elementId, nuevoGrupoId);
+                        
+                        // Actualizar todas las simulaciones asociadas a este simulador
+                        for (Tab simTab : tabPane.getTabs()) {
+                            if (simTab.getContent() instanceof simulador.SimulacionFinal) {
+                                simulador.SimulacionFinal sim = (simulador.SimulacionFinal) simTab.getContent();
+                                if (sim != null && sim.getSimuladorPadreId() != null && 
+                                    sim.getSimuladorPadreId().equals(elementId)) {
+                                    sim.setGrupoId(nuevoGrupoId);
+                                    // Forzar actualización inmediata del número de grupo
+                                    sim.actualizarGrupoYTitulo();
+                                }
+                            }
+                        }
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

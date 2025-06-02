@@ -34,6 +34,7 @@ import java.awt.image.BufferedImage;
 import javafx.embed.swing.SwingFXUtils;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Locale;
 
 public class SimulacionFinal extends BorderPane implements ActualizableTextos {
     @FXML private TextField campoEntrada;
@@ -74,8 +75,10 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
     // Lista para almacenar los estados anteriores
     private List<EstadoSimulacion> estadosAnteriores = new ArrayList<>();
 
-    private String simuladorPadreId; // Nuevo campo para almacenar el ID del simulador padre
-    private int numeroSimulacion; // Número de esta simulación específica
+    private String simuladorPadreId;
+    private int numeroSimulacion;
+    private String grupoId;
+    private int numeroGrupo;
     public String simulacionId; // Identificador único para esta simulación
 
     // Clase para almacenar el estado de la simulación
@@ -121,8 +124,18 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         // Asignar número de simulación
         this.numeroSimulacion = simulacionesEnGrupo + 1;
         
+        // Añadir listener para cambios en las pestañas
+        tabPane.getTabs().addListener((javafx.collections.ListChangeListener.Change<? extends Tab> c) -> {
+            while (c.next()) {
+                if (c.wasRemoved() || c.wasAdded()) {
+                    // Actualizar el grupo y título cuando hay cambios en las pestañas
+                    actualizarGrupoYTitulo();
+                }
+            }
+        });
+        
         cargarFXML();
-        actualizarTitulosPestañas();
+        actualizarTitulosPestañasInterno(TabManager.contarGruposActivos(tabPane) > 1);
         
         // Añadir listener para cerrar pestañas hijas
         if (tabPane != null) {
@@ -159,49 +172,54 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
     }
 
     /**
-     * Actualiza los títulos de todas las pestañas relacionadas con esta simulación.
+     * Actualiza el grupo y título de la simulación basado en el estado actual del TabPane
+     */
+    public void actualizarGrupoYTitulo() {
+        if (simuladorPadreId == null || tabPane == null) return;
+        
+        // Obtener el nuevo grupo y número del simulador padre
+        String nuevoGrupoId = TabManager.obtenerGrupoDeElemento(tabPane, simuladorPadreId);
+        int nuevoNumeroGrupo = TabManager.obtenerNumeroGrupo(tabPane, simuladorPadreId);
+        boolean hayMultiplesGrupos = TabManager.contarGruposActivos(tabPane) > 1;
+        
+        // Actualizar los valores internos
+        this.grupoId = nuevoGrupoId;
+        this.numeroGrupo = nuevoNumeroGrupo;
+        
+        // Forzar actualización de títulos
+        actualizarTitulosPestañas(nuevoNumeroGrupo, hayMultiplesGrupos);
+    }
+
+    /**
+     * Actualiza los títulos de las pestañas con el número de grupo especificado.
+     */
+    public void actualizarTitulosPestañas(int numeroGrupo, boolean mostrarGrupo) {
+        this.numeroGrupo = numeroGrupo;
+        actualizarTitulosPestañasInterno(mostrarGrupo);
+    }
+
+    /**
+     * Actualiza los títulos de las pestañas usando el número de grupo actual.
      */
     public void actualizarTitulosPestañas() {
         if (tabPane == null || simuladorPadreId == null) return;
+        actualizarTitulosPestañasInterno(TabManager.contarGruposActivos(tabPane) > 1);
+    }
+
+    /**
+     * Implementación interna de la actualización de títulos.
+     */
+    private void actualizarTitulosPestañasInterno(boolean mostrarGrupo) {
+        if (tabPane == null) return;
         
-        // Obtener el número de grupo del simulador padre
-        int numeroGrupo = TabManager.obtenerNumeroGrupo(tabPane, simuladorPadreId);
-        
-        // Determinar si hay más de un grupo
-        boolean mostrarGrupo = TabManager.contarGruposActivos(tabPane) > 1;
-        
-        // Contar simulaciones en este grupo
-        int simulacionesEnGrupo = 0;
-        for (Tab tab : tabPane.getTabs()) {
-            if (tab.getContent() instanceof SimulacionFinal) {
-                SimulacionFinal sim = (SimulacionFinal) tab.getContent();
-                if (sim.simuladorPadreId != null && sim.simuladorPadreId.equals(this.simuladorPadreId)) {
-                    simulacionesEnGrupo++;
-                }
-            }
-        }
-        
-        // Actualizar títulos
-        for (Tab tab : tabPane.getTabs()) {
-            if (tab.getContent() == this) {
-                String tituloBase = bundle.getString("simulador.paso6.simulacion.final");
-                String nuevoTitulo;
-                if (simulacionesEnGrupo > 1) {
-                    // Solo mostrar número si hay más de una simulación
-                    nuevoTitulo = mostrarGrupo ? 
-                        numeroGrupo + "-" + tituloBase + " " + numeroSimulacion :
-                        tituloBase + " " + numeroSimulacion;
-                } else {
-                    // Si solo hay una simulación, no mostrar número
-                    nuevoTitulo = mostrarGrupo ? 
-                        numeroGrupo + "-" + tituloBase :
-                        tituloBase;
-                }
-                tab.setText(nuevoTitulo);
-            } else if (tab.getUserData() != null) {
-                String userData = tab.getUserData().toString();
-                if (userData.startsWith("derivacion_") && userData.endsWith(simulacionId)) {
-                    String tituloBase = bundle.getString("simulacionfinal.tab.derivacion");
+        try {
+            // Contar simulaciones en el mismo grupo
+            int simulacionesEnGrupo = contarSimulacionesEnGrupo();
+            
+            // Actualizar pestaña de simulación
+            for (Tab tab : tabPane.getTabs()) {
+                if (tab.getContent() == this) {
+                    String tituloBase = bundle.getString("simulador.paso6.simulacion.final");
                     String nuevoTitulo;
                     if (simulacionesEnGrupo > 1) {
                         nuevoTitulo = mostrarGrupo ? 
@@ -213,24 +231,37 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
                             tituloBase;
                     }
                     tab.setText(nuevoTitulo);
-                } else if (userData.startsWith("arbol_") && userData.endsWith(simulacionId)) {
-                    String tituloBase = bundle.getString("simulacionfinal.tab.arbol");
-                    String nuevoTitulo;
-                    if (simulacionesEnGrupo > 1) {
-                        nuevoTitulo = mostrarGrupo ? 
-                            numeroGrupo + "-" + tituloBase + " " + numeroSimulacion :
-                            tituloBase + " " + numeroSimulacion;
-                    } else {
-                        nuevoTitulo = mostrarGrupo ? 
-                            numeroGrupo + "-" + tituloBase :
-                            tituloBase;
-                    }
-                    tab.setText(nuevoTitulo);
+                    break;
                 }
             }
+            
+            // Actualizar pestañas hijas (derivación y árbol)
+            for (Tab tab : tabPane.getTabs()) {
+                if (tab.getUserData() != null) {
+                    String userData = tab.getUserData().toString();
+                    if (userData.startsWith("derivacion_") && userData.endsWith(simulacionId)) {
+                        String tituloBase = bundle.getString("simulacionfinal.tab.derivacion");
+                        String nuevoTitulo = mostrarGrupo ? 
+                            numeroGrupo + "-" + tituloBase + " " + numeroSimulacion :
+                            tituloBase + " " + numeroSimulacion;
+                        tab.setText(nuevoTitulo);
+                    } else if (userData.startsWith("arbol_") && userData.endsWith(simulacionId)) {
+                        String tituloBase = bundle.getString("simulacionfinal.tab.arbol");
+                        String nuevoTitulo = mostrarGrupo ? 
+                            numeroGrupo + "-" + tituloBase + " " + numeroSimulacion :
+                            tituloBase + " " + numeroSimulacion;
+                        tab.setText(nuevoTitulo);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
+    /**
+     * Reasigna los números de las simulaciones en orden secuencial.
+     */
     public static void reasignarNumerosSimulaciones(TabPane tabPane) {
         if (tabPane == null) return;
         
@@ -260,7 +291,7 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
             
             // Reasignar números
             for (int i = 0; i < simulaciones.size(); i++) {
-                simulaciones.get(i).numeroSimulacion = i + 1;
+                simulaciones.get(i).numeroGrupo = i + 1;
                 simulaciones.get(i).actualizarTitulosPestañas();
             }
         }
@@ -633,8 +664,8 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
                 int numeroGrupo = TabManager.obtenerNumeroGrupo(tabPane, simuladorId);
                 String tituloBase = bundle.getString("simulacionfinal.tab.derivacion");
                 String tituloDerivacion = numeroGrupo > 0 ? 
-                    numeroGrupo + "-" + tituloBase + " " + numeroSimulacion :
-                    tituloBase + " " + numeroSimulacion;
+                    numeroGrupo + "-" + tituloBase + " " + numeroGrupo :
+                    tituloBase + " " + numeroGrupo;
                 
                 // Buscar la pestaña de simulación actual
                 Tab simulacionTab = null;
@@ -744,7 +775,7 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
             VBox layout = new VBox(15);
             layout.setPadding(new Insets(40, 0, 0, 0));
             layout.setAlignment(Pos.TOP_CENTER);
-            String tituloArbol = bundle.getString("simulacionfinal.tab.arbol") + " " + numeroSimulacion;
+            String tituloArbol = bundle.getString("simulacionfinal.tab.arbol") + " " + numeroGrupo;
             Label labelTitulo = new Label(tituloArbol);
             labelTitulo.setStyle(
                 "-fx-font-size: 30px;" +
@@ -887,8 +918,8 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
                 int numeroGrupo = TabManager.obtenerNumeroGrupo(tabPane, simuladorId);
                 String tituloBase = bundle.getString("simulacionfinal.tab.arbol");
                 String tituloArbol = numeroGrupo > 0 ? 
-                    numeroGrupo + "-" + tituloBase + " " + numeroSimulacion :
-                    tituloBase + " " + numeroSimulacion;
+                    numeroGrupo + "-" + tituloBase + " " + numeroGrupo :
+                    tituloBase + " " + numeroGrupo;
                 
                 // Buscar la pestaña de simulación actual
                 Tab simulacionTab = null;
@@ -1024,14 +1055,11 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
     }
 
     /**
-     * Actualiza los títulos de las pestañas de derivación y árbol sintáctico.
-     * @param numeroGrupo El número del grupo al que pertenece la simulación
-     * @param mostrarGrupo Si se debe mostrar el número de grupo en los títulos
+     * Cuenta el número de simulaciones que pertenecen al mismo grupo que esta simulación.
      */
-    public void actualizarTitulosPestañas(Integer numeroGrupo, boolean mostrarGrupo) {
-        if (tabPane == null) return;
+    private int contarSimulacionesEnGrupo() {
+        if (tabPane == null) return 1;
         
-        // Contar simulaciones en este grupo
         int simulacionesEnGrupo = 0;
         for (Tab tab : tabPane.getTabs()) {
             if (tab.getContent() instanceof SimulacionFinal) {
@@ -1041,58 +1069,22 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
                 }
             }
         }
-        
-        // Actualizar títulos
-        for (Tab tab : tabPane.getTabs()) {
-            if (tab.getContent() == this) {
-                String tituloBase = bundle.getString("simulador.paso6.simulacion.final");
-                String nuevoTitulo;
-                if (simulacionesEnGrupo > 1) {
-                    // Solo mostrar número si hay más de una simulación
-                    nuevoTitulo = mostrarGrupo ? 
-                        numeroGrupo + "-" + tituloBase + " " + numeroSimulacion :
-                        tituloBase + " " + numeroSimulacion;
-                } else {
-                    // Si solo hay una simulación, no mostrar número
-                    nuevoTitulo = mostrarGrupo ? 
-                        numeroGrupo + "-" + tituloBase :
-                        tituloBase;
-                }
-                tab.setText(nuevoTitulo);
-            } else if (tab.getUserData() != null) {
-                String userData = tab.getUserData().toString();
-                
-                // Actualizar pestaña de derivación
-                if (userData.equals("derivacion_" + simulacionId)) {
-                    String tituloBase = bundle.getString("simulacionfinal.tab.derivacion");
-                    String nuevoTitulo;
-                    if (simulacionesEnGrupo > 1) {
-                        nuevoTitulo = mostrarGrupo ? 
-                            numeroGrupo + "-" + tituloBase + " " + numeroSimulacion :
-                            tituloBase + " " + numeroSimulacion;
-                    } else {
-                        nuevoTitulo = mostrarGrupo ? 
-                            numeroGrupo + "-" + tituloBase :
-                            tituloBase;
-                    }
-                    tab.setText(nuevoTitulo);
-                }
-                // Actualizar pestaña de árbol sintáctico
-                else if (userData.equals("arbol_" + simulacionId)) {
-                    String tituloBase = bundle.getString("simulacionfinal.tab.arbol");
-                    String nuevoTitulo;
-                    if (simulacionesEnGrupo > 1) {
-                        nuevoTitulo = mostrarGrupo ? 
-                            numeroGrupo + "-" + tituloBase + " " + numeroSimulacion :
-                            tituloBase + " " + numeroSimulacion;
-                    } else {
-                        nuevoTitulo = mostrarGrupo ? 
-                            numeroGrupo + "-" + tituloBase :
-                            tituloBase;
-                    }
-                    tab.setText(nuevoTitulo);
-                }
-            }
-        }
+        return simulacionesEnGrupo;
+    }
+
+    public void setGrupoId(String grupoId) {
+        this.grupoId = grupoId;
+    }
+
+    public void setNumeroGrupo(int numeroGrupo) {
+        this.numeroGrupo = numeroGrupo;
+    }
+
+    public String getGrupoId() {
+        return grupoId;
+    }
+
+    public int getNumeroGrupo() {
+        return numeroGrupo;
     }
 } 

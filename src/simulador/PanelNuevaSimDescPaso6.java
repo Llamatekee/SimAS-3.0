@@ -332,23 +332,32 @@ public class PanelNuevaSimDescPaso6 extends BorderPane implements PanelNuevaSimD
             panelSimuladorDesc.getBundle()
         );
 
-        // Obtener el número de grupo del simulador
-        int numeroGrupo = TabManager.obtenerNumeroGrupo(panelSimuladorDesc.tabPane, panelSimuladorDesc.getSimuladorId());
+        // Obtener el grupo del simulador
+        String simuladorId = panelSimuladorDesc.getSimuladorId();
+        String grupoId = TabManager.obtenerGrupoDeElemento(panelSimuladorDesc.tabPane, simuladorId);
+        int numeroGrupo = TabManager.obtenerNumeroGrupo(panelSimuladorDesc.tabPane, simuladorId);
+        
+        // Asignar el grupo a la simulación
+        simulacionFinal.setGrupoId(grupoId);
+        simulacionFinal.setNumeroGrupo(numeroGrupo);
         
         // Construir el título base
         String tituloBase = bundle.getString("simulador.paso6.simulacion");
         
-        // Añadir el número de grupo si es válido
-        String tituloFinal = numeroGrupo > 0 ? numeroGrupo + "-" + tituloBase : tituloBase;
+        // Añadir el número de grupo si es válido y hay múltiples grupos
+        boolean hayMultiplesGrupos = TabManager.contarGruposActivos(panelSimuladorDesc.tabPane) > 1;
+        String tituloFinal = (numeroGrupo > 0 && hayMultiplesGrupos) ? 
+            numeroGrupo + "-" + tituloBase : 
+            tituloBase;
 
         // Usar TabManager para crear la pestaña como hija del simulador
-        String childId = "simulacion_" + panelSimuladorDesc.getSimuladorId();
+        String childId = "simulacion_" + simuladorId;
         Tab nuevaPestana = TabManager.getOrCreateTab(
             panelSimuladorDesc.tabPane,
             SimulacionFinal.class,
             tituloFinal,
             simulacionFinal,
-            panelSimuladorDesc.getSimuladorId(),
+            simuladorId,
             childId
         );
         
