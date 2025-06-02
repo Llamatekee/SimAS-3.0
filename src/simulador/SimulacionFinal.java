@@ -89,6 +89,10 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
     private int numeroInstancia = 1;
     public final String simulacionId;
 
+    // Referencias a pestañas hijas activas
+    private Tab derivacionTab;
+    private Tab arbolTab;
+
     // Clase para almacenar el estado de la simulación
     private static class EstadoSimulacion {
         Stack<String> pila;
@@ -454,31 +458,93 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
     }
 
     private void iniciarSimulacionFinal() {
-        // Inicializar pila y entrada
+        // Limpiar el historial y estados anteriores
+        historialObservable.clear();
+        estadosAnteriores.clear();
+        pasoActual = 0;
+
+        // Limpiar el área de mensajes/acción
+        areaMensajes.clear();
+
+        // Inicializar la pila con el símbolo inicial y el marcador de fin
         pilaSimulacion = new Stack<>();
         pilaSimulacion.push("$");
         pilaSimulacion.push(gramatica.getSimbInicial());
 
-        String entradaUsuario = campoEntrada.getText().trim();
-        if (entradaUsuario.isEmpty()) {
+        // Preparar la entrada
+        String entrada = campoEntrada.getText().trim();
+        if (entrada.isEmpty()) {
             mostrarAlertaCadenaVacia();
             return;
         }
-        entradaSimulacion = new java.util.ArrayList<>(Arrays.asList(entradaUsuario.split(" ")));
-        entradaSimulacion.add("$");
-        
-        areaMensajes.setText("");
-        pasoActual = 0;
+
+        // Convertir la entrada en una lista de símbolos y añadir el marcador de fin
+        entradaSimulacion = Arrays.asList(entrada.split("\\s+"));
+        List<String> entradaConFin = new ArrayList<>(entradaSimulacion);
+        entradaConFin.add("$");
+        entradaSimulacion = entradaConFin;
+
+        // Iniciar la simulación
         simulacionEnCurso = true;
+        // El botón Iniciar siempre debe estar activo
+        btnIniciar.setDisable(false);
         btnPaso.setDisable(false);
         btnFinal.setDisable(false);
-        btnRetroceso.setDisable(false);
-        btnInicio.setDisable(false);
+        btnRetroceso.setDisable(true);
+        btnInicio.setDisable(true);
+        campoEntrada.setDisable(true);
+        btnEditarCadena.setDisable(false);
+
+        // Actualizar la vista
         actualizarVista();
-        historialObservable.clear();
-        estadosAnteriores.clear();
-        // Guardar estado inicial
-        estadosAnteriores.add(new EstadoSimulacion(pilaSimulacion, entradaSimulacion, "Inicio"));
+
+        // Resetear las pestañas hijas al estado inicial si están activas
+        if (derivacionTab != null && tabPane.getTabs().contains(derivacionTab)) {
+            TextArea areaDerivacion = (TextArea) derivacionTab.getContent();
+            areaDerivacion.setText(gramatica.getSimbInicial()); // Solo mostrar el símbolo inicial
+        }
+
+        if (arbolTab != null && tabPane.getTabs().contains(arbolTab)) {
+            // Crear árbol con solo el nodo inicial
+            NodoArbol raiz = new NodoArbol(gramatica.getSimbInicial());
+            
+            // Generar el código DOT para Graphviz
+            String dotCode = generarDotDesdeArbol(raiz);
+            
+            try {
+                // Crear un archivo temporal para el código DOT
+                java.nio.file.Path dotFile = java.nio.file.Files.createTempFile("arbol_", ".dot");
+                java.nio.file.Files.write(dotFile, dotCode.getBytes());
+                
+                // Crear un archivo temporal para la imagen
+                java.nio.file.Path imgFile = java.nio.file.Files.createTempFile("arbol_", ".png");
+                
+                // Ejecutar Graphviz para generar la imagen
+                ProcessBuilder pb = new ProcessBuilder("dot", "-Tpng", dotFile.toString(), "-o", imgFile.toString());
+                Process process = pb.start();
+                process.waitFor();
+                
+                // Cargar la imagen en un ImageView
+                javafx.scene.image.Image imagen = new javafx.scene.image.Image(imgFile.toUri().toString());
+                javafx.scene.image.ImageView imageView = new javafx.scene.image.ImageView(imagen);
+                imageView.setPreserveRatio(true);
+                imageView.setFitWidth(800);
+                
+                // Obtener el contenedor VBox existente y el ScrollPane
+                VBox contenedor = (VBox) arbolTab.getContent();
+                ScrollPane scrollPane = (ScrollPane) contenedor.getChildren().get(0);
+                
+                // Actualizar el contenido del ScrollPane
+                scrollPane.setContent(imageView);
+                
+                // Limpiar archivos temporales
+                java.nio.file.Files.deleteIfExists(dotFile);
+                java.nio.file.Files.deleteIfExists(imgFile);
+                
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void mostrarAlertaCadenaVacia() {
@@ -509,6 +575,8 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
             btnFinal.setDisable(true);
             pasoActual++;
             agregarPasoHistorial(accionRealizada);
+            actualizarVista();
+            actualizarPestañasHijas();
             return;
         }
 
@@ -527,6 +595,8 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
             btnFinal.setDisable(true);
             pasoActual++;
             agregarPasoHistorial(accionRealizada);
+            actualizarVista();
+            actualizarPestañasHijas();
             return;
         } else {
             // Buscar producción o función de error en la tabla predictiva
@@ -539,6 +609,8 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
                 btnFinal.setDisable(true);
                 pasoActual++;
                 agregarPasoHistorial(accionRealizada);
+                actualizarVista();
+                actualizarPestañasHijas();
                 return;
             }
             if (accion.startsWith("E")) {
@@ -574,12 +646,14 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         pasoActual++;
         agregarPasoHistorial(accionRealizada);
         actualizarVista();
+        actualizarPestañasHijas();
     }
 
     private void avanzarAlFinal() {
         while (simulacionEnCurso) {
             avanzarPaso();
         }
+        actualizarPestañasHijas();
     }
 
     private void retrocederAlInicio() {
@@ -611,6 +685,7 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         
         // Deshabilitar el botón de retroceso
         btnRetroceso.setDisable(true);
+        actualizarPestañasHijas();
     }
 
     private void retrocederPaso() {
@@ -645,6 +720,7 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         if (estadosAnteriores.size() == 1) {
             btnRetroceso.setDisable(true);
         }
+        actualizarPestañasHijas();
     }
 
     private void actualizarVista() {
@@ -676,8 +752,8 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
      * Muestra la derivación de la simulación actual.
      */
     private void mostrarDerivacion() {
-        // Buscar si ya existe una pestaña de derivación
-        Tab derivacionTab = null;
+        // Buscar si ya existe una pestaña de derivación para esta simulación
+        derivacionTab = null;
         for (Tab tab : tabPane.getTabs()) {
             if (tab.getUserData() != null && 
                 tab.getUserData().toString().equals("derivacion_" + simulacionId)) {
@@ -686,7 +762,7 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
             }
         }
         
-        // Si no existe, crear una nueva
+        // Si no existe la pestaña, crearla
         if (derivacionTab == null) {
             derivacionTab = new Tab();
             derivacionTab.setUserData("derivacion_" + simulacionId);
@@ -714,7 +790,26 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
             areaDerivacion.setText(derivacion.toString());
             
             derivacionTab.setContent(areaDerivacion);
-            tabPane.getTabs().add(derivacionTab);
+            
+            // Buscar la pestaña de simulación padre y añadir la pestaña de derivación después de ella
+            int insertPosition = -1;
+            for (int i = 0; i < tabPane.getTabs().size(); i++) {
+                Tab tab = tabPane.getTabs().get(i);
+                if (tab.getContent() == this) {
+                    insertPosition = i + 1;
+                    break;
+                }
+            }
+            
+            // Añadir la pestaña en la posición correcta
+            if (insertPosition >= 0) {
+                tabPane.getTabs().add(insertPosition, derivacionTab);
+            } else {
+                tabPane.getTabs().add(derivacionTab);
+            }
+
+            // Añadir listener para cuando se cierre la pestaña
+            derivacionTab.setOnClosed(e -> derivacionTab = null);
         }
         
         // Seleccionar la pestaña
@@ -817,102 +912,121 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
      * Muestra el árbol sintáctico de la simulación actual.
      */
     private void mostrarArbolSintactico() {
-        System.out.println("Iniciando mostrarArbolSintactico()");
-        
-        // Verificar que haya pasos en el historial
+        // Crear el árbol con al menos el nodo inicial
+        NodoArbol raiz;
         if (historialObservable.isEmpty()) {
-            System.out.println("No hay pasos en el historial para construir el árbol");
-            return;
+            raiz = new NodoArbol(gramatica.getSimbInicial());
+        } else {
+            raiz = construirArbolDesdeHistorial();
         }
         
-        // Construir el árbol primero
-        System.out.println("Construyendo árbol desde historial");
-        System.out.println("Número de pasos en historial: " + historialObservable.size());
-        
-        // Imprimir el historial para debug
-        for (HistorialPaso paso : historialObservable) {
-            System.out.println("Paso: " + paso.getAccion());
+        // Crear la pestaña si no existe
+        if (arbolTab == null || !tabPane.getTabs().contains(arbolTab)) {
+            arbolTab = new Tab();
+            arbolTab.setUserData("arbol_" + simulacionId);
+            arbolTab.setClosable(true);
+            
+            // Obtener el estado actual del grupo y la instancia
+            boolean hayMultiplesGrupos = TabManager.contarGruposActivos(tabPane) > 1;
+            int simulacionesEnGrupo = contarSimulacionesEnGrupo();
+            boolean mostrarInstancia = simulacionesEnGrupo > 1;
+            
+            // Construir el título con el número de grupo e instancia correctos
+            String tituloBase = bundle.getString("simulacionfinal.tab.arbol");
+            arbolTab.setText(construirTitulo(tituloBase, hayMultiplesGrupos, mostrarInstancia));
+            
+            // Generar el código DOT para Graphviz
+            String dotCode = generarDotDesdeArbol(raiz);
+            
+            try {
+                // Crear un archivo temporal para el código DOT
+                java.nio.file.Path dotFile = java.nio.file.Files.createTempFile("arbol_", ".dot");
+                java.nio.file.Files.write(dotFile, dotCode.getBytes());
+                
+                // Crear un archivo temporal para la imagen
+                java.nio.file.Path imgFile = java.nio.file.Files.createTempFile("arbol_", ".png");
+                
+                // Ejecutar Graphviz para generar la imagen
+                ProcessBuilder pb = new ProcessBuilder("dot", "-Tpng", dotFile.toString(), "-o", imgFile.toString());
+                Process process = pb.start();
+                process.waitFor();
+                
+                // Cargar la imagen en un ImageView
+                javafx.scene.image.Image imagen = new javafx.scene.image.Image(imgFile.toUri().toString());
+                javafx.scene.image.ImageView imageView = new javafx.scene.image.ImageView(imagen);
+                imageView.setPreserveRatio(true);
+                imageView.setFitWidth(800);
+                
+                // Crear un ScrollPane para permitir zoom y scroll
+                ScrollPane scrollPane = new ScrollPane();
+                scrollPane.setContent(imageView);
+                scrollPane.setFitToWidth(true);
+                scrollPane.setFitToHeight(true);
+                
+                // Añadir controles de zoom
+                Slider zoomSlider = new Slider(0.5, 2, 1);
+                zoomSlider.setShowTickLabels(true);
+                zoomSlider.setShowTickMarks(true);
+                
+                // Vincular el zoom del slider con la escala de la imagen
+                zoomSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
+                    imageView.setScaleX(newVal.doubleValue());
+                    imageView.setScaleY(newVal.doubleValue());
+                });
+                
+                // Crear contenedor para la imagen y el slider
+                VBox contenedor = new VBox(10);
+                contenedor.setPadding(new Insets(10));
+                contenedor.setAlignment(Pos.CENTER);
+                contenedor.getChildren().addAll(scrollPane, zoomSlider);
+                VBox.setVgrow(scrollPane, Priority.ALWAYS);
+                
+                // Establecer el contenido de la pestaña
+                arbolTab.setContent(contenedor);
+                
+                // Buscar la pestaña de simulación padre y añadir la pestaña del árbol después de ella
+                int insertPosition = -1;
+                for (int i = 0; i < tabPane.getTabs().size(); i++) {
+                    Tab tab = tabPane.getTabs().get(i);
+                    if (tab.getContent() == this) {
+                        // Encontrar la última pestaña relacionada con esta simulación
+                        int lastRelatedTab = i;
+                        for (int j = i + 1; j < tabPane.getTabs().size(); j++) {
+                            Tab nextTab = tabPane.getTabs().get(j);
+                            if (nextTab.getUserData() != null && 
+                                (nextTab.getUserData().toString().equals("derivacion_" + simulacionId) ||
+                                 nextTab.getUserData().toString().equals("arbol_" + simulacionId))) {
+                                lastRelatedTab = j;
+                            } else {
+                                break;
+                            }
+                        }
+                        insertPosition = lastRelatedTab + 1;
+                        break;
+                    }
+                }
+                
+                // Añadir la pestaña en la posición correcta
+                if (insertPosition >= 0) {
+                    tabPane.getTabs().add(insertPosition, arbolTab);
+                } else {
+                    tabPane.getTabs().add(arbolTab);
+                }
+
+                // Añadir listener para cuando se cierre la pestaña
+                arbolTab.setOnClosed(e -> arbolTab = null);
+                
+                // Limpiar archivos temporales
+                java.nio.file.Files.deleteIfExists(dotFile);
+                java.nio.file.Files.deleteIfExists(imgFile);
+                
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         
-        NodoArbol raiz = construirArbolDesdeHistorial();
-        System.out.println("Árbol construido");
-        
-        // Crear la pestaña
-        System.out.println("Creando nueva pestaña de árbol");
-        Tab arbolTab = new Tab();
-        arbolTab.setUserData("arbol_" + simulacionId);
-        arbolTab.setClosable(true);
-        
-        // Obtener el estado actual del grupo y la instancia
-        boolean hayMultiplesGrupos = TabManager.contarGruposActivos(tabPane) > 1;
-        int simulacionesEnGrupo = contarSimulacionesEnGrupo();
-        boolean mostrarInstancia = simulacionesEnGrupo > 1;
-        
-        // Construir el título con el número de grupo e instancia correctos
-        String tituloBase = bundle.getString("simulacionfinal.tab.arbol");
-        arbolTab.setText(construirTitulo(tituloBase, hayMultiplesGrupos, mostrarInstancia));
-        
-        // Generar el código DOT para Graphviz
-        String dotCode = generarDotDesdeArbol(raiz);
-        
-        try {
-            // Crear un archivo temporal para el código DOT
-            java.nio.file.Path dotFile = java.nio.file.Files.createTempFile("arbol_", ".dot");
-            java.nio.file.Files.write(dotFile, dotCode.getBytes());
-            
-            // Crear un archivo temporal para la imagen
-            java.nio.file.Path imgFile = java.nio.file.Files.createTempFile("arbol_", ".png");
-            
-            // Ejecutar Graphviz para generar la imagen
-            ProcessBuilder pb = new ProcessBuilder("dot", "-Tpng", dotFile.toString(), "-o", imgFile.toString());
-            Process process = pb.start();
-            process.waitFor();
-            
-            // Cargar la imagen en un ImageView
-            javafx.scene.image.Image imagen = new javafx.scene.image.Image(imgFile.toUri().toString());
-            javafx.scene.image.ImageView imageView = new javafx.scene.image.ImageView(imagen);
-            imageView.setPreserveRatio(true);
-            imageView.setFitWidth(800); // Ajustar según necesidad
-            
-            // Crear un ScrollPane para permitir zoom y scroll
-            ScrollPane scrollPane = new ScrollPane();
-            scrollPane.setContent(imageView);
-            scrollPane.setFitToWidth(true);
-            scrollPane.setFitToHeight(true);
-            
-            // Añadir controles de zoom
-            Slider zoomSlider = new Slider(0.5, 2, 1);
-            zoomSlider.setShowTickLabels(true);
-            zoomSlider.setShowTickMarks(true);
-            
-            // Vincular el zoom del slider con la escala de la imagen
-            zoomSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
-                imageView.setScaleX(newVal.doubleValue());
-                imageView.setScaleY(newVal.doubleValue());
-            });
-            
-            // Crear contenedor para la imagen y el slider
-            VBox contenedor = new VBox(10);
-            contenedor.setPadding(new Insets(10));
-            contenedor.setAlignment(Pos.CENTER);
-            contenedor.getChildren().addAll(scrollPane, zoomSlider);
-            VBox.setVgrow(scrollPane, Priority.ALWAYS);
-            
-            // Establecer el contenido de la pestaña
-            arbolTab.setContent(contenedor);
-            
-            // Añadir la pestaña y seleccionarla
-            tabPane.getTabs().add(arbolTab);
-            tabPane.getSelectionModel().select(arbolTab);
-            
-            // Limpiar archivos temporales
-            java.nio.file.Files.deleteIfExists(dotFile);
-            java.nio.file.Files.deleteIfExists(imgFile);
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println("Error al generar el árbol: " + e.getMessage());
-        }
+        // Seleccionar la pestaña
+        tabPane.getSelectionModel().select(arbolTab);
     }
 
     private String generarDotDesdeArbol(NodoArbol raiz) {
@@ -1058,29 +1172,19 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
 
     // Construir el árbol sintáctico a partir del historial de pasos
     private NodoArbol construirArbolDesdeHistorial() {
-        System.out.println("Iniciando construcción del árbol");
         // Creamos la raíz con el símbolo inicial
         NodoArbol raiz = new NodoArbol(gramatica.getSimbInicial());
-        System.out.println("Símbolo inicial (raíz): " + raiz.valor);
         
         // Crear una copia del historial para no modificar el original
         List<HistorialPaso> historialCopia = new ArrayList<>(historialObservable);
         construirRecursivo(raiz, historialCopia);
-        
-        // Debug: imprimir el árbol resultante
-        System.out.println("Árbol construido:");
-        imprimirArbol(raiz, "");
         
         return raiz;
     }
 
     // Recursivo: expande el primer no terminal de cada producción
     private void construirRecursivo(NodoArbol nodo, List<HistorialPaso> pasos) {
-        System.out.println("construirRecursivo para nodo: " + nodo.valor);
-        System.out.println("Pasos restantes: " + pasos.size());
-        
         if (pasos.isEmpty()) {
-            System.out.println("No hay más pasos para procesar");
             return;
         }
         
@@ -1088,7 +1192,6 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         for (int i = 0; i < pasos.size(); i++) {
             HistorialPaso paso = pasos.get(i);
             String accion = paso.getAccion();
-            System.out.println("Analizando paso " + i + ": " + accion);
             
             // Si es una producción (contiene una flecha)
             if (accion.contains("→")) {
@@ -1098,12 +1201,8 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
                 String izquierda = partes[0].trim();
                 String derecha = partes[1].trim();
                 
-                System.out.println("Encontrada producción limpia: " + izquierda + " → " + derecha);
-                
                 // Si esta producción corresponde al nodo actual
                 if (izquierda.equals(nodo.valor)) {
-                    System.out.println("Producción corresponde al nodo actual");
-                    
                     // Dividir la parte derecha en símbolos
                     String[] simbolos = derecha.split("\\s+");
                     
@@ -1112,13 +1211,11 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
                         if (!simbolo.isEmpty()) {
                             NodoArbol hijo = new NodoArbol(simbolo);
                             nodo.hijos.add(hijo);
-                            System.out.println("Añadido hijo: " + simbolo);
                             
                             // Si el hijo es no terminal, procesarlo recursivamente
                             if (!esTerminal(simbolo)) {
                                 // Crear una nueva lista con los pasos restantes
                                 List<HistorialPaso> pasosRestantes = new ArrayList<>(pasos.subList(i + 1, pasos.size()));
-                                System.out.println("Procesando recursivamente hijo no terminal: " + simbolo);
                                 construirRecursivo(hijo, pasosRestantes);
                             }
                         }
@@ -1130,14 +1227,68 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
                 }
             }
         }
-        System.out.println("No se encontró producción para el nodo: " + nodo.valor);
     }
 
-    // Método auxiliar para imprimir el árbol
-    private void imprimirArbol(NodoArbol nodo, String prefijo) {
-        System.out.println(prefijo + "└─ " + nodo.valor);
-        for (NodoArbol hijo : nodo.hijos) {
-            imprimirArbol(hijo, prefijo + "   ");
+    /**
+     * Actualiza el contenido de las pestañas hijas activas (derivación y árbol).
+     */
+    private void actualizarPestañasHijas() {
+        // Actualizar pestaña de derivación si está activa
+        if (derivacionTab != null && tabPane.getTabs().contains(derivacionTab)) {
+            TextArea areaDerivacion = (TextArea) derivacionTab.getContent();
+            StringBuilder derivacion = new StringBuilder();
+            for (HistorialPaso paso : historialObservable) {
+                derivacion.append(paso.getAccion()).append("\n");
+            }
+            areaDerivacion.setText(derivacion.toString());
+        }
+
+        // Actualizar pestaña de árbol si está activa
+        if (arbolTab != null && tabPane.getTabs().contains(arbolTab)) {
+            // Construir el nuevo árbol
+            NodoArbol raiz;
+            if (historialObservable.isEmpty()) {
+                raiz = new NodoArbol(gramatica.getSimbInicial());
+            } else {
+                raiz = construirArbolDesdeHistorial();
+            }
+
+            // Generar el código DOT para Graphviz
+            String dotCode = generarDotDesdeArbol(raiz);
+            
+            try {
+                // Crear un archivo temporal para el código DOT
+                java.nio.file.Path dotFile = java.nio.file.Files.createTempFile("arbol_", ".dot");
+                java.nio.file.Files.write(dotFile, dotCode.getBytes());
+                
+                // Crear un archivo temporal para la imagen
+                java.nio.file.Path imgFile = java.nio.file.Files.createTempFile("arbol_", ".png");
+                
+                // Ejecutar Graphviz para generar la imagen
+                ProcessBuilder pb = new ProcessBuilder("dot", "-Tpng", dotFile.toString(), "-o", imgFile.toString());
+                Process process = pb.start();
+                process.waitFor();
+                
+                // Cargar la imagen en un ImageView
+                javafx.scene.image.Image imagen = new javafx.scene.image.Image(imgFile.toUri().toString());
+                javafx.scene.image.ImageView imageView = new javafx.scene.image.ImageView(imagen);
+                imageView.setPreserveRatio(true);
+                imageView.setFitWidth(800);
+                
+                // Obtener el contenedor VBox existente y el ScrollPane
+                VBox contenedor = (VBox) arbolTab.getContent();
+                ScrollPane scrollPane = (ScrollPane) contenedor.getChildren().get(0);
+                
+                // Actualizar el contenido del ScrollPane
+                scrollPane.setContent(imageView);
+                
+                // Limpiar archivos temporales
+                java.nio.file.Files.deleteIfExists(dotFile);
+                java.nio.file.Files.deleteIfExists(imgFile);
+                
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 } 
