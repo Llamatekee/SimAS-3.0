@@ -79,7 +79,8 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
     private int numeroSimulacion;
     private String grupoId;
     private int numeroGrupo;
-    public String simulacionId; // Identificador único para esta simulación
+    private int numeroInstancia = 1;
+    public final String simulacionId;
 
     // Clase para almacenar el estado de la simulación
     private static class EstadoSimulacion {
@@ -135,7 +136,7 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         });
         
         cargarFXML();
-        actualizarTitulosPestañasInterno(TabManager.contarGruposActivos(tabPane) > 1);
+        actualizarTitulosPestañasInterno(TabManager.contarGruposActivos(tabPane) > 1, simulacionesEnGrupo > 1);
         
         // Añadir listener para cerrar pestañas hijas
         if (tabPane != null) {
@@ -186,16 +187,21 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         this.grupoId = nuevoGrupoId;
         this.numeroGrupo = nuevoNumeroGrupo;
         
+        // Contar simulaciones en el mismo grupo para determinar si mostrar el número de instancia
+        int simulacionesEnGrupo = contarSimulacionesEnGrupo();
+        boolean mostrarInstancia = simulacionesEnGrupo > 1;
+        
         // Forzar actualización de títulos
-        actualizarTitulosPestañas(nuevoNumeroGrupo, hayMultiplesGrupos);
+        actualizarTitulosPestañas(nuevoNumeroGrupo, hayMultiplesGrupos, numeroInstancia, mostrarInstancia);
     }
 
     /**
      * Actualiza los títulos de las pestañas con el número de grupo especificado.
      */
-    public void actualizarTitulosPestañas(int numeroGrupo, boolean mostrarGrupo) {
+    public void actualizarTitulosPestañas(int numeroGrupo, boolean mostrarGrupo, int numeroInstancia, boolean mostrarInstancia) {
         this.numeroGrupo = numeroGrupo;
-        actualizarTitulosPestañasInterno(mostrarGrupo);
+        this.numeroInstancia = numeroInstancia;
+        actualizarTitulosPestañasInterno(mostrarGrupo, mostrarInstancia);
     }
 
     /**
@@ -203,67 +209,70 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
      */
     public void actualizarTitulosPestañas() {
         if (tabPane == null || simuladorPadreId == null) return;
-        actualizarTitulosPestañasInterno(TabManager.contarGruposActivos(tabPane) > 1);
+        
+        boolean hayMultiplesGrupos = TabManager.contarGruposActivos(tabPane) > 1;
+        int simulacionesEnGrupo = contarSimulacionesEnGrupo();
+        boolean mostrarInstancia = simulacionesEnGrupo > 1;
+        
+        actualizarTitulosPestañasInterno(hayMultiplesGrupos, mostrarInstancia);
     }
 
     /**
-     * Implementación interna de la actualización de títulos.
+     * Actualiza los títulos de las pestañas relacionadas con esta simulación.
      */
-    private void actualizarTitulosPestañasInterno(boolean mostrarGrupo) {
-        if (tabPane == null) return;
-        
-        try {
-            // Contar simulaciones en el mismo grupo
-            int simulacionesEnGrupo = contarSimulacionesEnGrupo();
-            
-            // Actualizar pestaña de simulación
-            for (Tab tab : tabPane.getTabs()) {
-                if (tab.getContent() == this) {
-                    String tituloBase = bundle.getString("simulador.paso6.simulacion.final");
-                    String nuevoTitulo;
-                    if (simulacionesEnGrupo > 1) {
-                        nuevoTitulo = mostrarGrupo ? 
-                            numeroGrupo + "-" + tituloBase + " " + numeroSimulacion :
-                            tituloBase + " " + numeroSimulacion;
-                    } else {
-                        nuevoTitulo = mostrarGrupo ? 
-                            numeroGrupo + "-" + tituloBase :
-                            tituloBase;
-                    }
-                    tab.setText(nuevoTitulo);
-                    break;
-                }
+    private void actualizarTitulosPestañasInterno(boolean mostrarGrupo, boolean mostrarInstancia) {
+        // Buscar la pestaña de simulación y actualizarla
+        for (Tab tab : tabPane.getTabs()) {
+            if (tab.getContent() == this) {
+                String tituloBase = bundle.getString("simulador.paso6.simulacion");
+                tab.setText(construirTitulo(tituloBase, mostrarGrupo, mostrarInstancia));
+                break;
             }
-            
-            // Actualizar pestañas hijas (derivación y árbol)
-            for (Tab tab : tabPane.getTabs()) {
-                if (tab.getUserData() != null) {
-                    String userData = tab.getUserData().toString();
-                    if (userData.startsWith("derivacion_") && userData.endsWith(simulacionId)) {
-                        String tituloBase = bundle.getString("simulacionfinal.tab.derivacion");
-                        String nuevoTitulo = mostrarGrupo ? 
-                            numeroGrupo + "-" + tituloBase + " " + numeroSimulacion :
-                            tituloBase + " " + numeroSimulacion;
-                        tab.setText(nuevoTitulo);
-                    } else if (userData.startsWith("arbol_") && userData.endsWith(simulacionId)) {
-                        String tituloBase = bundle.getString("simulacionfinal.tab.arbol");
-                        String nuevoTitulo = mostrarGrupo ? 
-                            numeroGrupo + "-" + tituloBase + " " + numeroSimulacion :
-                            tituloBase + " " + numeroSimulacion;
-                        tab.setText(nuevoTitulo);
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
+        
+        // Buscar y actualizar las pestañas de derivación y árbol
+        for (Tab tab : tabPane.getTabs()) {
+            if (tab.getUserData() != null) {
+                String userData = tab.getUserData().toString();
+                
+                // Actualizar pestaña de derivación
+                if (userData.equals("derivacion_" + simulacionId)) {
+                    String tituloBase = bundle.getString("simulacionfinal.tab.derivacion");
+                    tab.setText(construirTitulo(tituloBase, mostrarGrupo, mostrarInstancia));
+                }
+                // Actualizar pestaña de árbol
+                else if (userData.equals("arbol_" + simulacionId)) {
+                    String tituloBase = bundle.getString("simulacionfinal.tab.arbol");
+                    tab.setText(construirTitulo(tituloBase, mostrarGrupo, mostrarInstancia));
+                }
+            }
+        }
+    }
+
+    /**
+     * Construye el título de una pestaña basado en el estado actual.
+     */
+    private String construirTitulo(String tituloBase, boolean mostrarGrupo, boolean mostrarInstancia) {
+        StringBuilder titulo = new StringBuilder();
+        
+        if (mostrarGrupo) {
+            titulo.append(numeroGrupo).append("-");
+        }
+        
+        titulo.append(tituloBase);
+        
+        if (mostrarInstancia) {
+            titulo.append(" (").append(numeroInstancia).append(")");
+        }
+        
+        return titulo.toString();
     }
 
     /**
      * Reasigna los números de las simulaciones en orden secuencial.
      */
-    public static void reasignarNumerosSimulaciones(TabPane tabPane) {
-        if (tabPane == null) return;
+    private void reasignarNumerosSimulaciones(TabPane tabPane) {
+        if (tabPane == null || simuladorPadreId == null) return;
         
         // Agrupar simulaciones por simulador padre
         Map<String, List<SimulacionFinal>> simulacionesPorSimulador = new HashMap<>();
@@ -291,12 +300,13 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
             
             // Reasignar números
             for (int i = 0; i < simulaciones.size(); i++) {
-                simulaciones.get(i).numeroGrupo = i + 1;
-                simulaciones.get(i).actualizarTitulosPestañas();
+                SimulacionFinal sim = simulaciones.get(i);
+                sim.setNumeroInstancia(i + 1);
+                sim.actualizarTitulosPestañas();
             }
         }
     }
-
+    
     private static Tab findTabForSimulacion(TabPane tabPane, SimulacionFinal sim) {
         for (Tab tab : tabPane.getTabs()) {
             if (tab.getContent() == sim) {
@@ -648,147 +658,159 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         historialObservable.add(new HistorialPaso(String.valueOf(pasoActual), pilaStr, entradaStr, accion));
     }
 
+    /**
+     * Muestra la derivación de la simulación actual.
+     */
     private void mostrarDerivacion() {
+        // Buscar si ya existe una pestaña de derivación
+        Tab derivacionTab = null;
+        for (Tab tab : tabPane.getTabs()) {
+            if (tab.getUserData() != null && 
+                tab.getUserData().toString().equals("derivacion_" + simulacionId)) {
+                derivacionTab = tab;
+                break;
+            }
+        }
+        
+        // Si no existe, crear una nueva
+        if (derivacionTab == null) {
+            derivacionTab = new Tab();
+            derivacionTab.setUserData("derivacion_" + simulacionId);
+            derivacionTab.setClosable(true);
+            
+            // Obtener el estado actual del grupo y la instancia
+            boolean hayMultiplesGrupos = TabManager.contarGruposActivos(tabPane) > 1;
+            int simulacionesEnGrupo = contarSimulacionesEnGrupo();
+            boolean mostrarInstancia = simulacionesEnGrupo > 1;
+            
+            // Construir el título con el número de grupo e instancia correctos
+            String tituloBase = bundle.getString("simulacionfinal.tab.derivacion");
+            derivacionTab.setText(construirTitulo(tituloBase, hayMultiplesGrupos, mostrarInstancia));
+            
+            // Crear el contenido
+            TextArea areaDerivacion = new TextArea();
+            areaDerivacion.setEditable(false);
+            areaDerivacion.setWrapText(true);
+            
+            // Generar la derivación
+            StringBuilder derivacion = new StringBuilder();
+            for (HistorialPaso paso : historialObservable) {
+                derivacion.append(paso.getAccion()).append("\n");
+            }
+            areaDerivacion.setText(derivacion.toString());
+            
+            derivacionTab.setContent(areaDerivacion);
+            tabPane.getTabs().add(derivacionTab);
+        }
+        
+        // Seleccionar la pestaña
+        tabPane.getSelectionModel().select(derivacionTab);
+    }
+
+    /**
+     * Muestra el contenido del árbol en una pestaña existente.
+     */
+    private void mostrarArbol(NodoArbol raiz) {
         try {
-            // Obtener el simuladorId del padre
-            String simuladorId = null;
+            // Crear el contenido del árbol
+            VBox layout = new VBox(10);
+            layout.setPadding(new javafx.geometry.Insets(20));
+            layout.setAlignment(javafx.geometry.Pos.TOP_LEFT);
+            layout.setStyle("-fx-background-color: white;");
+            
+            Label titulo = new Label(bundle.getString("simulacionfinal.tab.arbol"));
+            titulo.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #3498DB;");
+            
+            // Crear la imagen del árbol
+            javafx.scene.image.ImageView imageView = new javafx.scene.image.ImageView();
+            imageView.setFitWidth(800);
+            imageView.setPreserveRatio(true);
+            imageView.setSmooth(true);
+            
+            // Generar la imagen del árbol y convertirla a Image de JavaFX
+            BufferedImage bufferedImage = generarImagenArbol(raiz);
+            javafx.scene.image.Image fxImage = SwingFXUtils.toFXImage(bufferedImage, null);
+            imageView.setImage(fxImage);
+            
+            layout.getChildren().addAll(titulo, imageView);
+            
+            // Buscar la pestaña del árbol
             for (Tab tab : tabPane.getTabs()) {
-                if (tab.getUserData() != null && tab.getUserData().toString().startsWith("simulador_")) {
-                    simuladorId = tab.getUserData().toString();
+                if (tab.getUserData() != null && 
+                    tab.getUserData().toString().equals("arbol_" + simulacionId)) {
+                    tab.setContent(layout);
                     break;
                 }
-            }
-            
-            if (simuladorId != null) {
-                // Obtener el número de grupo
-                int numeroGrupo = TabManager.obtenerNumeroGrupo(tabPane, simuladorId);
-                String tituloBase = bundle.getString("simulacionfinal.tab.derivacion");
-                String tituloDerivacion = numeroGrupo > 0 ? 
-                    numeroGrupo + "-" + tituloBase + " " + numeroGrupo :
-                    tituloBase + " " + numeroGrupo;
-                
-                // Buscar la pestaña de simulación actual
-                Tab simulacionTab = null;
-                for (Tab tab : tabPane.getTabs()) {
-                    if (tab.getContent() == this) {
-                        simulacionTab = tab;
-                        break;
-                    }
-                }
-                
-                if (simulacionTab == null) return;
-                
-                // Buscar si ya existe una pestaña de derivación
-                Tab tabDerivacion = null;
-                for (Tab tab : tabPane.getTabs()) {
-                    if (tab.getUserData() != null && 
-                        tab.getUserData().toString().equals("derivacion_" + simulacionId)) {
-                        tabDerivacion = tab;
-                        break;
-                    }
-                }
-                
-                // Si no existe, crear una nueva
-                if (tabDerivacion == null) {
-                    final Tab newTab = new Tab(tituloDerivacion);
-                    newTab.setUserData("derivacion_" + simulacionId);
-                    newTab.setClosable(true);
-                    newTab.setOnCloseRequest(e -> {
-                        e.consume();
-                        tabPane.getTabs().remove(newTab);
-                    });
-                    
-                    // Encontrar la posición correcta para insertar
-                    int insertPos = tabPane.getTabs().indexOf(simulacionTab) + 1;
-                    
-                    // Si hay un árbol sintáctico después de la simulación, insertar antes
-                    for (Tab tab : tabPane.getTabs()) {
-                        if (tab.getUserData() != null && 
-                            tab.getUserData().toString().equals("arbol_" + simulacionId)) {
-                            insertPos = tabPane.getTabs().indexOf(tab);
-                            break;
-                        }
-                    }
-                    
-                    tabPane.getTabs().add(insertPos, newTab);
-                    tabDerivacion = newTab;
-                }
-                
-                // Crear el contenido de la derivación
-                VBox layout = new VBox(10);
-                layout.setPadding(new javafx.geometry.Insets(20));
-                layout.setAlignment(javafx.geometry.Pos.TOP_LEFT);
-                layout.setStyle("-fx-background-color: white;");
-                
-                Label titulo = new Label(bundle.getString("simulacionfinal.tab.derivacion"));
-                titulo.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #3498DB;");
-                
-                TextArea areaDerivacion = new TextArea();
-                areaDerivacion.setEditable(false);
-                areaDerivacion.setWrapText(true);
-                areaDerivacion.setStyle("-fx-font-family: monospace; -fx-font-size: 14px;");
-                areaDerivacion.setPrefRowCount(20);
-                
-                // Generar la derivación
-                StringBuilder derivacion = new StringBuilder();
-                for (int i = 0; i < historialObservable.size(); i++) {
-                    HistorialPaso paso = historialObservable.get(i);
-                    derivacion.append("Paso ").append(i + 1).append(":\n");
-                    derivacion.append("Pila: ").append(paso.getPila()).append("\n");
-                    derivacion.append("Entrada: ").append(paso.getEntrada()).append("\n");
-                    derivacion.append("Acción: ").append(paso.getAccion()).append("\n\n");
-                }
-                
-                areaDerivacion.setText(derivacion.toString());
-                
-                layout.getChildren().addAll(titulo, areaDerivacion);
-                tabDerivacion.setContent(layout);
-                tabDerivacion.setText(tituloDerivacion);
-                tabPane.getSelectionModel().select(tabDerivacion);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private void mostrarArbolSintactico() {
-        try {
-            // 1. Construir el árbol sintáctico como estructura de nodos
-            NodoArbol raiz = construirArbolDesdeHistorial();
-            // 2. Generar el código DOT
-            String dot = generarDotDesdeArbol(raiz);
-            // 3. Guardar DOT en archivo temporal
-            File dotFile = File.createTempFile("arbol_sintactico", ".dot");
-            File imgFile = File.createTempFile("arbol_sintactico", ".png");
-            try (java.io.FileWriter fw = new java.io.FileWriter(dotFile)) {
-                fw.write(dot);
-            }
-            // 4. Ejecutar Graphviz para generar la imagen
-            ProcessBuilder pb = new ProcessBuilder("dot", "-Tpng", dotFile.getAbsolutePath(), "-o", imgFile.getAbsolutePath());
-            pb.start().waitFor();
-            // 5. Mostrar la imagen en una pestaña
-            javafx.scene.image.Image img = new javafx.scene.image.Image(imgFile.toURI().toString());
-            javafx.scene.image.ImageView imageView = new javafx.scene.image.ImageView(img);
-            imageView.setPreserveRatio(true);
-            imageView.setFitWidth(700);
-            imageView.setFitHeight(700);
-            VBox layout = new VBox(15);
-            layout.setPadding(new Insets(40, 0, 0, 0));
-            layout.setAlignment(Pos.TOP_CENTER);
-            String tituloArbol = bundle.getString("simulacionfinal.tab.arbol") + " " + numeroGrupo;
-            Label labelTitulo = new Label(tituloArbol);
-            labelTitulo.setStyle(
-                "-fx-font-size: 30px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-text-fill: #3498db;" +
-                "-fx-padding: 0 0 32 0;"
-            );
-            layout.getChildren().addAll(labelTitulo, imageView);
+    private BufferedImage generarImagenArbol(NodoArbol raiz) {
+        // Implementa la lógica para generar una imagen del árbol a partir del nodo raíz
+        // Puedes usar bibliotecas como JavaFX o Swing para crear la imagen
+        // Aquí se usa un ejemplo simple con JavaFX
+        javafx.scene.image.WritableImage writableImage = new javafx.scene.image.WritableImage(800, 800);
+        javafx.scene.image.PixelWriter pixelWriter = writableImage.getPixelWriter();
+        generarImagenRec(raiz, 0, 0, 800, 800, pixelWriter);
+        return SwingFXUtils.fromFXImage(writableImage, null);
+    }
 
-            mostrarArbol(raiz);
-        } catch (Exception e) {
-            e.printStackTrace();
+    private void generarImagenRec(NodoArbol nodo, int x, int y, int width, int height, javafx.scene.image.PixelWriter pixelWriter) {
+        if (nodo == null) return;
+        
+        // Dibujar el nodo actual
+        int color = 0xFF000000; // Negro
+        pixelWriter.setArgb(x, y, color);
+        
+        // Dibujar los hijos
+        int childWidth = width / (nodo.hijos.size() + 1);
+        for (int i = 0; i < nodo.hijos.size(); i++) {
+            int childX = x + (i + 1) * childWidth;
+            int childY = y + 50;
+            generarImagenRec(nodo.hijos.get(i), childX, childY, childWidth, height - 50, pixelWriter);
         }
+    }
+
+    /**
+     * Muestra el árbol sintáctico de la simulación actual.
+     */
+    private void mostrarArbolSintactico() {
+        // Buscar si ya existe una pestaña de árbol
+        Tab arbolTab = null;
+        for (Tab tab : tabPane.getTabs()) {
+            if (tab.getUserData() != null && 
+                tab.getUserData().toString().equals("arbol_" + simulacionId)) {
+                arbolTab = tab;
+                break;
+            }
+        }
+        
+        // Si no existe, crear una nueva
+        if (arbolTab == null) {
+            arbolTab = new Tab();
+            arbolTab.setUserData("arbol_" + simulacionId);
+            arbolTab.setClosable(true);
+            
+            // Obtener el estado actual del grupo y la instancia
+            boolean hayMultiplesGrupos = TabManager.contarGruposActivos(tabPane) > 1;
+            int simulacionesEnGrupo = contarSimulacionesEnGrupo();
+            boolean mostrarInstancia = simulacionesEnGrupo > 1;
+            
+            // Construir el título con el número de grupo e instancia correctos
+            String tituloBase = bundle.getString("simulacionfinal.tab.arbol");
+            arbolTab.setText(construirTitulo(tituloBase, hayMultiplesGrupos, mostrarInstancia));
+            
+            // Construir el árbol y mostrarlo
+            NodoArbol raiz = construirArbolDesdeHistorial();
+            mostrarArbol(raiz);
+            
+            tabPane.getTabs().add(arbolTab);
+        }
+        
+        // Seleccionar la pestaña
+        tabPane.getSelectionModel().select(arbolTab);
     }
 
     // Nodo para el árbol sintáctico
@@ -902,128 +924,6 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         actualizarTitulosPestañas();
     }
 
-    private void mostrarArbol(NodoArbol raiz) {
-        try {
-            // Obtener el simuladorId del padre
-            String simuladorId = null;
-            for (Tab tab : tabPane.getTabs()) {
-                if (tab.getUserData() != null && tab.getUserData().toString().startsWith("simulador_")) {
-                    simuladorId = tab.getUserData().toString();
-                    break;
-                }
-            }
-            
-            if (simuladorId != null) {
-                // Obtener el número de grupo
-                int numeroGrupo = TabManager.obtenerNumeroGrupo(tabPane, simuladorId);
-                String tituloBase = bundle.getString("simulacionfinal.tab.arbol");
-                String tituloArbol = numeroGrupo > 0 ? 
-                    numeroGrupo + "-" + tituloBase + " " + numeroGrupo :
-                    tituloBase + " " + numeroGrupo;
-                
-                // Buscar la pestaña de simulación actual
-                Tab simulacionTab = null;
-                for (Tab tab : tabPane.getTabs()) {
-                    if (tab.getContent() == this) {
-                        simulacionTab = tab;
-                        break;
-                    }
-                }
-                
-                if (simulacionTab == null) return;
-                
-                // Buscar si ya existe una pestaña de árbol
-                Tab tabArbol = null;
-                for (Tab tab : tabPane.getTabs()) {
-                    if (tab.getUserData() != null && 
-                        tab.getUserData().toString().equals("arbol_" + simulacionId)) {
-                        tabArbol = tab;
-                        break;
-                    }
-                }
-                
-                // Si no existe, crear una nueva
-                if (tabArbol == null) {
-                    final Tab newTab = new Tab(tituloArbol);
-                    newTab.setUserData("arbol_" + simulacionId);
-                    newTab.setClosable(true);
-                    newTab.setOnCloseRequest(e -> {
-                        e.consume();
-                        tabPane.getTabs().remove(newTab);
-                    });
-                    
-                    // Encontrar la posición correcta para insertar
-                    int insertPos = tabPane.getTabs().indexOf(simulacionTab) + 1;
-                    
-                    // Si hay una derivación después de la simulación, insertar después de ella
-                    for (Tab tab : tabPane.getTabs()) {
-                        if (tab.getUserData() != null && 
-                            tab.getUserData().toString().equals("derivacion_" + simulacionId)) {
-                            insertPos = tabPane.getTabs().indexOf(tab) + 1;
-                            break;
-                        }
-                    }
-                    
-                    tabPane.getTabs().add(insertPos, newTab);
-                    tabArbol = newTab;
-                }
-                
-                // Crear el contenido del árbol
-                VBox layout = new VBox(10);
-                layout.setPadding(new javafx.geometry.Insets(20));
-                layout.setAlignment(javafx.geometry.Pos.TOP_LEFT);
-                layout.setStyle("-fx-background-color: white;");
-                
-                Label titulo = new Label(bundle.getString("simulacionfinal.tab.arbol"));
-                titulo.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #3498DB;");
-                
-                // Crear la imagen del árbol
-                javafx.scene.image.ImageView imageView = new javafx.scene.image.ImageView();
-                imageView.setFitWidth(800);
-                imageView.setPreserveRatio(true);
-                imageView.setSmooth(true);
-                
-                // Generar la imagen del árbol y convertirla a Image de JavaFX
-                BufferedImage bufferedImage = generarImagenArbol(raiz);
-                javafx.scene.image.Image fxImage = SwingFXUtils.toFXImage(bufferedImage, null);
-                imageView.setImage(fxImage);
-                
-                layout.getChildren().addAll(titulo, imageView);
-                tabArbol.setContent(layout);
-                tabArbol.setText(tituloArbol);
-                tabPane.getSelectionModel().select(tabArbol);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private BufferedImage generarImagenArbol(NodoArbol raiz) {
-        // Implementa la lógica para generar una imagen del árbol a partir del nodo raíz
-        // Puedes usar bibliotecas como JavaFX o Swing para crear la imagen
-        // Aquí se usa un ejemplo simple con JavaFX
-        javafx.scene.image.WritableImage writableImage = new javafx.scene.image.WritableImage(800, 800);
-        javafx.scene.image.PixelWriter pixelWriter = writableImage.getPixelWriter();
-        generarImagenRec(raiz, 0, 0, 800, 800, pixelWriter);
-        return SwingFXUtils.fromFXImage(writableImage, null);
-    }
-
-    private void generarImagenRec(NodoArbol nodo, int x, int y, int width, int height, javafx.scene.image.PixelWriter pixelWriter) {
-        if (nodo == null) return;
-        
-        // Dibujar el nodo actual
-        int color = 0xFF000000; // Negro
-        pixelWriter.setArgb(x, y, color);
-        
-        // Dibujar los hijos
-        int childWidth = width / (nodo.hijos.size() + 1);
-        for (int i = 0; i < nodo.hijos.size(); i++) {
-            int childX = x + (i + 1) * childWidth;
-            int childY = y + 50;
-            generarImagenRec(nodo.hijos.get(i), childX, childY, childWidth, height - 50, pixelWriter);
-        }
-    }
-
     /**
      * Verifica si esta simulación pertenece a un simulador específico.
      * @param simuladorId El ID del simulador a verificar
@@ -1086,5 +986,13 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
 
     public int getNumeroGrupo() {
         return numeroGrupo;
+    }
+
+    public void setNumeroInstancia(int numeroInstancia) {
+        this.numeroInstancia = numeroInstancia;
+    }
+
+    public int getNumeroInstancia() {
+        return numeroInstancia;
     }
 } 

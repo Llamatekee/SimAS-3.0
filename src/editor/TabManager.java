@@ -2109,9 +2109,6 @@ public class TabManager {
         
         int nuevoNumeroGrupo = grupos.get(nuevoGrupoId);
         
-        // Lista para almacenar simulaciones que necesitan actualización
-        List<simulador.SimulacionFinal> simulacionesParaActualizar = new ArrayList<>();
-        
         // Actualizar pestañas hijas directas del simulador
         for (Tab tab : tabPane.getTabs()) {
             if (tab.getUserData() != null) {
@@ -2124,42 +2121,36 @@ public class TabManager {
             }
         }
         
-        // Actualizar simulaciones y sus pestañas relacionadas
+        // Contar simulaciones en el nuevo grupo
+        int simulacionesEnGrupo = 0;
+        Map<simulador.SimulacionFinal, Integer> ordenSimulaciones = new LinkedHashMap<>();
+        
+        // Primero recolectar todas las simulaciones en orden
         for (Tab tab : tabPane.getTabs()) {
             if (tab.getContent() instanceof simulador.SimulacionFinal) {
                 simulador.SimulacionFinal sim = (simulador.SimulacionFinal) tab.getContent();
                 if (sim.getSimuladorPadreId() != null && sim.getSimuladorPadreId().equals(simuladorId)) {
-                    // Actualizar la simulación
-                    sim.setGrupoId(nuevoGrupoId);
-                    sim.setNumeroGrupo(nuevoNumeroGrupo);
-                    simulacionesParaActualizar.add(sim);
-                    
-                    // Actualizar derivaciones y árboles
-                    for (Tab childTab : tabPane.getTabs()) {
-                        if (childTab.getUserData() != null) {
-                            String childId = childTab.getUserData().toString();
-                            if ((childId.startsWith("derivacion_") || childId.startsWith("arbol_")) &&
-                                childId.endsWith(sim.simulacionId)) {
-                                String tituloBase = childTab.getText().replaceAll("^\\d+-", ""); // Remover número anterior
-                                childTab.setText(nuevoNumeroGrupo + "-" + tituloBase);
-                            }
-                        }
-                    }
+                    ordenSimulaciones.put(sim, ++simulacionesEnGrupo);
                 }
             }
         }
         
-        // Forzar actualización inmediata de las simulaciones
-        for (simulador.SimulacionFinal sim : simulacionesParaActualizar) {
-            sim.actualizarTitulosPestañas(nuevoNumeroGrupo, true);
-        }
+        // Actualizar cada simulación con su número de instancia
+        boolean hayMultiplesGrupos = contarGruposActivos(tabPane) > 1;
+        boolean mostrarInstancia = simulacionesEnGrupo > 1;
         
-        // Forzar una actualización asíncrona como respaldo
-        javafx.application.Platform.runLater(() -> {
-            for (simulador.SimulacionFinal sim : simulacionesParaActualizar) {
-                sim.actualizarTitulosPestañas(nuevoNumeroGrupo, true);
-            }
-        });
+        for (Map.Entry<simulador.SimulacionFinal, Integer> entry : ordenSimulaciones.entrySet()) {
+            simulador.SimulacionFinal sim = entry.getKey();
+            int instancia = entry.getValue();
+            
+            // Actualizar la simulación
+            sim.setGrupoId(nuevoGrupoId);
+            sim.setNumeroGrupo(nuevoNumeroGrupo);
+            sim.setNumeroInstancia(instancia);
+            
+            // Forzar actualización de títulos
+            sim.actualizarTitulosPestañas(nuevoNumeroGrupo, hayMultiplesGrupos, instancia, mostrarInstancia);
+        }
     }
 
     /**
@@ -2198,6 +2189,25 @@ public class TabManager {
         boolean hayMultiplesGrupos = gruposActivos.size() > 1;
         
         // Primero actualizar simulaciones para que tengan los nuevos números
+        Map<String, Integer> contadorSimulacionesPorGrupo = new HashMap<>();
+        
+        // Primera pasada: contar simulaciones por grupo
+        for (Tab tab : tabPane.getTabs()) {
+            if (tab.getContent() instanceof simulador.SimulacionFinal) {
+                simulador.SimulacionFinal sim = (simulador.SimulacionFinal) tab.getContent();
+                String simuladorId = sim.getSimuladorPadreId();
+                if (simuladorId != null) {
+                    String grupoId = elementos.get(simuladorId);
+                    if (grupoId != null) {
+                        contadorSimulacionesPorGrupo.merge(grupoId, 1, Integer::sum);
+                    }
+                }
+            }
+        }
+        
+        // Segunda pasada: actualizar títulos con números de instancia
+        Map<String, Integer> contadorActualPorGrupo = new HashMap<>();
+        
         for (Tab tab : tabPane.getTabs()) {
             if (tab.getContent() instanceof simulador.SimulacionFinal) {
                 simulador.SimulacionFinal sim = (simulador.SimulacionFinal) tab.getContent();
@@ -2207,10 +2217,15 @@ public class TabManager {
                     if (grupoId != null) {
                         Integer numero = grupos.get(grupoId);
                         if (numero != null) {
+                            // Incrementar contador de instancia para este grupo
+                            int instancia = contadorActualPorGrupo.merge(grupoId, 1, Integer::sum);
+                            boolean mostrarInstancia = contadorSimulacionesPorGrupo.get(grupoId) > 1;
+                            
+                            // Actualizar simulación con ambos números
                             sim.setGrupoId(grupoId);
                             sim.setNumeroGrupo(numero);
-                            // Forzar actualización inmediata
-                            sim.actualizarTitulosPestañas(numero, hayMultiplesGrupos);
+                            sim.setNumeroInstancia(instancia);
+                            sim.actualizarTitulosPestañas(numero, hayMultiplesGrupos, instancia, mostrarInstancia);
                         }
                     }
                 }
@@ -2240,24 +2255,5 @@ public class TabManager {
                 }
             }
         }
-        
-        // Forzar una actualización asíncrona como respaldo
-        javafx.application.Platform.runLater(() -> {
-            for (Tab tab : tabPane.getTabs()) {
-                if (tab.getContent() instanceof simulador.SimulacionFinal) {
-                    simulador.SimulacionFinal sim = (simulador.SimulacionFinal) tab.getContent();
-                    String simuladorId = sim.getSimuladorPadreId();
-                    if (simuladorId != null) {
-                        String grupoId = elementos.get(simuladorId);
-                        if (grupoId != null) {
-                            Integer numero = grupos.get(grupoId);
-                            if (numero != null) {
-                                sim.actualizarTitulosPestañas(numero, hayMultiplesGrupos);
-                            }
-                        }
-                    }
-                }
-            }
-        });
     }
 } 
