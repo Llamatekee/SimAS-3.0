@@ -270,12 +270,49 @@ public class SecondaryWindow extends EditorWindow {
             String parentId = parentTab.getUserData().toString();
             List<Tab> childTabs = new ArrayList<>();
             
-            // Buscar todas las pestañas hijas
-            for (Tab tab : new ArrayList<>(sourceTabPane.getTabs())) {
-                if (tab.getUserData() != null) {
-                    String childId = tab.getUserData().toString();
-                    if (TabManager.isPestañaHijaDeElemento(childId, parentId)) {
-                        childTabs.add(tab);
+            // Si es un simulador, recolectar sus pestañas relacionadas
+            if (parentId.startsWith("simulador_")) {
+                // Recolectar pestañas hijas directas (gramática y funciones de error)
+                for (Tab tab : new ArrayList<>(sourceTabPane.getTabs())) {
+                    if (tab.getUserData() != null) {
+                        String childId = tab.getUserData().toString();
+                        if (childId.equals("gramatica_" + parentId) || 
+                            childId.equals("funciones_error_" + parentId)) {
+                            childTabs.add(tab);
+                        }
+                    }
+                }
+                
+                // Recolectar simulaciones y sus pestañas relacionadas
+                for (Tab tab : new ArrayList<>(sourceTabPane.getTabs())) {
+                    if (tab.getContent() instanceof simulador.SimulacionFinal) {
+                        simulador.SimulacionFinal sim = (simulador.SimulacionFinal) tab.getContent();
+                        if (sim.getSimuladorPadreId() != null && sim.getSimuladorPadreId().equals(parentId)) {
+                            // Añadir la simulación
+                            childTabs.add(tab);
+                            
+                            // Buscar sus derivaciones y árboles
+                            for (Tab childTab : new ArrayList<>(sourceTabPane.getTabs())) {
+                                if (childTab.getUserData() != null) {
+                                    String childId = childTab.getUserData().toString();
+                                    if ((childId.startsWith("derivacion_") || childId.startsWith("arbol_")) &&
+                                        childId.endsWith(sim.simulacionId)) {
+                                        childTabs.add(childTab);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            // Si es un editor, recolectar sus pestañas hijas normales
+            else if (parentId.startsWith("editor_")) {
+                for (Tab tab : new ArrayList<>(sourceTabPane.getTabs())) {
+                    if (tab.getUserData() != null) {
+                        String childId = tab.getUserData().toString();
+                        if (TabManager.isPestañaHijaDeElemento(childId, parentId)) {
+                            childTabs.add(tab);
+                        }
                     }
                 }
             }
@@ -286,40 +323,18 @@ public class SecondaryWindow extends EditorWindow {
             }
         }
 
-        // Limpiar las referencias del grupo en la ventana origen
+        // Limpiar las relaciones en la ventana origen
         for (String elementId : elementIds) {
             TabManager.eliminarElementoDeGrupo(sourceTabPane, elementId, grupoId);
         }
 
-        // Mantener el mismo grupoId en la ventana destino
-        for (String elementId : elementIds) {
-            TabManager.asignarElementoAGrupo(localTabPane, elementId, grupoId);
-            
-            // Si es un simulador, actualizar sus simulaciones
-            if (elementId.startsWith("simulador_")) {
-                // Buscar simulaciones de este simulador
-                for (Tab tab : groupTabs) {
-                    if (tab.getContent() instanceof simulador.SimulacionFinal) {
-                        simulador.SimulacionFinal sim = (simulador.SimulacionFinal) tab.getContent();
-                        if (sim != null && sim.getSimuladorPadreId() != null && 
-                            sim.getSimuladorPadreId().equals(elementId)) {
-                            sim.setGrupoId(grupoId);
-                            sim.setNumeroGrupo(TabManager.obtenerNumeroGrupo(localTabPane, elementId));
-                        }
-                    }
-                }
-            }
-        }
+        // Crear un nuevo grupo en la ventana destino
+        String nuevoGrupoId = "grupo_" + System.currentTimeMillis() + "_" + (++TabManager.contadorGrupos);
 
-        // Mover las pestañas manteniendo sus referencias originales
+        // Establecer el nuevo grupo en la ventana destino
         Map<String, List<Tab>> destRelations = TabManager.getParentChildRelations(localTabPane);
         
-        // Primero limpiar las relaciones existentes en el destino para este grupo
-        for (String parentId : parentChildMap.keySet()) {
-            destRelations.remove(parentId);
-        }
-
-        // Ahora mover las pestañas y establecer las nuevas relaciones
+        // Mover las pestañas a la nueva ventana y actualizar sus referencias
         for (Tab tab : groupTabs) {
             sourceTabPane.getTabs().remove(tab);
             localTabPane.getTabs().add(tab);
@@ -330,6 +345,11 @@ public class SecondaryWindow extends EditorWindow {
                 String elementId = tab.getUserData().toString();
                 if (parentChildMap.containsKey(elementId)) {
                     destRelations.put(elementId, parentChildMap.get(elementId));
+                }
+                
+                // Si es un elemento principal, asignarlo al nuevo grupo
+                if (elementId.startsWith("editor_") || elementId.startsWith("simulador_")) {
+                    TabManager.asignarElementoAGrupo(localTabPane, elementId, nuevoGrupoId);
                 }
             }
         }
@@ -351,7 +371,7 @@ public class SecondaryWindow extends EditorWindow {
             // Actualizar IDs de simulaciones
             for (String elementId : elementIds) {
                 if (elementId.startsWith("simulador_")) {
-                    TabManager.actualizarIdsRelacionados(localTabPane, elementId, grupoId);
+                    TabManager.actualizarIdsRelacionados(localTabPane, elementId, nuevoGrupoId);
                 }
             }
         });

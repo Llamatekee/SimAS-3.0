@@ -1360,12 +1360,54 @@ public class TabManager {
     private static List<Tab> recolectarPestañasRelacionadas(TabPane tabPane, String simuladorId) {
         List<Tab> pestañasRelacionadas = new ArrayList<>();
         
+        // Primero recolectar pestañas hijas directas del simulador (gramática y funciones de error)
         for (Tab tab : new ArrayList<>(tabPane.getTabs())) {
             if (tab.getUserData() != null) {
                 String childId = tab.getUserData().toString();
-                
-                // Verificar si es una pestaña hija del simulador
-                if (isPestañaHijaDeElemento(childId, simuladorId)) {
+                if (childId.equals("gramatica_" + simuladorId) || 
+                    childId.equals("funciones_error_" + simuladorId)) {
+                    pestañasRelacionadas.add(tab);
+                }
+            }
+        }
+        
+        // Luego recolectar simulaciones y sus pestañas relacionadas
+        for (Tab tab : new ArrayList<>(tabPane.getTabs())) {
+            if (tab.getContent() instanceof simulador.SimulacionFinal) {
+                simulador.SimulacionFinal sim = (simulador.SimulacionFinal) tab.getContent();
+                if (sim.getSimuladorPadreId() != null && sim.getSimuladorPadreId().equals(simuladorId)) {
+                    // Añadir la simulación
+                    pestañasRelacionadas.add(tab);
+                    
+                    // Buscar sus derivaciones y árboles
+                    for (Tab childTab : new ArrayList<>(tabPane.getTabs())) {
+                        if (childTab.getUserData() != null) {
+                            String childId = childTab.getUserData().toString();
+                            if ((childId.startsWith("derivacion_") || childId.startsWith("arbol_")) &&
+                                childId.endsWith(sim.simulacionId)) {
+                                pestañasRelacionadas.add(childTab);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        return pestañasRelacionadas;
+    }
+
+    /**
+     * Recolecta todas las pestañas relacionadas con una simulación.
+     */
+    private static List<Tab> recolectarPestañasDeSimulacion(TabPane tabPane, simulador.SimulacionFinal simulacion) {
+        List<Tab> pestañasRelacionadas = new ArrayList<>();
+        
+        // Buscar derivaciones y árboles de la simulación
+        for (Tab tab : new ArrayList<>(tabPane.getTabs())) {
+            if (tab.getUserData() != null) {
+                String userData = tab.getUserData().toString();
+                if ((userData.startsWith("derivacion_") || userData.startsWith("arbol_")) &&
+                    userData.endsWith(simulacion.simulacionId)) {
                     pestañasRelacionadas.add(tab);
                 }
             }
@@ -1597,6 +1639,30 @@ public class TabManager {
                                                 pestañasAMover.addAll(recolectarPestañasRelacionadas(tabPane, 
                                                             tab.getUserData().toString()));
                                             }
+                                            // Si es una simulación, añadir sus pestañas relacionadas
+                                            else if (tab.getContent() instanceof simulador.SimulacionFinal) {
+                                                simulador.SimulacionFinal sim = (simulador.SimulacionFinal) tab.getContent();
+                                                pestañasAMover.addAll(recolectarPestañasDeSimulacion(tabPane, sim));
+                                            }
+                                            // Si es una derivación o árbol, mover todo el grupo del simulador padre
+                                            else if (tab.getUserData() != null) {
+                                                String userData = tab.getUserData().toString();
+                                                if (userData.startsWith("derivacion_") || userData.startsWith("arbol_")) {
+                                                    // Buscar la simulación padre
+                                                    for (Tab simTab : tabPane.getTabs()) {
+                                                        if (simTab.getContent() instanceof simulador.SimulacionFinal) {
+                                                            simulador.SimulacionFinal sim = (simulador.SimulacionFinal) simTab.getContent();
+                                                            if (userData.endsWith(sim.simulacionId)) {
+                                                                // Encontramos la simulación padre, añadirla
+                                                                pestañasAMover.add(simTab);
+                                                                // Añadir todas sus pestañas relacionadas
+                                                                pestañasAMover.addAll(recolectarPestañasDeSimulacion(tabPane, sim));
+                                                                break;
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
                                         }
                                     }
                                 } else {
@@ -1607,6 +1673,30 @@ public class TabManager {
                                         selectedTab.getUserData().toString().startsWith("simulador_")) {
                                         pestañasAMover.addAll(recolectarPestañasRelacionadas(tabPane, 
                                                     selectedTab.getUserData().toString()));
+                                    }
+                                    // Si es una simulación, añadir sus pestañas relacionadas
+                                    else if (selectedTab.getContent() instanceof simulador.SimulacionFinal) {
+                                        simulador.SimulacionFinal sim = (simulador.SimulacionFinal) selectedTab.getContent();
+                                        pestañasAMover.addAll(recolectarPestañasDeSimulacion(tabPane, sim));
+                                    }
+                                    // Si es una derivación o árbol, mover todo el grupo del simulador padre
+                                    else if (selectedTab.getUserData() != null) {
+                                        String userData = selectedTab.getUserData().toString();
+                                        if (userData.startsWith("derivacion_") || userData.startsWith("arbol_")) {
+                                            // Buscar la simulación padre
+                                            for (Tab simTab : tabPane.getTabs()) {
+                                                if (simTab.getContent() instanceof simulador.SimulacionFinal) {
+                                                    simulador.SimulacionFinal sim = (simulador.SimulacionFinal) simTab.getContent();
+                                                    if (userData.endsWith(sim.simulacionId)) {
+                                                        // Encontramos la simulación padre, añadirla
+                                                        pestañasAMover.add(simTab);
+                                                        // Añadir todas sus pestañas relacionadas
+                                                        pestañasAMover.addAll(recolectarPestañasDeSimulacion(tabPane, sim));
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
                                     }
                                 }
                                 
@@ -1693,6 +1783,30 @@ public class TabManager {
                                             pestañasAMover.addAll(recolectarPestañasRelacionadas(tabPane, 
                                                         tab.getUserData().toString()));
                                         }
+                                        // Si es una simulación, añadir sus pestañas relacionadas
+                                        else if (tab.getContent() instanceof simulador.SimulacionFinal) {
+                                            simulador.SimulacionFinal sim = (simulador.SimulacionFinal) tab.getContent();
+                                            pestañasAMover.addAll(recolectarPestañasDeSimulacion(tabPane, sim));
+                                        }
+                                        // Si es una derivación o árbol, mover todo el grupo del simulador padre
+                                        else if (tab.getUserData() != null) {
+                                            String userData = tab.getUserData().toString();
+                                            if (userData.startsWith("derivacion_") || userData.startsWith("arbol_")) {
+                                                // Buscar la simulación padre
+                                                for (Tab simTab : tabPane.getTabs()) {
+                                                    if (simTab.getContent() instanceof simulador.SimulacionFinal) {
+                                                        simulador.SimulacionFinal sim = (simulador.SimulacionFinal) simTab.getContent();
+                                                        if (userData.endsWith(sim.simulacionId)) {
+                                                            // Encontramos la simulación padre, añadirla
+                                                            pestañasAMover.add(simTab);
+                                                            // Añadir todas sus pestañas relacionadas
+                                                            pestañasAMover.addAll(recolectarPestañasDeSimulacion(tabPane, sim));
+                                                            break;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
                                     }
                                 }
                             } else {
@@ -1703,6 +1817,30 @@ public class TabManager {
                                     selectedTab.getUserData().toString().startsWith("simulador_")) {
                                     pestañasAMover.addAll(recolectarPestañasRelacionadas(tabPane, 
                                                 selectedTab.getUserData().toString()));
+                                }
+                                // Si es una simulación, añadir sus pestañas relacionadas
+                                else if (selectedTab.getContent() instanceof simulador.SimulacionFinal) {
+                                    simulador.SimulacionFinal sim = (simulador.SimulacionFinal) selectedTab.getContent();
+                                    pestañasAMover.addAll(recolectarPestañasDeSimulacion(tabPane, sim));
+                                }
+                                // Si es una derivación o árbol, mover todo el grupo del simulador padre
+                                else if (selectedTab.getUserData() != null) {
+                                    String userData = selectedTab.getUserData().toString();
+                                    if (userData.startsWith("derivacion_") || userData.startsWith("arbol_")) {
+                                        // Buscar la simulación padre
+                                        for (Tab simTab : tabPane.getTabs()) {
+                                            if (simTab.getContent() instanceof simulador.SimulacionFinal) {
+                                                simulador.SimulacionFinal sim = (simulador.SimulacionFinal) simTab.getContent();
+                                                if (userData.endsWith(sim.simulacionId)) {
+                                                    // Encontramos la simulación padre, añadirla
+                                                    pestañasAMover.add(simTab);
+                                                    // Añadir todas sus pestañas relacionadas
+                                                    pestañasAMover.addAll(recolectarPestañasDeSimulacion(tabPane, sim));
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
                             }
                             
@@ -1974,29 +2112,44 @@ public class TabManager {
         // Lista para almacenar simulaciones que necesitan actualización
         List<simulador.SimulacionFinal> simulacionesParaActualizar = new ArrayList<>();
         
+        // Actualizar pestañas hijas directas del simulador
         for (Tab tab : tabPane.getTabs()) {
-            if (tab.getContent() instanceof simulador.SimulacionFinal) {
-                simulador.SimulacionFinal sim = (simulador.SimulacionFinal) tab.getContent();
-                if (sim != null && sim.getSimuladorPadreId() != null && 
-                    sim.getSimuladorPadreId().equals(simuladorId)) {
-                    // Actualizar el ID interno del grupo en la simulación
-                    sim.setGrupoId(nuevoGrupoId);
-                    sim.setNumeroGrupo(nuevoNumeroGrupo);
-                    simulacionesParaActualizar.add(sim);
-                }
-            }
-            
-            // Actualizar pestañas de gramática y funciones de error
             if (tab.getUserData() != null) {
                 String userData = tab.getUserData().toString();
                 if (userData.equals("gramatica_" + simuladorId) || 
                     userData.equals("funciones_error_" + simuladorId)) {
-                    actualizarTituloSimulador(tab, nuevoNumeroGrupo, true);
+                    String tituloBase = tab.getText().replaceAll("^\\d+-", ""); // Remover número anterior si existe
+                    tab.setText(nuevoNumeroGrupo + "-" + tituloBase);
                 }
             }
         }
         
-        // Actualizar todas las simulaciones después de recolectarlas
+        // Actualizar simulaciones y sus pestañas relacionadas
+        for (Tab tab : tabPane.getTabs()) {
+            if (tab.getContent() instanceof simulador.SimulacionFinal) {
+                simulador.SimulacionFinal sim = (simulador.SimulacionFinal) tab.getContent();
+                if (sim.getSimuladorPadreId() != null && sim.getSimuladorPadreId().equals(simuladorId)) {
+                    // Actualizar la simulación
+                    sim.setGrupoId(nuevoGrupoId);
+                    sim.setNumeroGrupo(nuevoNumeroGrupo);
+                    simulacionesParaActualizar.add(sim);
+                    
+                    // Actualizar derivaciones y árboles
+                    for (Tab childTab : tabPane.getTabs()) {
+                        if (childTab.getUserData() != null) {
+                            String childId = childTab.getUserData().toString();
+                            if ((childId.startsWith("derivacion_") || childId.startsWith("arbol_")) &&
+                                childId.endsWith(sim.simulacionId)) {
+                                String tituloBase = childTab.getText().replaceAll("^\\d+-", ""); // Remover número anterior
+                                childTab.setText(nuevoNumeroGrupo + "-" + tituloBase);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        // Forzar actualización inmediata de las simulaciones
         for (simulador.SimulacionFinal sim : simulacionesParaActualizar) {
             sim.actualizarTitulosPestañas(nuevoNumeroGrupo, true);
         }
