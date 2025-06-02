@@ -16,15 +16,19 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import javafx.application.Platform;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.Comparator;
 
 public class SecondaryWindow extends EditorWindow {
     
     private static final Map<String, SecondaryWindow> activeWindows = new ConcurrentHashMap<>();
+    private static int nextWindowNumber = 1;
     private final String windowId;
-    private static int windowCounter = 0;
     private final TabPane localTabPane;
     private final Stage stage;
     private final ResourceBundle bundle;
+    private int windowNumber;
     
     static {
     }
@@ -47,12 +51,13 @@ public class SecondaryWindow extends EditorWindow {
         return new ConcurrentHashMap<>(activeWindows);
     }
     
-    public SecondaryWindow(ResourceBundle bundle, String title) {
+    public SecondaryWindow(ResourceBundle bundle, String baseTitle) {
         super(null); // No inicializar la ventana en la clase padre
         
         this.bundle = bundle;
         
-        windowId = "SecondaryWindow-" + (++windowCounter);
+        windowNumber = getNextAvailableNumber();
+        windowId = "SecondaryWindow-" + windowNumber;
         activeWindows.put(windowId, this);
         
         // Crear un nuevo TabPane local para esta ventana
@@ -63,8 +68,9 @@ public class SecondaryWindow extends EditorWindow {
         stage = new Stage();
         Scene scene = new Scene(localTabPane);
         stage.setScene(scene);
-        stage.setTitle(title);
-        stage.initModality(Modality.NONE);
+        
+        // Configurar el título con el número de ventana
+        updateWindowTitle(baseTitle);
         
         // Configurar el tamaño de la ventana
         stage.setWidth(800);
@@ -93,6 +99,7 @@ public class SecondaryWindow extends EditorWindow {
                 }
             }
             activeWindows.remove(windowId);
+            reorderWindowNumbers();
         });
     }
     
@@ -445,5 +452,52 @@ public class SecondaryWindow extends EditorWindow {
                 e.printStackTrace();
             }
         }
+    }
+    
+    private static int getNextAvailableNumber() {
+        // Encontrar el primer número disponible
+        Set<Integer> usedNumbers = new HashSet<>();
+        for (SecondaryWindow window : activeWindows.values()) {
+            usedNumbers.add(window.getWindowNumber());
+        }
+        
+        int number = 1;
+        while (usedNumbers.contains(number)) {
+            number++;
+        }
+        
+        return number;
+    }
+    
+    private static void reorderWindowNumbers() {
+        // Ordenar las ventanas por su número actual
+        List<SecondaryWindow> windows = new ArrayList<>(activeWindows.values());
+        windows.sort(Comparator.comparingInt(SecondaryWindow::getWindowNumber));
+        
+        // Reasignar números secuencialmente
+        int newNumber = 1;
+        for (SecondaryWindow window : windows) {
+            // Solo actualizar si el número ha cambiado
+            if (window.windowNumber != newNumber) {
+                // Eliminar la entrada antigua
+                activeWindows.remove("SecondaryWindow-" + window.windowNumber);
+                
+                // Actualizar el número
+                window.windowNumber = newNumber;
+                window.updateWindowTitle(window.stage.getTitle().replaceAll(" \\[\\d+\\]$", ""));
+                
+                // Añadir la nueva entrada
+                activeWindows.put("SecondaryWindow-" + newNumber, window);
+            }
+            newNumber++;
+        }
+    }
+    
+    private void updateWindowTitle(String baseTitle) {
+        stage.setTitle(baseTitle + " [" + windowNumber + "]");
+    }
+    
+    public int getWindowNumber() {
+        return windowNumber;
     }
 } 
