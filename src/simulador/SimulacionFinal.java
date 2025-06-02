@@ -35,6 +35,13 @@ import javafx.embed.swing.SwingFXUtils;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Locale;
+import javafx.scene.control.TreeView;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TreeCell;
+import javafx.scene.control.Label;
+import javafx.scene.layout.Priority;
+import javafx.scene.control.Slider;
 
 public class SimulacionFinal extends BorderPane implements ActualizableTextos {
     @FXML private TextField campoEntrada;
@@ -94,6 +101,13 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
             this.entrada = new ArrayList<>(entrada);
             this.accion = accion;
         }
+    }
+
+    // Nodo para el árbol sintáctico
+    private static class NodoArbol {
+        String valor;
+        List<NodoArbol> hijos = new ArrayList<>();
+        NodoArbol(String valor) { this.valor = valor; }
     }
 
     public SimulacionFinal(Gramatica gramatica, TablaPredictivaPaso5 tablaPredictiva, TabPane tabPane, ResourceBundle bundle) {
@@ -711,65 +725,91 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
      * Muestra el contenido del árbol en una pestaña existente.
      */
     private void mostrarArbol(NodoArbol raiz) {
-        try {
-            // Crear el contenido del árbol
-            VBox layout = new VBox(10);
-            layout.setPadding(new javafx.geometry.Insets(20));
-            layout.setAlignment(javafx.geometry.Pos.TOP_LEFT);
-            layout.setStyle("-fx-background-color: white;");
-            
-            Label titulo = new Label(bundle.getString("simulacionfinal.tab.arbol"));
-            titulo.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #3498DB;");
-            
-            // Crear la imagen del árbol
-            javafx.scene.image.ImageView imageView = new javafx.scene.image.ImageView();
-            imageView.setFitWidth(800);
-            imageView.setPreserveRatio(true);
-            imageView.setSmooth(true);
-            
-            // Generar la imagen del árbol y convertirla a Image de JavaFX
-            BufferedImage bufferedImage = generarImagenArbol(raiz);
-            javafx.scene.image.Image fxImage = SwingFXUtils.toFXImage(bufferedImage, null);
-            imageView.setImage(fxImage);
-            
-            layout.getChildren().addAll(titulo, imageView);
-            
-            // Buscar la pestaña del árbol
-            for (Tab tab : tabPane.getTabs()) {
-                if (tab.getUserData() != null && 
-                    tab.getUserData().toString().equals("arbol_" + simulacionId)) {
-                    tab.setContent(layout);
-                    break;
+        System.out.println("Iniciando mostrarArbol()");
+        if (raiz == null) {
+            System.out.println("Error: raiz es null");
+            return;
+        }
+        
+        // Crear un TreeView para mostrar el árbol
+        TreeView<String> treeView = new TreeView<>();
+        TreeItem<String> rootItem = convertirNodoArbolATreeItem(raiz);
+        treeView.setRoot(rootItem);
+        treeView.setShowRoot(true);
+        
+        System.out.println("TreeView creado con raíz: " + rootItem.getValue());
+        
+        // Configurar el estilo del TreeView
+        treeView.setStyle("-fx-font-size: 14px; -fx-font-family: 'Consolas';");
+        
+        // Personalizar la apariencia de los nodos
+        treeView.setCellFactory(tv -> new TreeCell<String>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                    setGraphic(null);
+                } else {
+                    setText(item);
+                    // Añadir estilo para nodos terminales y no terminales
+                    if (esTerminal(item)) {
+                        setStyle("-fx-text-fill: #2196F3;"); // Azul para terminales
+                    } else {
+                        setStyle("-fx-text-fill: #4CAF50;"); // Verde para no terminales
+                    }
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        });
+        
+        // Expandir todo el árbol por defecto
+        expandirArbol(rootItem);
+        
+        // Crear un ScrollPane para permitir scroll si el árbol es grande
+        ScrollPane scrollPane = new ScrollPane(treeView);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setFitToHeight(true);
+        
+        // Buscar la pestaña del árbol y actualizar su contenido
+        boolean pestañaEncontrada = false;
+        for (Tab tab : tabPane.getTabs()) {
+            if (tab.getUserData() != null && 
+                tab.getUserData().toString().equals("arbol_" + simulacionId)) {
+                
+                // Crear un contenedor para el árbol
+                BorderPane contenedor = new BorderPane();
+                contenedor.setCenter(scrollPane);
+                
+                // Establecer el contenido de la pestaña
+                tab.setContent(contenedor);
+                pestañaEncontrada = true;
+                System.out.println("Contenido establecido en la pestaña del árbol");
+                break;
+            }
+        }
+        
+        if (!pestañaEncontrada) {
+            System.out.println("Error: No se encontró la pestaña para mostrar el árbol");
         }
     }
 
-    private BufferedImage generarImagenArbol(NodoArbol raiz) {
-        // Implementa la lógica para generar una imagen del árbol a partir del nodo raíz
-        // Puedes usar bibliotecas como JavaFX o Swing para crear la imagen
-        // Aquí se usa un ejemplo simple con JavaFX
-        javafx.scene.image.WritableImage writableImage = new javafx.scene.image.WritableImage(800, 800);
-        javafx.scene.image.PixelWriter pixelWriter = writableImage.getPixelWriter();
-        generarImagenRec(raiz, 0, 0, 800, 800, pixelWriter);
-        return SwingFXUtils.fromFXImage(writableImage, null);
+    private TreeItem<String> convertirNodoArbolATreeItem(NodoArbol nodo) {
+        System.out.println("Convirtiendo nodo a TreeItem: " + nodo.valor);
+        TreeItem<String> item = new TreeItem<>(nodo.valor);
+        
+        for (NodoArbol hijo : nodo.hijos) {
+            item.getChildren().add(convertirNodoArbolATreeItem(hijo));
+        }
+        
+        return item;
     }
 
-    private void generarImagenRec(NodoArbol nodo, int x, int y, int width, int height, javafx.scene.image.PixelWriter pixelWriter) {
-        if (nodo == null) return;
-        
-        // Dibujar el nodo actual
-        int color = 0xFF000000; // Negro
-        pixelWriter.setArgb(x, y, color);
-        
-        // Dibujar los hijos
-        int childWidth = width / (nodo.hijos.size() + 1);
-        for (int i = 0; i < nodo.hijos.size(); i++) {
-            int childX = x + (i + 1) * childWidth;
-            int childY = y + 50;
-            generarImagenRec(nodo.hijos.get(i), childX, childY, childWidth, height - 50, pixelWriter);
+    private void expandirArbol(TreeItem<?> item) {
+        if (item != null) {
+            item.setExpanded(true);
+            for (TreeItem<?> child : item.getChildren()) {
+                expandirArbol(child);
+            }
         }
     }
 
@@ -777,94 +817,114 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
      * Muestra el árbol sintáctico de la simulación actual.
      */
     private void mostrarArbolSintactico() {
-        // Buscar si ya existe una pestaña de árbol
-        Tab arbolTab = null;
-        for (Tab tab : tabPane.getTabs()) {
-            if (tab.getUserData() != null && 
-                tab.getUserData().toString().equals("arbol_" + simulacionId)) {
-                arbolTab = tab;
-                break;
-            }
+        System.out.println("Iniciando mostrarArbolSintactico()");
+        
+        // Verificar que haya pasos en el historial
+        if (historialObservable.isEmpty()) {
+            System.out.println("No hay pasos en el historial para construir el árbol");
+            return;
         }
         
-        // Si no existe, crear una nueva
-        if (arbolTab == null) {
-            arbolTab = new Tab();
-            arbolTab.setUserData("arbol_" + simulacionId);
-            arbolTab.setClosable(true);
+        // Construir el árbol primero
+        System.out.println("Construyendo árbol desde historial");
+        System.out.println("Número de pasos en historial: " + historialObservable.size());
+        
+        // Imprimir el historial para debug
+        for (HistorialPaso paso : historialObservable) {
+            System.out.println("Paso: " + paso.getAccion());
+        }
+        
+        NodoArbol raiz = construirArbolDesdeHistorial();
+        System.out.println("Árbol construido");
+        
+        // Crear la pestaña
+        System.out.println("Creando nueva pestaña de árbol");
+        Tab arbolTab = new Tab();
+        arbolTab.setUserData("arbol_" + simulacionId);
+        arbolTab.setClosable(true);
+        
+        // Obtener el estado actual del grupo y la instancia
+        boolean hayMultiplesGrupos = TabManager.contarGruposActivos(tabPane) > 1;
+        int simulacionesEnGrupo = contarSimulacionesEnGrupo();
+        boolean mostrarInstancia = simulacionesEnGrupo > 1;
+        
+        // Construir el título con el número de grupo e instancia correctos
+        String tituloBase = bundle.getString("simulacionfinal.tab.arbol");
+        arbolTab.setText(construirTitulo(tituloBase, hayMultiplesGrupos, mostrarInstancia));
+        
+        // Generar el código DOT para Graphviz
+        String dotCode = generarDotDesdeArbol(raiz);
+        
+        try {
+            // Crear un archivo temporal para el código DOT
+            java.nio.file.Path dotFile = java.nio.file.Files.createTempFile("arbol_", ".dot");
+            java.nio.file.Files.write(dotFile, dotCode.getBytes());
             
-            // Obtener el estado actual del grupo y la instancia
-            boolean hayMultiplesGrupos = TabManager.contarGruposActivos(tabPane) > 1;
-            int simulacionesEnGrupo = contarSimulacionesEnGrupo();
-            boolean mostrarInstancia = simulacionesEnGrupo > 1;
+            // Crear un archivo temporal para la imagen
+            java.nio.file.Path imgFile = java.nio.file.Files.createTempFile("arbol_", ".png");
             
-            // Construir el título con el número de grupo e instancia correctos
-            String tituloBase = bundle.getString("simulacionfinal.tab.arbol");
-            arbolTab.setText(construirTitulo(tituloBase, hayMultiplesGrupos, mostrarInstancia));
+            // Ejecutar Graphviz para generar la imagen
+            ProcessBuilder pb = new ProcessBuilder("dot", "-Tpng", dotFile.toString(), "-o", imgFile.toString());
+            Process process = pb.start();
+            process.waitFor();
             
-            // Construir el árbol y mostrarlo
-            NodoArbol raiz = construirArbolDesdeHistorial();
-            mostrarArbol(raiz);
+            // Cargar la imagen en un ImageView
+            javafx.scene.image.Image imagen = new javafx.scene.image.Image(imgFile.toUri().toString());
+            javafx.scene.image.ImageView imageView = new javafx.scene.image.ImageView(imagen);
+            imageView.setPreserveRatio(true);
+            imageView.setFitWidth(800); // Ajustar según necesidad
             
+            // Crear un ScrollPane para permitir zoom y scroll
+            ScrollPane scrollPane = new ScrollPane();
+            scrollPane.setContent(imageView);
+            scrollPane.setFitToWidth(true);
+            scrollPane.setFitToHeight(true);
+            
+            // Añadir controles de zoom
+            Slider zoomSlider = new Slider(0.5, 2, 1);
+            zoomSlider.setShowTickLabels(true);
+            zoomSlider.setShowTickMarks(true);
+            
+            // Vincular el zoom del slider con la escala de la imagen
+            zoomSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
+                imageView.setScaleX(newVal.doubleValue());
+                imageView.setScaleY(newVal.doubleValue());
+            });
+            
+            // Crear contenedor para la imagen y el slider
+            VBox contenedor = new VBox(10);
+            contenedor.setPadding(new Insets(10));
+            contenedor.setAlignment(Pos.CENTER);
+            contenedor.getChildren().addAll(scrollPane, zoomSlider);
+            VBox.setVgrow(scrollPane, Priority.ALWAYS);
+            
+            // Establecer el contenido de la pestaña
+            arbolTab.setContent(contenedor);
+            
+            // Añadir la pestaña y seleccionarla
             tabPane.getTabs().add(arbolTab);
-        }
-        
-        // Seleccionar la pestaña
-        tabPane.getSelectionModel().select(arbolTab);
-    }
-
-    // Nodo para el árbol sintáctico
-    private static class NodoArbol {
-        String valor;
-        List<NodoArbol> hijos = new ArrayList<>();
-        NodoArbol(String valor) { this.valor = valor; }
-    }
-
-    // Construir el árbol sintáctico a partir del historial de pasos
-    private NodoArbol construirArbolDesdeHistorial() {
-        // Creamos la raíz con el símbolo inicial
-        NodoArbol raiz = new NodoArbol(gramatica.getSimbInicial());
-        construirRecursivo(raiz, new ArrayList<>(historialObservable));
-        return raiz;
-    }
-
-    // Recursivo: expande el primer no terminal de cada producción
-    private void construirRecursivo(NodoArbol nodo, List<HistorialPaso> pasos) {
-        if (pasos.isEmpty()) return;
-        HistorialPaso paso = pasos.remove(0);
-        String accion = paso.getAccion();
-        if (accion.contains("→")) {
-            String[] partes = accion.split("→");
-            if (partes.length == 2) {
-                String derecha = partes[1].trim();
-                if (!derecha.equals("ε")) {
-                    String[] simbolos = derecha.split(" ");
-                    for (String s : simbolos) {
-                        if (!s.isEmpty()) {
-                            NodoArbol hijo = new NodoArbol(s);
-                            nodo.hijos.add(hijo);
-                        }
-                    }
-                    // Expandir recursivamente los hijos no terminales
-                    for (NodoArbol hijo : nodo.hijos) {
-                        if (!esTerminal(hijo.valor) && !hijo.valor.equals("ε")) {
-                            construirRecursivo(hijo, new ArrayList<>(pasos));
-                        }
-                    }
-                } else {
-                    nodo.hijos.add(new NodoArbol("ε"));
-                }
-            }
+            tabPane.getSelectionModel().select(arbolTab);
+            
+            // Limpiar archivos temporales
+            java.nio.file.Files.deleteIfExists(dotFile);
+            java.nio.file.Files.deleteIfExists(imgFile);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Error al generar el árbol: " + e.getMessage());
         }
     }
 
-    // Generar el código DOT para Graphviz
     private String generarDotDesdeArbol(NodoArbol raiz) {
         StringBuilder sb = new StringBuilder();
         sb.append("digraph G {\n");
-        sb.append("node [shape=ellipse, fontsize=18, fontname=Consolas, style=filled, fillcolor=white, color=black];\n");
-        int[] id = {0};
-        generarDotRec(raiz, sb, id, null);
+        sb.append("  node [shape=box, style=rounded, fontname=\"Arial\"];\n");
+        sb.append("  edge [arrowhead=none];\n");
+        
+        // Usar un contador para generar IDs únicos de nodos
+        int[] idCounter = {0};
+        generarDotRec(raiz, sb, idCounter, null);
+        
         sb.append("}\n");
         return sb.toString();
     }
@@ -994,5 +1054,90 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
 
     public int getNumeroInstancia() {
         return numeroInstancia;
+    }
+
+    // Construir el árbol sintáctico a partir del historial de pasos
+    private NodoArbol construirArbolDesdeHistorial() {
+        System.out.println("Iniciando construcción del árbol");
+        // Creamos la raíz con el símbolo inicial
+        NodoArbol raiz = new NodoArbol(gramatica.getSimbInicial());
+        System.out.println("Símbolo inicial (raíz): " + raiz.valor);
+        
+        // Crear una copia del historial para no modificar el original
+        List<HistorialPaso> historialCopia = new ArrayList<>(historialObservable);
+        construirRecursivo(raiz, historialCopia);
+        
+        // Debug: imprimir el árbol resultante
+        System.out.println("Árbol construido:");
+        imprimirArbol(raiz, "");
+        
+        return raiz;
+    }
+
+    // Recursivo: expande el primer no terminal de cada producción
+    private void construirRecursivo(NodoArbol nodo, List<HistorialPaso> pasos) {
+        System.out.println("construirRecursivo para nodo: " + nodo.valor);
+        System.out.println("Pasos restantes: " + pasos.size());
+        
+        if (pasos.isEmpty()) {
+            System.out.println("No hay más pasos para procesar");
+            return;
+        }
+        
+        // Buscar la producción que expande este nodo
+        for (int i = 0; i < pasos.size(); i++) {
+            HistorialPaso paso = pasos.get(i);
+            String accion = paso.getAccion();
+            System.out.println("Analizando paso " + i + ": " + accion);
+            
+            // Si es una producción (contiene una flecha)
+            if (accion.contains("→")) {
+                // Eliminar el número de producción si existe
+                String accionLimpia = accion.replaceAll("^\\d+\\.\\s*", "").trim();
+                String[] partes = accionLimpia.split("→");
+                String izquierda = partes[0].trim();
+                String derecha = partes[1].trim();
+                
+                System.out.println("Encontrada producción limpia: " + izquierda + " → " + derecha);
+                
+                // Si esta producción corresponde al nodo actual
+                if (izquierda.equals(nodo.valor)) {
+                    System.out.println("Producción corresponde al nodo actual");
+                    
+                    // Dividir la parte derecha en símbolos
+                    String[] simbolos = derecha.split("\\s+");
+                    
+                    // Crear nodos hijos para cada símbolo
+                    for (String simbolo : simbolos) {
+                        if (!simbolo.isEmpty()) {
+                            NodoArbol hijo = new NodoArbol(simbolo);
+                            nodo.hijos.add(hijo);
+                            System.out.println("Añadido hijo: " + simbolo);
+                            
+                            // Si el hijo es no terminal, procesarlo recursivamente
+                            if (!esTerminal(simbolo)) {
+                                // Crear una nueva lista con los pasos restantes
+                                List<HistorialPaso> pasosRestantes = new ArrayList<>(pasos.subList(i + 1, pasos.size()));
+                                System.out.println("Procesando recursivamente hijo no terminal: " + simbolo);
+                                construirRecursivo(hijo, pasosRestantes);
+                            }
+                        }
+                    }
+                    
+                    // Remover esta producción para no reutilizarla
+                    pasos.remove(i);
+                    return;
+                }
+            }
+        }
+        System.out.println("No se encontró producción para el nodo: " + nodo.valor);
+    }
+
+    // Método auxiliar para imprimir el árbol
+    private void imprimirArbol(NodoArbol nodo, String prefijo) {
+        System.out.println(prefijo + "└─ " + nodo.valor);
+        for (NodoArbol hijo : nodo.hijos) {
+            imprimirArbol(hijo, prefijo + "   ");
+        }
     }
 } 
