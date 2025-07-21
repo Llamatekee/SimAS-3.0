@@ -216,8 +216,16 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
      * Actualiza los títulos de las pestañas con el número de grupo especificado.
      */
     public void actualizarTitulosPestañas(int numeroGrupo, boolean mostrarGrupo, int numeroInstancia, boolean mostrarInstancia) {
+        System.out.println("[DEBUG] SimulacionFinal.actualizarTitulosPestañas: recibido numeroGrupo=" + numeroGrupo + 
+                         ", mostrarGrupo=" + mostrarGrupo + ", numeroInstancia=" + numeroInstancia + 
+                         ", mostrarInstancia=" + mostrarInstancia);
+        System.out.println("[DEBUG] SimulacionFinal.actualizarTitulosPestañas: numeroGrupo antes=" + this.numeroGrupo);
+        
         this.numeroGrupo = numeroGrupo;
         this.numeroInstancia = numeroInstancia;
+        
+        System.out.println("[DEBUG] SimulacionFinal.actualizarTitulosPestañas: numeroGrupo después=" + this.numeroGrupo);
+        
         actualizarTitulosPestañasInterno(mostrarGrupo, mostrarInstancia);
     }
 
@@ -238,11 +246,26 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
      * Actualiza los títulos de las pestañas relacionadas con esta simulación.
      */
     private void actualizarTitulosPestañasInterno(boolean mostrarGrupo, boolean mostrarInstancia) {
+        System.out.println("[DEBUG] SimulacionFinal.actualizarTitulosPestañasInterno: buscando pestaña para simulación...");
+        System.out.println("[DEBUG] SimulacionFinal.actualizarTitulosPestañasInterno: simulacionId=" + simulacionId);
+        
         // Buscar la pestaña de simulación y actualizarla
         for (Tab tab : tabPane.getTabs()) {
-            if (tab.getContent() == this) {
+            System.out.println("[DEBUG] SimulacionFinal.actualizarTitulosPestañasInterno: revisando pestaña userData=" + 
+                             (tab.getUserData() != null ? tab.getUserData().toString() : "null") + 
+                             ", contenido es this=" + (tab.getContent() == this));
+            
+            // Buscar por userData primero, luego por contenido como respaldo
+            if ((simulacionId != null && tab.getUserData() != null && 
+                 tab.getUserData().toString().equals(simulacionId)) || 
+                tab.getContent() == this) {
+                
                 String tituloBase = bundle.getString("simulador.paso6.simulacion");
-                tab.setText(construirTitulo(tituloBase, mostrarGrupo, mostrarInstancia));
+                String nuevoTitulo = construirTitulo(tituloBase, mostrarGrupo, mostrarInstancia);
+                String tituloAnterior = tab.getText();
+                tab.setText(nuevoTitulo);
+                System.out.println("[DEBUG] SimulacionFinal.actualizarTitulosPestañasInterno: pestaña encontrada y actualizada: " + 
+                                 tituloAnterior + " -> " + nuevoTitulo);
                 break;
             }
         }
@@ -267,7 +290,12 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
             titulo.append(" (").append(numeroInstancia).append(")");
         }
         
-        return titulo.toString();
+        String resultado = titulo.toString();
+        System.out.println("[DEBUG] SimulacionFinal.construirTitulo: mostrarGrupo=" + mostrarGrupo + 
+                         ", numeroGrupo=" + numeroGrupo + ", mostrarInstancia=" + mostrarInstancia + 
+                         ", numeroInstancia=" + numeroInstancia + " -> resultado: " + resultado);
+        
+        return resultado;
     }
 
     /**

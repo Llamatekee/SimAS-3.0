@@ -2169,13 +2169,28 @@ public class TabManager {
                             int instancia = contadorActualPorGrupo.merge(grupoId, 1, Integer::sum);
                             boolean mostrarInstancia = contadorSimulacionesPorGrupo.get(grupoId) > 1;
                             
+                            // Debug: mostrar información de la simulación
+                            String tituloAnterior = tab.getText();
+                            System.out.println("[DEBUG] Actualizando simulación: " + simuladorId + 
+                                             " -> grupo: " + grupoId + " (número: " + numero + 
+                                             ", instancia: " + instancia + ", mostrarInstancia: " + mostrarInstancia + ")");
+                            
                             // Actualizar simulación con ambos números
                             sim.setGrupoId(grupoId);
                             sim.setNumeroGrupo(numero);
                             sim.setNumeroInstancia(instancia);
                             sim.actualizarTitulosPestañas(numero, hayMultiplesGrupos, instancia, mostrarInstancia);
+                            
+                            // Debug: mostrar el cambio de título
+                            System.out.println("[DEBUG] Simulación actualizada: " + tituloAnterior + " -> " + tab.getText());
+                        } else {
+                            System.out.println("[DEBUG] No se encontró número para grupo: " + grupoId);
                         }
+                    } else {
+                        System.out.println("[DEBUG] No se encontró grupo para simulador: " + simuladorId);
                     }
+                } else {
+                    System.out.println("[DEBUG] Simulación sin simulador padre: " + tab.getUserData());
                 }
             }
         }
@@ -2469,6 +2484,9 @@ public class TabManager {
             // 7. AÑADIR PESTAÑAS A VENTANA DESTINO EN ORDEN CORRECTO
             for (Tab tab : pestañasMovidas) {
                 targetTabPane.getTabs().add(tab);
+                System.out.println("[DEBUG] Añadida pestaña a ventana destino: " + 
+                                 (tab.getUserData() != null ? tab.getUserData().toString() : "null") + 
+                                 " (contenido: " + tab.getContent().getClass().getSimpleName() + ")");
             }
             System.out.println("[DEBUG] Añadidas " + pestañasMovidas.size() + " pestañas a ventana destino");
 
@@ -2490,6 +2508,14 @@ public class TabManager {
                 boolean estaEnTabPane = targetTabPane.getTabs().contains(tab);
                 String tabId = tab.getUserData() != null ? tab.getUserData().toString() : "sin ID";
                 System.out.println("[DEBUG]   - " + tabId + ": " + (estaEnTabPane ? "✓" : "✗"));
+            }
+            
+            // Debug: mostrar todas las pestañas en la ventana destino
+            System.out.println("[DEBUG] Pestañas en ventana destino después del movimiento:");
+            for (Tab tab : targetTabPane.getTabs()) {
+                String tabId = tab.getUserData() != null ? tab.getUserData().toString() : "null";
+                String contenido = tab.getContent() != null ? tab.getContent().getClass().getSimpleName() : "null";
+                System.out.println("[DEBUG]   - userData: " + tabId + ", contenido: " + contenido);
             }
 
             // 9. RESTAURAR RELACIONES PADRE-HIJO EN VENTANA DESTINO
@@ -2794,6 +2820,19 @@ public class TabManager {
         if (tab.getContent() instanceof editor.Editor) {
             editor.Editor editor = (editor.Editor) tab.getContent();
             editor.setTabPane(nuevoTabPane);
+        } else if (tab.getContent() instanceof simulador.SimulacionFinal) {
+            simulador.SimulacionFinal sim = (simulador.SimulacionFinal) tab.getContent();
+            // SimulacionFinal no tiene setTabPane, pero podemos actualizar la referencia interna
+            // usando reflexión para acceder al campo tabPane privado
+            try {
+                java.lang.reflect.Field tabPaneField = simulador.SimulacionFinal.class.getDeclaredField("tabPane");
+                tabPaneField.setAccessible(true);
+                tabPaneField.set(sim, nuevoTabPane);
+                System.out.println("[DEBUG] Actualizada referencia TabPane en SimulacionFinal: " + 
+                                 (tab.getUserData() != null ? tab.getUserData().toString() : "null"));
+            } catch (Exception e) {
+                System.err.println("[ERROR] No se pudo actualizar la referencia TabPane en SimulacionFinal: " + e.getMessage());
+            }
         } else {
             // Para otros tipos de contenido, intentar actualizar referencias si es necesario
             try {
