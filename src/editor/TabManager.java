@@ -225,7 +225,16 @@ public class TabManager {
                 }
             } else {
             }
-        } else {
+        } else if (parentId != null && childId != null) {
+            // Esto significa que es una pestaña hija - debe heredar el grupo del padre
+            Map<String, String> elementos = elementoToGrupo.get(tabPane);
+            if (elementos != null) {
+                String grupoDelPadre = elementos.get(parentId);
+                if (grupoDelPadre != null) {
+                    // Asignar la pestaña hija al mismo grupo que el padre
+                    elementos.put(childId, grupoDelPadre);
+                }
+            }
         }
         
         // AHORA calcular la posición donde insertar la pestaña (después de asignar grupos)
@@ -1186,6 +1195,17 @@ public class TabManager {
                         tab.setText(mostrarGrupo ? numeroGrupo + "-" + tituloBase : tituloBase);
                     } else if (childId.equals("funciones_error_" + elementId)) {
                         String tituloBase = obtenerTituloBaseFuncionesError(tabPane);
+                        tab.setText(mostrarGrupo ? numeroGrupo + "-" + tituloBase : tituloBase);
+                    }
+                }
+                
+                // Pestañas hijas de simulación (derivación y árbol)
+                else if (elementId.startsWith("simulacion_")) {
+                    if (childId.startsWith("derivacion_")) {
+                        String tituloBase = obtenerTituloBaseParaHija(tabPane, childId);
+                        tab.setText(mostrarGrupo ? numeroGrupo + "-" + tituloBase : tituloBase);
+                    } else if (childId.startsWith("arbol_")) {
+                        String tituloBase = obtenerTituloBaseParaHija(tabPane, childId);
                         tab.setText(mostrarGrupo ? numeroGrupo + "-" + tituloBase : tituloBase);
                     }
                 }
@@ -2238,6 +2258,10 @@ public class TabManager {
                     return bundle.getString("simulador.paso4.btn.nueva");
                 } else if (childId.startsWith("simulacion_")) {
                     return bundle.getString("simulador.simulacion");
+                } else if (childId.startsWith("derivacion_")) {
+                    return bundle.getString("simulacionfinal.tab.derivacion");
+                } else if (childId.startsWith("arbol_")) {
+                    return bundle.getString("simulacionfinal.tab.arbol");
                 }
             }
         } catch (Exception e) {
@@ -2259,6 +2283,10 @@ public class TabManager {
             return "Nueva Función Error";
         } else if (childId.startsWith("simulacion_")) {
             return "Simulación";
+        } else if (childId.startsWith("derivacion_")) {
+            return "Derivación";
+        } else if (childId.startsWith("arbol_")) {
+            return "Árbol Sintáctico";
         }
         
         return "Pestaña"; // Fallback final

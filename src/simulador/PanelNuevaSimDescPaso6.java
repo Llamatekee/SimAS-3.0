@@ -361,6 +361,9 @@ public class PanelNuevaSimDescPaso6 extends BorderPane implements PanelNuevaSimD
             childId
         );
         
+        // Asignar el simulacionId correcto a la simulación
+        simulacionFinal.setSimulacionId(childId);
+        
         // Seleccionar la nueva pestaña
         panelSimuladorDesc.tabPane.getSelectionModel().select(nuevaPestana);
     }
