@@ -1740,112 +1740,30 @@ public class TabManager {
                                 // Obtener el grupo de la pestaña seleccionada
                                 String grupoId = obtenerGrupoDePestaña(tabPane, selectedTab);
                                 
-                                // Lista para almacenar todas las pestañas a mover
-                                List<Tab> pestañasAMover = new ArrayList<>();
-                                
-                                // Reforzar la identificación de grupos y actualizar relaciones de padre-hijo
                                 if (grupoId != null) {
-                                    // Si pertenece a un grupo, mover todas las pestañas del grupo
-                                    for (Tab tab : new ArrayList<>(tabPane.getTabs())) {
-                                        String tabGrupoId = obtenerGrupoDePestaña(tabPane, tab);
-                                        if (grupoId.equals(tabGrupoId)) {
-                                            pestañasAMover.add(tab);
-                                            // Si es un simulador, añadir sus pestañas relacionadas
-                                            if (tab.getUserData() != null && 
-                                                tab.getUserData().toString().startsWith("simulador_")) {
-                                                pestañasAMover.addAll(recolectarPestañasRelacionadas(tabPane, 
-                                                            tab.getUserData().toString()));
-                                            }
-                                            // Si es una simulación, añadir sus pestañas relacionadas
-                                            else if (tab.getContent() instanceof simulador.SimulacionFinal) {
-                                                simulador.SimulacionFinal sim = (simulador.SimulacionFinal) tab.getContent();
-                                                pestañasAMover.addAll(recolectarPestañasDeSimulacion(tabPane, sim));
-                                            }
-                                            // Si es una derivación o árbol, mover todo el grupo del simulador padre
-                                            else if (tab.getUserData() != null) {
-                                                String userData = tab.getUserData().toString();
-                                                if (userData.startsWith("derivacion_") || userData.startsWith("arbol_")) {
-                                                    // Buscar la simulación padre
-                                                    for (Tab simTab : tabPane.getTabs()) {
-                                                        if (simTab.getContent() instanceof simulador.SimulacionFinal) {
-                                                            simulador.SimulacionFinal sim = (simulador.SimulacionFinal) simTab.getContent();
-                                                            if (userData.endsWith(sim.simulacionId)) {
-                                                                // Encontramos la simulación padre, añadirla
-                                                                pestañasAMover.add(simTab);
-                                                                // Añadir todas sus pestañas relacionadas
-                                                                pestañasAMover.addAll(recolectarPestañasDeSimulacion(tabPane, sim));
-                                                                break;
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
+                                    // CORRECCIÓN: Usar el método mejorado igual que para nueva ventana
+                                    // Esto asegura IDs únicos y mantiene consistencia
+                                    boolean exito = moverGrupoEntreVentanasMejorado(tabPane, targetTabPane, grupoId, selectedTab);
+                                    
+                                    if (!exito) {
+                                        System.err.println("[ERROR] Falló el movimiento del grupo: " + grupoId);
+                                        // Fallback: mover solo la pestaña seleccionada
+                                        Tab newTab = new Tab(selectedTab.getText(), selectedTab.getContent());
+                                        newTab.setUserData(selectedTab.getUserData());
+                                        targetTabPane.getTabs().add(newTab);
+                                        tabPane.getTabs().remove(selectedTab);
                                     }
                                 } else {
-                                    // Si no pertenece a un grupo, mover solo la pestaña seleccionada
-                                    pestañasAMover.add(selectedTab);
-                                    // Si es un simulador, añadir sus pestañas relacionadas
-                                    if (selectedTab.getUserData() != null && 
-                                        selectedTab.getUserData().toString().startsWith("simulador_")) {
-                                        pestañasAMover.addAll(recolectarPestañasRelacionadas(tabPane, 
-                                                    selectedTab.getUserData().toString()));
-                                    }
-                                    // Si es una simulación, añadir sus pestañas relacionadas
-                                    else if (selectedTab.getContent() instanceof simulador.SimulacionFinal) {
-                                        simulador.SimulacionFinal sim = (simulador.SimulacionFinal) selectedTab.getContent();
-                                        pestañasAMover.addAll(recolectarPestañasDeSimulacion(tabPane, sim));
-                                    }
-                                    // Si es una derivación o árbol, mover todo el grupo del simulador padre
-                                    else if (selectedTab.getUserData() != null) {
-                                        String userData = selectedTab.getUserData().toString();
-                                        if (userData.startsWith("derivacion_") || userData.startsWith("arbol_")) {
-                                            // Buscar la simulación padre
-                                            for (Tab simTab : tabPane.getTabs()) {
-                                                if (simTab.getContent() instanceof simulador.SimulacionFinal) {
-                                                    simulador.SimulacionFinal sim = (simulador.SimulacionFinal) simTab.getContent();
-                                                    if (userData.endsWith(sim.simulacionId)) {
-                                                        // Encontramos la simulación padre, añadirla
-                                                        pestañasAMover.add(simTab);
-                                                        // Añadir todas sus pestañas relacionadas
-                                                        pestañasAMover.addAll(recolectarPestañasDeSimulacion(tabPane, sim));
-                                                        break;
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                                
-                                // Mover todas las pestañas recopiladas
-                                for (Tab tab : pestañasAMover) {
-                                    // Crear nueva pestaña en la ventana principal
-                                    Tab newTab = new Tab(tab.getText(), tab.getContent());
-                                    newTab.setUserData(tab.getUserData());
+                                    // Si no pertenece a un grupo, mover solo la pestaña
+                                    Tab newTab = new Tab(selectedTab.getText(), selectedTab.getContent());
+                                    newTab.setUserData(selectedTab.getUserData());
                                     targetTabPane.getTabs().add(newTab);
+                                    tabPane.getTabs().remove(selectedTab);
                                     
-                                    // Eliminar la pestaña de la ventana original
-                                    tabPane.getTabs().remove(tab);
-                                    
-                                    // Si la pestaña tiene un grupo, mover la información del grupo
-                                    if (tab.getUserData() != null) {
-                                        String tabElementId = tab.getUserData().toString();
-                                        String elementGrupoId = obtenerGrupoDeElemento(tabPane, tabElementId);
-                                        if (elementGrupoId != null) {
-                                            eliminarElementoDeGrupo(tabPane, tabElementId, elementGrupoId);
-                                            asignarElementoAGrupo(targetTabPane, tabElementId, elementGrupoId);
-                                            
-                                            // Si es un simulador, actualizar los IDs de sus pestañas relacionadas
-                                            if (tabElementId.startsWith("simulador_")) {
-                                                actualizarIdsRelacionados(targetTabPane, tabElementId, elementGrupoId);
-                                            }
-                                        }
-                                    }
+                                    // Reasignar numeración en ambas ventanas
+                                    reasignarNumerosGruposGramatica(tabPane);
+                                    reasignarNumerosGruposGramatica(targetTabPane);
                                 }
-                                
-                                // Forzar renumeración en ambas ventanas
-                                reasignarNumerosGruposGramatica(tabPane);
-                                reasignarNumerosGruposGramatica(targetTabPane);
                                 
                                 // Traer la ventana principal al frente
                                 mainStage.toFront();
@@ -1885,112 +1803,30 @@ public class TabManager {
                             // Obtener el grupo de la pestaña seleccionada
                             String grupoId = obtenerGrupoDePestaña(tabPane, selectedTab);
                             
-                            // Lista para almacenar todas las pestañas a mover
-                            List<Tab> pestañasAMover = new ArrayList<>();
-                            
-                            // Reforzar la identificación de grupos y actualizar relaciones de padre-hijo
                             if (grupoId != null) {
-                                // Si pertenece a un grupo, mover todas las pestañas del grupo
-                                for (Tab tab : new ArrayList<>(tabPane.getTabs())) {
-                                    String tabGrupoId = obtenerGrupoDePestaña(tabPane, tab);
-                                    if (grupoId.equals(tabGrupoId)) {
-                                        pestañasAMover.add(tab);
-                                        // Si es un simulador, añadir sus pestañas relacionadas
-                                        if (tab.getUserData() != null && 
-                                            tab.getUserData().toString().startsWith("simulador_")) {
-                                            pestañasAMover.addAll(recolectarPestañasRelacionadas(tabPane, 
-                                                        tab.getUserData().toString()));
-                                        }
-                                        // Si es una simulación, añadir sus pestañas relacionadas
-                                        else if (tab.getContent() instanceof simulador.SimulacionFinal) {
-                                            simulador.SimulacionFinal sim = (simulador.SimulacionFinal) tab.getContent();
-                                            pestañasAMover.addAll(recolectarPestañasDeSimulacion(tabPane, sim));
-                                        }
-                                        // Si es una derivación o árbol, mover todo el grupo del simulador padre
-                                        else if (tab.getUserData() != null) {
-                                            String userData = tab.getUserData().toString();
-                                            if (userData.startsWith("derivacion_") || userData.startsWith("arbol_")) {
-                                                // Buscar la simulación padre
-                                                for (Tab simTab : tabPane.getTabs()) {
-                                                    if (simTab.getContent() instanceof simulador.SimulacionFinal) {
-                                                        simulador.SimulacionFinal sim = (simulador.SimulacionFinal) simTab.getContent();
-                                                        if (userData.endsWith(sim.simulacionId)) {
-                                                            // Encontramos la simulación padre, añadirla
-                                                            pestañasAMover.add(simTab);
-                                                            // Añadir todas sus pestañas relacionadas
-                                                            pestañasAMover.addAll(recolectarPestañasDeSimulacion(tabPane, sim));
-                                                            break;
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
+                                // CORRECCIÓN: Usar el método mejorado igual que para nueva ventana
+                                // Esto asegura IDs únicos y mantiene consistencia
+                                boolean exito = moverGrupoEntreVentanasMejorado(tabPane, window.getTabPane(), grupoId, selectedTab);
+                                
+                                if (!exito) {
+                                    System.err.println("[ERROR] Falló el movimiento del grupo: " + grupoId);
+                                    // Fallback: mover solo la pestaña seleccionada
+                                    Tab newTab = new Tab(selectedTab.getText(), selectedTab.getContent());
+                                    newTab.setUserData(selectedTab.getUserData());
+                                    window.getTabPane().getTabs().add(newTab);
+                                    tabPane.getTabs().remove(selectedTab);
                                 }
                             } else {
-                                // Si no pertenece a un grupo, mover solo la pestaña seleccionada
-                                pestañasAMover.add(selectedTab);
-                                // Si es un simulador, añadir sus pestañas relacionadas
-                                if (selectedTab.getUserData() != null && 
-                                    selectedTab.getUserData().toString().startsWith("simulador_")) {
-                                    pestañasAMover.addAll(recolectarPestañasRelacionadas(tabPane, 
-                                                selectedTab.getUserData().toString()));
-                                }
-                                // Si es una simulación, añadir sus pestañas relacionadas
-                                else if (selectedTab.getContent() instanceof simulador.SimulacionFinal) {
-                                    simulador.SimulacionFinal sim = (simulador.SimulacionFinal) selectedTab.getContent();
-                                    pestañasAMover.addAll(recolectarPestañasDeSimulacion(tabPane, sim));
-                                }
-                                // Si es una derivación o árbol, mover todo el grupo del simulador padre
-                                else if (selectedTab.getUserData() != null) {
-                                    String userData = selectedTab.getUserData().toString();
-                                    if (userData.startsWith("derivacion_") || userData.startsWith("arbol_")) {
-                                        // Buscar la simulación padre
-                                        for (Tab simTab : tabPane.getTabs()) {
-                                            if (simTab.getContent() instanceof simulador.SimulacionFinal) {
-                                                simulador.SimulacionFinal sim = (simulador.SimulacionFinal) simTab.getContent();
-                                                if (userData.endsWith(sim.simulacionId)) {
-                                                    // Encontramos la simulación padre, añadirla
-                                                    pestañasAMover.add(simTab);
-                                                    // Añadir todas sus pestañas relacionadas
-                                                    pestañasAMover.addAll(recolectarPestañasDeSimulacion(tabPane, sim));
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            
-                            // Mover todas las pestañas recopiladas
-                            for (Tab tab : pestañasAMover) {
-                                // Crear nueva pestaña en la ventana destino
-                                Tab newTab = new Tab(tab.getText(), tab.getContent());
-                                newTab.setUserData(tab.getUserData());
+                                // Si no pertenece a un grupo, mover solo la pestaña
+                                Tab newTab = new Tab(selectedTab.getText(), selectedTab.getContent());
+                                newTab.setUserData(selectedTab.getUserData());
                                 window.getTabPane().getTabs().add(newTab);
+                                tabPane.getTabs().remove(selectedTab);
                                 
-                                // Eliminar la pestaña de la ventana original
-                                tabPane.getTabs().remove(tab);
-                                
-                                // Si la pestaña tiene un grupo, mover la información del grupo
-                                if (tab.getUserData() != null) {
-                                    String tabElementId = tab.getUserData().toString();
-                                    String elementGrupoId = obtenerGrupoDeElemento(tabPane, tabElementId);
-                                    if (elementGrupoId != null) {
-                                        eliminarElementoDeGrupo(tabPane, tabElementId, elementGrupoId);
-                                        asignarElementoAGrupo(window.getTabPane(), tabElementId, elementGrupoId);
-                                        
-                                        // Si es un simulador, actualizar los IDs de sus pestañas relacionadas
-                                        if (tabElementId.startsWith("simulador_")) {
-                                            actualizarIdsRelacionados(window.getTabPane(), tabElementId, elementGrupoId);
-                                        }
-                                    }
-                                }
+                                // Reasignar numeración en ambas ventanas
+                                reasignarNumerosGruposGramatica(tabPane);
+                                reasignarNumerosGruposGramatica(window.getTabPane());
                             }
-                            
-                            // Forzar renumeración en ambas ventanas
-                            reasignarNumerosGruposGramatica(tabPane);
-                            reasignarNumerosGruposGramatica(window.getTabPane());
                             
                             // Traer la ventana destino al frente
                             window.getStage().toFront();
