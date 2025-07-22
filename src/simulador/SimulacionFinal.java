@@ -772,6 +772,8 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         String childId = "derivacion_" + simulacionId;
         String tituloBase = bundle.getString("simulacionfinal.tab.derivacion");
         
+        System.out.println("[DEBUG] SimulacionFinal.crearPestanaDerivacionConTabManager: simulacionId=" + simulacionId + ", childId=" + childId);
+        
         // Crear el contenido
         TextArea areaDerivacion = new TextArea();
         areaDerivacion.setEditable(false);
@@ -794,6 +796,9 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
             childId
         );
         
+        System.out.println("[DEBUG] SimulacionFinal.crearPestanaDerivacionConTabManager: pestaña creada con userData=" + 
+                         (nuevaPestana != null ? nuevaPestana.getUserData() : "null"));
+        
         return nuevaPestana;
     }
 
@@ -808,6 +813,8 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         
         String childId = "arbol_" + simulacionId;
         String tituloBase = bundle.getString("simulacionfinal.tab.arbol");
+        
+        System.out.println("[DEBUG] SimulacionFinal.crearPestanaArbolConTabManager: simulacionId=" + simulacionId + ", childId=" + childId);
         
         // Crear el árbol con al menos el nodo inicial
         NodoArbol raiz;
@@ -873,6 +880,9 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
                 childId
             );
             
+            System.out.println("[DEBUG] SimulacionFinal.crearPestanaArbolConTabManager: pestaña creada con userData=" + 
+                             (nuevaPestana != null ? nuevaPestana.getUserData() : "null"));
+            
             // Limpiar archivos temporales
             java.nio.file.Files.deleteIfExists(dotFile);
             java.nio.file.Files.deleteIfExists(imgFile);
@@ -894,18 +904,25 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
             return;
         }
         
+        System.out.println("[DEBUG] SimulacionFinal.mostrarDerivacion: simulacionId=" + simulacionId);
+        
         // Buscar si ya existe una pestaña de derivación para esta simulación
         derivacionTab = null;
         for (Tab tab : tabPane.getTabs()) {
-            if (tab.getUserData() != null && 
-                tab.getUserData().toString().equals("derivacion_" + simulacionId)) {
-                derivacionTab = tab;
-                break;
+            if (tab.getUserData() != null) {
+                String userData = tab.getUserData().toString();
+                System.out.println("[DEBUG] SimulacionFinal.mostrarDerivacion: revisando pestaña userData=" + userData);
+                if (userData.equals("derivacion_" + simulacionId)) {
+                    derivacionTab = tab;
+                    System.out.println("[DEBUG] SimulacionFinal.mostrarDerivacion: encontrada pestaña derivación existente");
+                    break;
+                }
             }
         }
         
         // Si no existe la pestaña, crearla usando TabManager
         if (derivacionTab == null) {
+            System.out.println("[DEBUG] SimulacionFinal.mostrarDerivacion: creando nueva pestaña derivación");
             derivacionTab = crearPestanaDerivacionConTabManager();
             
             // Añadir listener para cuando se cierre la pestaña
@@ -914,6 +931,7 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
             }
         } else {
             // Si ya existe, actualizar su contenido
+            System.out.println("[DEBUG] SimulacionFinal.mostrarDerivacion: actualizando contenido de pestaña derivación existente");
             TextArea areaDerivacion = (TextArea) derivacionTab.getContent();
             StringBuilder derivacion = new StringBuilder();
             for (HistorialPaso paso : historialObservable) {
@@ -1029,18 +1047,25 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
             return;
         }
         
+        System.out.println("[DEBUG] SimulacionFinal.mostrarArbolSintactico: simulacionId=" + simulacionId);
+        
         // Buscar si ya existe una pestaña de árbol para esta simulación
         arbolTab = null;
         for (Tab tab : tabPane.getTabs()) {
-            if (tab.getUserData() != null && 
-                tab.getUserData().toString().equals("arbol_" + simulacionId)) {
-                arbolTab = tab;
-                break;
+            if (tab.getUserData() != null) {
+                String userData = tab.getUserData().toString();
+                System.out.println("[DEBUG] SimulacionFinal.mostrarArbolSintactico: revisando pestaña userData=" + userData);
+                if (userData.equals("arbol_" + simulacionId)) {
+                    arbolTab = tab;
+                    System.out.println("[DEBUG] SimulacionFinal.mostrarArbolSintactico: encontrada pestaña árbol existente");
+                    break;
+                }
             }
         }
         
         // Si no existe la pestaña, crearla usando TabManager
         if (arbolTab == null) {
+            System.out.println("[DEBUG] SimulacionFinal.mostrarArbolSintactico: creando nueva pestaña árbol");
             arbolTab = crearPestanaArbolConTabManager();
             
             // Añadir listener para cuando se cierre la pestaña
@@ -1049,6 +1074,7 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
             }
         } else {
             // Si ya existe, actualizar su contenido
+            System.out.println("[DEBUG] SimulacionFinal.mostrarArbolSintactico: actualizando contenido de pestaña árbol existente");
             actualizarContenidoArbol(arbolTab);
         }
         
@@ -1316,6 +1342,8 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
             return; // No hay simulacionId, no se pueden actualizar las pestañas hijas
         }
         
+        System.out.println("[DEBUG] SimulacionFinal.actualizarPestañasHijas: simulacionId=" + simulacionId);
+        
         // Buscar las pestañas hijas usando TabManager
         for (Tab tab : tabPane.getTabs()) {
             if (tab.getUserData() != null) {
@@ -1323,6 +1351,7 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
                 
                 // Actualizar pestaña de derivación si está activa
                 if (userData.equals("derivacion_" + simulacionId)) {
+                    System.out.println("[DEBUG] SimulacionFinal.actualizarPestañasHijas: actualizando derivación");
                     TextArea areaDerivacion = (TextArea) tab.getContent();
                     StringBuilder derivacion = new StringBuilder();
                     for (HistorialPaso paso : historialObservable) {
@@ -1333,6 +1362,7 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
                 
                 // Actualizar pestaña de árbol si está activa
                 else if (userData.equals("arbol_" + simulacionId)) {
+                    System.out.println("[DEBUG] SimulacionFinal.actualizarPestañasHijas: actualizando árbol");
                     actualizarContenidoArbol(tab);
                 }
             }

@@ -350,19 +350,21 @@ public class PanelNuevaSimDescPaso6 extends BorderPane implements PanelNuevaSimD
             numeroGrupo + "-" + tituloBase : 
             tituloBase;
 
+        // Generar un simulacionId único usando timestamp
+        String simulacionId = "simulacion_" + simuladorId + "_" + System.currentTimeMillis();
+        
         // Usar TabManager para crear la pestaña como hija del simulador
-        String childId = "simulacion_" + simuladorId;
         Tab nuevaPestana = TabManager.getOrCreateTab(
             panelSimuladorDesc.tabPane,
             SimulacionFinal.class,
             tituloFinal,
             simulacionFinal,
             simuladorId,
-            childId
+            simulacionId
         );
         
         // Asignar el simulacionId correcto a la simulación
-        simulacionFinal.setSimulacionId(childId);
+        simulacionFinal.setSimulacionId(simulacionId);
         
         // Seleccionar la nueva pestaña
         panelSimuladorDesc.tabPane.getSelectionModel().select(nuevaPestana);
