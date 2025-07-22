@@ -628,7 +628,7 @@ public class TabPaneMonitor {
      */
     private void debug(String message) {
         if (debugMode) {
-            System.out.println("[MONITOR] " + message);
+            //System.out.println("[MONITOR] " + message);
         }
     }
 } 

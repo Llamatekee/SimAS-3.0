@@ -27,7 +27,7 @@ public class SecondaryWindow extends EditorWindow {
     private final String windowId;
     private final TabPane localTabPane;
     private final Stage stage;
-    private final ResourceBundle bundle;
+    private ResourceBundle bundle;
     private int windowNumber;
     
     static {
@@ -384,5 +384,66 @@ public class SecondaryWindow extends EditorWindow {
     
     public int getWindowNumber() {
         return windowNumber;
+    }
+    
+    /**
+     * Actualiza el idioma de esta ventana secundaria y todas sus pestañas
+     */
+    public void actualizarIdioma(ResourceBundle nuevoBundle) {
+        // Actualizar el ResourceBundle de esta ventana
+        this.bundle = nuevoBundle;
+        
+        // Actualizar el ResourceBundle en TabManager para esta ventana
+        TabManager.setResourceBundle(localTabPane, nuevoBundle);
+        
+        // Actualizar el menú contextual con el nuevo idioma
+        TabManager.configurarMenuContextual(localTabPane, nuevoBundle);
+        
+        // Actualizar todos los textos de las pestañas
+        for (Tab tab : localTabPane.getTabs()) {
+            if (tab.getContent() instanceof editor.ActualizableTextos) {
+                ((editor.ActualizableTextos) tab.getContent()).actualizarTextos(nuevoBundle);
+            }
+        }
+        
+        // Forzar la actualización de títulos de pestañas
+        // Esto es crucial para las pestañas que ya estaban abiertas
+        TabManager.actualizarTitulosPestañas(localTabPane);
+        
+        // Actualizar manualmente los títulos de pestañas que podrían no estar en el sistema de grupos
+        for (Tab tab : localTabPane.getTabs()) {
+            Object content = tab.getContent();
+            if (content instanceof editor.Editor) {
+                tab.setText(nuevoBundle.getString("editor.title"));
+            } else if (content != null && content.getClass().getName().equals("simulador.PanelSimuladorDesc")) {
+                try {
+                    // Usar reflexión para acceder al método setBundle
+                    java.lang.reflect.Method setBundleMethod = content.getClass().getMethod("setBundle", ResourceBundle.class);
+                    setBundleMethod.invoke(content, nuevoBundle);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else if (content instanceof simulador.SimulacionFinal) {
+                simulador.SimulacionFinal sim = (simulador.SimulacionFinal) content;
+                sim.actualizarTextos(nuevoBundle);
+            }
+            
+            // Actualizar títulos de pestañas hijas específicas por su userData
+            if (tab.getUserData() != null) {
+                String userData = tab.getUserData().toString();
+                if (userData.startsWith("terminales_")) {
+                    tab.setText(nuevoBundle.getString("creacion2.tab.modificar.terminales"));
+                } else if (userData.startsWith("no_terminales_")) {
+                    tab.setText(nuevoBundle.getString("creacion2.tab.modificar.no.terminales"));
+                } else if (userData.startsWith("producciones_")) {
+                    tab.setText(nuevoBundle.getString("creacion3.tab.modificar.producciones"));
+                } else if (userData.startsWith("creacion_")) {
+                    tab.setText(nuevoBundle.getString("editor.asistente"));
+                }
+            }
+        }
+        
+        // Actualizar el título de la ventana si es necesario
+        updateWindowTitle("SimAS 3.0");
     }
 } 

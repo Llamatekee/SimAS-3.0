@@ -22,6 +22,7 @@ import simulador.PanelSimuladorDesc;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
+import java.util.Map;
 
 public class MenuPrincipal extends Application {
 
@@ -428,42 +429,34 @@ public class MenuPrincipal extends Application {
             if (labelDesarrollado != null) labelDesarrollado.setText(bundle.getString("label.desarrollado"));
             
             // Actualizar textos de las pestañas y contenido
-            if (tabPane != null) {
-                // Actualizar el menú contextual del TabPane
-                TabManager.actualizarMenuContextual(tabPane, bundle);
-                
-                for (Tab tab : tabPane.getTabs()) {
-                    // Título de la pestaña principal
-                    if (tab.getText().equals("Menú Principal") || 
-                        tab.getText().equals("Main Menu") || 
-                        tab.getText().equals("Menu Principal") ||
-                        tab.getText().equals("Menu") ||
-                        tab == tabPane.getTabs().get(0)) {  // Primera pestaña es siempre el menú principal
-                        tab.setText(bundle.getString("title.menu"));
-                    }
-                    
-                    // Actualizar textos de cualquier panel que implemente ActualizableTextos
-                    if (tab.getContent() instanceof ActualizableTextos) {
-                        ((ActualizableTextos) tab.getContent()).actualizarTextos(bundle);
-                        // Actualizar títulos específicos
-                        if (tab.getContent() instanceof editor.Editor) {
-                            tab.setText(bundle.getString("editor.title"));
-                        } else if (tab.getContent() instanceof editor.PanelSimbolosNoTerminales) {
-                            tab.setText(bundle.getString("creacion2.tab.modificar.no.terminales"));
-                        } else if (tab.getContent() instanceof editor.PanelSimbolosTerminales) {
-                            tab.setText(bundle.getString("creacion2.tab.modificar.terminales"));
-                        }
-                    }
+            for (Tab tab : tabPane.getTabs()) {
+                if (tab.getContent() instanceof editor.ActualizableTextos) {
+                    ((editor.ActualizableTextos) tab.getContent()).actualizarTextos(bundle);
                 }
-                
-                // Actualizar todos los simuladores
-                actualizarTodosLosSimuladores();
-                
-                // Reasignar numeración de editores con nuevos títulos
-                TabManager.reasignarNumerosGruposGramatica(tabPane);
             }
+            
+            // Actualizar títulos de pestañas
+            TabManager.actualizarTitulosPestañas(tabPane);
+            
+            // SINCRONIZAR IDIOMA CON TODAS LAS VENTANAS SECUNDARIAS
+            sincronizarIdiomaConVentanasSecundarias();
+            
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+    
+    /**
+     * Sincroniza el idioma actual con todas las ventanas secundarias activas
+     */
+    private void sincronizarIdiomaConVentanasSecundarias() {
+        Map<String, SecondaryWindow> activeWindows = SecondaryWindow.getActiveWindows();
+        
+        for (SecondaryWindow window : activeWindows.values()) {
+            if (window != null && window.getStage() != null && window.getStage().isShowing()) {
+                // Actualizar el ResourceBundle de la ventana secundaria
+                window.actualizarIdioma(bundle);
+            }
         }
     }
 

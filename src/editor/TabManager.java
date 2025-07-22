@@ -1177,8 +1177,29 @@ public class TabManager {
             
             String childId = tab.getUserData().toString();
             
+            // Pestañas hijas de editor (terminales, no terminales, producciones)
+            if (elementId.startsWith("editor_")) {
+                if (childId.startsWith("terminales_")) {
+                    String tituloBase = obtenerTituloBaseTerminales(tabPane);
+                    String nuevoTitulo = mostrarGrupo ? numeroGrupo + "-" + tituloBase : tituloBase;
+                    tab.setText(nuevoTitulo);
+                } else if (childId.startsWith("no_terminales_")) {
+                    String tituloBase = obtenerTituloBaseNoTerminales(tabPane);
+                    String nuevoTitulo = mostrarGrupo ? numeroGrupo + "-" + tituloBase : tituloBase;
+                    tab.setText(nuevoTitulo);
+                } else if (childId.startsWith("producciones_")) {
+                    String tituloBase = obtenerTituloBaseProducciones(tabPane);
+                    String nuevoTitulo = mostrarGrupo ? numeroGrupo + "-" + tituloBase : tituloBase;
+                    tab.setText(nuevoTitulo);
+                } else if (childId.startsWith("creacion_")) {
+                    String tituloBase = obtenerTituloBaseParaHija(tabPane, childId);
+                    String nuevoTitulo = mostrarGrupo ? numeroGrupo + "-" + tituloBase : tituloBase;
+                    tab.setText(nuevoTitulo);
+                }
+            }
+            
             // Pestañas hijas de simulador (gramática original y funciones de error)
-            if (elementId.startsWith("simulador_")) {
+            else if (elementId.startsWith("simulador_")) {
                 if (childId.equals("gramatica_original_" + elementId)) {
                     String tituloBase = obtenerTituloBaseGramaticaOriginal(tabPane);
                     String nuevoTitulo = mostrarGrupo ? numeroGrupo + "-" + tituloBase : tituloBase;
@@ -2118,9 +2139,9 @@ public class TabManager {
     }
 
     /**
-     * Actualiza los títulos de todas las pestañas en un TabPane
+     * Actualiza los títulos de todas las pestañas en un TabPane específico.
      */
-    private static void actualizarTitulosPestañas(TabPane tabPane) {
+    public static void actualizarTitulosPestañas(TabPane tabPane) {
         if (tabPane == null) return;
         
         Map<String, String> elementos = elementoToGrupo.get(tabPane);
