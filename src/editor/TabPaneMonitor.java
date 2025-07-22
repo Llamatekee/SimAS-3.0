@@ -97,7 +97,6 @@ public class TabPaneMonitor {
         
         void onTabsChanged(ListChangeListener.Change<? extends Tab> change) {
             Platform.runLater(() -> {
-                System.out.println("[MONITOR] Cambio detectado en TabPane: " + identifier);
                 
                 // Validar inmediatamente después del cambio
                 TabPaneMonitor.getInstance().validarConsistenciaTabPane(tabPane, true);
@@ -195,11 +194,6 @@ public class TabPaneMonitor {
             problemas.addAll(validarNumeracionGrupos(tabPane));
             
             if (!problemas.isEmpty()) {
-                System.out.println("[MONITOR] Problemas detectados en " + identifier + ":");
-                for (String problema : problemas) {
-                    System.out.println("  - " + problema);
-                }
-                
                 // INTENTAR REPARAR AUTOMÁTICAMENTE
                 repararInconsistencias(tabPane, problemas);
             } else {
@@ -595,16 +589,6 @@ public class TabPaneMonitor {
         return stats.toString();
     }
     
-    private void debug(String message) {
-        if (debugMode) {
-            System.out.println("[MONITOR] " + message);
-        }
-    }
-    
-    public void setDebugMode(boolean enabled) {
-        this.debugMode = enabled;
-    }
-    
     /**
      * Limpia recursos cuando la aplicación se cierra
      */
@@ -637,6 +621,14 @@ public class TabPaneMonitor {
      */
     public void reiniciarTodosLosContadores() {
         contadorReparaciones.clear();
-        debug("Todos los contadores de reparación reiniciados");
+    }
+    
+    /**
+     * Método de debug que imprime mensajes si el modo debug está activado
+     */
+    private void debug(String message) {
+        if (debugMode) {
+            System.out.println("[MONITOR] " + message);
+        }
     }
 } 
