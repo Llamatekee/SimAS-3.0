@@ -2243,6 +2243,32 @@ public class TabManager {
                 }
             }
         }
+        
+        // ACTUALIZACIÓN ADICIONAL: Buscar pestañas hijas que podrían no estar en las relaciones registradas
+        for (Tab tab : tabPane.getTabs()) {
+            if (tab.getUserData() != null) {
+                String userData = tab.getUserData().toString();
+                
+                // Buscar pestañas hijas de editores que podrían no estar en las relaciones
+                if (userData.startsWith("terminales_") || userData.startsWith("no_terminales_") || 
+                    userData.startsWith("producciones_") || userData.startsWith("creacion_")) {
+                    
+                    // Buscar el editor padre
+                    for (Map.Entry<String, String> entry : elementos.entrySet()) {
+                        String elementoPadre = entry.getKey();
+                        String grupoDelPadre = entry.getValue();
+                        
+                        if (elementoPadre.startsWith("editor_") && isPestañaHijaDeElemento(userData, elementoPadre)) {
+                            Integer numero = grupos.get(grupoDelPadre);
+                            if (numero != null) {
+                                actualizarTituloHija(tab, userData, numero, hayMultiplesGrupos);
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+        }
     }
     
     /**
@@ -2461,6 +2487,12 @@ public class TabManager {
             }
             gruposDestino.put(nuevoGrupoId, nuevoNumeroGrupo);
 
+            // 8.5. COPIAR RESOURCEBUNDLE DE VENTANA ORIGEN A DESTINO
+            java.util.ResourceBundle bundleOrigen = resourceBundles.get(sourceTabPane);
+            if (bundleOrigen != null) {
+                resourceBundles.put(targetTabPane, bundleOrigen);
+            }
+
             // 9. RESTAURAR RELACIONES PADRE-HIJO EN VENTANA DESTINO
             Map<String, List<Tab>> relacionesDestino = parentChildRelations.computeIfAbsent(targetTabPane, k -> new HashMap<>());
             for (Map.Entry<String, List<Tab>> entry : grupoCompleto.relacionesPadreHijo.entrySet()) {
@@ -2491,15 +2523,13 @@ public class TabManager {
                 restaurarListenerOnClosed(tab, targetTabPane);
             }
 
-            // 11. FORZAR RENUMERACIÓN COMPLETA Y CORRECTA EN AMBAS VENTANAS
+            // 11. REASIGNAR NUMERACIÓN EN AMBAS VENTANAS
             Platform.runLater(() -> {
                 reasignarNumerosGruposGramatica(sourceTabPane);
                 reasignarNumerosGruposGramatica(targetTabPane);
                 
-                // Segunda renumeración para asegurar consistencia
-                Platform.runLater(() -> {
-                    reasignarNumerosGruposGramatica(targetTabPane);
-                });
+                // ACTUALIZAR TÍTULOS DE PESTAÑAS EN LA VENTANA DESTINO
+                actualizarTitulosPestañas(targetTabPane);
             });
 
             // 12. SELECCIONAR PESTAÑA ORIGINAL

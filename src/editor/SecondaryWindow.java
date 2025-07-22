@@ -108,6 +108,10 @@ public class SecondaryWindow extends EditorWindow {
     
     private void configureTabPane() {
         localTabPane.setTabDragPolicy(TabPane.TabDragPolicy.REORDER);
+        
+        // ESTABLECER RESOURCEBUNDLE EN TABMANAGER PARA ESTA VENTANA
+        TabManager.setResourceBundle(localTabPane, bundle);
+        
         TabManager.configurarMenuContextual(localTabPane, bundle);
         
         // Registrar este TabPane en el monitor para supervisión continua
