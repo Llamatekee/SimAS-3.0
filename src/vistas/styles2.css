@@ -1,15 +1,15 @@
 /* ===== ESTILOS GENERALES - SimAS 3.0 ===== */
 .root {
     -fx-font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
-    -fx-background-color: linear-gradient(to bottom, #002b36, #073b4c, #002b36);
+    -fx-background-color: linear-gradient(to bottom, #1e3c72, #2a5298, #1e3c72);
 }
 
 /* ===== ESTILOS MENU PRINCIPAL ===== */
 .menu-panel {
     -fx-padding: 50px 40px;
-    -fx-background-color: rgba(255, 255, 255, 0.08);
+    -fx-background-color: rgba(255, 255, 255, 0.1);
     -fx-background-radius: 25px;
-    -fx-border-color: rgba(255, 255, 255, 0.15);
+    -fx-border-color: rgba(255, 255, 255, 0.2);
     -fx-border-width: 1px;
     -fx-border-radius: 25px;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 20, 0.3, 0, 8);
@@ -28,20 +28,22 @@
 
 /* Subtítulo */
 .menu-panel .label:nth-child(2) {
-    -fx-font-size: 20px;
-    -fx-text-fill: rgba(255, 255, 255, 0.7);
-    -fx-padding: 0 0 40px 0;
+    -fx-font-size: 22px;
+    -fx-text-fill: rgba(255, 255, 255, 0.75);
+    -fx-padding: 0 0 50px 0;
     -fx-font-weight: 300;
     -fx-font-style: italic;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 5, 0.2, 0, 1);
 }
 
 /* Pie de página */
 .menu-panel .label:last-child {
     -fx-font-size: 16px;
-    -fx-text-fill: rgba(255, 255, 255, 0.5);
-    -fx-padding: 40px 0 0 0;
+    -fx-text-fill: rgba(255, 255, 255, 0.6);
+    -fx-padding: 50px 0 0 0;
     -fx-font-weight: 300;
     -fx-font-style: italic;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 3, 0.2, 0, 1);
 }
 
 /* ===== BOTONES DEL MENÚ ===== */
@@ -63,8 +65,8 @@
     -fx-cursor: hand;
     
     /* Gradiente moderno para botones principales */
-    -fx-background-color: linear-gradient(to right, #00d4aa, #00b4d8);
-    -fx-effect: dropshadow(gaussian, rgba(0, 212, 170, 0.3), 8, 0.3, 0, 4);
+    -fx-background-color: linear-gradient(to right, #4facfe, #00f2fe);
+    -fx-effect: dropshadow(gaussian, rgba(79, 172, 254, 0.4), 8, 0.3, 0, 4);
     -fx-border-color: rgba(255, 255, 255, 0.2);
     -fx-border-width: 1px;
 }
@@ -82,8 +84,8 @@
 }
 
 .menu-button:hover {
-    -fx-background-color: linear-gradient(to right, #00b4d8, #00d4aa);
-    -fx-effect: dropshadow(gaussian, rgba(0, 212, 170, 0.5), 12, 0.4, 0, 6);
+    -fx-background-color: linear-gradient(to right, #00f2fe, #4facfe);
+    -fx-effect: dropshadow(gaussian, rgba(79, 172, 254, 0.6), 12, 0.4, 0, 6);
     -fx-scale-x: 1.02;
     -fx-scale-y: 1.02;
     -fx-border-color: rgba(255, 255, 255, 0.4);
@@ -116,14 +118,14 @@
     
     /* Gradiente rojo moderno */
     -fx-background-color: linear-gradient(to right, #ff6b6b, #ee5a52);
-    -fx-effect: dropshadow(gaussian, rgba(255, 107, 107, 0.3), 8, 0.3, 0, 4);
+    -fx-effect: dropshadow(gaussian, rgba(255, 107, 107, 0.4), 8, 0.3, 0, 4);
     -fx-border-color: rgba(255, 255, 255, 0.2);
     -fx-border-width: 1px;
 }
 
 .menu-button-exit:hover {
     -fx-background-color: linear-gradient(to right, #ee5a52, #ff6b6b);
-    -fx-effect: dropshadow(gaussian, rgba(255, 107, 107, 0.5), 12, 0.4, 0, 6);
+    -fx-effect: dropshadow(gaussian, rgba(255, 107, 107, 0.6), 12, 0.4, 0, 6);
     -fx-scale-x: 1.02;
     -fx-scale-y: 1.02;
     -fx-border-color: rgba(255, 255, 255, 0.4);
@@ -168,21 +170,21 @@
 
 /* ===== SELECTOR DE IDIOMA ===== */
 .combo-box {
-    -fx-background-color: rgba(255, 255, 255, 0.1);
-    -fx-background-radius: 12px;
-    -fx-border-radius: 12px;
-    -fx-border-color: rgba(255, 255, 255, 0.2);
+    -fx-background-color: rgba(255, 255, 255, 0.08);
+    -fx-background-radius: 15px;
+    -fx-border-radius: 15px;
+    -fx-border-color: rgba(255, 255, 255, 0.18);
     -fx-border-width: 1px;
-    -fx-padding: 8px 12px;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 4, 0.2, 0, 2);
+    -fx-padding: 10px 15px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 6, 0.3, 0, 3);
     -fx-min-width: 150px;
     -fx-pref-width: 150px;
 }
 
 .combo-box:hover {
-    -fx-background-color: rgba(255, 255, 255, 0.15);
-    -fx-border-color: rgba(255, 255, 255, 0.3);
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 6, 0.3, 0, 3);
+    -fx-background-color: rgba(255, 255, 255, 0.12);
+    -fx-border-color: rgba(255, 255, 255, 0.25);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 8, 0.4, 0, 4);
 }
 
 .combo-box .list-cell {
@@ -253,8 +255,8 @@
 }
 
 .tab-pane .tab:selected {
-    -fx-background-color: rgba(0, 212, 170, 0.3);
-    -fx-border-color: rgba(0, 212, 170, 0.5);
+    -fx-background-color: rgba(79, 172, 254, 0.3);
+    -fx-border-color: rgba(79, 172, 254, 0.5);
 }
 
 .tab-pane .tab .tab-label {
