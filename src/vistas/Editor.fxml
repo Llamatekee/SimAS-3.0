@@ -6,16 +6,16 @@
 <?import javafx.scene.image.*?>
 
 <?import java.net.URL?>
-<BorderPane fx:id="rootPane" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" stylesheets="/vistas/styles.css">
+<BorderPane fx:id="rootPane" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" stylesheets="/vistas/styles2.css">
     <!-- Barra de herramientas superior -->
     <top>
         <VBox spacing="0">
             <!-- Título del editor -->
-            <HBox styleClass="editor-header" alignment="CENTER_LEFT">
+            <HBox styleClass="editor-header" alignment="CENTER">
                 <padding>
-                    <Insets top="10" right="10" bottom="10" left="10"/>
+                    <Insets top="15" right="15" bottom="15" left="15"/>
                 </padding>
-                <Label fx:id="labelTitulo" text="%editor.title" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+                <Label fx:id="labelTitulo" text="%editor.title" styleClass="editor-title"/>
             </HBox>
             
             <!-- Barra de herramientas -->
@@ -39,11 +39,11 @@
 
     <!-- Contenido central -->
     <center>
-        <VBox spacing="15" styleClass="editor-content">
+        <VBox spacing="8" styleClass="editor-content" VBox.vgrow="ALWAYS">
             <!-- Información básica de la gramática -->
-            <VBox spacing="5" styleClass="info-section">
+            <VBox spacing="5" styleClass="info-section" VBox.vgrow="NEVER">
                 <padding>
-                    <Insets top="10" right="10" bottom="10" left="10"/>
+                    <Insets top="8" right="8" bottom="8" left="8"/>
                 </padding>
                 <Label fx:id="labelPanelTitulo" text="%editor.label.titulo" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: white;"/>
                 
@@ -70,9 +70,9 @@
             </VBox>
             
             <!-- Símbolos y producciones -->
-            <HBox spacing="20" VBox.vgrow="ALWAYS">
+            <HBox spacing="15" VBox.vgrow="ALWAYS">
                 <padding>
-                    <Insets top="0" right="10" bottom="10" left="10"/>
+                    <Insets top="0" right="8" bottom="8" left="8"/>
                 </padding>
                 <!-- Símbolos -->
                 <VBox spacing="10" HBox.hgrow="ALWAYS">
@@ -89,7 +89,7 @@
             <!-- Producciones -->
             <VBox spacing="5" VBox.vgrow="ALWAYS">
                 <padding>
-                    <Insets top="0" right="10" bottom="10" left="10"/>
+                    <Insets top="0" right="8" bottom="8" left="8"/>
                 </padding>
                 <Label fx:id="labelProducciones" text="%editor.label.producciones" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: white;"/>
                 <ListView fx:id="listProducciones" styleClass="list-view" VBox.vgrow="ALWAYS"/>

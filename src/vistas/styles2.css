@@ -331,3 +331,505 @@
 .scroll-bar:horizontal .decrement-arrow {
     -fx-background-color: transparent;
 }
+
+/* ===== ESTILOS EDITOR ===== */
+.editor-header {
+    -fx-background-color: rgba(52, 152, 219, 0.25);
+    -fx-border-color: rgba(255, 255, 255, 0.2);
+    -fx-border-width: 0 0 2 0;
+    -fx-padding: 10px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 5, 0.3, 0, 2);
+    -fx-alignment: center;
+}
+
+.toolbar {
+    -fx-background-color: rgba(44, 62, 80, 0.3);
+    -fx-padding: 8px;
+    -fx-spacing: 8px;
+    -fx-border-radius: 0 0 12px 12px;
+    -fx-background-radius: 0 0 12px 12px;
+    -fx-border-color: rgba(255, 255, 255, 0.1);
+    -fx-border-width: 0 1 1 1;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 4, 0.2, 0, 2);
+}
+
+.toolbar HBox {
+    -fx-spacing: 8px;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.toolbar-button {
+    -fx-background-color: linear-gradient(to right, #27ae60, #2ecc71);
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-font-weight: 600;
+    -fx-padding: 6px 12px;
+    -fx-min-width: 70px;
+    -fx-max-width: 90px;
+    -fx-alignment: center;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(39, 174, 96, 0.3), 4, 0.2, 0, 2);
+    -fx-border-color: rgba(255, 255, 255, 0.15);
+    -fx-border-width: 1px;
+}
+
+.toolbar-button:hover {
+    -fx-background-color: linear-gradient(to right, #2ecc71, #27ae60);
+    -fx-effect: dropshadow(gaussian, rgba(39, 174, 96, 0.5), 6, 0.3, 0, 3);
+    -fx-border-color: rgba(255, 255, 255, 0.25);
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+}
+
+.toolbar-button:pressed {
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+}
+
+.toolbar-button:disabled {
+    -fx-background-color: linear-gradient(to right, #95a5a6, #7f8c8d);
+    -fx-text-fill: rgba(255, 255, 255, 0.7);
+    -fx-opacity: 0.6;
+    -fx-effect: none;
+    -fx-border-color: rgba(255, 255, 255, 0.1);
+}
+
+.editor-content {
+    -fx-background-color: rgba(52, 73, 94, 0.4);
+    -fx-background-radius: 15px;
+    -fx-padding: 8px;
+    -fx-spacing: 6px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 3, 0.2, 0, 1);
+    -fx-border-color: rgba(255, 255, 255, 0.08);
+    -fx-border-width: 1px;
+    -fx-border-radius: 15px;
+    -fx-fill-height: true;
+    -fx-fill-width: true;
+}
+
+.info-section {
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+    -fx-background-radius: 12px;
+    -fx-padding: 10px;
+    -fx-spacing: 6px;
+    -fx-border-color: rgba(255, 255, 255, 0.25);
+    -fx-border-width: 2px;
+    -fx-border-radius: 12px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 5, 0.3, 0, 3);
+}
+
+/* Campos de texto del editor */
+.editor-content .text-field {
+    -fx-background-color: rgba(255, 255, 255, 0.2);
+    -fx-text-fill: white;
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-padding: 10px 15px;
+    -fx-border-color: rgba(255, 255, 255, 0.35);
+    -fx-border-width: 2px;
+    -fx-pref-height: 40px;
+    -fx-font-size: 14px;
+    -fx-cursor: default;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 3, 0.2, 0, 2);
+}
+
+.editor-content .text-field:focused {
+    -fx-background-color: rgba(255, 255, 255, 0.25);
+    -fx-border-color: rgba(52, 152, 219, 0.8);
+    -fx-border-width: 3px;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(gaussian, rgba(52, 152, 219, 0.4), 5, 0.3, 0, 3);
+}
+
+.editor-content .text-field:disabled {
+    -fx-background-color: rgba(255, 255, 255, 0.08);
+    -fx-text-fill: rgba(255, 255, 255, 0.6);
+    -fx-border-color: rgba(255, 255, 255, 0.15);
+    -fx-opacity: 0.7;
+}
+
+/* Listas del editor */
+.editor-content .list-view {
+    -fx-background-color: rgba(255, 255, 255, 0.18);
+    -fx-text-fill: white;
+    -fx-background-radius: 12px;
+    -fx-border-radius: 12px;
+    -fx-border-color: rgba(255, 255, 255, 0.3);
+    -fx-border-width: 2px;
+    -fx-min-height: 150px;
+    -fx-pref-height: 200px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 4, 0.3, 0, 2);
+}
+
+.editor-content .list-view .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-padding: 6px 10px;
+    -fx-font-size: 13px;
+    -fx-border-color: transparent;
+}
+
+.editor-content .list-view .list-cell:selected {
+    -fx-background-color: rgba(52, 152, 219, 0.4);
+    -fx-text-fill: white;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-effect: dropshadow(gaussian, rgba(52, 152, 219, 0.3), 2, 0.2, 0, 1);
+}
+
+.editor-content .list-view .list-cell:hover {
+    -fx-background-color: rgba(52, 152, 219, 0.2);
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+}
+
+/* Labels del editor */
+.editor-content .label {
+    -fx-text-fill: rgba(255, 255, 255, 0.95);
+    -fx-font-size: 14px;
+    -fx-font-weight: 600;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 1, 0.2, 0, 1);
+}
+
+/* Títulos de sección */
+.editor-content .label[style*="font-size: 16px"],
+.editor-content .label[style*="font-size: 14px"] {
+    -fx-text-fill: #ecf0f1;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 2, 0.2, 0, 1);
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+}
+
+/* Títulos de secciones de gramática con más contraste */
+.editor-content .label[text*="Gramática"],
+.editor-content .label[text*="No Terminales"],
+.editor-content .label[text*="Terminales"],
+.editor-content .label[text*="Producciones"] {
+    -fx-text-fill: #2c3e50;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-background-color: rgba(255, 255, 255, 0.25);
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-padding: 8px 15px;
+    -fx-border-color: rgba(255, 255, 255, 0.4);
+    -fx-border-width: 2px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 3, 0.2, 0, 2);
+}
+
+/* Título principal del editor */
+.editor-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 4, 0.4, 0, 3);
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+    -fx-font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    -fx-letter-spacing: 1px;
+}
+
+.editor-header .label {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 3, 0.3, 0, 2);
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+}
+
+/* ===== ESTILOS PARA EXPANSIÓN DE CONTENIDO ===== */
+/* Hacer que las secciones ocupen todo el espacio disponible */
+.editor-content {
+    -fx-fill-height: true;
+    -fx-fill-width: true;
+}
+
+.editor-content VBox {
+    -fx-fill-height: true;
+    -fx-fill-width: true;
+}
+
+.editor-content HBox {
+    -fx-fill-height: true;
+    -fx-fill-width: true;
+}
+
+.editor-content .list-view {
+    -fx-fill-height: true;
+    -fx-fill-width: true;
+    -fx-min-height: 100px;
+    -fx-pref-height: 300px;
+}
+
+/* Asegurar que el BorderPane ocupe toda la ventana */
+BorderPane {
+    -fx-fill-height: true;
+    -fx-fill-width: true;
+}
+
+/* ===== ESTILOS CREACION GRAMATICA ===== */
+.creation-step {
+    -fx-background-color: transparent;
+}
+
+.step-header {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 3, 0.2, 0, 1);
+}
+
+.field-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: rgba(255, 255, 255, 0.9);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 1, 0.2, 0, 1);
+}
+
+.error-label {
+    -fx-text-fill: #ff6b6b;
+    -fx-font-size: 12px;
+    -fx-padding: 2 0 0 0;
+    -fx-effect: dropshadow(gaussian, rgba(255, 107, 107, 0.3), 1, 0.2, 0, 1);
+}
+
+/* Campos de texto en creación de gramática */
+.creation-step .text-field, 
+.creation-step .text-area {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-border-color: rgba(255, 255, 255, 0.2);
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-padding: 10px 12px;
+    -fx-font-size: 14px;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 2, 0.2, 0, 1);
+}
+
+.creation-step .text-field:focused, 
+.creation-step .text-area:focused {
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+    -fx-border-color: rgba(79, 172, 254, 0.5);
+    -fx-effect: dropshadow(gaussian, rgba(79, 172, 254, 0.2), 4, 0.2, 0, 2);
+}
+
+.creation-step .text-area {
+    -fx-pref-height: 120px;
+}
+
+.creation-step .text-area .content {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-background-radius: 8px;
+}
+
+.creation-step .text-area:focused .content {
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Botones de navegación */
+.button-container {
+    -fx-padding: 20px 0 0 0;
+}
+
+.button-primary {
+    -fx-background-color: linear-gradient(to right, #4facfe, #00f2fe);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-min-width: 100px;
+    -fx-cursor: hand;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-padding: 8px 16px;
+    -fx-effect: dropshadow(gaussian, rgba(79, 172, 254, 0.3), 4, 0.2, 0, 2);
+    -fx-border-color: rgba(255, 255, 255, 0.15);
+    -fx-border-width: 1px;
+}
+
+.button-primary:hover {
+    -fx-background-color: linear-gradient(to right, #00f2fe, #4facfe);
+    -fx-effect: dropshadow(gaussian, rgba(79, 172, 254, 0.5), 6, 0.3, 0, 3);
+    -fx-border-color: rgba(255, 255, 255, 0.25);
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+}
+
+.button-secondary {
+    -fx-background-color: linear-gradient(to right, #95a5a6, #7f8c8d);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-min-width: 100px;
+    -fx-cursor: hand;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-padding: 8px 16px;
+    -fx-effect: dropshadow(gaussian, rgba(149, 165, 166, 0.3), 4, 0.2, 0, 2);
+    -fx-border-color: rgba(255, 255, 255, 0.15);
+    -fx-border-width: 1px;
+}
+
+.button-secondary:hover {
+    -fx-background-color: linear-gradient(to right, #7f8c8d, #95a5a6);
+    -fx-effect: dropshadow(gaussian, rgba(149, 165, 166, 0.5), 6, 0.3, 0, 3);
+    -fx-border-color: rgba(255, 255, 255, 0.25);
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+}
+
+.button-navigation {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-min-width: 100px;
+    -fx-cursor: hand;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-padding: 8px 16px;
+    -fx-border-color: rgba(255, 255, 255, 0.2);
+    -fx-border-width: 1px;
+}
+
+.button-navigation:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+    -fx-border-color: rgba(255, 255, 255, 0.3);
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+}
+
+.button-navigation:disabled {
+    -fx-opacity: 0.5;
+    -fx-cursor: default;
+}
+
+/* ===== ESTILOS WIZARD ===== */
+.wizard-step {
+    -fx-background-color: transparent;
+}
+
+.wizard-header {
+    -fx-background-color: rgba(79, 172, 254, 0.15);
+    -fx-padding: 15px;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-alignment: center;
+    -fx-background-radius: 12px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 5, 0.2, 0, 2);
+    -fx-border-color: rgba(255, 255, 255, 0.1);
+    -fx-border-width: 1px;
+    -fx-border-radius: 12px;
+}
+
+.wizard-section-header {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: rgba(79, 172, 254, 0.9);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 2, 0.2, 0, 1);
+    -fx-padding: 5px 0;
+    -fx-border-color: transparent transparent rgba(79, 172, 254, 0.3) transparent;
+    -fx-border-width: 0 0 2 0;
+}
+
+.wizard-content {
+    -fx-padding: 20px;
+    -fx-spacing: 20px;
+    -fx-fill-height: true;
+}
+
+.wizard-navigation {
+    -fx-padding: 20px 0;
+    -fx-spacing: 10px;
+    -fx-alignment: center-right;
+    -fx-border-color: rgba(255, 255, 255, 0.1) transparent transparent transparent;
+    -fx-border-width: 1 0 0 0;
+}
+
+/* Botones específicos del wizard */
+.button-cancel {
+    -fx-background-color: linear-gradient(to right, #ff6b6b, #ee5a52);
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-font-weight: bold;
+    -fx-padding: 8px 15px;
+    -fx-min-width: 100px;
+    -fx-alignment: center;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(255, 107, 107, 0.3), 4, 0.2, 0, 2);
+    -fx-border-color: rgba(255, 255, 255, 0.15);
+    -fx-border-width: 1px;
+}
+
+.button-cancel:hover {
+    -fx-background-color: linear-gradient(to right, #ee5a52, #ff6b6b);
+    -fx-effect: dropshadow(gaussian, rgba(255, 107, 107, 0.5), 6, 0.3, 0, 3);
+    -fx-border-color: rgba(255, 255, 255, 0.25);
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+}
+
+.button-next {
+    -fx-background-color: linear-gradient(to right, #4facfe, #00f2fe);
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-font-weight: bold;
+    -fx-padding: 8px 15px;
+    -fx-min-width: 100px;
+    -fx-alignment: center;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(79, 172, 254, 0.3), 4, 0.2, 0, 2);
+    -fx-border-color: rgba(255, 255, 255, 0.15);
+    -fx-border-width: 1px;
+}
+
+.button-next:hover {
+    -fx-background-color: linear-gradient(to right, #00f2fe, #4facfe);
+    -fx-effect: dropshadow(gaussian, rgba(79, 172, 254, 0.5), 6, 0.3, 0, 3);
+    -fx-border-color: rgba(255, 255, 255, 0.25);
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+}
+
+/* Campos del wizard */
+.wizard-field {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-text-fill: white;
+    -fx-padding: 10px;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-font-size: 14px;
+    -fx-border-color: rgba(255, 255, 255, 0.2);
+    -fx-border-width: 1px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 2, 0.2, 0, 1);
+}
+
+.text-area.wizard-field {
+    -fx-min-height: 200px;
+}
+
+.wizard-field:focused {
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+    -fx-border-color: rgba(79, 172, 254, 0.5);
+    -fx-border-width: 2px;
+    -fx-effect: dropshadow(gaussian, rgba(79, 172, 254, 0.2), 4, 0.2, 0, 2);
+}
+
+/* Labels del wizard */
+.wizard-label {
+    -fx-font-size: 14px;
+    -fx-text-fill: rgba(255, 255, 255, 0.9);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 1, 0.2, 0, 1);
+}
+
+.wizard-subsection-header {
+    -fx-font-size: 14px;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 1, 0.2, 0, 1);
+}
