@@ -27,6 +27,7 @@ import java.util.Map;
 public class MenuPrincipal extends Application {
 
     @FXML private TabPane tabPane;
+    @FXML private Tab mainTab;
     @FXML private Button btnCerrarTabs;
     @FXML private ComboBox<String> comboIdioma;
     @FXML private Button btnEditor;
@@ -360,8 +361,7 @@ public class MenuPrincipal extends Application {
         });
         
         // Actualizar el título inicial de la pestaña principal
-        if (tabPane != null && !tabPane.getTabs().isEmpty()) {
-            Tab mainTab = tabPane.getTabs().get(0);
+        if (mainTab != null) {
             mainTab.setText(bundle.getString("title.menu"));
         }
         
@@ -427,6 +427,11 @@ public class MenuPrincipal extends Application {
             if (labelTitulo != null) labelTitulo.setText(bundle.getString("label.titulo"));
             if (labelSubtitulo != null) labelSubtitulo.setText(bundle.getString("label.subtitulo"));
             if (labelDesarrollado != null) labelDesarrollado.setText(bundle.getString("label.desarrollado"));
+            
+            // Actualizar el título de la pestaña principal
+            if (mainTab != null) {
+                mainTab.setText(bundle.getString("title.menu"));
+            }
             
             // Actualizar textos de las pestañas y contenido
             for (Tab tab : tabPane.getTabs()) {

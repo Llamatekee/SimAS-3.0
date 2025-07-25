@@ -6,12 +6,12 @@
 <?import javafx.geometry.Insets?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml/1"
-            stylesheets="@styles.css">
+            stylesheets="@styles2.css">
 
     <top>
         <HBox alignment="CENTER_RIGHT" spacing="10" style="-fx-padding: 10 20 0 0;">
             <Label text="Idioma:" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
-            <ComboBox fx:id="comboIdioma" prefWidth="120" />
+            <ComboBox fx:id="comboIdioma" prefWidth="150" />
         </HBox>
     </top>
 
@@ -19,7 +19,7 @@
         <StackPane>
             <TabPane fx:id="tabPane" tabClosingPolicy="SELECTED_TAB" styleClass="tab-pane">
                 <tabs>
-                    <Tab text="Menú Principal" closable="false">
+                    <Tab fx:id="mainTab" text="Menú Principal" closable="false">
                         <content>
                             <VBox fx:id="menuPanel" spacing="25" alignment="CENTER" styleClass="menu-panel">
                                 <!-- Título de la aplicación -->
