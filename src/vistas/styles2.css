@@ -337,14 +337,14 @@
     -fx-background-color: rgba(52, 152, 219, 0.25);
     -fx-border-color: rgba(255, 255, 255, 0.2);
     -fx-border-width: 0 0 2 0;
-    -fx-padding: 10px;
+    -fx-padding: 8px;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 5, 0.3, 0, 2);
     -fx-alignment: center;
 }
 
 .toolbar {
     -fx-background-color: rgba(44, 62, 80, 0.3);
-    -fx-padding: 8px;
+    -fx-padding: 8px 12px;
     -fx-spacing: 8px;
     -fx-border-radius: 0 0 12px 12px;
     -fx-background-radius: 0 0 12px 12px;
@@ -361,18 +361,24 @@
 .toolbar-button {
     -fx-background-color: linear-gradient(to right, #27ae60, #2ecc71);
     -fx-text-fill: white;
-    -fx-font-size: 12px;
-    -fx-background-radius: 8px;
-    -fx-border-radius: 8px;
+    -fx-font-size: 11px;
+    -fx-background-radius: 6px;
+    -fx-border-radius: 6px;
     -fx-font-weight: 600;
-    -fx-padding: 6px 12px;
+    -fx-padding: 6px 8px;
     -fx-min-width: 70px;
-    -fx-max-width: 90px;
+    -fx-pref-width: 75px;
+    -fx-max-width: 85px;
+    -fx-min-height: 30px;
+    -fx-pref-height: 32px;
+    -fx-max-height: 35px;
     -fx-alignment: center;
     -fx-cursor: hand;
-    -fx-effect: dropshadow(gaussian, rgba(39, 174, 96, 0.3), 4, 0.2, 0, 2);
+    -fx-effect: dropshadow(gaussian, rgba(39, 174, 96, 0.3), 3, 0.2, 0, 1);
     -fx-border-color: rgba(255, 255, 255, 0.15);
     -fx-border-width: 1px;
+    -fx-content-display: left;
+    -fx-graphic-text-gap: 4px;
 }
 
 .toolbar-button:hover {
@@ -395,6 +401,22 @@
     -fx-effect: none;
     -fx-border-color: rgba(255, 255, 255, 0.1);
 }
+
+/* Estilos para los iconos de los botones */
+.toolbar-button .image-view {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 1, 0.2, 0, 1);
+}
+
+.toolbar-button:hover .image-view {
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 0.4), 2, 0.3, 0, 1);
+}
+
+.toolbar-button:disabled .image-view {
+    -fx-opacity: 0.5;
+    -fx-effect: none;
+}
+
+
 
 .editor-content {
     -fx-background-color: rgba(52, 73, 94, 0.4);
