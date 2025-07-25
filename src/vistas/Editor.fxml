@@ -19,9 +19,9 @@
             </HBox>
             
             <!-- Barra de herramientas -->
-            <HBox styleClass="toolbar" spacing="8">
+            <HBox styleClass="toolbar" spacing="4">
                 <padding>
-                    <Insets top="6" right="10" bottom="6" left="10"/>
+                    <Insets top="6" right="6" bottom="6" left="6"/>
                 </padding>
                 <Button fx:id="btnAnadir" text="Nueva" onAction="#onBtnAnadirAction" styleClass="toolbar-button">
                     <graphic>

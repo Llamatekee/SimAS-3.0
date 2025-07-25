@@ -195,6 +195,7 @@ public class Editor extends VBox implements ActualizableTextos {
     @FXML
     public void initialize() {
         actualizarTextos(bundle);
+        configurarTooltips();
         // Configurar la vista según sea necesario
         btnEditar.setDisable(true);
         btnEliminar.setDisable(true);
@@ -499,6 +500,10 @@ public class Editor extends VBox implements ActualizableTextos {
             if (btnInforme != null) btnInforme.setText(bundle.getString("editor.btn.informe"));
             if (btnSimular != null) btnSimular.setText(bundle.getString("editor.btn.simular"));
             if (btnSalir != null) btnSalir.setText(bundle.getString("btn.salir"));
+            
+            // Actualizar tooltips de los botones
+            configurarTooltips();
+            
             // Actualizar título de la ventana
             if (rootPane != null && rootPane.getScene() != null) {
                 Stage stage = (Stage) rootPane.getScene().getWindow();
@@ -526,5 +531,22 @@ public class Editor extends VBox implements ActualizableTextos {
     public void setBundle(ResourceBundle bundle) {
         this.bundle = bundle;
         actualizarTextos(bundle);
+    }
+    
+    /**
+     * Configura los tooltips para todos los botones del editor
+     */
+    private void configurarTooltips() {
+        if (bundle != null) {
+            btnAnadir.setTooltip(new Tooltip(bundle.getString("editor.tooltip.nueva")));
+            btnAbrir.setTooltip(new Tooltip(bundle.getString("editor.tooltip.abrir")));
+            btnGuardar.setTooltip(new Tooltip(bundle.getString("editor.tooltip.guardar")));
+            btnEditar.setTooltip(new Tooltip(bundle.getString("editor.tooltip.editar")));
+            btnEliminar.setTooltip(new Tooltip(bundle.getString("editor.tooltip.eliminar")));
+            btnValidar.setTooltip(new Tooltip(bundle.getString("editor.tooltip.validar")));
+            btnInforme.setTooltip(new Tooltip(bundle.getString("editor.tooltip.informe")));
+            btnSimular.setTooltip(new Tooltip(bundle.getString("editor.tooltip.simular")));
+            btnSalir.setTooltip(new Tooltip(bundle.getString("editor.tooltip.salir")));
+        }
     }
 }
