@@ -54,7 +54,7 @@
                 onAction="#onBtnCancelarAction">
             <graphic>
                 <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
-                    <Image url="@../resources/icons/book_blue_delete.png"/>
+                    <Image url="@../resources/icons/selection_delete.png"/>
                 </ImageView>
             </graphic>
         </Button>

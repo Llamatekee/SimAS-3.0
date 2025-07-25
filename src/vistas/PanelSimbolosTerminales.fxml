@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
 
 <GridPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
          styleClass="wizard-step" vgap="0" VBox.vgrow="ALWAYS">
@@ -41,12 +42,30 @@
             <HBox spacing="10">
                 <TextField fx:id="txtSimboloTerminal" styleClass="wizard-field"
                           HBox.hgrow="ALWAYS"/>
-                <Button fx:id="btnInsertar" styleClass="button-next"
-                        onAction="#onInsertarAction"/>
-                <Button fx:id="btnModificar" styleClass="button-next"
-                        onAction="#onModificarAction"/>
-                <Button fx:id="btnEliminar" styleClass="button-cancel"
-                        onAction="#onEliminarAction"/>
+                <Button fx:id="btnInsertar" styleClass="wizard-action-button"
+                        onAction="#onInsertarAction">
+                                <graphic>
+                <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
+                    <Image url="@../resources/icons/element_add.png"/>
+                </ImageView>
+            </graphic>
+                </Button>
+                <Button fx:id="btnModificar" styleClass="wizard-action-button"
+                        onAction="#onModificarAction">
+                    <graphic>
+                        <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
+                            <Image url="@../resources/icons/pencil.png"/>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button fx:id="btnEliminar" styleClass="wizard-action-button"
+                        onAction="#onEliminarAction">
+                    <graphic>
+                        <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
+                            <Image url="@../resources/icons/book_blue_delete.png"/>
+                        </ImageView>
+                    </graphic>
+                </Button>
             </HBox>
         </VBox>
 
@@ -61,10 +80,22 @@
     <HBox styleClass="wizard-navigation" GridPane.columnIndex="0" GridPane.rowIndex="2" 
           GridPane.valignment="BOTTOM">
         <Button fx:id="btnCancelar" styleClass="button-cancel" 
-                onAction="#onCancelarAction"/>
+                onAction="#onCancelarAction">
+            <graphic>
+                <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
+                    <Image url="@../resources/icons/selection_delete.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
         <Region HBox.hgrow="ALWAYS"/>
         <Button fx:id="btnAceptar" styleClass="button-finish" 
-                onAction="#onAceptarAction"/>
+                onAction="#onAceptarAction">
+            <graphic>
+                <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
+                    <Image url="@../resources/icons/check.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
     </HBox>
 
 </GridPane>

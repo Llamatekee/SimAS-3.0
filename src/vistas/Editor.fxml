@@ -47,7 +47,7 @@
                 <Button fx:id="btnEditar" text="Editar" onAction="#onBtnEditarAction" styleClass="toolbar-button">
                     <graphic>
                         <ImageView fitHeight="12" fitWidth="12" preserveRatio="true">
-                            <Image url="@../resources/icons/pencil.png"/>
+                            <Image url="@../resources/icons/data_edit.png"/>
                         </ImageView>
                     </graphic>
                 </Button>
