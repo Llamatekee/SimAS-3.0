@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
 
 <GridPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
          styleClass="wizard-step" vgap="0" VBox.vgrow="ALWAYS">
@@ -33,23 +34,59 @@
         
         <ListView fx:id="listProducciones" VBox.vgrow="ALWAYS"/>
         
-        <Button fx:id="btnModificarProducciones" maxWidth="Infinity" onAction="#onBtnModificarProduccionesAction"/>
+        <Button fx:id="btnModificarProducciones" maxWidth="Infinity" onAction="#onBtnModificarProduccionesAction" styleClass="wizard-action-button">
+            <graphic>
+                <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
+                    <Image url="@../resources/icons/pencil.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
     </VBox>
 
     <!-- Navigation -->
     <HBox styleClass="wizard-navigation" GridPane.columnIndex="0" GridPane.rowIndex="2" 
           GridPane.valignment="BOTTOM">
         <Button fx:id="btnCancelar" styleClass="button-cancel" 
-                onAction="#onBtnCancelarAction"/>
+                onAction="#onBtnCancelarAction">
+            <graphic>
+                <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
+                    <Image url="@../resources/icons/selection_delete.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
         <Region HBox.hgrow="ALWAYS"/>
         <Button fx:id="btnPrimero" styleClass="button-next" 
-                onAction="#onBtnPrimeroAction"/>
+                onAction="#onBtnPrimeroAction">
+            <graphic>
+                <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
+                    <Image url="@../resources/icons/arrow_left_blue.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
         <Button fx:id="btnAnterior" styleClass="button-next" 
-                onAction="#onBtnAnteriorAction"/>
+                onAction="#onBtnAnteriorAction">
+            <graphic>
+                <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
+                    <Image url="@../resources/icons/arrow_left_green.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
         <Button fx:id="btnSiguiente" styleClass="button-next" 
-                onAction="#onBtnSiguienteAction"/>
+                onAction="#onBtnSiguienteAction">
+            <graphic>
+                <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
+                    <Image url="@../resources/icons/arrow_right_green.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
         <Button fx:id="btnUltimo" styleClass="button-next" 
-                onAction="#onBtnUltimoAction"/>
+                onAction="#onBtnUltimoAction">
+            <graphic>
+                <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
+                    <Image url="@../resources/icons/arrow_right_blue.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
     </HBox>
 
 </GridPane>

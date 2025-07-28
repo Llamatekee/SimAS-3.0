@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
 
 <GridPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
          styleClass="wizard-step" vgap="0" VBox.vgrow="ALWAYS">
@@ -12,13 +13,13 @@
     </columnConstraints>
     
     <rowConstraints>
-        <RowConstraints valignment="TOP" minHeight="80" maxHeight="80" fillHeight="false"/> <!-- Header -->
+        <RowConstraints valignment="TOP" minHeight="50" maxHeight="50" fillHeight="false"/> <!-- Header -->
         <RowConstraints vgrow="ALWAYS" valignment="TOP" fillHeight="true"/> <!-- Content -->
-        <RowConstraints valignment="BOTTOM" minHeight="60" maxHeight="60" fillHeight="false"/> <!-- Navigation -->
+        <RowConstraints valignment="BOTTOM" minHeight="40" maxHeight="40" fillHeight="false"/> <!-- Navigation -->
     </rowConstraints>
 
     <padding>
-        <Insets top="30" right="40" bottom="30" left="40"/>
+        <Insets top="15" right="20" bottom="15" left="20"/>
     </padding>
 
     <!-- Header -->
@@ -26,79 +27,121 @@
            GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.halignment="CENTER"/>
 
     <!-- Content -->
-    <VBox spacing="20" GridPane.columnIndex="0" GridPane.rowIndex="1" 
+    <VBox spacing="8" GridPane.columnIndex="0" GridPane.rowIndex="1" 
           styleClass="wizard-content">
         
-        <!-- Antecedente Section -->
-        <VBox spacing="10">
-            <Label fx:id="labelAntecedente" styleClass="wizard-section-header"/>
-            <ComboBox fx:id="comboBoxAntecedente" styleClass="wizard-combo-box" 
-                     maxWidth="Infinity"/>
-        </VBox>
+        <!-- Top Section: Antecedente and Consecuente -->
+        <HBox spacing="15" VBox.vgrow="NEVER">
+            <!-- Antecedente Section -->
+            <VBox spacing="5" HBox.hgrow="ALWAYS">
+                <Label fx:id="labelAntecedente" styleClass="wizard-section-header"/>
+                <ComboBox fx:id="comboBoxAntecedente" styleClass="wizard-combo-box" 
+                         maxWidth="Infinity"/>
+            </VBox>
 
-        <!-- Consecuente Section -->
-        <VBox spacing="10">
-            <Label fx:id="labelConsecuente" styleClass="wizard-section-header"/>
-            <HBox spacing="10">
-                <TextField fx:id="txtConsecuente" styleClass="wizard-field"
-                          HBox.hgrow="ALWAYS"/>
-                <Button fx:id="btnBorrar" styleClass="button-cancel"
-                        onAction="#onBtnBorrarAction"/>
-            </HBox>
-        </VBox>
+            <!-- Consecuente Section -->
+            <VBox spacing="5" HBox.hgrow="ALWAYS">
+                <Label fx:id="labelConsecuente" styleClass="wizard-section-header"/>
+                <HBox spacing="5">
+                    <TextField fx:id="txtConsecuente" styleClass="wizard-field"
+                              HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="btnBorrar" styleClass="button-cancel"
+                            onAction="#onBtnBorrarAction">
+                        <graphic>
+                            <ImageView fitHeight="12" fitWidth="12" preserveRatio="true">
+                                <Image url="@../resources/icons/selection_delete.png"/>
+                            </ImageView>
+                        </graphic>
+                    </Button>
+                </HBox>
+            </VBox>
+        </HBox>
 
-        <!-- Símbolos Section -->
-        <VBox spacing="15">
+        <!-- Middle Section: Símbolos and Epsilon -->
+        <VBox spacing="6" VBox.vgrow="NEVER">
             <Label fx:id="labelAnadirSimbolos" styleClass="wizard-section-header"/>
-            <HBox spacing="20">
+            <HBox spacing="10">
                 <!-- No Terminales -->
-                <VBox spacing="10" HBox.hgrow="ALWAYS">
+                <VBox spacing="5" HBox.hgrow="ALWAYS">
                     <Label fx:id="labelNoTerminales" styleClass="wizard-subsection-header"/>
-                    <ListView fx:id="listNoTerminales" VBox.vgrow="ALWAYS" 
+                    <ListView fx:id="listNoTerminales" prefHeight="60" VBox.vgrow="NEVER" 
                              onMouseClicked="#onListNoTerminalesClicked"/>
                 </VBox>
                 
                 <!-- Terminales -->
-                <VBox spacing="10" HBox.hgrow="ALWAYS">
+                <VBox spacing="5" HBox.hgrow="ALWAYS">
                     <Label fx:id="labelTerminales" styleClass="wizard-subsection-header"/>
-                    <ListView fx:id="listTerminales" VBox.vgrow="ALWAYS"
+                    <ListView fx:id="listTerminales" prefHeight="60" VBox.vgrow="NEVER"
                              onMouseClicked="#onListTerminalesClicked"/>
                 </VBox>
                 
                 <!-- Epsilon -->
-                <VBox spacing="10">
+                <VBox spacing="5" HBox.hgrow="NEVER">
                     <Label fx:id="labelEpsilon" styleClass="wizard-subsection-header"/>
                     <Button fx:id="btnEpsilon" text="ε" styleClass="button-next"
-                            onAction="#onBtnEpsilonAction"/>
+                            onAction="#onBtnEpsilonAction" prefWidth="50" prefHeight="30"/>
                 </VBox>
             </HBox>
         </VBox>
 
-        <!-- Acciones Section -->
-        <HBox spacing="10">
-            <Button fx:id="btnInsertar" styleClass="button-next" maxWidth="Infinity" HBox.hgrow="ALWAYS"
-                    onAction="#onBtnInsertarAction"/>
-            <Button fx:id="btnModificar" styleClass="button-next" maxWidth="Infinity" HBox.hgrow="ALWAYS"
-                    onAction="#onBtnModificarAction"/>
-            <Button fx:id="btnEliminar" styleClass="button-cancel" maxWidth="Infinity" HBox.hgrow="ALWAYS"
-                    onAction="#onBtnEliminarAction"/>
+        <!-- Lista de Producciones with Action Buttons -->
+        <HBox spacing="15" VBox.vgrow="ALWAYS">
+            <!-- Lista de Producciones -->
+            <VBox spacing="5" HBox.hgrow="ALWAYS">
+                <Label fx:id="labelLista" styleClass="wizard-section-header"/>
+                <ListView fx:id="listProducciones" VBox.vgrow="ALWAYS"/>
+            </VBox>
+            
+            <!-- Action Buttons -->
+            <VBox spacing="8" HBox.hgrow="NEVER" alignment="TOP_CENTER">
+                <Button fx:id="btnInsertar" styleClass="wizard-action-button" 
+                        onAction="#onBtnInsertarAction" prefWidth="120">
+                    <graphic>
+                        <ImageView fitHeight="12" fitWidth="12" preserveRatio="true">
+                            <Image url="@../resources/icons/element_add.png"/>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button fx:id="btnModificar" styleClass="wizard-action-button" 
+                        onAction="#onBtnModificarAction" prefWidth="120">
+                    <graphic>
+                        <ImageView fitHeight="12" fitWidth="12" preserveRatio="true">
+                            <Image url="@../resources/icons/pencil.png"/>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button fx:id="btnEliminar" styleClass="button-cancel" 
+                        onAction="#onBtnEliminarAction" prefWidth="120">
+                    <graphic>
+                        <ImageView fitHeight="12" fitWidth="12" preserveRatio="true">
+                            <Image url="@../resources/icons/book_blue_delete.png"/>
+                        </ImageView>
+                    </graphic>
+                </Button>
+            </VBox>
         </HBox>
-
-        <!-- Lista de Producciones -->
-        <VBox spacing="10" VBox.vgrow="ALWAYS">
-            <Label fx:id="labelLista" styleClass="wizard-section-header"/>
-            <ListView fx:id="listProducciones" VBox.vgrow="ALWAYS"/>
-        </VBox>
     </VBox>
 
     <!-- Navigation -->
     <HBox styleClass="wizard-navigation" GridPane.columnIndex="0" GridPane.rowIndex="2" 
           GridPane.valignment="BOTTOM">
         <Button fx:id="btnCancelar" styleClass="button-cancel" 
-                onAction="#onBtnCancelarAction"/>
+                onAction="#onBtnCancelarAction">
+            <graphic>
+                <ImageView fitHeight="12" fitWidth="12" preserveRatio="true">
+                    <Image url="@../resources/icons/selection_delete.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
         <Region HBox.hgrow="ALWAYS"/>
         <Button fx:id="btnAceptar" styleClass="button-finish" 
-                onAction="#onBtnAceptarAction"/>
+                onAction="#onBtnAceptarAction">
+            <graphic>
+                <ImageView fitHeight="12" fitWidth="12" preserveRatio="true">
+                    <Image url="@../resources/icons/check.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
     </HBox>
 
 </GridPane>
