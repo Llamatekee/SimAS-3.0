@@ -9,6 +9,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import javafx.stage.Screen;
+import javafx.scene.Scene;
 
 import java.io.IOException;
 
@@ -76,6 +78,90 @@ public class PanelCreacionGramaticaPaso2 extends VBox implements ActualizableTex
         });
 
         cargarDatosDesdeGramatica();
+        
+        // Aplicar estilos responsivos basados en el tamaño de la pantalla
+        aplicarEstilosResponsivos();
+    }
+
+    /**
+     * Aplica estilos responsivos basados en el tamaño de la pantalla
+     */
+    private void aplicarEstilosResponsivos() {
+        // Obtener el tamaño de la pantalla principal
+        Screen primaryScreen = Screen.getPrimary();
+        double screenWidth = primaryScreen.getVisualBounds().getWidth();
+        double screenHeight = primaryScreen.getVisualBounds().getHeight();
+        
+        // Determinar si es una pantalla pequeña
+        boolean isSmallScreen = screenWidth < 1200 || screenHeight < 800;
+        
+        if (isSmallScreen) {
+            aplicarEstilosCompactos();
+        }
+    }
+    
+    /**
+     * Aplica estilos compactos para pantallas pequeñas
+     */
+    private void aplicarEstilosCompactos() {
+        // Aplicar estilos compactos a los elementos principales
+        if (labelHeader != null) {
+            labelHeader.getStyleClass().add("wizard-header-compact");
+        }
+        
+        if (labelNoTerminalesSeccion != null) {
+            labelNoTerminalesSeccion.getStyleClass().add("wizard-section-header-compact");
+        }
+        
+        if (labelTerminalesSeccion != null) {
+            labelTerminalesSeccion.getStyleClass().add("wizard-section-header-compact");
+        }
+        
+        // Aplicar estilos compactos a las listas
+        if (listNoTerminales != null) {
+            listNoTerminales.getStyleClass().add("list-view-compact");
+            // Ajustar tamaños mínimos para pantallas pequeñas
+            listNoTerminales.setMinHeight(60);
+            listNoTerminales.setPrefHeight(80);
+            listNoTerminales.setMaxHeight(120);
+        }
+        
+        if (listTerminales != null) {
+            listTerminales.getStyleClass().add("list-view-compact");
+            // Ajustar tamaños mínimos para pantallas pequeñas
+            listTerminales.setMinHeight(60);
+            listTerminales.setPrefHeight(80);
+            listTerminales.setMaxHeight(120);
+        }
+        
+        // Aplicar estilos compactos a los botones
+        if (btnModificarNoTerminales != null) {
+            btnModificarNoTerminales.getStyleClass().add("wizard-action-button-compact");
+        }
+        
+        if (btnModificarTerminales != null) {
+            btnModificarTerminales.getStyleClass().add("wizard-action-button-compact");
+        }
+        
+        if (btnCancelar != null) {
+            btnCancelar.getStyleClass().add("button-compact");
+        }
+        
+        if (btnPrimero != null) {
+            btnPrimero.getStyleClass().add("button-compact");
+        }
+        
+        if (btnAnterior != null) {
+            btnAnterior.getStyleClass().add("button-compact");
+        }
+        
+        if (btnSiguiente != null) {
+            btnSiguiente.getStyleClass().add("button-compact");
+        }
+        
+        if (btnUltimo != null) {
+            btnUltimo.getStyleClass().add("button-compact");
+        }
     }
 
     /**

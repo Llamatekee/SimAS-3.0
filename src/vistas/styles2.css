@@ -1077,3 +1077,149 @@ BorderPane {
     -fx-background-radius: 8px;
     -fx-border-radius: 8px;
 }
+
+/* ===== ESTILOS RESPONSIVOS PARA PANTALLAS PEQUEÑAS ===== */
+
+/* Estilos específicos para las listas del paso 2 */
+.wizard-content .list-view {
+    -fx-min-height: 80px;
+    -fx-pref-height: 120px;
+    -fx-max-height: 200px;
+}
+
+/* Asegurar que los botones de navegación se ajusten */
+.wizard-navigation .button {
+    -fx-min-width: 70px;
+    -fx-max-width: 120px;
+}
+
+/* Mejorar el espaciado en pantallas pequeñas */
+.wizard-content VBox {
+    -fx-spacing: 10px;
+}
+
+/* Ajustes para iconos en botones */
+.button .image-view {
+    -fx-fit-height: 14px;
+    -fx-fit-width: 14px;
+}
+
+/* Asegurar que el contenido se ajuste al espacio disponible */
+.wizard-step {
+    -fx-fill-height: true;
+    -fx-fill-width: true;
+}
+
+.wizard-content {
+    -fx-fill-height: true;
+    -fx-fill-width: true;
+}
+
+/* Estilos compactos para pantallas pequeñas */
+.wizard-step-compact {
+    -fx-padding: 10px;
+}
+
+.wizard-header-compact {
+    -fx-font-size: 18px;
+    -fx-padding: 8px;
+}
+
+.wizard-section-header-compact {
+    -fx-font-size: 14px;
+}
+
+.wizard-content-compact {
+    -fx-padding: 10px;
+    -fx-spacing: 8px;
+}
+
+.wizard-navigation-compact {
+    -fx-padding: 10px 0;
+    -fx-spacing: 5px;
+}
+
+/* Botones compactos */
+.button-compact {
+    -fx-font-size: 11px;
+    -fx-padding: 5px 10px;
+    -fx-min-width: 70px;
+}
+
+/* Listas compactas */
+.list-view-compact {
+    -fx-min-height: 60px;
+    -fx-pref-height: 80px;
+    -fx-max-height: 120px;
+}
+
+.list-view-compact .list-cell {
+    -fx-padding: 4px;
+    -fx-font-size: 11px;
+}
+
+/* Botones de acción compactos */
+.wizard-action-button-compact {
+    -fx-font-size: 11px;
+    -fx-padding: 6px 12px;
+}
+
+/* Estilos adicionales para pantallas muy pequeñas */
+.wizard-step {
+    -fx-min-width: 400px;
+    -fx-min-height: 500px;
+}
+
+/* Ajustes específicos para el paso 2 */
+.wizard-content VBox > VBox {
+    -fx-spacing: 8px;
+}
+
+.wizard-content VBox > VBox > Label {
+    -fx-font-size: 14px;
+}
+
+/* Mejorar la legibilidad en pantallas pequeñas */
+.wizard-list .list-cell {
+    -fx-padding: 6px 8px;
+    -fx-font-size: 12px;
+}
+
+/* Ajustes para botones de navegación en pantallas pequeñas */
+.wizard-navigation HBox {
+    -fx-spacing: 5px;
+}
+
+.wizard-navigation .button {
+    -fx-min-width: 60px;
+    -fx-max-width: 100px;
+    -fx-font-size: 11px;
+}
+
+/* Asegurar que las listas no se desborden */
+.list-view {
+    -fx-pref-width: 300px;
+    -fx-max-width: 400px;
+}
+
+/* Ajustes para el contenido principal */
+.wizard-content {
+    -fx-pref-width: 350px;
+    -fx-max-width: 500px;
+}
+
+/* Mejorar el espaciado general */
+.wizard-step {
+    -fx-spacing: 5px;
+}
+
+/* Ajustes para pantallas con resolución muy baja */
+.wizard-header {
+    -fx-min-height: 40px;
+    -fx-max-height: 60px;
+}
+
+.wizard-navigation {
+    -fx-min-height: 40px;
+    -fx-max-height: 60px;
+}

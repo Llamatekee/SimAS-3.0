@@ -13,13 +13,13 @@
     </columnConstraints>
     
     <rowConstraints>
-        <RowConstraints valignment="TOP" minHeight="80" maxHeight="80" fillHeight="false"/> <!-- Header -->
+        <RowConstraints valignment="TOP" minHeight="60" maxHeight="80" fillHeight="false"/> <!-- Header -->
         <RowConstraints vgrow="ALWAYS" valignment="TOP" fillHeight="true"/> <!-- Content -->
-        <RowConstraints valignment="BOTTOM" minHeight="60" maxHeight="60" fillHeight="false"/> <!-- Navigation -->
+        <RowConstraints valignment="BOTTOM" minHeight="50" maxHeight="70" fillHeight="false"/> <!-- Navigation -->
     </rowConstraints>
 
     <padding>
-        <Insets top="30" right="40" bottom="30" left="40"/>
+        <Insets top="20" right="20" bottom="20" left="20"/>
     </padding>
 
     <!-- Header -->
@@ -27,18 +27,19 @@
            GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.halignment="CENTER"/>
 
     <!-- Content -->
-    <VBox spacing="30" GridPane.columnIndex="0" GridPane.rowIndex="1" 
+    <VBox spacing="15" GridPane.columnIndex="0" GridPane.rowIndex="1" 
           styleClass="wizard-content" GridPane.vgrow="ALWAYS">
         
         <!-- No Terminales Section -->
-        <VBox spacing="15" VBox.vgrow="ALWAYS">
+        <VBox spacing="10" VBox.vgrow="ALWAYS">
             <Label fx:id="labelNoTerminalesSeccion" text="Símbolos No Terminales" styleClass="wizard-section-header"/>
-            <ListView fx:id="listNoTerminales" VBox.vgrow="ALWAYS"/>
+            <ListView fx:id="listNoTerminales" VBox.vgrow="ALWAYS" 
+                      minHeight="80" prefHeight="120" maxHeight="200"/>
             <Button fx:id="btnModificarNoTerminales" text="Modificar No Terminales" 
                     styleClass="wizard-action-button"
                     maxWidth="Infinity" onAction="#onBtnModificarNoTerminalesAction">
                 <graphic>
-                    <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
+                    <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
                         <Image url="@../resources/icons/pencil.png"/>
                     </ImageView>
                 </graphic>
@@ -46,14 +47,15 @@
         </VBox>
 
         <!-- Terminales Section -->
-        <VBox spacing="15" VBox.vgrow="ALWAYS">
+        <VBox spacing="10" VBox.vgrow="ALWAYS">
             <Label fx:id="labelTerminalesSeccion" text="Símbolos Terminales" styleClass="wizard-section-header"/>
-            <ListView fx:id="listTerminales" VBox.vgrow="ALWAYS"/>
+            <ListView fx:id="listTerminales" VBox.vgrow="ALWAYS"
+                      minHeight="80" prefHeight="120" maxHeight="200"/>
             <Button fx:id="btnModificarTerminales" text="Modificar Terminales" 
                     styleClass="wizard-action-button"
                     maxWidth="Infinity" onAction="#onBtnModificarTerminalesAction">
                 <graphic>
-                    <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
+                    <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
                         <Image url="@../resources/icons/pencil.png"/>
                     </ImageView>
                 </graphic>
@@ -63,11 +65,11 @@
 
     <!-- Navigation -->
     <HBox styleClass="wizard-navigation" GridPane.columnIndex="0" GridPane.rowIndex="2" 
-          GridPane.valignment="BOTTOM">
+          GridPane.valignment="BOTTOM" spacing="8">
         <Button fx:id="btnCancelar" text="Cancelar" styleClass="button-cancel" 
                 onAction="#onBtnCancelarAction">
             <graphic>
-                <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
+                <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
                     <Image url="@../resources/icons/selection_delete.png"/>
                 </ImageView>
             </graphic>
@@ -76,7 +78,7 @@
         <Button fx:id="btnPrimero" text="Primero" styleClass="button-next" 
                 onAction="#onBtnPrimeroAction">
             <graphic>
-                <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
+                <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
                     <Image url="@../resources/icons/arrow_left_blue.png"/>
                 </ImageView>
             </graphic>
@@ -84,7 +86,7 @@
         <Button fx:id="btnAnterior" text="Anterior" styleClass="button-next" 
                 onAction="#onBtnAnteriorAction">
             <graphic>
-                <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
+                <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
                     <Image url="@../resources/icons/arrow_left_green.png"/>
                 </ImageView>
             </graphic>
@@ -92,7 +94,7 @@
         <Button fx:id="btnSiguiente" text="Siguiente" styleClass="button-next" 
                 onAction="#onBtnSiguienteAction">
             <graphic>
-                <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
+                <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
                     <Image url="@../resources/icons/arrow_right_green.png"/>
                 </ImageView>
             </graphic>
@@ -100,7 +102,7 @@
         <Button fx:id="btnUltimo" text="Último" styleClass="button-next" 
                 onAction="#onBtnUltimoAction">
             <graphic>
-                <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
+                <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
                     <Image url="@../resources/icons/arrow_right_blue.png"/>
                 </ImageView>
             </graphic>
