@@ -27,21 +27,23 @@
            GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.halignment="CENTER"/>
 
     <!-- Content -->
-    <VBox spacing="40" GridPane.columnIndex="0" GridPane.rowIndex="1" 
-          styleClass="wizard-content" maxHeight="-Infinity">
+    <VBox spacing="25" GridPane.columnIndex="0" GridPane.rowIndex="1" 
+          styleClass="wizard-content" maxHeight="-Infinity" GridPane.halignment="CENTER" alignment="CENTER">
         
         <!-- Nombre Section -->
-        <VBox spacing="15">
+        <VBox spacing="8" styleClass="field-section" maxWidth="500" alignment="CENTER">
             <Label fx:id="labelNombreSeccion" text="Nombre de la Gramática" styleClass="wizard-section-header"/>
-            <TextField fx:id="txtNombre" styleClass="wizard-field"/>
+            <TextField fx:id="txtNombre" styleClass="wizard-field" promptText="Ingrese el nombre de la gramática"/>
             <Label fx:id="lblNombreError" styleClass="error-label" 
                    managed="false" visible="false"/>
         </VBox>
 
         <!-- Descripción Section -->
-        <VBox spacing="15">
+        <VBox spacing="8" styleClass="field-section" maxWidth="500" alignment="CENTER">
             <Label fx:id="labelDescripcionSeccion" text="Descripción" styleClass="wizard-section-header"/>
-            <TextField fx:id="txtDescripcion" styleClass="wizard-field"/>
+            <TextArea fx:id="txtDescripcion" styleClass="wizard-field text-area-field" 
+                      promptText="Ingrese una descripción detallada de la gramática"
+                      wrapText="true" prefRowCount="3"/>
             <Label fx:id="lblDescripcionError" styleClass="error-label" 
                    managed="false" visible="false"/>
         </VBox>
@@ -49,7 +51,7 @@
 
     <!-- Navigation -->
     <HBox styleClass="wizard-navigation" GridPane.columnIndex="0" GridPane.rowIndex="2" 
-          GridPane.valignment="BOTTOM">
+          GridPane.valignment="BOTTOM" spacing="8">
         <Button fx:id="btnCancelar" text="Cancelar" styleClass="button-cancel" 
                 onAction="#onBtnCancelarAction">
             <graphic>

@@ -27,14 +27,14 @@
            GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.halignment="CENTER"/>
 
     <!-- Content -->
-    <VBox spacing="15" GridPane.columnIndex="0" GridPane.rowIndex="1" 
-          styleClass="wizard-content" GridPane.vgrow="ALWAYS">
+    <VBox spacing="20" GridPane.columnIndex="0" GridPane.rowIndex="1" 
+          styleClass="wizard-content" GridPane.vgrow="ALWAYS" GridPane.halignment="CENTER" alignment="CENTER">
         
         <!-- No Terminales Section -->
-        <VBox spacing="10" VBox.vgrow="ALWAYS">
+        <VBox spacing="10" styleClass="symbol-section" maxWidth="500" alignment="CENTER">
             <Label fx:id="labelNoTerminalesSeccion" text="Símbolos No Terminales" styleClass="wizard-section-header"/>
-            <ListView fx:id="listNoTerminales" VBox.vgrow="ALWAYS" 
-                      minHeight="80" prefHeight="120" maxHeight="200"/>
+            <ListView fx:id="listNoTerminales" styleClass="wizard-list" 
+                      minHeight="100" prefHeight="120" maxHeight="150"/>
             <Button fx:id="btnModificarNoTerminales" text="Modificar No Terminales" 
                     styleClass="wizard-action-button"
                     maxWidth="Infinity" onAction="#onBtnModificarNoTerminalesAction">
@@ -47,10 +47,10 @@
         </VBox>
 
         <!-- Terminales Section -->
-        <VBox spacing="10" VBox.vgrow="ALWAYS">
+        <VBox spacing="10" styleClass="symbol-section" maxWidth="500" alignment="CENTER">
             <Label fx:id="labelTerminalesSeccion" text="Símbolos Terminales" styleClass="wizard-section-header"/>
-            <ListView fx:id="listTerminales" VBox.vgrow="ALWAYS"
-                      minHeight="80" prefHeight="120" maxHeight="200"/>
+            <ListView fx:id="listTerminales" styleClass="wizard-list"
+                      minHeight="100" prefHeight="120" maxHeight="150"/>
             <Button fx:id="btnModificarTerminales" text="Modificar Terminales" 
                     styleClass="wizard-action-button"
                     maxWidth="Infinity" onAction="#onBtnModificarTerminalesAction">
@@ -69,7 +69,7 @@
         <Button fx:id="btnCancelar" text="Cancelar" styleClass="button-cancel" 
                 onAction="#onBtnCancelarAction">
             <graphic>
-                <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
+                <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
                     <Image url="@../resources/icons/selection_delete.png"/>
                 </ImageView>
             </graphic>
@@ -78,7 +78,7 @@
         <Button fx:id="btnPrimero" text="Primero" styleClass="button-next" 
                 onAction="#onBtnPrimeroAction">
             <graphic>
-                <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
+                <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
                     <Image url="@../resources/icons/arrow_left_blue.png"/>
                 </ImageView>
             </graphic>
@@ -86,7 +86,7 @@
         <Button fx:id="btnAnterior" text="Anterior" styleClass="button-next" 
                 onAction="#onBtnAnteriorAction">
             <graphic>
-                <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
+                <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
                     <Image url="@../resources/icons/arrow_left_green.png"/>
                 </ImageView>
             </graphic>
@@ -94,7 +94,7 @@
         <Button fx:id="btnSiguiente" text="Siguiente" styleClass="button-next" 
                 onAction="#onBtnSiguienteAction">
             <graphic>
-                <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
+                <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
                     <Image url="@../resources/icons/arrow_right_green.png"/>
                 </ImageView>
             </graphic>
@@ -102,7 +102,7 @@
         <Button fx:id="btnUltimo" text="Último" styleClass="button-next" 
                 onAction="#onBtnUltimoAction">
             <graphic>
-                <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
+                <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
                     <Image url="@../resources/icons/arrow_right_blue.png"/>
                 </ImageView>
             </graphic>

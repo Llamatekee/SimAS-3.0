@@ -181,6 +181,32 @@
     -fx-pref-width: 150px;
 }
 
+/* ===== COMBOBOX DEL WIZARD ===== */
+.wizard-combo-box {
+    -fx-background-color: rgba(255, 255, 255, 0.12);
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-border-color: rgba(255, 255, 255, 0.25);
+    -fx-border-width: 2px;
+    -fx-padding: 12px 16px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 4, 0.3, 0, 2);
+    -fx-font-size: 14px;
+    -fx-font-weight: 500;
+}
+
+.wizard-combo-box:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+    -fx-border-color: rgba(255, 255, 255, 0.3);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 5, 0.3, 0, 3);
+}
+
+.wizard-combo-box:focused {
+    -fx-background-color: rgba(255, 255, 255, 0.18);
+    -fx-border-color: rgba(79, 172, 254, 0.6);
+    -fx-border-width: 3px;
+    -fx-effect: dropshadow(gaussian, rgba(79, 172, 254, 0.3), 6, 0.4, 0, 3);
+}
+
 .combo-box:hover {
     -fx-background-color: rgba(255, 255, 255, 0.12);
     -fx-border-color: rgba(255, 255, 255, 0.25);
@@ -645,8 +671,9 @@ BorderPane {
 .error-label {
     -fx-text-fill: #ff6b6b;
     -fx-font-size: 12px;
-    -fx-padding: 2 0 0 0;
-    -fx-effect: dropshadow(gaussian, rgba(255, 107, 107, 0.3), 1, 0.2, 0, 1);
+    -fx-padding: 4px 0 0 0;
+    -fx-effect: dropshadow(gaussian, rgba(255, 107, 107, 0.2), 1, 0.2, 0, 1);
+    -fx-font-weight: 500;
 }
 
 /* Campos de texto en creación de gramática */
@@ -761,6 +788,144 @@ BorderPane {
     -fx-background-color: transparent;
 }
 
+/* ===== ESTILOS PARA CAMPOS DEL WIZARD ===== */
+.field-section {
+    -fx-background-color: rgba(255, 255, 255, 0.08);
+    -fx-background-radius: 12px;
+    -fx-border-radius: 12px;
+    -fx-border-color: rgba(255, 255, 255, 0.15);
+    -fx-border-width: 1px;
+    -fx-padding: 18px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 4, 0.2, 0, 2);
+}
+
+.field-section:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-border-color: rgba(255, 255, 255, 0.2);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0.3, 0, 3);
+}
+
+/* ===== ESTILOS PARA SÍMBOLOS DEL WIZARD ===== */
+.symbol-section {
+    -fx-background-color: rgba(255, 255, 255, 0.08);
+    -fx-background-radius: 12px;
+    -fx-border-radius: 12px;
+    -fx-border-color: rgba(255, 255, 255, 0.15);
+    -fx-border-width: 1px;
+    -fx-padding: 18px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 4, 0.2, 0, 2);
+}
+
+.symbol-section:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-border-color: rgba(255, 255, 255, 0.2);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0.3, 0, 3);
+}
+
+/* ===== ESTILOS PARA PRODUCCIONES DEL WIZARD ===== */
+.productions-container {
+    -fx-background-color: rgba(255, 255, 255, 0.08);
+    -fx-background-radius: 15px;
+    -fx-border-radius: 15px;
+    -fx-border-color: rgba(255, 255, 255, 0.15);
+    -fx-border-width: 1px;
+    -fx-padding: 20px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 6, 0.3, 0, 3);
+}
+
+.productions-container:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-border-color: rgba(255, 255, 255, 0.2);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 8, 0.4, 0, 4);
+}
+
+/* ===== ESTILOS PARA SÍMBOLO INICIAL DEL WIZARD ===== */
+.initial-symbol-container {
+    -fx-background-color: rgba(255, 255, 255, 0.08);
+    -fx-background-radius: 15px;
+    -fx-border-radius: 15px;
+    -fx-border-color: rgba(255, 255, 255, 0.15);
+    -fx-border-width: 1px;
+    -fx-padding: 30px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 6, 0.3, 0, 3);
+}
+
+.initial-symbol-container:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-border-color: rgba(255, 255, 255, 0.2);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 8, 0.4, 0, 4);
+}
+
+/* Estilos específicos para las listas de símbolos */
+.wizard-list {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-border-color: rgba(255, 255, 255, 0.2);
+    -fx-border-width: 1px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 2, 0.2, 0, 1);
+}
+
+.wizard-list .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-padding: 8px 12px;
+    -fx-font-size: 13px;
+    -fx-font-weight: 500;
+    -fx-border-color: transparent;
+}
+
+.wizard-list .list-cell:selected {
+    -fx-background-color: rgba(79, 172, 254, 0.3);
+    -fx-text-fill: white;
+    -fx-background-radius: 6px;
+    -fx-border-radius: 6px;
+    -fx-effect: dropshadow(gaussian, rgba(79, 172, 254, 0.2), 2, 0.2, 0, 1);
+}
+
+.wizard-list .list-cell:hover {
+    -fx-background-color: rgba(79, 172, 254, 0.15);
+    -fx-background-radius: 6px;
+    -fx-border-radius: 6px;
+}
+
+/* Estilos para listas vacías */
+.wizard-list:empty {
+    -fx-background-color: rgba(255, 255, 255, 0.05);
+    -fx-border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Mejorar la apariencia de los iconos en los botones */
+.wizard-action-button .image-view {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 1, 0.2, 0, 1);
+}
+
+.wizard-action-button:hover .image-view {
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 0.3), 2, 0.3, 0, 1);
+}
+
+/* Estilos específicos para TextArea */
+.text-area-field {
+    -fx-min-height: 100px;
+    -fx-pref-height: 120px;
+    -fx-max-height: 150px;
+    -fx-alignment: top-left;
+}
+
+.text-area-field .content {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+}
+
+.text-area-field:focused .content {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+}
+
 .wizard-header {
     -fx-background-color: linear-gradient(to bottom right, #667eea, #764ba2);
     -fx-padding: 12px 15px;
@@ -787,17 +952,24 @@ BorderPane {
 }
 
 .wizard-content {
-    -fx-padding: 15px;
-    -fx-spacing: 10px;
+    -fx-padding: 20px;
+    -fx-spacing: 15px;
     -fx-fill-height: true;
+    -fx-fill-width: true;
+    -fx-alignment: center;
+    -fx-pref-width: 350px;
+    -fx-max-width: 500px;
 }
 
 .wizard-navigation {
     -fx-padding: 15px 0;
-    -fx-spacing: 10px;
+    -fx-spacing: 8px;
     -fx-alignment: center-right;
     -fx-border-color: rgba(255, 255, 255, 0.1) transparent transparent transparent;
     -fx-border-width: 1 0 0 0;
+    -fx-min-height: 60px;
+    -fx-pref-height: 60px;
+    -fx-max-height: 60px;
 }
 
 /* Botones específicos del wizard */
@@ -868,15 +1040,21 @@ BorderPane {
 
 /* Campos del wizard */
 .wizard-field {
-    -fx-background-color: rgba(255, 255, 255, 0.2);
+    -fx-background-color: rgba(255, 255, 255, 0.12);
     -fx-text-fill: white;
-    -fx-padding: 12px 15px;
-    -fx-border-radius: 10px;
-    -fx-background-radius: 10px;
+    -fx-padding: 12px 16px;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
     -fx-font-size: 14px;
-    -fx-border-color: rgba(255, 255, 255, 0.35);
-    -fx-border-width: 2px;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 3, 0.2, 0, 2);
+    -fx-border-color: rgba(255, 255, 255, 0.2);
+    -fx-border-width: 1px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 2, 0.2, 0, 1);
+    -fx-font-weight: 500;
+}
+
+.wizard-field .prompt-text {
+    -fx-text-fill: rgba(255, 255, 255, 0.5);
+    -fx-font-style: italic;
 }
 
 .text-area.wizard-field {
@@ -905,10 +1083,16 @@ BorderPane {
 }
 
 .wizard-field:focused {
-    -fx-background-color: rgba(255, 255, 255, 0.25);
-    -fx-border-color: rgba(52, 152, 219, 0.8);
-    -fx-border-width: 3px;
-    -fx-effect: dropshadow(gaussian, rgba(52, 152, 219, 0.4), 5, 0.3, 0, 3);
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+    -fx-border-color: rgba(79, 172, 254, 0.6);
+    -fx-border-width: 2px;
+    -fx-effect: dropshadow(gaussian, rgba(79, 172, 254, 0.3), 4, 0.3, 0, 2);
+}
+
+.wizard-field:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.14);
+    -fx-border-color: rgba(255, 255, 255, 0.25);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 3, 0.2, 0, 2);
 }
 
 
@@ -935,33 +1119,34 @@ BorderPane {
 }
 
 .wizard-section-header {
-    -fx-font-size: 16px;
-    -fx-text-fill: white;
-    -fx-font-weight: 700;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 3, 0.3, 0, 2);
-    -fx-padding: 8px 0;
-    -fx-background-color: rgba(255, 255, 255, 0.1);
-    -fx-background-radius: 8px;
-    -fx-border-radius: 8px;
+    -fx-font-size: 15px;
+    -fx-text-fill: rgba(255, 255, 255, 0.9);
+    -fx-font-weight: 600;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 2, 0.2, 0, 1);
     -fx-padding: 8px 12px;
-    -fx-border-color: rgba(255, 255, 255, 0.2);
+    -fx-background-color: rgba(79, 172, 254, 0.15);
+    -fx-background-radius: 6px;
+    -fx-border-radius: 6px;
+    -fx-border-color: rgba(79, 172, 254, 0.25);
     -fx-border-width: 1px;
+    -fx-alignment: center;
 }
 
 /* Botones de acción del wizard */
 .wizard-action-button {
     -fx-background-color: linear-gradient(to right, #667eea, #764ba2);
     -fx-text-fill: white;
-    -fx-font-size: 14px;
-    -fx-background-radius: 10px;
-    -fx-border-radius: 10px;
+    -fx-font-size: 13px;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
     -fx-font-weight: 600;
-    -fx-padding: 12px 20px;
+    -fx-padding: 10px 16px;
     -fx-alignment: center;
     -fx-cursor: hand;
-    -fx-effect: dropshadow(gaussian, rgba(102, 126, 234, 0.4), 6, 0.3, 0, 3);
-    -fx-border-color: rgba(255, 255, 255, 0.2);
+    -fx-effect: dropshadow(gaussian, rgba(102, 126, 234, 0.3), 4, 0.3, 0, 2);
+    -fx-border-color: rgba(255, 255, 255, 0.15);
     -fx-border-width: 1px;
+    -fx-graphic-text-gap: 6px;
 }
 
 .wizard-action-button:hover {
@@ -1087,11 +1272,7 @@ BorderPane {
     -fx-max-height: 200px;
 }
 
-/* Asegurar que los botones de navegación se ajusten */
-.wizard-navigation .button {
-    -fx-min-width: 70px;
-    -fx-max-width: 120px;
-}
+
 
 /* Mejorar el espaciado en pantallas pequeñas */
 .wizard-content VBox {
@@ -1110,10 +1291,7 @@ BorderPane {
     -fx-fill-width: true;
 }
 
-.wizard-content {
-    -fx-fill-height: true;
-    -fx-fill-width: true;
-}
+
 
 /* Estilos compactos para pantallas pequeñas */
 .wizard-step-compact {
@@ -1185,15 +1363,15 @@ BorderPane {
     -fx-font-size: 12px;
 }
 
-/* Ajustes para botones de navegación en pantallas pequeñas */
-.wizard-navigation HBox {
-    -fx-spacing: 5px;
-}
+
 
 .wizard-navigation .button {
-    -fx-min-width: 60px;
-    -fx-max-width: 100px;
-    -fx-font-size: 11px;
+    -fx-min-width: 80px;
+    -fx-max-width: 120px;
+    -fx-font-size: 12px;
+    -fx-min-height: 35px;
+    -fx-pref-height: 35px;
+    -fx-max-height: 35px;
 }
 
 /* Asegurar que las listas no se desborden */
@@ -1202,11 +1380,7 @@ BorderPane {
     -fx-max-width: 400px;
 }
 
-/* Ajustes para el contenido principal */
-.wizard-content {
-    -fx-pref-width: 350px;
-    -fx-max-width: 500px;
-}
+
 
 /* Mejorar el espaciado general */
 .wizard-step {
@@ -1219,7 +1393,4 @@ BorderPane {
     -fx-max-height: 60px;
 }
 
-.wizard-navigation {
-    -fx-min-height: 40px;
-    -fx-max-height: 60px;
-}
+

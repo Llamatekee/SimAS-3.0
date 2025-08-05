@@ -27,22 +27,23 @@
            GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.halignment="CENTER"/>
 
     <!-- Content -->
-    <VBox spacing="30" GridPane.columnIndex="0" GridPane.rowIndex="1" 
-          styleClass="wizard-content">
+    <VBox spacing="25" GridPane.columnIndex="0" GridPane.rowIndex="1" 
+          styleClass="wizard-content" GridPane.halignment="CENTER" alignment="CENTER">
         
-        <padding>
-            <Insets top="40" />
-        </padding>
-        
-        <Label fx:id="labelSimboloInicial" styleClass="wizard-section-header"/>
-        
-        <ComboBox fx:id="comboBoxSimboloInicial" styleClass="wizard-combo-box" 
-                  prefWidth="300" style="-fx-text-fill: white; -fx-background-color: #2c3e50;"/>
+        <!-- Container principal para el símbolo inicial -->
+        <VBox spacing="20" styleClass="initial-symbol-container" maxWidth="500" minWidth="400" alignment="CENTER">
+            
+            <Label fx:id="labelSimboloInicial" styleClass="wizard-section-header"/>
+            
+            <ComboBox fx:id="comboBoxSimboloInicial" styleClass="wizard-combo-box" 
+                      prefWidth="300" maxWidth="400"/>
+            
+        </VBox>
     </VBox>
 
     <!-- Navigation -->
     <HBox styleClass="wizard-navigation" GridPane.columnIndex="0" GridPane.rowIndex="2" 
-          GridPane.valignment="BOTTOM">
+          GridPane.valignment="BOTTOM" spacing="8">
         <Button fx:id="btnCancelar" text="Cancelar" styleClass="button-cancel" 
                 onAction="#onBtnCancelarAction">
             <graphic>
@@ -65,6 +66,14 @@
             <graphic>
                 <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
                     <Image url="@../resources/icons/arrow_left_green.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
+        <Button fx:id="btnSiguiente" text="Siguiente" styleClass="button-next" 
+                disable="true">
+            <graphic>
+                <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
+                    <Image url="@../resources/icons/arrow_right_green.png"/>
                 </ImageView>
             </graphic>
         </Button>

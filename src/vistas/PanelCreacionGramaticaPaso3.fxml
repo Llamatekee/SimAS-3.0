@@ -19,7 +19,7 @@
     </rowConstraints>
 
     <padding>
-        <Insets top="30" right="40" bottom="30" left="40"/>
+        <Insets top="15" right="25" bottom="15" left="25"/>
     </padding>
 
     <!-- Header -->
@@ -27,26 +27,32 @@
            GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.halignment="CENTER"/>
 
     <!-- Content -->
-    <VBox spacing="20" GridPane.columnIndex="0" GridPane.rowIndex="1" 
-          styleClass="wizard-content" GridPane.vgrow="ALWAYS">
+    <VBox spacing="15" GridPane.columnIndex="0" GridPane.rowIndex="1" 
+          styleClass="wizard-content" GridPane.vgrow="ALWAYS" GridPane.halignment="CENTER" alignment="CENTER">
         
-        <Label fx:id="labelLista" styleClass="wizard-section-header"/>
-        
-        <ListView fx:id="listProducciones" VBox.vgrow="ALWAYS"/>
-        
-        <Button fx:id="btnModificarProducciones" maxWidth="Infinity" onAction="#onBtnModificarProduccionesAction" styleClass="wizard-action-button">
-            <graphic>
-                <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
-                    <Image url="@../resources/icons/pencil.png"/>
-                </ImageView>
-            </graphic>
-        </Button>
+        <!-- Container principal para las producciones -->
+        <VBox spacing="15" styleClass="productions-container" maxWidth="750" minWidth="550" alignment="TOP_CENTER">
+            
+            <Label fx:id="labelLista" styleClass="wizard-section-header"/>
+            
+            <ListView fx:id="listProducciones" styleClass="wizard-list" 
+                      minHeight="600" prefHeight="700" maxHeight="800"/>
+            
+            <Button fx:id="btnModificarProducciones" maxWidth="Infinity" onAction="#onBtnModificarProduccionesAction" styleClass="wizard-action-button">
+                <graphic>
+                    <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
+                        <Image url="@../resources/icons/pencil.png"/>
+                    </ImageView>
+                </graphic>
+            </Button>
+            
+        </VBox>
     </VBox>
 
     <!-- Navigation -->
     <HBox styleClass="wizard-navigation" GridPane.columnIndex="0" GridPane.rowIndex="2" 
-          GridPane.valignment="BOTTOM">
-        <Button fx:id="btnCancelar" styleClass="button-cancel" 
+          GridPane.valignment="BOTTOM" spacing="8">
+        <Button fx:id="btnCancelar" text="Cancelar" styleClass="button-cancel" 
                 onAction="#onBtnCancelarAction">
             <graphic>
                 <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
@@ -55,7 +61,7 @@
             </graphic>
         </Button>
         <Region HBox.hgrow="ALWAYS"/>
-        <Button fx:id="btnPrimero" styleClass="button-next" 
+        <Button fx:id="btnPrimero" text="Primero" styleClass="button-next" 
                 onAction="#onBtnPrimeroAction">
             <graphic>
                 <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
@@ -63,7 +69,7 @@
                 </ImageView>
             </graphic>
         </Button>
-        <Button fx:id="btnAnterior" styleClass="button-next" 
+        <Button fx:id="btnAnterior" text="Anterior" styleClass="button-next" 
                 onAction="#onBtnAnteriorAction">
             <graphic>
                 <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
@@ -71,7 +77,7 @@
                 </ImageView>
             </graphic>
         </Button>
-        <Button fx:id="btnSiguiente" styleClass="button-next" 
+        <Button fx:id="btnSiguiente" text="Siguiente" styleClass="button-next" 
                 onAction="#onBtnSiguienteAction">
             <graphic>
                 <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
@@ -79,7 +85,7 @@
                 </ImageView>
             </graphic>
         </Button>
-        <Button fx:id="btnUltimo" styleClass="button-next" 
+        <Button fx:id="btnUltimo" text="Último" styleClass="button-next" 
                 onAction="#onBtnUltimoAction">
             <graphic>
                 <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">

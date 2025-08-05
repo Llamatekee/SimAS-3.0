@@ -20,7 +20,7 @@ public class PanelCreacionGramaticaPaso1 extends VBox implements ActualizableTex
     private static final int MAX_DESCRIPCION_LENGTH = 500;
 
     @FXML private TextField txtNombre;
-    @FXML private TextField txtDescripcion;
+    @FXML private TextArea txtDescripcion;
     @FXML private Button btnSiguiente;
     @FXML private Button btnAnterior;
     @FXML private Button btnCancelar;
