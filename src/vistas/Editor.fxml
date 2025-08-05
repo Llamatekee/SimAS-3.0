@@ -124,29 +124,29 @@
             </VBox>
             
             <!-- Símbolos y producciones -->
-            <HBox spacing="15" VBox.vgrow="ALWAYS">
+            <VBox spacing="10" VBox.vgrow="ALWAYS">
                 <padding>
                     <Insets top="0" right="8" bottom="8" left="8"/>
                 </padding>
-                <!-- Símbolos -->
-                <VBox spacing="10" HBox.hgrow="ALWAYS">
-                    <Label fx:id="labelNoTerminales" text="%editor.label.no.terminales" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: white;"/>
-                    <ListView fx:id="listNoTerminales" styleClass="list-view" VBox.vgrow="ALWAYS"/>
-                </VBox>
                 
-                <VBox spacing="10" HBox.hgrow="ALWAYS">
-                    <Label fx:id="labelTerminales" text="%editor.label.terminales" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: white;"/>
-                    <ListView fx:id="listTerminales" styleClass="list-view" VBox.vgrow="ALWAYS"/>
-                </VBox>
-            </HBox>
+                <!-- Símbolos -->
+                <HBox spacing="15" VBox.vgrow="NEVER">
+                    <VBox spacing="10" HBox.hgrow="ALWAYS">
+                        <Label fx:id="labelNoTerminales" text="%editor.label.no.terminales" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+                        <ListView fx:id="listNoTerminales" styleClass="list-view" VBox.vgrow="ALWAYS"/>
+                    </VBox>
+                    
+                    <VBox spacing="10" HBox.hgrow="ALWAYS">
+                        <Label fx:id="labelTerminales" text="%editor.label.terminales" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+                        <ListView fx:id="listTerminales" styleClass="list-view" VBox.vgrow="ALWAYS"/>
+                    </VBox>
+                </HBox>
 
-            <!-- Producciones -->
-            <VBox spacing="5" VBox.vgrow="ALWAYS">
-                <padding>
-                    <Insets top="0" right="8" bottom="8" left="8"/>
-                </padding>
-                <Label fx:id="labelProducciones" text="%editor.label.producciones" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: white;"/>
-                <ListView fx:id="listProducciones" styleClass="list-view" VBox.vgrow="ALWAYS"/>
+                <!-- Producciones -->
+                <VBox spacing="5" VBox.vgrow="ALWAYS">
+                    <Label fx:id="labelProducciones" text="%editor.label.producciones" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+                    <ListView fx:id="listProducciones" styleClass="list-view" VBox.vgrow="ALWAYS"/>
+                </VBox>
             </VBox>
         </VBox>
     </center>

@@ -1448,7 +1448,8 @@ BorderPane {
 }
 
 /* Asegurar que las listas no se desborden */
-.list-view {
+/* Esta regla se aplica solo a listas generales, no a las del editor */
+.list-view:not(.editor-content .list-view) {
     -fx-pref-width: 300px;
     -fx-max-width: 400px;
 }
