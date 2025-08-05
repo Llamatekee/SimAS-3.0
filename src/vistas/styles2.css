@@ -788,6 +788,25 @@ BorderPane {
     -fx-background-color: transparent;
 }
 
+/* Estilo para extender el fondo del wizard por todo el ancho */
+.wizard-step-full-width {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+}
+
+/* Estilo para el GridPane del wizard para extender el fondo */
+.wizard-step GridPane {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+}
+
+/* Estilo para la fila de navegación del GridPane */
+.wizard-step GridPane > .row-constraints:last-child {
+    -fx-background-color: rgba(0, 0, 0, 0.3);
+}
+
 /* ===== ESTILOS PARA CAMPOS DEL WIZARD ===== */
 .field-section {
     -fx-background-color: rgba(255, 255, 255, 0.08);
@@ -970,6 +989,8 @@ BorderPane {
     -fx-min-height: 60px;
     -fx-pref-height: 60px;
     -fx-max-height: 60px;
+    -fx-background-color: rgba(0, 0, 0, 0.1);
+    -fx-position-type: absolute;
 }
 
 /* Botones específicos del wizard */
@@ -980,8 +1001,13 @@ BorderPane {
     -fx-background-radius: 10px;
     -fx-border-radius: 10px;
     -fx-font-weight: 600;
-    -fx-padding: 10px 18px;
-    -fx-min-width: 110px;
+    -fx-padding: 8px 16px;
+    -fx-min-width: 120px;
+    -fx-max-width: 120px;
+    -fx-pref-width: 120px;
+    -fx-min-height: 35px;
+    -fx-max-height: 35px;
+    -fx-pref-height: 35px;
     -fx-alignment: center;
     -fx-cursor: hand;
     -fx-effect: dropshadow(gaussian, rgba(255, 107, 107, 0.4), 6, 0.3, 0, 3);
@@ -1004,8 +1030,13 @@ BorderPane {
     -fx-background-radius: 10px;
     -fx-border-radius: 10px;
     -fx-font-weight: 600;
-    -fx-padding: 10px 18px;
-    -fx-min-width: 110px;
+    -fx-padding: 8px 16px;
+    -fx-min-width: 120px;
+    -fx-max-width: 120px;
+    -fx-pref-width: 120px;
+    -fx-min-height: 35px;
+    -fx-max-height: 35px;
+    -fx-pref-height: 35px;
     -fx-alignment: center;
     -fx-cursor: hand;
     -fx-effect: dropshadow(gaussian, rgba(102, 126, 234, 0.4), 6, 0.3, 0, 3);
@@ -1173,8 +1204,13 @@ BorderPane {
     -fx-background-radius: 10px;
     -fx-border-radius: 10px;
     -fx-font-weight: 600;
-    -fx-padding: 10px 18px;
-    -fx-min-width: 110px;
+    -fx-padding: 8px 16px;
+    -fx-min-width: 120px;
+    -fx-max-width: 120px;
+    -fx-pref-width: 120px;
+    -fx-min-height: 35px;
+    -fx-max-height: 35px;
+    -fx-pref-height: 35px;
     -fx-alignment: center;
     -fx-cursor: hand;
     -fx-effect: dropshadow(gaussian, rgba(39, 174, 96, 0.4), 6, 0.3, 0, 3);
@@ -1366,12 +1402,49 @@ BorderPane {
 
 
 .wizard-navigation .button {
-    -fx-min-width: 80px;
+    -fx-min-width: 120px;
     -fx-max-width: 120px;
-    -fx-font-size: 12px;
+    -fx-pref-width: 120px;
     -fx-min-height: 35px;
-    -fx-pref-height: 35px;
     -fx-max-height: 35px;
+    -fx-pref-height: 35px;
+    -fx-alignment: center;
+}
+
+.wizard-navigation .button .graphic {
+    -fx-fit-width: 16px;
+    -fx-fit-height: 16px;
+}
+
+.wizard-navigation .button .text {
+    -fx-font-size: 14px;
+    -fx-font-weight: 600;
+}
+
+/* Asegurar que el contenedor de navegación mantenga su posición */
+.wizard-navigation {
+    -fx-padding: 10px 0;
+    -fx-spacing: 8px;
+    -fx-alignment: center-right;
+    -fx-border-color: rgba(255, 255, 255, 0.2);
+    -fx-border-width: 1 0 0 0;
+    -fx-min-height: 45px;
+    -fx-pref-height: 45px;
+    -fx-max-height: 45px;
+    -fx-background-color: transparent;
+    -fx-position-type: absolute;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+}
+
+/* Estilo específico para el wizard-navigation dentro del wizard-step-full-width */
+.wizard-step-full-width .wizard-navigation {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+    -fx-padding: 10px 40px;
+    -fx-border-color: rgba(255, 255, 255, 0.2);
+    -fx-border-width: 1 0 0 0;
 }
 
 /* Asegurar que las listas no se desborden */
