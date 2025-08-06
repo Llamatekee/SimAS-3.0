@@ -2482,4 +2482,52 @@ GridPane {
     -fx-pref-width: 700px;
 }
 
+/* ===== ESTILOS PARA CAMPOS DE TEXTO DEL FORMULARIO ===== */
+/* Estilos para los campos de texto del formulario de nueva función de error */
+.wizard-step .text-field {
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-border-color: rgba(255, 255, 255, 0.3);
+    -fx-border-width: 1px;
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-font-weight: 500;
+    -fx-padding: 8px 12px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 2, 0.2, 0, 1);
+}
+
+.wizard-step .text-field:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.2);
+    -fx-border-color: rgba(255, 255, 255, 0.4);
+}
+
+.wizard-step .text-field:focused {
+    -fx-background-color: rgba(79, 172, 254, 0.2);
+    -fx-border-color: rgba(79, 172, 254, 0.6);
+    -fx-effect: dropshadow(gaussian, rgba(79, 172, 254, 0.3), 3, 0.3, 0, 2);
+}
+
+/* Estilos para el prompt text de los campos de texto */
+.wizard-step .text-field .prompt-text {
+    -fx-text-fill: rgba(255, 255, 255, 0.6);
+    -fx-font-style: italic;
+}
+
+/* Estilos para campos de texto no editables (como el identificador) */
+.wizard-step .text-field:disabled {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-border-color: rgba(255, 255, 255, 0.2);
+    -fx-text-fill: rgba(255, 255, 255, 0.8);
+    -fx-opacity: 0.8;
+}
+
+/* Estilos para las etiquetas del formulario */
+.wizard-step .label {
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+    -fx-padding: 4px 0;
+}
+
 

@@ -44,10 +44,20 @@ public class NuevaFuncionError implements ActualizableTextos {
         actualizarTextos(bundle);
     }
 
+    @FXML
+    private void initialize() {
+        // Este método se llama automáticamente después de cargar el FXML
+        // Configurar el campo de identificador como no editable
+        if (textFieldIdentificador != null) {
+            textFieldIdentificador.setEditable(false);
+        }
+    }
+
     private void cargarFXML() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/NuevaFuncionError.fxml"));
             loader.setController(this);
+            loader.setResources(bundle);
             root = loader.load();
         } catch (IOException e) {
             e.printStackTrace();
