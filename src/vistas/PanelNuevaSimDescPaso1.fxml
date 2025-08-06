@@ -3,12 +3,14 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
 
+<?import java.net.URL?>
 <GridPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
-         styleClass="wizard-step" vgap="0" VBox.vgrow="ALWAYS">
+         styleClass="wizard-step" vgap="0">
     
     <columnConstraints>
-        <ColumnConstraints hgrow="ALWAYS"/>
+        <ColumnConstraints hgrow="ALWAYS" minWidth="600" prefWidth="800"/>
     </columnConstraints>
     
     <rowConstraints>
@@ -27,10 +29,10 @@
 
     <!-- Content -->
     <VBox spacing="20" GridPane.columnIndex="0" GridPane.rowIndex="1" 
-          styleClass="wizard-content">
+          styleClass="wizard-content" VBox.vgrow="ALWAYS">
         
         <!-- Estado Section -->
-        <VBox spacing="15">
+        <VBox spacing="15" VBox.vgrow="NEVER">
             <Label fx:id="lblEstadoTitulo" styleClass="wizard-section-header"/>
             <Label fx:id="lblEstadoGramatica" styleClass="wizard-label"/>
             <Label fx:id="lblRecursividad" styleClass="error-label"/>
@@ -46,20 +48,56 @@
 
     <!-- Navigation -->
     <HBox styleClass="wizard-navigation" GridPane.columnIndex="0" GridPane.rowIndex="2" 
-          GridPane.valignment="BOTTOM">
+          GridPane.valignment="BOTTOM" GridPane.halignment="CENTER">
         <Button fx:id="btnCancelar" text="%button.cancelar" styleClass="button-cancel" 
-                onAction="#cancelarSimulacion"/>
+                onAction="#cancelarSimulacion">
+            <graphic>
+                <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
+                    <Image url="@../resources/icons/book_blue_preferences.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
         <Button fx:id="btnVisualizarGramatica" text="%simulador.paso1.btn.gramatica" styleClass="button-grammar" 
-                onAction="#visualizarGramatica"/>
+                onAction="#visualizarGramatica">
+            <graphic>
+                <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
+                    <Image url="@../resources/icons/book_blue_view.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
         <Region HBox.hgrow="ALWAYS"/>
         <Button fx:id="btnPrimero" text="%button.primero" styleClass="button-first-last" 
-                onAction="#handlePrimero" disable="true"/>
+                onAction="#handlePrimero" disable="true">
+            <graphic>
+                <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
+                    <Image url="@../resources/icons/arrow_left_blue.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
         <Button fx:id="btnAnterior" text="%button.anterior" styleClass="button-prev-next" 
-                onAction="#handleAnterior" disable="true"/>
+                onAction="#handleAnterior" disable="true">
+            <graphic>
+                <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
+                    <Image url="@../resources/icons/arrow_left_green.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
         <Button fx:id="btnSiguiente" text="%button.siguiente" styleClass="button-prev-next" 
-                onAction="#handleSiguiente"/>
+                onAction="#handleSiguiente">
+            <graphic>
+                <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
+                    <Image url="@../resources/icons/arrow_right_green.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
         <Button fx:id="btnUltimo" text="%button.ultimo" styleClass="button-first-last" 
-                onAction="#handleUltimo"/>
+                onAction="#handleUltimo">
+            <graphic>
+                <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
+                    <Image url="@../resources/icons/arrow_right_blue.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
     </HBox>
 
 </GridPane>

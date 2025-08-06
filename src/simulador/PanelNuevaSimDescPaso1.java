@@ -25,8 +25,11 @@ public class PanelNuevaSimDescPaso1 implements PanelNuevaSimDescPaso, Actualizab
     @FXML private Label lblRecursividad;
     @FXML private Label lblFactorizacion;
     @FXML private ListView<String> listProducciones;
+    @FXML private Button btnCancelar;
+    @FXML private Button btnVisualizarGramatica;
     @FXML private Button btnPrimero;
     @FXML private Button btnAnterior;
+    @FXML private Button btnSiguiente;
     @FXML private Button btnUltimo;
 
     private final PanelSimuladorDesc panelPadre;
@@ -76,18 +79,32 @@ public class PanelNuevaSimDescPaso1 implements PanelNuevaSimDescPaso, Actualizab
         boolean esRecursiva = gramatica.eliminarRecursividad();
         boolean necesitaFactorizacion = gramatica.factorizar();
 
+        // Limpiar estilos previos
+        lblRecursividad.getStyleClass().removeAll("error-label", "wizard-label");
+        lblFactorizacion.getStyleClass().removeAll("error-label", "wizard-label");
+        lblEstadoGramatica.getStyleClass().removeAll("error-label", "wizard-label");
+
         if (esRecursiva) {
             lblRecursividad.setText(bundle.getString("simulador.gramatica.recursiva"));
-            lblRecursividad.setStyle("-fx-text-fill: red;");
+            lblRecursividad.getStyleClass().add("error-label");
+        } else {
+            lblRecursividad.setText("");
         }
+        
         if (necesitaFactorizacion) {
             lblFactorizacion.setText(bundle.getString("simulador.gramatica.no.factorizada"));
-            lblFactorizacion.setStyle("-fx-text-fill: red;");
+            lblFactorizacion.getStyleClass().add("error-label");
+        } else {
+            lblFactorizacion.setText("");
         }
+        
         if (!esRecursiva && !necesitaFactorizacion) {
             lblEstadoGramatica.setText(bundle.getString("simulador.gramatica.correcta"));
-            lblEstadoGramatica.setStyle("-fx-text-fill: green;");
+            lblEstadoGramatica.getStyleClass().add("wizard-label");
+        } else {
+            lblEstadoGramatica.setText("");
         }
+        
         listProducciones.setItems(gramatica.getProduccionesModel());
     }
 

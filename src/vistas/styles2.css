@@ -1051,37 +1051,41 @@ BorderPane {
 
 /* Estilos específicos para las listas de símbolos */
 .wizard-list {
-    -fx-background-color: rgba(255, 255, 255, 0.1);
-    -fx-background-radius: 8px;
-    -fx-border-radius: 8px;
-    -fx-border-color: rgba(255, 255, 255, 0.2);
-    -fx-border-width: 1px;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 2, 0.2, 0, 1);
+    -fx-background-color: rgba(255, 255, 255, 0.18);
+    -fx-background-radius: 12px;
+    -fx-border-radius: 12px;
+    -fx-border-color: rgba(255, 255, 255, 0.3);
+    -fx-border-width: 2px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 4, 0.3, 0, 2);
     -fx-fill-height: true;
     -fx-fill-width: true;
+    -fx-min-height: 150px;
+    -fx-pref-height: 200px;
+    -fx-min-width: 300px;
+    -fx-pref-width: 400px;
 }
 
 .wizard-list .list-cell {
     -fx-background-color: transparent;
     -fx-text-fill: white;
-    -fx-padding: 8px 12px;
+    -fx-padding: 6px 10px;
     -fx-font-size: 13px;
     -fx-font-weight: 500;
     -fx-border-color: transparent;
 }
 
 .wizard-list .list-cell:selected {
-    -fx-background-color: rgba(79, 172, 254, 0.3);
+    -fx-background-color: rgba(52, 152, 219, 0.4);
     -fx-text-fill: white;
-    -fx-background-radius: 6px;
-    -fx-border-radius: 6px;
-    -fx-effect: dropshadow(gaussian, rgba(79, 172, 254, 0.2), 2, 0.2, 0, 1);
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-effect: dropshadow(gaussian, rgba(52, 152, 219, 0.3), 2, 0.2, 0, 1);
 }
 
 .wizard-list .list-cell:hover {
-    -fx-background-color: rgba(79, 172, 254, 0.15);
-    -fx-background-radius: 6px;
-    -fx-border-radius: 6px;
+    -fx-background-color: rgba(52, 152, 219, 0.2);
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
 }
 
 /* Estilos para listas vacías */
@@ -1376,8 +1380,12 @@ BorderPane {
 
 /* Estilos adicionales para pantallas muy pequeñas */
 .wizard-step {
-    -fx-min-width: 400px;
+    -fx-min-width: 600px;
     -fx-min-height: 500px;
+    -fx-pref-width: 800px;
+    -fx-pref-height: 600px;
+    -fx-max-width: 1200px;
+    -fx-max-height: 800px;
 }
 
 /* Ajustes específicos para el paso 2 */
@@ -1476,6 +1484,8 @@ BorderPane {
     -fx-fill-width: true;
     -fx-alignment: top-center;
     -fx-background-color: transparent;
+    -fx-min-width: 500px;
+    -fx-pref-width: 700px;
 }
 
 /* Secciones de símbolos con mejor distribución */
@@ -1755,9 +1765,9 @@ GridPane {
     -fx-border-radius: 10px;
     -fx-font-weight: 600;
     -fx-padding: 8px 16px;
-    -fx-min-width: 120px;
-    -fx-max-width: 120px;
-    -fx-pref-width: 120px;
+    -fx-min-width: 100px;
+    -fx-max-width: 100px;
+    -fx-pref-width: 100px;
     -fx-min-height: 35px;
     -fx-max-height: 35px;
     -fx-pref-height: 35px;
@@ -2077,6 +2087,205 @@ GridPane {
     -fx-background-color: rgba(255, 255, 255, 0.1);
     -fx-border-color: rgba(255, 255, 255, 0.2);
     -fx-opacity: 0.9;
+}
+
+/* ===== ESTILOS ESPECÍFICOS PARA EL SIMULADOR ===== */
+/* Botón para ver gramática */
+.button-grammar {
+    -fx-background-color: linear-gradient(to right, #f39c12, #e67e22);
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-font-weight: 600;
+    -fx-padding: 8px 16px;
+    -fx-min-width: 140px;
+    -fx-max-width: 140px;
+    -fx-pref-width: 140px;
+    -fx-min-height: 35px;
+    -fx-max-height: 35px;
+    -fx-pref-height: 35px;
+    -fx-alignment: center;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(243, 156, 18, 0.4), 6, 0.3, 0, 3);
+    -fx-border-color: rgba(255, 255, 255, 0.2);
+    -fx-border-width: 1px;
+}
+
+.button-grammar:hover {
+    -fx-background-color: linear-gradient(to right, #e67e22, #f39c12);
+    -fx-effect: dropshadow(gaussian, rgba(243, 156, 18, 0.6), 8, 0.4, 0, 4);
+    -fx-border-color: rgba(255, 255, 255, 0.3);
+    -fx-scale-x: 1.03;
+    -fx-scale-y: 1.03;
+}
+
+.button-grammar:pressed {
+    -fx-scale-x: 0.97;
+    -fx-scale-y: 0.97;
+}
+
+.button-grammar .image-view {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 1, 0.2, 0, 1);
+}
+
+.button-grammar:hover .image-view {
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 0.4), 2, 0.3, 0, 1);
+}
+
+/* Botones de navegación específicos del simulador */
+.button-first-last {
+    -fx-background-color: linear-gradient(to right, #3498db, #2980b9);
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-font-weight: 600;
+    -fx-padding: 8px 16px;
+    -fx-min-width: 110px;
+    -fx-max-width: 110px;
+    -fx-pref-width: 110px;
+    -fx-min-height: 35px;
+    -fx-max-height: 35px;
+    -fx-pref-height: 35px;
+    -fx-alignment: center;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(52, 152, 219, 0.4), 6, 0.3, 0, 3);
+    -fx-border-color: rgba(255, 255, 255, 0.2);
+    -fx-border-width: 1px;
+}
+
+.button-first-last:hover {
+    -fx-background-color: linear-gradient(to right, #2980b9, #3498db);
+    -fx-effect: dropshadow(gaussian, rgba(52, 152, 219, 0.6), 8, 0.4, 0, 4);
+    -fx-border-color: rgba(255, 255, 255, 0.3);
+    -fx-scale-x: 1.03;
+    -fx-scale-y: 1.03;
+}
+
+.button-first-last:pressed {
+    -fx-scale-x: 0.97;
+    -fx-scale-y: 0.97;
+}
+
+.button-first-last:disabled {
+    -fx-background-color: linear-gradient(to right, #95a5a6, #7f8c8d);
+    -fx-text-fill: rgba(255, 255, 255, 0.7);
+    -fx-opacity: 0.6;
+    -fx-effect: none;
+    -fx-border-color: rgba(255, 255, 255, 0.1);
+}
+
+.button-first-last .image-view {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 1, 0.2, 0, 1);
+}
+
+.button-first-last:hover .image-view {
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 0.4), 2, 0.3, 0, 1);
+}
+
+.button-first-last:disabled .image-view {
+    -fx-opacity: 0.5;
+    -fx-effect: none;
+}
+
+.button-prev-next {
+    -fx-background-color: linear-gradient(to right, #27ae60, #2ecc71);
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-font-weight: 600;
+    -fx-padding: 8px 16px;
+    -fx-min-width: 110px;
+    -fx-max-width: 110px;
+    -fx-pref-width: 110px;
+    -fx-min-height: 35px;
+    -fx-max-height: 35px;
+    -fx-pref-height: 35px;
+    -fx-alignment: center;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(39, 174, 96, 0.4), 6, 0.3, 0, 3);
+    -fx-border-color: rgba(255, 255, 255, 0.2);
+    -fx-border-width: 1px;
+}
+
+.button-prev-next:hover {
+    -fx-background-color: linear-gradient(to right, #2ecc71, #27ae60);
+    -fx-effect: dropshadow(gaussian, rgba(39, 174, 96, 0.6), 8, 0.4, 0, 4);
+    -fx-border-color: rgba(255, 255, 255, 0.3);
+    -fx-scale-x: 1.03;
+    -fx-scale-y: 1.03;
+}
+
+.button-prev-next:pressed {
+    -fx-scale-x: 0.97;
+    -fx-scale-y: 0.97;
+}
+
+.button-prev-next:disabled {
+    -fx-background-color: linear-gradient(to right, #95a5a6, #7f8c8d);
+    -fx-text-fill: rgba(255, 255, 255, 0.7);
+    -fx-opacity: 0.6;
+    -fx-effect: none;
+    -fx-border-color: rgba(255, 255, 255, 0.1);
+}
+
+.button-prev-next .image-view {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 1, 0.2, 0, 1);
+}
+
+.button-prev-next:hover .image-view {
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 0.4), 2, 0.3, 0, 1);
+}
+
+.button-prev-next:disabled .image-view {
+    -fx-opacity: 0.5;
+    -fx-effect: none;
+}
+
+/* Estilos para etiquetas de estado del simulador */
+.wizard-label {
+    -fx-text-fill: #27ae60;
+    -fx-font-size: 14px;
+    -fx-font-weight: 600;
+    -fx-padding: 8px 12px;
+    -fx-background-color: rgba(39, 174, 96, 0.15);
+    -fx-background-radius: 6px;
+    -fx-border-radius: 6px;
+    -fx-border-color: rgba(39, 174, 96, 0.25);
+    -fx-border-width: 1px;
+    -fx-effect: dropshadow(gaussian, rgba(39, 174, 96, 0.2), 2, 0.2, 0, 1);
+}
+
+/* Mejorar el espaciado del menú de navegación del simulador */
+.wizard-navigation {
+    -fx-spacing: 8px;
+    -fx-padding: 10px 0;
+    -fx-alignment: center;
+    -fx-min-width: 600px;
+    -fx-pref-width: 800px;
+}
+
+/* Asegurar que el header del simulador se centre correctamente */
+.wizard-step .wizard-header {
+    -fx-min-width: 500px;
+    -fx-pref-width: 700px;
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+}
+
+.error-label {
+    -fx-text-fill: #e74c3c;
+    -fx-font-size: 13px;
+    -fx-font-weight: 500;
+    -fx-padding: 6px 10px;
+    -fx-background-color: rgba(231, 76, 60, 0.15);
+    -fx-background-radius: 4px;
+    -fx-border-radius: 4px;
+    -fx-border-color: rgba(231, 76, 60, 0.25);
+    -fx-border-width: 1px;
+    -fx-effect: dropshadow(gaussian, rgba(231, 76, 60, 0.2), 1, 0.2, 0, 1);
 }
 
 
