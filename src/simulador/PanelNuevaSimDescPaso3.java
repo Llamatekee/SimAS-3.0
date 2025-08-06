@@ -43,6 +43,14 @@ public class PanelNuevaSimDescPaso3 implements PanelNuevaSimDescPaso, Actualizab
         construirTablaPredictiva();
     }
 
+    @FXML
+    private void initialize() {
+        // Este método se llama automáticamente después de cargar el FXML
+        if (tablaPredictiva != null) {
+            tablaPredictiva.setPlaceholder(new Label("No hay datos disponibles"));
+        }
+    }
+
     private void cargarFXML() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/PanelNuevaSimDescPaso3.fxml"));

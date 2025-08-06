@@ -2381,6 +2381,31 @@ GridPane {
     -fx-background-color: transparent;
 }
 
+/* Corregir las esquinas del header de la tabla */
+.wizard-table .table-view .column-header-background .filler {
+    -fx-background-color: transparent;
+}
+
+.wizard-table .table-view .column-header-background .show-hide-columns-button {
+    -fx-background-color: transparent;
+}
+
+/* Asegurar que las esquinas del header coincidan con la tabla */
+.wizard-table .table-view .column-header-background .corner {
+    -fx-background-color: transparent;
+}
+
+/* Estilos específicos para la primera y última columna del header */
+.wizard-table .table-view .column-header:first-child {
+    -fx-background-radius: 12px 0 0 0;
+    -fx-border-radius: 12px 0 0 0;
+}
+
+.wizard-table .table-view .column-header:last-child {
+    -fx-background-radius: 0 12px 0 0;
+    -fx-border-radius: 0 12px 0 0;
+}
+
 .error-label {
     -fx-text-fill: #e74c3c;
     -fx-font-size: 13px;
