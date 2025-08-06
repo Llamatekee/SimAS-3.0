@@ -883,6 +883,8 @@ BorderPane {
     -fx-border-color: rgba(255, 255, 255, 0.2);
     -fx-border-width: 1px;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 2, 0.2, 0, 1);
+    -fx-fill-height: true;
+    -fx-fill-width: true;
 }
 
 .wizard-list .list-cell {
@@ -962,195 +964,6 @@ BorderPane {
 
 .wizard-section-header {
     -fx-font-size: 14px;
-    -fx-font-weight: bold;
-    -fx-text-fill: rgba(79, 172, 254, 0.9);
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 2, 0.2, 0, 1);
-    -fx-padding: 3px 0;
-    -fx-border-color: transparent transparent rgba(79, 172, 254, 0.3) transparent;
-    -fx-border-width: 0 0 1px 0;
-}
-
-.wizard-content {
-    -fx-padding: 20px;
-    -fx-spacing: 15px;
-    -fx-fill-height: true;
-    -fx-fill-width: true;
-    -fx-alignment: center;
-    -fx-pref-width: 350px;
-    -fx-max-width: 500px;
-}
-
-.wizard-navigation {
-    -fx-padding: 15px 0;
-    -fx-spacing: 8px;
-    -fx-alignment: center-right;
-    -fx-border-color: rgba(255, 255, 255, 0.1) transparent transparent transparent;
-    -fx-border-width: 1 0 0 0;
-    -fx-min-height: 60px;
-    -fx-pref-height: 60px;
-    -fx-max-height: 60px;
-    -fx-background-color: rgba(0, 0, 0, 0.1);
-    -fx-position-type: absolute;
-}
-
-/* Botones específicos del wizard */
-.button-cancel {
-    -fx-background-color: linear-gradient(to right, #ff6b6b, #ee5a52);
-    -fx-text-fill: white;
-    -fx-font-size: 14px;
-    -fx-background-radius: 10px;
-    -fx-border-radius: 10px;
-    -fx-font-weight: 600;
-    -fx-padding: 8px 16px;
-    -fx-min-width: 120px;
-    -fx-max-width: 120px;
-    -fx-pref-width: 120px;
-    -fx-min-height: 35px;
-    -fx-max-height: 35px;
-    -fx-pref-height: 35px;
-    -fx-alignment: center;
-    -fx-cursor: hand;
-    -fx-effect: dropshadow(gaussian, rgba(255, 107, 107, 0.4), 6, 0.3, 0, 3);
-    -fx-border-color: rgba(255, 255, 255, 0.2);
-    -fx-border-width: 1px;
-}
-
-.button-cancel:hover {
-    -fx-background-color: linear-gradient(to right, #ee5a52, #ff6b6b);
-    -fx-effect: dropshadow(gaussian, rgba(255, 107, 107, 0.6), 8, 0.4, 0, 4);
-    -fx-border-color: rgba(255, 255, 255, 0.3);
-    -fx-scale-x: 1.03;
-    -fx-scale-y: 1.03;
-}
-
-.button-next {
-    -fx-background-color: linear-gradient(to right, #667eea, #764ba2);
-    -fx-text-fill: white;
-    -fx-font-size: 14px;
-    -fx-background-radius: 10px;
-    -fx-border-radius: 10px;
-    -fx-font-weight: 600;
-    -fx-padding: 8px 16px;
-    -fx-min-width: 120px;
-    -fx-max-width: 120px;
-    -fx-pref-width: 120px;
-    -fx-min-height: 35px;
-    -fx-max-height: 35px;
-    -fx-pref-height: 35px;
-    -fx-alignment: center;
-    -fx-cursor: hand;
-    -fx-effect: dropshadow(gaussian, rgba(102, 126, 234, 0.4), 6, 0.3, 0, 3);
-    -fx-border-color: rgba(255, 255, 255, 0.2);
-    -fx-border-width: 1px;
-}
-
-.button-next:hover {
-    -fx-background-color: linear-gradient(to right, #764ba2, #667eea);
-    -fx-effect: dropshadow(gaussian, rgba(102, 126, 234, 0.6), 8, 0.4, 0, 4);
-    -fx-border-color: rgba(255, 255, 255, 0.3);
-    -fx-scale-x: 1.03;
-    -fx-scale-y: 1.03;
-}
-
-/* Estilos para iconos de botones del wizard */
-.button-cancel .image-view,
-.button-next .image-view {
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 1, 0.2, 0, 1);
-}
-
-.button-cancel:hover .image-view,
-.button-next:hover .image-view {
-    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 0.4), 2, 0.3, 0, 1);
-}
-
-.button-cancel:disabled .image-view,
-.button-next:disabled .image-view {
-    -fx-opacity: 0.5;
-    -fx-effect: none;
-}
-
-/* Campos del wizard */
-.wizard-field {
-    -fx-background-color: rgba(255, 255, 255, 0.12);
-    -fx-text-fill: white;
-    -fx-padding: 12px 16px;
-    -fx-border-radius: 8px;
-    -fx-background-radius: 8px;
-    -fx-font-size: 14px;
-    -fx-border-color: rgba(255, 255, 255, 0.2);
-    -fx-border-width: 1px;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 2, 0.2, 0, 1);
-    -fx-font-weight: 500;
-}
-
-.wizard-field .prompt-text {
-    -fx-text-fill: rgba(255, 255, 255, 0.5);
-    -fx-font-style: italic;
-}
-
-.text-area.wizard-field {
-    -fx-min-height: 120px;
-}
-
-/* TextField para descripción */
-#txtDescripcion {
-    -fx-min-height: 120px;
-    -fx-pref-height: 120px;
-    -fx-alignment: top-left;
-}
-
-.text-area.wizard-field .content {
-    -fx-background-color: transparent;
-    -fx-background-radius: 0;
-    -fx-border-radius: 0;
-    -fx-border-color: transparent;
-    -fx-border-width: 0;
-}
-
-.text-area.wizard-field:focused .content {
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
-    -fx-border-width: 0;
-}
-
-.wizard-field:focused {
-    -fx-background-color: rgba(255, 255, 255, 0.15);
-    -fx-border-color: rgba(79, 172, 254, 0.6);
-    -fx-border-width: 2px;
-    -fx-effect: dropshadow(gaussian, rgba(79, 172, 254, 0.3), 4, 0.3, 0, 2);
-}
-
-.wizard-field:hover {
-    -fx-background-color: rgba(255, 255, 255, 0.14);
-    -fx-border-color: rgba(255, 255, 255, 0.25);
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 3, 0.2, 0, 2);
-}
-
-
-
-/* Labels del wizard */
-.wizard-label {
-    -fx-font-size: 14px;
-    -fx-text-fill: rgba(255, 255, 255, 0.9);
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 1, 0.2, 0, 1);
-}
-
-.wizard-subsection-header {
-    -fx-font-size: 16px;
-    -fx-text-fill: white;
-    -fx-font-weight: 700;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 3, 0.3, 0, 2);
-    -fx-padding: 8px 0;
-    -fx-background-color: rgba(255, 255, 255, 0.1);
-    -fx-background-radius: 8px;
-    -fx-border-radius: 8px;
-    -fx-padding: 8px 12px;
-    -fx-border-color: rgba(255, 255, 255, 0.2);
-    -fx-border-width: 1px;
-}
-
-.wizard-section-header {
-    -fx-font-size: 15px;
     -fx-text-fill: rgba(255, 255, 255, 0.9);
     -fx-font-weight: 600;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 2, 0.2, 0, 1);
@@ -1167,17 +980,19 @@ BorderPane {
 .wizard-action-button {
     -fx-background-color: linear-gradient(to right, #667eea, #764ba2);
     -fx-text-fill: white;
-    -fx-font-size: 13px;
+    -fx-font-size: 12px;
     -fx-background-radius: 8px;
     -fx-border-radius: 8px;
     -fx-font-weight: 600;
-    -fx-padding: 10px 16px;
+    -fx-padding: 10px 12px;
     -fx-alignment: center;
     -fx-cursor: hand;
     -fx-effect: dropshadow(gaussian, rgba(102, 126, 234, 0.3), 4, 0.3, 0, 2);
     -fx-border-color: rgba(255, 255, 255, 0.15);
     -fx-border-width: 1px;
     -fx-graphic-text-gap: 6px;
+    -fx-min-height: 35px;
+    -fx-pref-height: 35px;
 }
 
 .wizard-action-button:hover {
@@ -1188,12 +1003,9 @@ BorderPane {
     -fx-scale-y: 1.02;
 }
 
-.wizard-action-button .image-view {
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 1, 0.2, 0, 1);
-}
-
-.wizard-action-button:hover .image-view {
-    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 0.4), 2, 0.3, 0, 1);
+.wizard-action-button:pressed {
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
 }
 
 /* Botón de finalizar del wizard */
@@ -1236,19 +1048,24 @@ BorderPane {
 
 /* Botones de símbolos predefinidos */
 .symbol-buttons-pane {
-    -fx-padding: 10px;
+    -fx-padding: 8px;
+    -fx-background-color: rgba(255, 255, 255, 0.05);
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-border-color: rgba(255, 255, 255, 0.1);
+    -fx-border-width: 1px;
 }
 
 .symbol-buttons-pane .button {
-    -fx-background-color: rgba(52, 152, 219, 0.3);
+    -fx-background-color: linear-gradient(to right, #3498db, #2980b9);
     -fx-text-fill: white;
-    -fx-font-size: 12px;
+    -fx-font-size: 13px;
     -fx-font-weight: 600;
     -fx-background-radius: 6px;
     -fx-border-radius: 6px;
-    -fx-padding: 6px 12px;
-    -fx-min-width: 30px;
-    -fx-min-height: 30px;
+    -fx-padding: 8px 12px;
+    -fx-min-width: 35px;
+    -fx-min-height: 35px;
     -fx-alignment: center;
     -fx-cursor: hand;
     -fx-effect: dropshadow(gaussian, rgba(52, 152, 219, 0.3), 2, 0.2, 0, 1);
@@ -1257,11 +1074,16 @@ BorderPane {
 }
 
 .symbol-buttons-pane .button:hover {
-    -fx-background-color: rgba(52, 152, 219, 0.5);
+    -fx-background-color: linear-gradient(to right, #2980b9, #3498db);
     -fx-effect: dropshadow(gaussian, rgba(52, 152, 219, 0.5), 3, 0.3, 0, 2);
     -fx-border-color: rgba(255, 255, 255, 0.3);
     -fx-scale-x: 1.05;
     -fx-scale-y: 1.05;
+}
+
+.symbol-buttons-pane .button:pressed {
+    -fx-scale-x: 0.95;
+    -fx-scale-y: 0.95;
 }
 
 /* Listas del wizard - iguales que las del editor */
@@ -1425,16 +1247,13 @@ BorderPane {
 .wizard-navigation {
     -fx-padding: 10px 0;
     -fx-spacing: 8px;
-    -fx-alignment: center-right;
+    -fx-alignment: center;
     -fx-border-color: rgba(255, 255, 255, 0.2);
     -fx-border-width: 1 0 0 0;
-    -fx-min-height: 45px;
-    -fx-pref-height: 45px;
-    -fx-max-height: 45px;
+    -fx-min-height: 50px;
+    -fx-pref-height: 50px;
+    -fx-max-height: 50px;
     -fx-background-color: transparent;
-    -fx-position-type: absolute;
-    -fx-background-radius: 0;
-    -fx-border-radius: 0;
 }
 
 /* Estilo específico para el wizard-navigation dentro del wizard-step-full-width */
@@ -1465,6 +1284,501 @@ BorderPane {
 .wizard-header {
     -fx-min-height: 40px;
     -fx-max-height: 60px;
+}
+
+/* ===== ESTILOS ESPECÍFICOS PARA PANEL DE SÍMBOLOS TERMINALES ===== */
+/* Mejorar el layout de dos columnas */
+.wizard-step {
+    -fx-fill-height: true;
+    -fx-fill-width: true;
+    -fx-background-color: transparent;
+}
+
+/* Optimizar el contenido principal */
+.wizard-content {
+    -fx-padding: 15px;
+    -fx-spacing: 15px;
+    -fx-fill-height: true;
+    -fx-fill-width: true;
+    -fx-alignment: top-center;
+    -fx-background-color: transparent;
+}
+
+/* Secciones de símbolos con mejor distribución */
+.symbol-section {
+    -fx-background-color: rgba(255, 255, 255, 0.08);
+    -fx-background-radius: 12px;
+    -fx-border-radius: 12px;
+    -fx-border-color: rgba(255, 255, 255, 0.15);
+    -fx-border-width: 1px;
+    -fx-padding: 15px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 4, 0.2, 0, 2);
+    -fx-fill-height: true;
+    -fx-fill-width: true;
+}
+
+.symbol-section:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-border-color: rgba(255, 255, 255, 0.2);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0.3, 0, 3);
+}
+
+/* Mejorar los botones de símbolos predefinidos */
+.symbol-buttons-pane {
+    -fx-padding: 8px;
+    -fx-background-color: rgba(255, 255, 255, 0.05);
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-border-color: rgba(255, 255, 255, 0.1);
+    -fx-border-width: 1px;
+}
+
+.symbol-buttons-pane .button {
+    -fx-background-color: linear-gradient(to right, #3498db, #2980b9);
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+    -fx-background-radius: 6px;
+    -fx-border-radius: 6px;
+    -fx-padding: 8px 12px;
+    -fx-min-width: 35px;
+    -fx-min-height: 35px;
+    -fx-alignment: center;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(52, 152, 219, 0.3), 2, 0.2, 0, 1);
+    -fx-border-color: rgba(255, 255, 255, 0.2);
+    -fx-border-width: 1px;
+}
+
+.symbol-buttons-pane .button:hover {
+    -fx-background-color: linear-gradient(to right, #2980b9, #3498db);
+    -fx-effect: dropshadow(gaussian, rgba(52, 152, 219, 0.5), 3, 0.3, 0, 2);
+    -fx-border-color: rgba(255, 255, 255, 0.3);
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+
+.symbol-buttons-pane .button:pressed {
+    -fx-scale-x: 0.95;
+    -fx-scale-y: 0.95;
+}
+
+/* Mejorar los campos de texto */
+.wizard-field {
+    -fx-background-color: rgba(255, 255, 255, 0.12);
+    -fx-text-fill: white;
+    -fx-padding: 12px 16px;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-font-size: 14px;
+    -fx-border-color: rgba(255, 255, 255, 0.2);
+    -fx-border-width: 1px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 2, 0.2, 0, 1);
+    -fx-font-weight: 500;
+    -fx-min-height: 40px;
+    -fx-pref-height: 40px;
+}
+
+.wizard-field .prompt-text {
+    -fx-text-fill: rgba(255, 255, 255, 0.5);
+    -fx-font-style: italic;
+}
+
+.wizard-field:focused {
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+    -fx-border-color: rgba(79, 172, 254, 0.6);
+    -fx-border-width: 2px;
+    -fx-effect: dropshadow(gaussian, rgba(79, 172, 254, 0.3), 4, 0.3, 0, 2);
+}
+
+.wizard-field:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.14);
+    -fx-border-color: rgba(255, 255, 255, 0.25);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 3, 0.2, 0, 2);
+}
+
+/* ===== BOTONES DE ACCIÓN DEL WIZARD ===== */
+/* Botones de acción generales (para listas pequeñas, formularios, etc.) */
+.wizard-action-button {
+    -fx-background-color: linear-gradient(to right, #667eea, #764ba2);
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-font-weight: 600;
+    -fx-padding: 10px 12px;
+    -fx-alignment: center;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(102, 126, 234, 0.3), 4, 0.3, 0, 2);
+    -fx-border-color: rgba(255, 255, 255, 0.15);
+    -fx-border-width: 1px;
+    -fx-graphic-text-gap: 6px;
+    -fx-min-height: 35px;
+    -fx-pref-height: 35px;
+}
+
+/* Botones de acción principales (para modificar terminales/no terminales) */
+.wizard-action-button-main {
+    -fx-background-color: linear-gradient(to right, #4facfe, #00f2fe);
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-background-radius: 12px;
+    -fx-border-radius: 12px;
+    -fx-font-weight: 700;
+    -fx-padding: 12px 20px;
+    -fx-alignment: center;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(79, 172, 254, 0.4), 6, 0.3, 0, 3);
+    -fx-border-color: rgba(255, 255, 255, 0.2);
+    -fx-border-width: 1px;
+    -fx-graphic-text-gap: 8px;
+    -fx-min-height: 45px;
+    -fx-pref-height: 45px;
+    -fx-min-width: 200px;
+    -fx-pref-width: 250px;
+}
+
+.wizard-action-button:hover {
+    -fx-background-color: linear-gradient(to right, #764ba2, #667eea);
+    -fx-effect: dropshadow(gaussian, rgba(102, 126, 234, 0.6), 8, 0.4, 0, 4);
+    -fx-border-color: rgba(255, 255, 255, 0.3);
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+}
+
+.wizard-action-button:pressed {
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+}
+
+.wizard-action-button-main:hover {
+    -fx-background-color: linear-gradient(to right, #00f2fe, #4facfe);
+    -fx-effect: dropshadow(gaussian, rgba(79, 172, 254, 0.6), 8, 0.4, 0, 4);
+    -fx-border-color: rgba(255, 255, 255, 0.3);
+    -fx-scale-x: 1.03;
+    -fx-scale-y: 1.03;
+}
+
+.wizard-action-button-main:pressed {
+    -fx-scale-x: 0.97;
+    -fx-scale-y: 0.97;
+}
+
+/* Mejorar las listas */
+.wizard-list {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-border-color: rgba(255, 255, 255, 0.2);
+    -fx-border-width: 1px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 2, 0.2, 0, 1);
+    -fx-fill-height: true;
+    -fx-fill-width: true;
+}
+
+.wizard-list .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-padding: 8px 12px;
+    -fx-font-size: 13px;
+    -fx-font-weight: 500;
+    -fx-border-color: transparent;
+}
+
+.wizard-list .list-cell:selected {
+    -fx-background-color: rgba(79, 172, 254, 0.3);
+    -fx-text-fill: white;
+    -fx-background-radius: 6px;
+    -fx-border-radius: 6px;
+    -fx-effect: dropshadow(gaussian, rgba(79, 172, 254, 0.2), 2, 0.2, 0, 1);
+}
+
+.wizard-list .list-cell:hover {
+    -fx-background-color: rgba(79, 172, 254, 0.15);
+    -fx-background-radius: 6px;
+    -fx-border-radius: 6px;
+}
+
+/* Mejorar los headers de sección */
+.wizard-section-header {
+    -fx-font-size: 14px;
+    -fx-text-fill: rgba(255, 255, 255, 0.9);
+    -fx-font-weight: 600;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 2, 0.2, 0, 1);
+    -fx-padding: 8px 12px;
+    -fx-background-color: rgba(79, 172, 254, 0.15);
+    -fx-background-radius: 6px;
+    -fx-border-radius: 6px;
+    -fx-border-color: rgba(79, 172, 254, 0.25);
+    -fx-border-width: 1px;
+    -fx-alignment: center;
+}
+
+/* Mejorar el header principal */
+.wizard-header {
+    -fx-background-color: linear-gradient(to bottom right, #667eea, #764ba2);
+    -fx-padding: 12px 15px;
+    -fx-font-size: 18px;
+    -fx-font-weight: 700;
+    -fx-text-fill: white;
+    -fx-alignment: center;
+    -fx-background-radius: 10px;
+    -fx-effect: dropshadow(gaussian, rgba(102, 126, 234, 0.4), 6, 0.3, 0, 3);
+    -fx-border-color: rgba(255, 255, 255, 0.2);
+    -fx-border-width: 1px;
+    -fx-border-radius: 10px;
+    -fx-letter-spacing: 0.5px;
+}
+
+/* Mejorar la navegación */
+.wizard-navigation {
+    -fx-padding: 10px 0;
+    -fx-spacing: 10px;
+    -fx-alignment: center;
+    -fx-border-color: rgba(255, 255, 255, 0.1) transparent transparent transparent;
+    -fx-border-width: 1 0 0 0;
+    -fx-min-height: 50px;
+    -fx-pref-height: 50px;
+    -fx-max-height: 50px;
+    -fx-background-color: transparent;
+}
+
+/* Optimizar para pantallas más grandes */
+.wizard-step {
+    -fx-min-width: 800px;
+    -fx-min-height: 600px;
+    -fx-pref-width: 1000px;
+    -fx-pref-height: 700px;
+}
+
+/* Asegurar que las columnas se distribuyan equitativamente */
+GridPane {
+    -fx-hgap: 20px;
+    -fx-vgap: 15px;
+}
+
+/* Mejorar la responsividad */
+@media (max-width: 1200px) {
+    .wizard-step {
+        -fx-min-width: 700px;
+        -fx-pref-width: 800px;
+    }
+}
+
+@media (max-width: 900px) {
+    .wizard-step {
+        -fx-min-width: 600px;
+        -fx-pref-width: 700px;
+    }
+}
+
+/* ===== BOTONES DE NAVEGACIÓN ESPECÍFICOS ===== */
+.button-cancel {
+    -fx-background-color: linear-gradient(to right, #ff6b6b, #ee5a52);
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-font-weight: 600;
+    -fx-padding: 8px 16px;
+    -fx-min-width: 120px;
+    -fx-max-width: 120px;
+    -fx-pref-width: 120px;
+    -fx-min-height: 35px;
+    -fx-max-height: 35px;
+    -fx-pref-height: 35px;
+    -fx-alignment: center;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(255, 107, 107, 0.4), 6, 0.3, 0, 3);
+    -fx-border-color: rgba(255, 255, 255, 0.2);
+    -fx-border-width: 1px;
+}
+
+.button-cancel:hover {
+    -fx-background-color: linear-gradient(to right, #ee5a52, #ff6b6b);
+    -fx-effect: dropshadow(gaussian, rgba(255, 107, 107, 0.6), 8, 0.4, 0, 4);
+    -fx-border-color: rgba(255, 255, 255, 0.3);
+    -fx-scale-x: 1.03;
+    -fx-scale-y: 1.03;
+}
+
+.button-cancel:pressed {
+    -fx-scale-x: 0.97;
+    -fx-scale-y: 0.97;
+}
+
+
+
+/* ===== BOTONES DE NAVEGACIÓN DEL WIZARD (ANTERIOR, SIGUIENTE, ETC.) ===== */
+.button-next {
+    -fx-background-color: linear-gradient(to right, #667eea, #764ba2);
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-font-weight: 600;
+    -fx-padding: 8px 16px;
+    -fx-min-width: 120px;
+    -fx-max-width: 120px;
+    -fx-pref-width: 120px;
+    -fx-min-height: 35px;
+    -fx-max-height: 35px;
+    -fx-pref-height: 35px;
+    -fx-alignment: center;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(102, 126, 234, 0.4), 6, 0.3, 0, 3);
+    -fx-border-color: rgba(255, 255, 255, 0.2);
+    -fx-border-width: 1px;
+}
+
+.button-next:hover {
+    -fx-background-color: linear-gradient(to right, #764ba2, #667eea);
+    -fx-effect: dropshadow(gaussian, rgba(102, 126, 234, 0.6), 8, 0.4, 0, 4);
+    -fx-border-color: rgba(255, 255, 255, 0.3);
+    -fx-scale-x: 1.03;
+    -fx-scale-y: 1.03;
+}
+
+.button-next:pressed {
+    -fx-scale-x: 0.97;
+    -fx-scale-y: 0.97;
+}
+
+/* Estilos para iconos de botones de navegación */
+.button-next .image-view {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 1, 0.2, 0, 1);
+}
+
+.button-next:hover .image-view {
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 0.4), 2, 0.3, 0, 1);
+}
+
+.button-next:disabled .image-view {
+    -fx-opacity: 0.5;
+    -fx-effect: none;
+}
+
+.button-finish {
+    -fx-background-color: linear-gradient(to right, #27ae60, #2ecc71);
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-font-weight: 600;
+    -fx-padding: 8px 16px;
+    -fx-min-width: 120px;
+    -fx-max-width: 120px;
+    -fx-pref-width: 120px;
+    -fx-min-height: 35px;
+    -fx-max-height: 35px;
+    -fx-pref-height: 35px;
+    -fx-alignment: center;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(39, 174, 96, 0.4), 6, 0.3, 0, 3);
+    -fx-border-color: rgba(255, 255, 255, 0.2);
+    -fx-border-width: 1px;
+}
+
+.button-finish:hover {
+    -fx-background-color: linear-gradient(to right, #2ecc71, #27ae60);
+    -fx-effect: dropshadow(gaussian, rgba(39, 174, 96, 0.6), 8, 0.4, 0, 4);
+    -fx-border-color: rgba(255, 255, 255, 0.3);
+    -fx-scale-x: 1.03;
+    -fx-scale-y: 1.03;
+}
+
+.button-finish:pressed {
+    -fx-scale-x: 0.97;
+    -fx-scale-y: 0.97;
+}
+
+/* Estilos para iconos de botones */
+.button-cancel .image-view,
+.button-finish .image-view {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 1, 0.2, 0, 1);
+}
+
+.button-cancel:hover .image-view,
+.button-finish:hover .image-view {
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 0.4), 2, 0.3, 0, 1);
+}
+
+.button-cancel:disabled .image-view,
+.button-finish:disabled .image-view {
+    -fx-opacity: 0.5;
+    -fx-effect: none;
+}
+
+/* ===== ESTILOS ADICIONALES PARA MEJORAR LA EXPERIENCIA ===== */
+/* Efectos de transición suaves */
+.wizard-step,
+.symbol-section,
+.wizard-action-button,
+.symbol-buttons-pane .button {
+    -fx-transition: all 0.2s ease-in-out;
+}
+
+/* Mejorar la legibilidad del texto */
+.wizard-content .label {
+    -fx-text-fill: rgba(255, 255, 255, 0.95);
+    -fx-font-size: 14px;
+    -fx-font-weight: 600;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 1, 0.2, 0, 1);
+}
+
+/* Optimizar el espaciado en dispositivos con pantallas pequeñas */
+@media (max-width: 800px) {
+    .wizard-content {
+        -fx-padding: 10px;
+        -fx-spacing: 10px;
+    }
+    
+    .symbol-section {
+        -fx-padding: 10px;
+    }
+    
+    .wizard-action-button {
+        -fx-font-size: 11px;
+        -fx-padding: 8px 10px;
+    }
+    
+    .symbol-buttons-pane .button {
+        -fx-font-size: 12px;
+        -fx-padding: 6px 10px;
+        -fx-min-width: 30px;
+        -fx-min-height: 30px;
+    }
+}
+
+/* Clase específica para botones de símbolos predefinidos */
+.symbol-button {
+    -fx-background-color: linear-gradient(to right, #3498db, #2980b9);
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+    -fx-background-radius: 6px;
+    -fx-border-radius: 6px;
+    -fx-padding: 8px 12px;
+    -fx-min-width: 35px;
+    -fx-min-height: 35px;
+    -fx-alignment: center;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(52, 152, 219, 0.3), 2, 0.2, 0, 1);
+    -fx-border-color: rgba(255, 255, 255, 0.2);
+    -fx-border-width: 1px;
+}
+
+.symbol-button:hover {
+    -fx-background-color: linear-gradient(to right, #2980b9, #3498db);
+    -fx-effect: dropshadow(gaussian, rgba(52, 152, 219, 0.5), 3, 0.3, 0, 2);
+    -fx-border-color: rgba(255, 255, 255, 0.3);
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+
+.symbol-button:pressed {
+    -fx-scale-x: 0.95;
+    -fx-scale-y: 0.95;
 }
 
 

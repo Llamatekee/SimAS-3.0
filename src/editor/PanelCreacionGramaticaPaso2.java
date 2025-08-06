@@ -136,11 +136,11 @@ public class PanelCreacionGramaticaPaso2 extends VBox implements ActualizableTex
         
         // Aplicar estilos compactos a los botones
         if (btnModificarNoTerminales != null) {
-            btnModificarNoTerminales.getStyleClass().add("wizard-action-button-compact");
+            btnModificarNoTerminales.getStyleClass().add("wizard-action-button-main");
         }
         
         if (btnModificarTerminales != null) {
-            btnModificarTerminales.getStyleClass().add("wizard-action-button-compact");
+            btnModificarTerminales.getStyleClass().add("wizard-action-button-main");
         }
         
         if (btnCancelar != null) {
@@ -148,19 +148,19 @@ public class PanelCreacionGramaticaPaso2 extends VBox implements ActualizableTex
         }
         
         if (btnPrimero != null) {
-            btnPrimero.getStyleClass().add("button-compact");
+            btnPrimero.getStyleClass().add("button-next");
         }
         
         if (btnAnterior != null) {
-            btnAnterior.getStyleClass().add("button-compact");
+            btnAnterior.getStyleClass().add("button-next");
         }
         
         if (btnSiguiente != null) {
-            btnSiguiente.getStyleClass().add("button-compact");
+            btnSiguiente.getStyleClass().add("button-next");
         }
         
         if (btnUltimo != null) {
-            btnUltimo.getStyleClass().add("button-compact");
+            btnUltimo.getStyleClass().add("button-next");
         }
     }
 

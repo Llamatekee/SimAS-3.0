@@ -72,7 +72,7 @@ public class PanelSimbolosTerminales extends VBox implements ActualizableTextos 
     private void generarBotonesPredefinidos() {
         for (String simbolo : simbolosPredefinidos) {
             Button btnSimbolo = new Button(simbolo);
-            btnSimbolo.setStyle("-fx-font-size: 14px; -fx-padding: 5px; -fx-background-color: #3498db; -fx-text-fill: white; -fx-border-radius: 5px;");
+            btnSimbolo.getStyleClass().add("symbol-button");
             btnSimbolo.setOnAction(event -> agregarSimbolo(simbolo));
             symbolButtonsPane.getChildren().add(btnSimbolo);
         }

@@ -36,7 +36,7 @@
             <ListView fx:id="listNoTerminales" styleClass="wizard-list" 
                       minHeight="100" prefHeight="120" maxHeight="150"/>
             <Button fx:id="btnModificarNoTerminales" text="Modificar No Terminales" 
-                    styleClass="wizard-action-button"
+                    styleClass="wizard-action-button-main"
                     maxWidth="Infinity" onAction="#onBtnModificarNoTerminalesAction">
                 <graphic>
                     <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
@@ -52,7 +52,7 @@
             <ListView fx:id="listTerminales" styleClass="wizard-list"
                       minHeight="100" prefHeight="120" maxHeight="150"/>
             <Button fx:id="btnModificarTerminales" text="Modificar Terminales" 
-                    styleClass="wizard-action-button"
+                    styleClass="wizard-action-button-main"
                     maxWidth="Infinity" onAction="#onBtnModificarTerminalesAction">
                 <graphic>
                     <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
