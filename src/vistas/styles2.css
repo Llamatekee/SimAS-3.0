@@ -194,6 +194,31 @@
     -fx-font-weight: 500;
 }
 
+/* Estilos específicos para el list-cell del wizard-combo-box */
+.wizard-combo-box .list-cell {
+    -fx-text-fill: white !important;
+    -fx-background-color: transparent !important;
+    -fx-font-size: 14px !important;
+    -fx-font-weight: 500 !important;
+    -fx-opacity: 1 !important;
+}
+
+/* Estilos para mejorar la visibilidad del texto seleccionado */
+.wizard-combo-box .list-cell:filled {
+    -fx-text-fill: white !important;
+    -fx-opacity: 1 !important;
+}
+
+.wizard-combo-box .list-cell:filled:selected {
+    -fx-text-fill: white !important;
+    -fx-opacity: 1 !important;
+}
+
+.wizard-combo-box .list-cell:filled:hover {
+    -fx-text-fill: white !important;
+    -fx-opacity: 1 !important;
+}
+
 .wizard-combo-box:hover {
     -fx-background-color: rgba(255, 255, 255, 0.15);
     -fx-border-color: rgba(255, 255, 255, 0.3);
@@ -205,6 +230,113 @@
     -fx-border-color: rgba(79, 172, 254, 0.6);
     -fx-border-width: 3px;
     -fx-effect: dropshadow(gaussian, rgba(79, 172, 254, 0.3), 6, 0.4, 0, 3);
+}
+
+/* Estilos específicos para el list-view del wizard-combo-box */
+.wizard-combo-box .list-view {
+    -fx-background-color: #2c3e50;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-border-color: rgba(255, 255, 255, 0.3);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.8), 12, 0.5, 0, 6);
+    -fx-opacity: 1;
+}
+
+.wizard-combo-box .list-view .list-cell {
+    -fx-text-fill: white;
+    -fx-background-color: transparent;
+    -fx-padding: 8px 12px;
+    -fx-font-size: 14px;
+    -fx-opacity: 1;
+}
+
+.wizard-combo-box .list-view .list-cell:hover {
+    -fx-background-color: rgba(0, 212, 170, 0.4);
+    -fx-opacity: 1;
+}
+
+.wizard-combo-box .list-view .list-cell:selected {
+    -fx-background-color: rgba(0, 212, 170, 0.6);
+    -fx-opacity: 1;
+}
+
+/* ===== ESTILOS AGRESIVOS PARA POPUPS ===== */
+/* Forzar opacidad completa en todos los popups de ComboBox */
+.popup {
+    -fx-opacity: 1 !important;
+    -fx-background-color: transparent !important;
+}
+
+.popup .content {
+    -fx-opacity: 1 !important;
+    -fx-background-color: transparent !important;
+}
+
+/* Estilos específicos para el popup del ComboBox */
+.combo-box-popup {
+    -fx-opacity: 1 !important;
+    -fx-background-color: transparent !important;
+}
+
+.combo-box-popup .list-view {
+    -fx-background-color: #2c3e50 !important;
+    -fx-opacity: 1 !important;
+    -fx-background-radius: 8px !important;
+    -fx-border-radius: 8px !important;
+    -fx-border-color: rgba(255, 255, 255, 0.3) !important;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.8), 12, 0.5, 0, 6) !important;
+}
+
+.combo-box-popup .list-view .list-cell {
+    -fx-background-color: transparent !important;
+    -fx-text-fill: white !important;
+    -fx-opacity: 1 !important;
+}
+
+.combo-box-popup .list-view .list-cell:hover {
+    -fx-background-color: rgba(0, 212, 170, 0.4) !important;
+    -fx-opacity: 1 !important;
+}
+
+.combo-box-popup .list-view .list-cell:selected {
+    -fx-background-color: rgba(0, 212, 170, 0.6) !important;
+    -fx-opacity: 1 !important;
+}
+
+/* Estilos específicos para el wizard-combo-box popup */
+.wizard-combo-box .popup {
+    -fx-opacity: 1 !important;
+    -fx-background-color: transparent !important;
+}
+
+.wizard-combo-box .popup .content {
+    -fx-opacity: 1 !important;
+    -fx-background-color: transparent !important;
+}
+
+.wizard-combo-box .popup .list-view {
+    -fx-background-color: #2c3e50 !important;
+    -fx-opacity: 1 !important;
+    -fx-background-radius: 8px !important;
+    -fx-border-radius: 8px !important;
+    -fx-border-color: rgba(255, 255, 255, 0.3) !important;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.8), 12, 0.5, 0, 6) !important;
+}
+
+.wizard-combo-box .popup .list-view .list-cell {
+    -fx-background-color: transparent !important;
+    -fx-text-fill: white !important;
+    -fx-opacity: 1 !important;
+}
+
+.wizard-combo-box .popup .list-view .list-cell:hover {
+    -fx-background-color: rgba(0, 212, 170, 0.4) !important;
+    -fx-opacity: 1 !important;
+}
+
+.wizard-combo-box .popup .list-view .list-cell:selected {
+    -fx-background-color: rgba(0, 212, 170, 0.6) !important;
+    -fx-opacity: 1 !important;
 }
 
 .combo-box:hover {
@@ -219,6 +351,44 @@
     -fx-font-size: 14px;
     -fx-font-weight: 500;
     -fx-padding: 4px 8px;
+    -fx-opacity: 1;
+}
+
+/* Estilos para mejorar la visibilidad del texto en ComboBox general */
+.combo-box .list-cell:filled {
+    -fx-text-fill: white !important;
+    -fx-opacity: 1 !important;
+}
+
+.combo-box .list-cell:filled:selected {
+    -fx-text-fill: white !important;
+    -fx-opacity: 1 !important;
+}
+
+.combo-box .list-cell:filled:hover {
+    -fx-text-fill: white !important;
+    -fx-opacity: 1 !important;
+}
+
+/* Asegurar que el ComboBox funcione correctamente */
+.combo-box {
+    -fx-opacity: 1 !important;
+    -fx-background-color: transparent !important;
+}
+
+.combo-box .list-cell {
+    -fx-opacity: 1 !important;
+    -fx-text-fill: white !important;
+    -fx-background-color: transparent !important;
+}
+
+/* Asegurar que el ComboBox sea interactivo */
+.combo-box:disabled {
+    -fx-opacity: 0.6 !important;
+}
+
+.combo-box:enabled {
+    -fx-opacity: 1 !important;
 }
 
 .combo-box .arrow-button {
@@ -233,11 +403,12 @@
 }
 
 .combo-box .list-view {
-    -fx-background-color: rgba(44, 62, 80, 0.95);
+    -fx-background-color: #2c3e50;
     -fx-background-radius: 8px;
     -fx-border-radius: 8px;
-    -fx-border-color: rgba(255, 255, 255, 0.2);
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 8, 0.3, 0, 4);
+    -fx-border-color: rgba(255, 255, 255, 0.3);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.8), 12, 0.5, 0, 6);
+    -fx-opacity: 1;
 }
 
 .combo-box .list-view .list-cell {
@@ -247,14 +418,17 @@
     -fx-font-size: 14px;
     -fx-min-width: 150px;
     -fx-pref-width: 150px;
+    -fx-opacity: 1;
 }
 
 .combo-box .list-view .list-cell:hover {
-    -fx-background-color: rgba(0, 212, 170, 0.3);
+    -fx-background-color: rgba(0, 212, 170, 0.4);
+    -fx-opacity: 1;
 }
 
 .combo-box .list-view .list-cell:selected {
-    -fx-background-color: rgba(0, 212, 170, 0.5);
+    -fx-background-color: rgba(0, 212, 170, 0.6);
+    -fx-opacity: 1;
 }
 
 /* ===== TABPANE ===== */
@@ -1779,6 +1953,130 @@ GridPane {
 .symbol-button:pressed {
     -fx-scale-x: 0.95;
     -fx-scale-y: 0.95;
+}
+
+/* ===== ESTILOS ESPECÍFICOS PARA PANEL DE PRODUCCIONES ===== */
+/* Mejorar el espaciado y alineación de las listas */
+.wizard-content .list-view {
+    -fx-min-height: 80px;
+    -fx-pref-height: 120px;
+    -fx-max-height: 200px;
+}
+
+/* Estilos para las subsecciones del panel de producciones */
+.wizard-subsection-header {
+    -fx-font-size: 12px;
+    -fx-text-fill: rgba(255, 255, 255, 0.8);
+    -fx-font-weight: 600;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 1, 0.2, 0, 1);
+    -fx-padding: 4px 8px;
+    -fx-background-color: rgba(79, 172, 254, 0.1);
+    -fx-background-radius: 4px;
+    -fx-border-radius: 4px;
+    -fx-border-color: rgba(79, 172, 254, 0.2);
+    -fx-border-width: 1px;
+    -fx-alignment: center;
+}
+
+/* Mejorar la apariencia del botón epsilon */
+.wizard-action-button[text="ε"] {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-background-color: linear-gradient(to right, #9b59b6, #8e44ad);
+    -fx-effect: dropshadow(gaussian, rgba(155, 89, 182, 0.4), 4, 0.3, 0, 2);
+}
+
+.wizard-action-button[text="ε"]:hover {
+    -fx-background-color: linear-gradient(to right, #8e44ad, #9b59b6);
+    -fx-effect: dropshadow(gaussian, rgba(155, 89, 182, 0.6), 6, 0.4, 0, 3);
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+
+/* Mejorar la consistencia de los botones de acción */
+.wizard-content .wizard-action-button,
+.wizard-content .button-cancel {
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+    -fx-min-height: 35px;
+    -fx-pref-height: 35px;
+    -fx-max-height: 35px;
+    -fx-min-width: 130px;
+    -fx-pref-width: 130px;
+    -fx-max-width: 130px;
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+    -fx-padding: 8px 12px;
+}
+
+/* Asegurar que los iconos tengan el mismo tamaño */
+.wizard-content .wizard-action-button .image-view,
+.wizard-content .button-cancel .image-view {
+    -fx-fit-height: 14px;
+    -fx-fit-width: 14px;
+}
+
+/* ===== ESTILOS ESPECÍFICOS PARA CAMPOS DE ENTRADA ===== */
+/* Asegurar que ComboBox y TextField tengan el mismo tamaño */
+.wizard-combo-box,
+.wizard-field {
+    -fx-min-height: 40px;
+    -fx-pref-height: 40px;
+    -fx-max-height: 40px;
+    -fx-font-size: 14px;
+    -fx-font-weight: 500;
+}
+
+/* Estilos específicos para el popup del wizard-combo-box */
+.wizard-combo-box .popup {
+    -fx-opacity: 1 !important;
+    -fx-background-color: transparent !important;
+}
+
+.wizard-combo-box .popup .content {
+    -fx-opacity: 1 !important;
+    -fx-background-color: transparent !important;
+}
+
+/* Estilos ultra-específicos para forzar la opacidad */
+.wizard-step .wizard-content .wizard-combo-box .popup .list-view {
+    -fx-background-color: #2c3e50 !important;
+    -fx-opacity: 1 !important;
+    -fx-background-radius: 8px !important;
+    -fx-border-radius: 8px !important;
+    -fx-border-color: rgba(255, 255, 255, 0.3) !important;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.8), 12, 0.5, 0, 6) !important;
+}
+
+.wizard-step .wizard-content .wizard-combo-box .popup .list-view .list-cell {
+    -fx-background-color: transparent !important;
+    -fx-text-fill: white !important;
+    -fx-opacity: 1 !important;
+}
+
+.wizard-step .wizard-content .wizard-combo-box .popup .list-view .list-cell:hover {
+    -fx-background-color: rgba(0, 212, 170, 0.4) !important;
+    -fx-opacity: 1 !important;
+}
+
+.wizard-step .wizard-content .wizard-combo-box .popup .list-view .list-cell:selected {
+    -fx-background-color: rgba(0, 212, 170, 0.6) !important;
+    -fx-opacity: 1 !important;
+}
+
+/* Estilo específico para campos no editables */
+.wizard-field:disabled {
+    -fx-background-color: rgba(255, 255, 255, 0.08);
+    -fx-text-fill: rgba(255, 255, 255, 0.7);
+    -fx-border-color: rgba(255, 255, 255, 0.15);
+    -fx-opacity: 0.8;
+}
+
+.wizard-field:disabled:focused {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-border-color: rgba(255, 255, 255, 0.2);
+    -fx-opacity: 0.9;
 }
 
 

@@ -73,6 +73,26 @@ public class PanelProducciones extends VBox implements ActualizableTextos {
         listNoTerminales.setItems(FXCollections.observableArrayList(noTerminales));
         listTerminales.setItems(FXCollections.observableArrayList(terminales));
         comboBoxAntecedente.setItems(noTerminales);
+        
+        // Agregar listener para debuggear la selección del ComboBox
+        comboBoxAntecedente.setOnAction(event -> {
+            NoTerminal selected = comboBoxAntecedente.getValue();
+            if (selected != null) {
+                System.out.println("ComboBox seleccionado: " + selected.getNombre());
+            }
+        });
+        
+        // Agregar listener para el valor del ComboBox
+        comboBoxAntecedente.valueProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null) {
+                System.out.println("Valor del ComboBox cambiado a: " + newVal.getNombre());
+            }
+        });
+        
+        // Deshabilitar la edición manual del campo consecuente
+        txtConsecuente.setEditable(false);
+        txtConsecuente.setFocusTraversable(false);
+        
         actualizarTextos(bundle);
         // Configurar visualización de la lista de producciones
         listProducciones.setCellFactory(param -> new ListCell<>() {

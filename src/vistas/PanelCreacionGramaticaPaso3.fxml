@@ -38,7 +38,7 @@
             <ListView fx:id="listProducciones" styleClass="wizard-list" 
                       minHeight="600" prefHeight="700" maxHeight="800"/>
             
-            <Button fx:id="btnModificarProducciones" maxWidth="Infinity" onAction="#onBtnModificarProduccionesAction" styleClass="wizard-action-button">
+            <Button fx:id="btnModificarProducciones" maxWidth="Infinity" onAction="#onBtnModificarProduccionesAction" styleClass="wizard-action-button-main">
                 <graphic>
                     <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
                         <Image url="@../resources/icons/pencil.png"/>

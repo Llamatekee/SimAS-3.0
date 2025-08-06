@@ -19,7 +19,7 @@
     </rowConstraints>
 
     <padding>
-        <Insets top="15" right="20" bottom="15" left="20"/>
+        <Insets top="20" right="30" bottom="20" left="30"/>
     </padding>
 
     <!-- Header -->
@@ -27,16 +27,16 @@
            GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.halignment="CENTER"/>
 
     <!-- Content -->
-    <VBox spacing="8" GridPane.columnIndex="0" GridPane.rowIndex="1" 
+    <VBox spacing="15" GridPane.columnIndex="0" GridPane.rowIndex="1" 
           styleClass="wizard-content">
         
         <!-- Top Section: Antecedente and Consecuente -->
-        <HBox spacing="15" VBox.vgrow="NEVER">
+        <HBox spacing="20" VBox.vgrow="NEVER">
             <!-- Antecedente Section -->
             <VBox spacing="5" HBox.hgrow="ALWAYS">
                 <Label fx:id="labelAntecedente" styleClass="wizard-section-header"/>
                 <ComboBox fx:id="comboBoxAntecedente" styleClass="wizard-combo-box" 
-                         maxWidth="Infinity"/>
+                         maxWidth="Infinity" prefHeight="40"/>
             </VBox>
 
             <!-- Consecuente Section -->
@@ -44,7 +44,7 @@
                 <Label fx:id="labelConsecuente" styleClass="wizard-section-header"/>
                 <HBox spacing="5">
                     <TextField fx:id="txtConsecuente" styleClass="wizard-field"
-                              HBox.hgrow="ALWAYS"/>
+                              HBox.hgrow="ALWAYS" prefHeight="40" editable="false"/>
                     <Button fx:id="btnBorrar" styleClass="button-cancel"
                             onAction="#onBtnBorrarAction">
                         <graphic>
@@ -58,9 +58,9 @@
         </HBox>
 
         <!-- Middle Section: Símbolos and Epsilon -->
-        <VBox spacing="6" VBox.vgrow="NEVER">
+        <VBox spacing="10" VBox.vgrow="NEVER">
             <Label fx:id="labelAnadirSimbolos" styleClass="wizard-section-header"/>
-            <HBox spacing="10">
+            <HBox spacing="15">
                 <!-- No Terminales -->
                 <VBox spacing="5" HBox.hgrow="ALWAYS">
                     <Label fx:id="labelNoTerminales" styleClass="wizard-subsection-header"/>
@@ -76,44 +76,44 @@
                 </VBox>
                 
                 <!-- Epsilon -->
-                <VBox spacing="5" HBox.hgrow="NEVER">
+                <VBox spacing="5" HBox.hgrow="NEVER" alignment="TOP_CENTER">
                     <Label fx:id="labelEpsilon" styleClass="wizard-subsection-header"/>
-                    <Button fx:id="btnEpsilon" text="ε" styleClass="button-next"
-                            onAction="#onBtnEpsilonAction" prefWidth="50" prefHeight="30"/>
+                    <Button fx:id="btnEpsilon" text="ε" styleClass="wizard-action-button"
+                            onAction="#onBtnEpsilonAction" prefWidth="60" prefHeight="35"/>
                 </VBox>
             </HBox>
         </VBox>
 
         <!-- Lista de Producciones with Action Buttons -->
-        <HBox spacing="15" VBox.vgrow="ALWAYS">
+        <HBox spacing="20" VBox.vgrow="ALWAYS">
             <!-- Lista de Producciones -->
-            <VBox spacing="5" HBox.hgrow="ALWAYS">
+            <VBox spacing="8" HBox.hgrow="ALWAYS">
                 <Label fx:id="labelLista" styleClass="wizard-section-header"/>
                 <ListView fx:id="listProducciones" VBox.vgrow="ALWAYS"/>
             </VBox>
             
             <!-- Action Buttons -->
-            <VBox spacing="8" HBox.hgrow="NEVER" alignment="TOP_CENTER">
+            <VBox spacing="10" HBox.hgrow="NEVER" alignment="CENTER">
                 <Button fx:id="btnInsertar" styleClass="wizard-action-button" 
-                        onAction="#onBtnInsertarAction" prefWidth="120">
+                        onAction="#onBtnInsertarAction">
                     <graphic>
-                        <ImageView fitHeight="12" fitWidth="12" preserveRatio="true">
+                        <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
                             <Image url="@../resources/icons/element_add.png"/>
                         </ImageView>
                     </graphic>
                 </Button>
                 <Button fx:id="btnModificar" styleClass="wizard-action-button" 
-                        onAction="#onBtnModificarAction" prefWidth="120">
+                        onAction="#onBtnModificarAction">
                     <graphic>
-                        <ImageView fitHeight="12" fitWidth="12" preserveRatio="true">
+                        <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
                             <Image url="@../resources/icons/pencil.png"/>
                         </ImageView>
                     </graphic>
                 </Button>
                 <Button fx:id="btnEliminar" styleClass="button-cancel" 
-                        onAction="#onBtnEliminarAction" prefWidth="120">
+                        onAction="#onBtnEliminarAction">
                     <graphic>
-                        <ImageView fitHeight="12" fitWidth="12" preserveRatio="true">
+                        <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
                             <Image url="@../resources/icons/book_blue_delete.png"/>
                         </ImageView>
                     </graphic>
