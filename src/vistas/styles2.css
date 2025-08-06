@@ -2591,9 +2591,9 @@ GridPane {
     -fx-border-color: rgba(255, 255, 255, 0.3);
     -fx-border-width: 1px;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 4, 0.3, 0, 2);
-    -fx-min-height: 300px;
-    -fx-pref-height: 300px;
-    -fx-max-height: 400px;
+    -fx-min-height: 40px;
+    -fx-pref-height: 280px;
+    -fx-max-height: 280px;
 }
 
 /* Estilos para los elementos de la lista del ComboBox */
@@ -2604,6 +2604,8 @@ GridPane {
     -fx-font-weight: 500;
     -fx-padding: 8px 12px;
     -fx-border-color: transparent;
+    -fx-min-height: 40px;
+    -fx-pref-height: 40px;
 }
 
 .wizard-step .combo-box .list-cell:hover {
