@@ -62,6 +62,11 @@ public class PanelNuevaSimDescPaso4 implements PanelNuevaSimDescPaso, Actualizab
 
     @FXML
     private void initialize() {
+        // Configurar la lista
+        if (listViewFuncionesError != null) {
+            listViewFuncionesError.setPlaceholder(new Label("No hay funciones de error definidas"));
+        }
+        
         // Inicializar funciones de error si no existen
         inicializarFuncionesError();
         // Mostrar las funciones de error existentes
@@ -318,8 +323,8 @@ public class PanelNuevaSimDescPaso4 implements PanelNuevaSimDescPaso, Actualizab
         if (labelTitulo != null) labelTitulo.setText(bundle.getString("simulador.paso4.titulo"));
         if (labelSubtitulo != null) labelSubtitulo.setText(bundle.getString("simulador.paso4.subtitulo"));
         if (checkBoxNoFuncionesError != null) checkBoxNoFuncionesError.setText(bundle.getString("simulador.paso4.checkbox"));
-        if (buttonNueva != null) buttonNueva.setText(bundle.getString("simulador.paso4.btn.nueva"));
-        if (buttonEliminar != null) buttonEliminar.setText(bundle.getString("simulador.paso4.btn.eliminar"));
+        if (buttonNueva != null) buttonNueva.setText(bundle.getString("simulador.paso4.btn.nueva.corta"));
+        if (buttonEliminar != null) buttonEliminar.setText(bundle.getString("simulador.paso4.btn.eliminar.corta"));
         if (buttonFinalizar != null) buttonFinalizar.setText(bundle.getString("button.finalizar"));
         if (buttonCancelar != null) buttonCancelar.setText(bundle.getString("button.cancelar"));
         if (buttonVisualizarGramatica != null) buttonVisualizarGramatica.setText(bundle.getString("simulador.paso1.btn.gramatica"));
