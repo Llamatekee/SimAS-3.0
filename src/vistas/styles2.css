@@ -2530,4 +2530,96 @@ GridPane {
     -fx-padding: 4px 0;
 }
 
+/* ===== ESTILOS PARA COMBOBOX DEL FORMULARIO ===== */
+/* Estilos para los ComboBox del formulario de nueva función de error */
+.wizard-step .combo-box {
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-border-color: rgba(255, 255, 255, 0.3);
+    -fx-border-width: 1px;
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-font-weight: 500;
+    -fx-padding: 0;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 2, 0.2, 0, 1);
+    -fx-min-height: 40px;
+    -fx-pref-height: 40px;
+}
+
+.wizard-step .combo-box:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.2);
+    -fx-border-color: rgba(255, 255, 255, 0.4);
+}
+
+.wizard-step .combo-box:focused {
+    -fx-background-color: rgba(79, 172, 254, 0.2);
+    -fx-border-color: rgba(79, 172, 254, 0.6);
+    -fx-effect: dropshadow(gaussian, rgba(79, 172, 254, 0.3), 3, 0.3, 0, 2);
+}
+
+/* Estilos para el botón de flecha del ComboBox */
+.wizard-step .combo-box .arrow-button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.wizard-step .combo-box .arrow {
+    -fx-background-color: white;
+    -fx-shape: "M 0 0 L 4 4 L 8 0 Z";
+    -fx-scale-x: 0.8;
+    -fx-scale-y: 0.8;
+}
+
+/* Estilos para el campo de texto del ComboBox */
+.wizard-step .combo-box .text-field {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-font-weight: 500;
+    -fx-padding: 8px 12px;
+    -fx-min-height: 40px;
+    -fx-pref-height: 40px;
+}
+
+/* Estilos para la lista desplegable del ComboBox */
+.wizard-step .combo-box .list-view {
+    -fx-background-color: rgba(40, 40, 40, 0.95);
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-border-color: rgba(255, 255, 255, 0.3);
+    -fx-border-width: 1px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 4, 0.3, 0, 2);
+    -fx-min-height: 300px;
+    -fx-pref-height: 300px;
+    -fx-max-height: 400px;
+}
+
+/* Estilos para los elementos de la lista del ComboBox */
+.wizard-step .combo-box .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-font-weight: 500;
+    -fx-padding: 8px 12px;
+    -fx-border-color: transparent;
+}
+
+.wizard-step .combo-box .list-cell:hover {
+    -fx-background-color: rgba(79, 172, 254, 0.3);
+}
+
+.wizard-step .combo-box .list-cell:selected {
+    -fx-background-color: rgba(79, 172, 254, 0.5);
+}
+
+/* Estilos para las etiquetas del formulario (excluyendo los títulos principales) */
+.wizard-step .wizard-content .label {
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+    -fx-padding: 4px 0;
+}
+
 
