@@ -4,12 +4,14 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
 
+<?import java.net.URL?>
 <GridPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
-         styleClass="wizard-step" vgap="0" VBox.vgrow="ALWAYS">
+         styleClass="wizard-step" vgap="0">
     
     <columnConstraints>
-        <ColumnConstraints hgrow="ALWAYS"/>
+        <ColumnConstraints hgrow="ALWAYS" minWidth="600" prefWidth="800"/>
     </columnConstraints>
     
     <rowConstraints>
@@ -28,7 +30,7 @@
 
     <!-- Content -->
     <VBox spacing="20" GridPane.columnIndex="0" GridPane.rowIndex="1" 
-          styleClass="wizard-content">
+          styleClass="wizard-content" VBox.vgrow="ALWAYS">
         
         <!-- Tabla Section -->
         <VBox spacing="10" VBox.vgrow="ALWAYS">
@@ -57,20 +59,56 @@
 
     <!-- Navigation -->
     <HBox styleClass="wizard-navigation" GridPane.columnIndex="0" GridPane.rowIndex="2" 
-          GridPane.valignment="BOTTOM">
-        <Button fx:id="btnCancelar" text="Cancelar" styleClass="button-cancel" 
-                onAction="#cancelarSimulacion"/>
-        <Button fx:id="btnVisualizarGramatica" text="Gramática" styleClass="button-grammar" 
-                onAction="#visualizarGramatica"/>
+          GridPane.valignment="BOTTOM" GridPane.halignment="CENTER">
+        <Button fx:id="btnCancelar" text="%button.cancelar" styleClass="button-cancel" 
+                onAction="#cancelarSimulacion">
+            <graphic>
+                <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
+                    <Image url="@../resources/icons/book_blue_preferences.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
+        <Button fx:id="btnVisualizarGramatica" text="%simulador.paso1.btn.gramatica" styleClass="button-grammar" 
+                onAction="#visualizarGramatica">
+            <graphic>
+                <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
+                    <Image url="@../resources/icons/book_blue_view.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
         <Region HBox.hgrow="ALWAYS"/>
-        <Button fx:id="btnPrimero" text="Primero" styleClass="button-first-last" 
-                onAction="#handlePrimero"/>
-        <Button fx:id="btnAnterior" text="Anterior" styleClass="button-prev-next" 
-                onAction="#retrocederPaso"/>
-        <Button fx:id="btnSiguiente" text="Siguiente" styleClass="button-prev-next" 
-                onAction="#avanzarPaso"/>
-        <Button fx:id="btnUltimo" text="Último" styleClass="button-first-last" 
-                onAction="#handleUltimo"/>
+        <Button fx:id="btnPrimero" text="%button.primero" styleClass="button-first-last" 
+                onAction="#handlePrimero">
+            <graphic>
+                <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
+                    <Image url="@../resources/icons/arrow_left_blue.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
+        <Button fx:id="btnAnterior" text="%button.anterior" styleClass="button-prev-next" 
+                onAction="#retrocederPaso">
+            <graphic>
+                <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
+                    <Image url="@../resources/icons/arrow_left_green.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
+        <Button fx:id="btnSiguiente" text="%button.siguiente" styleClass="button-prev-next" 
+                onAction="#avanzarPaso">
+            <graphic>
+                <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
+                    <Image url="@../resources/icons/arrow_right_green.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
+        <Button fx:id="btnUltimo" text="%button.ultimo" styleClass="button-first-last" 
+                onAction="#handleUltimo">
+            <graphic>
+                <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
+                    <Image url="@../resources/icons/arrow_right_blue.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
     </HBox>
 
 </GridPane>

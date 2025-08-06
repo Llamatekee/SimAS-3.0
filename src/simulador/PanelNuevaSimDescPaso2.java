@@ -50,6 +50,14 @@ public class PanelNuevaSimDescPaso2 implements PanelNuevaSimDescPaso, Actualizab
         construirConjuntos();
     }
 
+    @FXML
+    private void initialize() {
+        // Este método se llama automáticamente después de cargar el FXML
+        if (tablaConjuntos != null) {
+            tablaConjuntos.setPlaceholder(new Label("No hay datos disponibles"));
+        }
+    }
+
     private void cargarFXML() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/PanelNuevaSimDescPaso2.fxml"));
@@ -57,8 +65,12 @@ public class PanelNuevaSimDescPaso2 implements PanelNuevaSimDescPaso, Actualizab
             loader.setResources(bundle);
             root = loader.load();
             
-            // Inicializar los textos
-            actualizarTextos(bundle);
+            // Inicializar los textos después de cargar el FXML
+            if (lblTitulo != null) lblTitulo.setText(bundle.getString("simulador.paso2.titulo"));
+            if (lblConjuntos != null) lblConjuntos.setText(bundle.getString("simulador.paso2.conjuntos"));
+            if (colSimbolo != null) colSimbolo.setText(bundle.getString("simulador.paso2.columna.simbolo"));
+            if (colPrimero != null) colPrimero.setText(bundle.getString("simulador.paso2.columna.primero"));
+            if (colSiguiente != null) colSiguiente.setText(bundle.getString("simulador.paso2.columna.siguiente"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -70,8 +82,10 @@ public class PanelNuevaSimDescPaso2 implements PanelNuevaSimDescPaso, Actualizab
 
         datosConjuntos = FXCollections.observableArrayList();
         for (NoTerminal nt : gramatica.getNoTerminales()) {
-            String primeros = String.join(" ", nt.getPrimeros().stream().map(Terminal::getNombre).toList());
-            String siguientes = String.join(" ", nt.getSiguientes().stream().map(Terminal::getNombre).toList());
+            String primeros = nt.getPrimeros().isEmpty() ? "ε" : 
+                String.join(" ", nt.getPrimeros().stream().map(Terminal::getNombre).toList());
+            String siguientes = nt.getSiguientes().isEmpty() ? "ε" : 
+                String.join(" ", nt.getSiguientes().stream().map(Terminal::getNombre).toList());
             datosConjuntos.add(new NoTerminalData(nt.getNombre(), primeros, siguientes));
         }
         
@@ -79,6 +93,11 @@ public class PanelNuevaSimDescPaso2 implements PanelNuevaSimDescPaso, Actualizab
         tablaConjuntos.setItems(datosConjuntos);
         tablaConjuntos.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         tablaConjuntos.setTableMenuButtonVisible(false);
+        
+        // Asegurar que las columnas tengan el ancho correcto
+        if (colSimbolo != null) colSimbolo.setPrefWidth(120);
+        if (colPrimero != null) colPrimero.setPrefWidth(250);
+        if (colSiguiente != null) colSiguiente.setPrefWidth(250);
     }
 
     @FXML
