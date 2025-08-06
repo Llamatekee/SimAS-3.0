@@ -2522,8 +2522,8 @@ GridPane {
     -fx-opacity: 0.8;
 }
 
-/* Estilos para las etiquetas del formulario */
-.wizard-step .label {
+/* Estilos para las etiquetas del formulario (excluyendo los títulos principales) */
+.wizard-step .wizard-content .label {
     -fx-text-fill: white;
     -fx-font-size: 13px;
     -fx-font-weight: 600;
