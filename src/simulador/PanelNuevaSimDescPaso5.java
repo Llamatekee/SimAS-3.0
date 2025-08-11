@@ -36,7 +36,6 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso, Actualizab
     @FXML private Button buttonRellenar;
     @FXML private Button buttonGramatica;
     @FXML private Button buttonPrimero;
-    @FXML private Button buttonUltimo;
     @FXML private Button buttonSimulacion;
     @FXML private Button buttonRellenarEpsilon;
     @FXML private Button buttonResetearTabla;
@@ -74,9 +73,8 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso, Actualizab
 
     @FXML
     private void initialize() {
-        // Deshabilitar los botones Siguiente y Último en el paso 5
+        // Deshabilitar el botón Siguiente en el paso 5
         buttonSiguiente.setDisable(true);
-        buttonUltimo.setDisable(true);
         
         // Configurar el botón de simulación
         buttonSimulacion.setOnAction(e -> iniciarSimulacion());
@@ -610,10 +608,7 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso, Actualizab
         panelPadre.cambiarPaso(0);
     }
 
-    @FXML
-    private void handleUltimo() {
-        // Ya estamos en el último paso, no hacer nada
-    }
+
 
     /**
      * Refresca la vista del paso 5.
@@ -734,7 +729,6 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso, Actualizab
         if (buttonPrimero != null) buttonPrimero.setText(bundle.getString("simulador.paso5.btn.primero"));
         if (buttonAnterior != null) buttonAnterior.setText(bundle.getString("simulador.paso5.btn.anterior"));
         if (buttonSiguiente != null) buttonSiguiente.setText(bundle.getString("simulador.paso5.btn.siguiente"));
-        if (buttonUltimo != null) buttonUltimo.setText(bundle.getString("simulador.paso5.btn.ultimo"));
         if (buttonSimulacion != null) buttonSimulacion.setText(bundle.getString("simulador.paso5.btn.simulacion"));
 
         // Actualizar el ComboBox de funciones de error

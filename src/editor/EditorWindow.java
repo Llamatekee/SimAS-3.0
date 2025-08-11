@@ -39,7 +39,7 @@ public class EditorWindow {
         Scene scene = new Scene(tabPane);
         
         // Aplicar estilos CSS
-        scene.getStylesheets().add(getClass().getResource("/vistas/styles.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("/vistas/styles2.css").toExternalForm());
         
         // Configurar atajos de teclado
         configurarAtajosTeclado(scene);

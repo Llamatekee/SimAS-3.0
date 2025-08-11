@@ -3,6 +3,8 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 
 <GridPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
          styleClass="wizard-step" vgap="0" VBox.vgrow="ALWAYS">
@@ -32,18 +34,36 @@
         <!-- Funciones de Error Section -->
         <VBox spacing="10" VBox.vgrow="ALWAYS">
             <Label fx:id="labelSeleccioneFuncion" text="%simulador.paso5.seleccione.funcion" styleClass="wizard-section-header"/>
-            <ComboBox fx:id="comboBoxFuncionesError" styleClass="wizard-combo-box"/>
+            <ComboBox fx:id="comboBoxFuncionesError" styleClass="wizard-combo-box" prefWidth="400"/>
             <TableView fx:id="tablaPredictiva" VBox.vgrow="ALWAYS" styleClass="wizard-table"/>
         </VBox>
 
         <!-- Acciones Section -->
         <HBox spacing="10">
             <Button fx:id="buttonEliminar" text="%simulador.paso5.btn.eliminar" styleClass="button-cancel" 
-                    onAction="#handleEliminar"/>
+                    onAction="#handleEliminar">
+                <graphic>
+                    <ImageView fitWidth="16" fitHeight="16">
+                        <Image url="@../resources/icons/application_delete.png"/>
+                    </ImageView>
+                </graphic>
+            </Button>
             <Button fx:id="buttonRellenarEpsilon" text="%simulador.paso5.btn.rellenar.epsilon" styleClass="button-grammar" 
-                    onAction="#handleRellenarEpsilon"/>
+                    onAction="#handleRellenarEpsilon">
+                <graphic>
+                    <ImageView fitWidth="16" fitHeight="16">
+                        <Image url="@../resources/icons/element_add.png"/>
+                    </ImageView>
+                </graphic>
+            </Button>
             <Button fx:id="buttonResetearTabla" text="%simulador.paso5.btn.resetear" styleClass="button-cancel" 
-                    onAction="#handleResetearTabla"/>
+                    onAction="#handleResetearTabla">
+                <graphic>
+                    <ImageView fitWidth="16" fitHeight="16">
+                        <Image url="@../resources/icons/application_stop.png"/>
+                    </ImageView>
+                </graphic>
+            </Button>
         </HBox>
     </VBox>
 
@@ -51,19 +71,53 @@
     <HBox styleClass="wizard-navigation" GridPane.columnIndex="0" GridPane.rowIndex="2" 
           GridPane.valignment="BOTTOM">
         <Button fx:id="buttonCancelar" text="%simulador.paso5.btn.cancelar" styleClass="button-cancel" 
-                onAction="#handleCancelar"/>
+                onAction="#handleCancelar">
+            <graphic>
+                <ImageView fitWidth="16" fitHeight="16">
+                    <Image url="@../resources/icons/application_stop.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
         <Button fx:id="buttonGramatica" text="%simulador.paso5.btn.gramatica" styleClass="button-grammar" 
-                onAction="#handleGramatica"/>
+                onAction="#handleGramatica">
+            <graphic>
+                <ImageView fitWidth="16" fitHeight="16">
+                    <Image url="@../resources/icons/book_blue_view.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
         <Region HBox.hgrow="ALWAYS"/>
         <Button fx:id="buttonPrimero" text="%simulador.paso5.btn.primero" styleClass="button-first-last" 
-                onAction="#handlePrimero"/>
+                onAction="#handlePrimero">
+            <graphic>
+                <ImageView fitWidth="16" fitHeight="16">
+                    <Image url="@../resources/icons/arrow_left_blue.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
         <Button fx:id="buttonAnterior" text="%simulador.paso5.btn.anterior" styleClass="button-prev-next" 
-                onAction="#handleAnterior"/>
+                onAction="#handleAnterior">
+            <graphic>
+                <ImageView fitWidth="16" fitHeight="16">
+                    <Image url="@../resources/icons/arrow_left_green.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
         <Button fx:id="buttonSiguiente" text="%simulador.paso5.btn.siguiente" styleClass="button-prev-next" 
-                onAction="#handleSiguiente"/>
-        <Button fx:id="buttonUltimo" text="%simulador.paso5.btn.ultimo" styleClass="button-first-last" 
-                onAction="#handleUltimo"/>
-        <Button fx:id="buttonSimulacion" text="%simulador.paso5.btn.simulacion" styleClass="button-grammar" />
+                onAction="#handleSiguiente">
+            <graphic>
+                <ImageView fitWidth="16" fitHeight="16">
+                    <Image url="@../resources/icons/arrow_right_green.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
+        <Button fx:id="buttonSimulacion" text="%simulador.paso5.btn.simulacion" styleClass="button-grammar">
+            <graphic>
+                <ImageView fitWidth="16" fitHeight="16">
+                    <Image url="@../resources/icons/telescope.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
     </HBox>
 
 </GridPane>

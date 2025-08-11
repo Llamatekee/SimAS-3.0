@@ -443,7 +443,7 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         layout.setPadding(new Insets(20));
 
         Scene scene = new Scene(layout);
-        scene.getStylesheets().add(getClass().getResource("/vistas/styles.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("/vistas/styles2.css").toExternalForm());
         dialog.setScene(scene);
         dialog.setResizable(false);
         dialog.showAndWait();

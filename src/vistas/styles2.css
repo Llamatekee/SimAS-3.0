@@ -2624,4 +2624,12 @@ GridPane {
     -fx-padding: 4px 0;
 }
 
+/* ===== MODIFICACIÓN ESPECÍFICA PARA EL COMBOBOX DEL PASO 5 ===== */
+/* Solo aumentar el ancho del ComboBox existente */
+.wizard-combo-box {
+    -fx-pref-width: 400px;
+    -fx-min-width: 400px;
+    -fx-max-width: 400px;
+}
+
 

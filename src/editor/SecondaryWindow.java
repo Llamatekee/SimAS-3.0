@@ -80,7 +80,7 @@ public class SecondaryWindow extends EditorWindow {
         
         // Aplicar estilos CSS si existen
         try {
-            scene.getStylesheets().add(getClass().getResource("/vistas/styles.css").toExternalForm());
+            scene.getStylesheets().add(getClass().getResource("/vistas/styles2.css").toExternalForm());
         } catch (Exception e) {
             e.printStackTrace();
         }
