@@ -117,7 +117,9 @@ public class TablaPredictivaPaso5 extends TablaPredictiva {
         TableColumn<FilaTablaPredictiva, String> colSimbolo = new TableColumn<>("Símbolo");
         colSimbolo.setCellValueFactory(cellData -> 
             new SimpleStringProperty(cellData.getValue().getSimbolo()));
-        colSimbolo.setPrefWidth(100);
+        colSimbolo.setPrefWidth(150);
+        colSimbolo.setMinWidth(150);
+        colSimbolo.setMaxWidth(150);
         
         // Limpiar columnas existentes
         getTablaPredictiva().getColumns().clear();
@@ -126,11 +128,17 @@ public class TablaPredictivaPaso5 extends TablaPredictiva {
         getTablaPredictiva().getColumns().add(colSimbolo);
         
         // Añadir columnas para cada terminal
+        boolean existeDolar = false;
         for (Terminal t : gramatica.getTerminales()) {
             if (t.getNombre() == null || t.getNombre().isEmpty()) continue;
+            if ("$".equals(t.getNombre())) {
+                existeDolar = true;
+            }
             
             TableColumn<FilaTablaPredictiva, String> colT = new TableColumn<>(t.getNombre());
-            colT.setPrefWidth(100);
+            colT.setPrefWidth(200);
+            colT.setMinWidth(200);
+            colT.setMaxWidth(200);
             
             colT.setCellValueFactory(cellData -> 
                 cellData.getValue().getValor(t.getNombre()));
@@ -138,12 +146,16 @@ public class TablaPredictivaPaso5 extends TablaPredictiva {
             getTablaPredictiva().getColumns().add(colT);
         }
         
-        // Añadir columna para $
-        TableColumn<FilaTablaPredictiva, String> colDolar = new TableColumn<>("$");
-        colDolar.setPrefWidth(100);
-        colDolar.setCellValueFactory(cellData -> 
-            cellData.getValue().getValor("$"));
-        getTablaPredictiva().getColumns().add(colDolar);
+        // Solo añadir columna para $ si no existe ya
+        if (!existeDolar) {
+            TableColumn<FilaTablaPredictiva, String> colDolar = new TableColumn<>("$");
+            colDolar.setPrefWidth(200);
+            colDolar.setMinWidth(200);
+            colDolar.setMaxWidth(200);
+            colDolar.setCellValueFactory(cellData -> 
+                cellData.getValue().getValor("$"));
+            getTablaPredictiva().getColumns().add(colDolar);
+        }
         
         columnsCreated = true;
     }

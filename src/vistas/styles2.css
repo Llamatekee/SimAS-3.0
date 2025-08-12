@@ -2632,4 +2632,270 @@ GridPane {
     -fx-max-width: 400px;
 }
 
+/* ===== ESTILOS ESPECÍFICOS PARA LA TABLA PREDICTIVA DEL PASO 5 ===== */
+/* Estilos específicos solo para la tabla del paso 5 */
+.paso5-simulador .wizard-table {
+    -fx-background-color: rgba(255, 255, 255, 0.95);
+    -fx-background-radius: 12px;
+    -fx-border-radius: 12px;
+    -fx-border-color: rgba(255, 255, 255, 0.3);
+    -fx-border-width: 2px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 8, 0.4, 0, 4);
+    -fx-padding: 2px;
+}
+
+/* Estilos para los encabezados de columnas del paso 5 */
+.paso5-simulador .wizard-table .column-header {
+    -fx-background-color: linear-gradient(to bottom, #4facfe, #00f2fe);
+    -fx-background-radius: 8px 8px 0 0;
+    -fx-border-color: rgba(255, 255, 255, 0.2);
+    -fx-border-width: 1px;
+    -fx-padding: 6px 4px;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+    -fx-text-fill: white;
+    -fx-alignment: center;
+    -fx-min-height: 35px;
+    -fx-pref-height: 35px;
+    -fx-max-height: 35px;
+    -fx-pref-width: 200px;
+    -fx-min-width: 200px;
+    -fx-max-width: 200px;
+}
+
+/* Primer encabezado (símbolos) más estrecho */
+.paso5-simulador .wizard-table .column-header:first-child {
+    -fx-pref-width: 150px;
+    -fx-min-width: 150px;
+    -fx-max-width: 150px;
+}
+
+.paso5-simulador .wizard-table .column-header:hover {
+    -fx-background-color: linear-gradient(to bottom, #00f2fe, #4facfe);
+    -fx-effect: dropshadow(gaussian, rgba(79, 172, 254, 0.4), 4, 0.3, 0, 2);
+}
+
+.paso5-simulador .wizard-table .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+}
+
+/* Estilos para las filas de la tabla del paso 5 */
+.paso5-simulador .wizard-table .table-row-cell {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 2px;
+    -fx-min-height: 35px;
+    -fx-pref-height: 35px;
+    -fx-max-height: 35px;
+}
+
+.paso5-simulador .wizard-table .table-row-cell:odd {
+    -fx-background-color: rgba(248, 249, 250, 0.8);
+}
+
+.paso5-simulador .wizard-table .table-row-cell:even {
+    -fx-background-color: rgba(255, 255, 255, 0.9);
+}
+
+.paso5-simulador .wizard-table .table-row-cell:hover {
+    -fx-background-color: rgba(79, 172, 254, 0.1);
+    -fx-effect: dropshadow(gaussian, rgba(79, 172, 254, 0.2), 2, 0.2, 0, 1);
+}
+
+.paso5-simulador .wizard-table .table-row-cell:selected {
+    -fx-background-color: rgba(79, 172, 254, 0.15);
+    -fx-border-color: rgba(79, 172, 254, 0.3);
+    -fx-border-width: 1px;
+}
+
+/* Estilos para las celdas de la tabla del paso 5 */
+.paso5-simulador .wizard-table .table-cell {
+    -fx-background-color: transparent;
+    -fx-border-color: rgba(0, 0, 0, 0.1);
+    -fx-border-width: 0.5px;
+    -fx-padding: 6px 4px;
+    -fx-alignment: center;
+    -fx-font-size: 12px;
+    -fx-font-weight: 500;
+    -fx-text-fill: #2c3e50;
+    -fx-background-radius: 4px;
+    -fx-border-radius: 4px;
+    -fx-min-height: 35px;
+    -fx-pref-height: 35px;
+    -fx-max-height: 35px;
+    -fx-pref-width: 200px;
+    -fx-min-width: 200px;
+    -fx-max-width: 200px;
+}
+
+/* Primera columna (símbolos) más estrecha */
+.paso5-simulador .wizard-table .table-cell:first-child {
+    -fx-pref-width: 150px;
+    -fx-min-width: 150px;
+    -fx-max-width: 150px;
+}
+
+/* Estilos específicos para diferentes tipos de contenido en las celdas del paso 5 */
+/* Estilos para celdas con funciones de error (se aplican dinámicamente) */
+.paso5-simulador .wizard-table .table-cell[style*="text-fill: #D32F2F"] {
+    -fx-text-fill: #d32f2f !important;
+    -fx-font-weight: bold !important;
+    -fx-background-color: rgba(211, 47, 47, 0.1);
+    -fx-border-color: rgba(211, 47, 47, 0.3);
+    -fx-alignment: center !important;
+    -fx-text-alignment: center !important;
+}
+
+/* Estilos para celdas con producciones (números) - Negro */
+.paso5-simulador .wizard-table .table-cell[style*="text-fill: black"] {
+    -fx-text-fill: #2c3e50 !important;
+    -fx-font-weight: bold !important;
+    -fx-background-color: rgba(44, 62, 80, 0.1);
+    -fx-border-color: rgba(44, 62, 80, 0.2);
+    -fx-alignment: center !important;
+    -fx-text-alignment: center !important;
+}
+
+/* Estilos para celdas con épsilon - Azul */
+.paso5-simulador .wizard-table .table-cell[style*="text-fill: #0D47A1"] {
+    -fx-text-fill: #0d47a1 !important;
+    -fx-font-weight: bold !important;
+    -fx-background-color: rgba(13, 71, 161, 0.1);
+    -fx-border-color: rgba(13, 71, 161, 0.3);
+    -fx-alignment: center !important;
+    -fx-text-alignment: center !important;
+}
+
+/* Clases CSS para las celdas personalizadas */
+.paso5-simulador .wizard-table .error-cell {
+    -fx-text-fill: #D32F2F !important;
+    -fx-font-weight: bold !important;
+    -fx-background-color: rgba(211, 47, 47, 0.1);
+    -fx-border-color: rgba(211, 47, 47, 0.3);
+}
+
+.paso5-simulador .wizard-table .production-cell {
+    -fx-text-fill: #2c3e50 !important;
+    -fx-font-weight: bold !important;
+    -fx-background-color: rgba(44, 62, 80, 0.1);
+    -fx-border-color: rgba(44, 62, 80, 0.2);
+}
+
+.paso5-simulador .wizard-table .epsilon-cell {
+    -fx-text-fill: #0D47A1 !important;
+    -fx-font-weight: bold !important;
+    -fx-background-color: rgba(13, 71, 161, 0.1);
+    -fx-border-color: rgba(13, 71, 161, 0.3);
+}
+
+.paso5-simulador .wizard-table .symbol-cell {
+    -fx-background-color: #F8F9FA !important;
+    -fx-text-fill: black !important;
+    -fx-font-weight: bold !important;
+}
+
+.paso5-simulador .wizard-table .selected-cell {
+    -fx-background-color: #E3F2FD !important;
+    -fx-text-fill: black !important;
+    -fx-font-weight: bold !important;
+    -fx-border-color: #1976D2 !important;
+    -fx-border-width: 1px !important;
+}
+
+.paso5-simulador .wizard-table .default-cell {
+    -fx-text-fill: black !important;
+}
+
+.paso5-simulador .wizard-table .empty-cell {
+    -fx-text-fill: black !important;
+}
+
+/* Estilos para celdas seleccionadas del paso 5 */
+.paso5-simulador .wizard-table .table-cell[style*="background-color: #E3F2FD"] {
+    -fx-background-color: rgba(227, 242, 253, 0.9) !important;
+    -fx-text-fill: #1976d2 !important;
+    -fx-font-weight: bold !important;
+    -fx-border-color: #1976d2 !important;
+    -fx-border-width: 2px !important;
+    -fx-effect: dropshadow(gaussian, rgba(25, 118, 210, 0.3), 3, 0.3, 0, 1);
+}
+
+/* Estilos para la columna de símbolos (primera columna) del paso 5 */
+.paso5-simulador .wizard-table .table-cell:first-child {
+    -fx-background-color: rgba(52, 73, 94, 0.1);
+    -fx-border-color: rgba(52, 73, 94, 0.3);
+    -fx-font-weight: bold;
+    -fx-text-fill: #34495e;
+}
+
+/* Estilos para el scrollbar de la tabla del paso 5 */
+.paso5-simulador .wizard-table .scroll-bar:vertical {
+    -fx-background-color: rgba(255, 255, 255, 0.3);
+    -fx-background-radius: 6px;
+    -fx-pref-width: 12px;
+}
+
+.paso5-simulador .wizard-table .scroll-bar:vertical .thumb {
+    -fx-background-color: rgba(79, 172, 254, 0.6);
+    -fx-background-radius: 6px;
+}
+
+.paso5-simulador .wizard-table .scroll-bar:vertical .thumb:hover {
+    -fx-background-color: rgba(79, 172, 254, 0.8);
+}
+
+/* Estilos para el placeholder cuando la tabla está vacía del paso 5 */
+.paso5-simulador .wizard-table .placeholder {
+    -fx-background-color: rgba(255, 255, 255, 0.8);
+    -fx-text-fill: #7f8c8d;
+    -fx-font-size: 14px;
+    -fx-font-style: italic;
+}
+
+/* Estilos para el área de la tabla del paso 5 */
+.paso5-simulador .wizard-table .table-view {
+    -fx-background-color: transparent;
+}
+
+.paso5-simulador .wizard-table .table-view .column-header-background {
+    -fx-background-color: transparent;
+}
+
+.paso5-simulador .wizard-table .table-view .filler {
+    -fx-background-color: transparent;
+}
+
+.paso5-simulador .wizard-table .table-view .column-header-background .filler {
+    -fx-background-color: transparent;
+}
+
+.paso5-simulador .wizard-table .table-view .column-header-background .show-hide-columns-button {
+    -fx-background-color: transparent;
+}
+
+.paso5-simulador .wizard-table .table-view .column-header-background .corner {
+    -fx-background-color: transparent;
+}
+
+/* Estilos para la primera y última columna del paso 5 */
+.paso5-simulador .wizard-table .table-view .column-header:first-child {
+    -fx-background-radius: 8px 0 0 0;
+}
+
+.paso5-simulador .wizard-table .table-view .column-header:last-child {
+    -fx-background-radius: 0 8px 0 0;
+}
+
+
+
+
+
+
+
+
+
 

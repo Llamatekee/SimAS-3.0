@@ -176,7 +176,7 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso, Actualizab
         }
         
         // Configurar propiedades visuales de la tabla
-        tablaPredictiva.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        tablaPredictiva.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
         tablaPredictiva.setTableMenuButtonVisible(false);
         tablaPredictiva.setEditable(true);
         
@@ -266,7 +266,9 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso, Actualizab
         TableColumn<FilaTablaPredictiva, String> colSimbolo = new TableColumn<>("Símbolo");
         colSimbolo.setCellValueFactory(cellData -> 
             new SimpleStringProperty(cellData.getValue().getSimbolo()));
-        colSimbolo.setPrefWidth(100);
+        colSimbolo.setPrefWidth(150);
+        colSimbolo.setMinWidth(150);
+        colSimbolo.setMaxWidth(150);
         
         // Configurar celda factory para la columna de símbolos
         colSimbolo.setCellFactory(column -> {
@@ -283,13 +285,11 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso, Actualizab
                     
                     setText(item);
                     
-                    // Aplicar estilo
+                    // Aplicar estilo usando clases CSS en lugar de estilos inline
                     if (isSelected()) {
-                        // Estilo para celda seleccionada
-                        setStyle("-fx-background-color: #E3F2FD; -fx-text-fill: black; -fx-font-weight: bold; -fx-border-color: #1976D2; -fx-border-width: 1px;");
+                        getStyleClass().setAll("selected-cell");
                     } else {
-                        // Estilo para símbolos
-                        setStyle("-fx-background-color: #F8F9FA; -fx-text-fill: black; -fx-font-weight: bold;");
+                        getStyleClass().setAll("symbol-cell");
                     }
                 }
             };
@@ -306,7 +306,9 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso, Actualizab
                 existeDolar = true;
             }
             TableColumn<FilaTablaPredictiva, String> colT = new TableColumn<>(t.getNombre());
-            colT.setPrefWidth(100);
+            colT.setPrefWidth(200);
+            colT.setMinWidth(200);
+            colT.setMaxWidth(200);
             final String nombreTerminal = t.getNombre();
             colT.setCellValueFactory(cellData -> 
                 cellData.getValue().getValor(nombreTerminal));
@@ -326,24 +328,24 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso, Actualizab
                         // Mostrar solo Ex si es función de error
                         if (item.matches("E\\d+")) {
                             setText(item);
-                            setStyle("-fx-text-fill: #D32F2F; -fx-font-weight: bold;");
+                            getStyleClass().setAll("error-cell");
                         } else if (item.startsWith("E")) {
                             int i = 1;
                             while (i < item.length() && Character.isDigit(item.charAt(i))) i++;
                             setText(item.substring(0, i));
-                            setStyle("-fx-text-fill: #D32F2F; -fx-font-weight: bold;");
+                            getStyleClass().setAll("error-cell");
                         } else if (!item.isEmpty() && Character.isDigit(item.charAt(0))) {
                             setText(item);
-                            setStyle("-fx-text-fill: black; -fx-font-weight: bold;");
+                            getStyleClass().setAll("production-cell");
                         } else if (item.startsWith("ε_")) {
                             setText(item.substring(2)); // Quitar prefijo
-                            setStyle("-fx-text-fill: #0D47A1; -fx-font-weight: bold;");
+                            getStyleClass().setAll("epsilon-cell");
                         } else {
                             setText(item);
-                            setStyle("-fx-text-fill: black;");
+                            getStyleClass().setAll("default-cell");
                         }
                         if (isSelected()) {
-                            setStyle("-fx-background-color: #E3F2FD; -fx-text-fill: black; -fx-font-weight: bold; -fx-border-color: #1976D2; -fx-border-width: 1px;");
+                            getStyleClass().setAll("selected-cell");
                         }
                     }
                 };
@@ -355,7 +357,9 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso, Actualizab
         // Solo añadir la columna $ si no existe ya en los terminales
         if (!existeDolar) {
             TableColumn<FilaTablaPredictiva, String> colDolar = new TableColumn<>("$");
-            colDolar.setPrefWidth(100);
+            colDolar.setPrefWidth(200);
+            colDolar.setMinWidth(200);
+            colDolar.setMaxWidth(200);
             colDolar.setCellValueFactory(cellData -> 
                 cellData.getValue().getValor("$"));
             
@@ -376,26 +380,20 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso, Actualizab
                         
                         // Aplicar estilo según tipo de contenido
                         if (isSelected()) {
-                            // Estilo para celda seleccionada
-                            setStyle("-fx-background-color: #E3F2FD; -fx-text-fill: black; -fx-font-weight: bold; -fx-border-color: #1976D2; -fx-border-width: 1px;");
+                            getStyleClass().setAll("selected-cell");
                         } else if (item != null && !item.isEmpty()) {
                             if (item.startsWith("E")) {
-                                // Estilo para funciones de error
-                                setStyle("-fx-text-fill: #D32F2F; -fx-font-weight: bold;");
+                                getStyleClass().setAll("error-cell");
                             } else if (Character.isDigit(item.charAt(0))) {
-                                // Estilo para producciones
-                                setStyle("-fx-text-fill: black; -fx-font-weight: bold;");
+                                getStyleClass().setAll("production-cell");
                             } else if (item.startsWith("ε_")) {
-                                // Estilo para épsilon
                                 setText(item.substring(2)); // Quitar prefijo
-                                setStyle("-fx-text-fill: #0D47A1; -fx-font-weight: bold;");
+                                getStyleClass().setAll("epsilon-cell");
                             } else {
-                                // Estilo predeterminado
-                                setStyle("-fx-text-fill: black;");
+                                getStyleClass().setAll("default-cell");
                             }
                         } else {
-                            // Estilo para celdas vacías
-                            setStyle("-fx-text-fill: black;");
+                            getStyleClass().setAll("empty-cell");
                         }
                     }
                 };
