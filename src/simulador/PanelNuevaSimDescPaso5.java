@@ -13,6 +13,7 @@ import javafx.collections.ObservableList;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.scene.control.TableCell;
+import javafx.geometry.Point2D;
 
 import java.io.IOException;
 import java.util.List;
@@ -77,10 +78,21 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso, Actualizab
     private void configurarManejadorClicFueraTabla() {
         // Usar Platform.runLater para asegurar que root esté disponible
         javafx.application.Platform.runLater(() -> {
-            if (root != null) {
-                root.setOnMouseClicked(event -> {
-                    // Si el clic no fue en la tabla, desmarcar la selección
-                    if (!tablaPredictiva.getBoundsInParent().contains(event.getX(), event.getY())) {
+            if (root != null && root.getScene() != null) {
+                // Configurar el manejador en la escena completa para capturar todos los clics
+                root.getScene().setOnMouseClicked(event -> {
+                    // Obtener las coordenadas del clic en la escena
+                    double sceneX = event.getSceneX();
+                    double sceneY = event.getSceneY();
+                    
+                    // Convertir las coordenadas de la escena a coordenadas locales de la tabla
+                    Point2D localPoint = tablaPredictiva.sceneToLocal(sceneX, sceneY);
+                    
+                    // Verificar si el clic fue dentro de la tabla
+                    if (localPoint == null || 
+                        localPoint.getX() < 0 || localPoint.getX() > tablaPredictiva.getWidth() ||
+                        localPoint.getY() < 0 || localPoint.getY() > tablaPredictiva.getHeight()) {
+                        // El clic fue fuera de la tabla, desmarcar la selección
                         tablaPredictiva.getSelectionModel().clearSelection();
                     }
                 });
@@ -309,7 +321,7 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso, Actualizab
                     
                     if (empty || item == null) {
                         setText(null);
-                        setStyle("");
+                        getStyleClass().setAll("empty-cell");
                         return;
                     }
                     
@@ -352,7 +364,7 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso, Actualizab
                         
                         if (empty || item == null) {
                             setText(null);
-                            setStyle("");
+                            getStyleClass().setAll("empty-cell");
                             return;
                         }
                         // Mostrar solo Ex si es función de error
@@ -402,7 +414,7 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso, Actualizab
                         
                         if (empty || item == null) {
                             setText(null);
-                            setStyle("");
+                            getStyleClass().setAll("empty-cell");
                             return;
                         }
                         
@@ -559,11 +571,7 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso, Actualizab
                     // Guardar inmediatamente en la tabla global para evitar pérdida de datos
                     guardarTablaEnGlobal();
                     
-                    // Para forzar la actualización visual, recrear las columnas
-                    tablaPredictiva.getColumns().clear();
-                    crearColumnasEnTabla(tablaPredictiva);
-                    
-                    // Refrescar la tabla local
+                    // Solo refrescar la tabla sin recrear las columnas para mantener el formato
                     tablaPredictiva.refresh();
                 } else {
                     // Mostrar alerta si la celda no tiene una función de error o una producción épsilon añadida
@@ -597,10 +605,7 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso, Actualizab
                         fila.setValor(column.getText(), "E" + funcionErrorSeleccionada.getIdentificador());
                         // Guardar inmediatamente en la tabla global para evitar pérdida de datos
                         guardarTablaEnGlobal();
-                        // Para forzar la actualización visual, recrear las columnas
-                        tablaPredictiva.getColumns().clear();
-                        crearColumnasEnTabla(tablaPredictiva);
-                        // Refrescar la tabla local
+                        // Solo refrescar la tabla sin recrear las columnas para mantener el formato
                         tablaPredictiva.refresh();
                     } else {
                         // Mostrar alerta si no se ha seleccionado una función de error

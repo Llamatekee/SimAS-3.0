@@ -2664,7 +2664,7 @@ GridPane {
 
 /* Clases CSS específicas para las celdas del paso 5 (mantienen funcionalidades) */
 .paso5-simulador .wizard-table .error-cell {
-    -fx-text-fill: #FF6B6B !important;
+    -fx-text-fill: white !important;
     -fx-font-weight: bold !important;
     -fx-background-color: rgba(255, 107, 107, 0.15) !important;
     -fx-border-color: rgba(255, 107, 107, 0.4) !important;
@@ -2675,7 +2675,7 @@ GridPane {
 }
 
 .paso5-simulador .wizard-table .production-cell {
-    -fx-text-fill: #4ECDC4 !important;
+    -fx-text-fill: white !important;
     -fx-font-weight: bold !important;
     -fx-background-color: rgba(78, 205, 196, 0.15) !important;
     -fx-border-color: rgba(78, 205, 196, 0.4) !important;
@@ -2686,7 +2686,7 @@ GridPane {
 }
 
 .paso5-simulador .wizard-table .epsilon-cell {
-    -fx-text-fill: #45B7D1 !important;
+    -fx-text-fill: white !important;
     -fx-font-weight: bold !important;
     -fx-background-color: rgba(69, 183, 209, 0.15) !important;
     -fx-border-color: rgba(69, 183, 209, 0.4) !important;
