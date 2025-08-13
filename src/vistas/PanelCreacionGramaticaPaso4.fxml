@@ -57,7 +57,7 @@
                 onAction="#onBtnPrimeroAction">
             <graphic>
                 <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
-                    <Image url="@../resources/icons/arrow_left_blue.png"/>
+                    <Image url="@../resources/primero.png"/>
                 </ImageView>
             </graphic>
         </Button>
@@ -65,7 +65,7 @@
                 onAction="#onBtnAnteriorAction">
             <graphic>
                 <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
-                    <Image url="@../resources/icons/arrow_left_green.png"/>
+                    <Image url="@../resources/anterior.png"/>
                 </ImageView>
             </graphic>
         </Button>
@@ -73,7 +73,7 @@
                 disable="true">
             <graphic>
                 <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
-                    <Image url="@../resources/icons/arrow_right_green.png"/>
+                    <Image url="@../resources/siguiente.png"/>
                 </ImageView>
             </graphic>
         </Button>

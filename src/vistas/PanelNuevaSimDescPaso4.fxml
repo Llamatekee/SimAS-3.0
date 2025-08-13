@@ -91,35 +91,35 @@
             </graphic>
         </Button>
         <Region HBox.hgrow="ALWAYS"/>
-        <Button fx:id="buttonPrimero" text="%button.primero" styleClass="button-first-last" 
+                <Button fx:id="buttonPrimero" text="%button.primero" styleClass="button-next"
                 onAction="#handlePrimero">
             <graphic>
                 <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
-                    <Image url="@../resources/icons/arrow_left_blue.png"/>
+                    <Image url="@../resources/primero.png"/>
                 </ImageView>
             </graphic>
         </Button>
-        <Button fx:id="buttonAnterior" text="%button.anterior" styleClass="button-prev-next" 
+                <Button fx:id="buttonAnterior" text="%button.anterior" styleClass="button-next"
                 onAction="#handleAnterior">
             <graphic>
                 <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
-                    <Image url="@../resources/icons/arrow_left_green.png"/>
+                    <Image url="@../resources/anterior.png"/>
                 </ImageView>
             </graphic>
         </Button>
-        <Button fx:id="buttonSiguiente" text="%button.siguiente" styleClass="button-prev-next" 
+                <Button fx:id="buttonSiguiente" text="%button.siguiente" styleClass="button-next"
                 onAction="#handleSiguiente">
             <graphic>
                 <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
-                    <Image url="@../resources/icons/arrow_right_green.png"/>
+                    <Image url="@../resources/siguiente.png"/>
                 </ImageView>
             </graphic>
         </Button>
-        <Button fx:id="buttonUltimo" text="%button.ultimo" styleClass="button-first-last" 
+                <Button fx:id="buttonUltimo" text="%button.ultimo" styleClass="button-next"
                 onAction="#handleUltimo">
             <graphic>
                 <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
-                    <Image url="@../resources/icons/arrow_right_blue.png"/>
+                    <Image url="@../resources/ultimo.png"/>
                 </ImageView>
             </graphic>
         </Button>

@@ -65,7 +65,7 @@
                 disable="true">
             <graphic>
                 <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
-                    <Image url="@../resources/icons/arrow_left_blue.png"/>
+                    <Image url="@../resources/primero.png"/>
                 </ImageView>
             </graphic>
         </Button>
@@ -73,23 +73,23 @@
                 disable="true">
             <graphic>
                 <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
-                    <Image url="@../resources/icons/arrow_left_green.png"/>
+                    <Image url="@../resources/anterior.png"/>
                 </ImageView>
             </graphic>
         </Button>
-        <Button fx:id="btnSiguiente" text="Siguiente" styleClass="button-next" 
+                <Button fx:id="btnSiguiente" text="Siguiente" styleClass="button-next"
                 onAction="#onBtnSiguienteAction">
             <graphic>
                 <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
-                    <Image url="@../resources/icons/arrow_right_green.png"/>
+                    <Image url="@../resources/siguiente.png"/>
                 </ImageView>
             </graphic>
         </Button>
-        <Button fx:id="btnUltimo" text="Último" styleClass="button-next" 
+                <Button fx:id="btnUltimo" text="Último" styleClass="button-next"
                 onAction="#onBtnUltimoAction">
             <graphic>
                 <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
-                    <Image url="@../resources/icons/arrow_right_blue.png"/>
+                    <Image url="@../resources/ultimo.png"/>
                 </ImageView>
             </graphic>
         </Button>

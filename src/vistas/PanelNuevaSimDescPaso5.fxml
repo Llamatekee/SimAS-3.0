@@ -87,27 +87,27 @@
             </graphic>
         </Button>
         <Region HBox.hgrow="ALWAYS"/>
-        <Button fx:id="buttonPrimero" text="%simulador.paso5.btn.primero" styleClass="button-first-last" 
+        <Button fx:id="buttonPrimero" text="%simulador.paso5.btn.primero" styleClass="button-next" 
                 onAction="#handlePrimero">
             <graphic>
                 <ImageView fitWidth="16" fitHeight="16">
-                    <Image url="@../resources/icons/arrow_left_blue.png"/>
+                    <Image url="@../resources/primero.png"/>
                 </ImageView>
             </graphic>
         </Button>
-        <Button fx:id="buttonAnterior" text="%simulador.paso5.btn.anterior" styleClass="button-prev-next" 
+        <Button fx:id="buttonAnterior" text="%simulador.paso5.btn.anterior" styleClass="button-next" 
                 onAction="#handleAnterior">
             <graphic>
                 <ImageView fitWidth="16" fitHeight="16">
-                    <Image url="@../resources/icons/arrow_left_green.png"/>
+                    <Image url="@../resources/anterior.png"/>
                 </ImageView>
             </graphic>
         </Button>
-        <Button fx:id="buttonSiguiente" text="%simulador.paso5.btn.siguiente" styleClass="button-prev-next" 
+        <Button fx:id="buttonSiguiente" text="%simulador.paso5.btn.siguiente" styleClass="button-next" 
                 onAction="#handleSiguiente">
             <graphic>
                 <ImageView fitWidth="16" fitHeight="16">
-                    <Image url="@../resources/icons/arrow_right_green.png"/>
+                    <Image url="@../resources/siguiente.png"/>
                 </ImageView>
             </graphic>
         </Button>
