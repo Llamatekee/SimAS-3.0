@@ -470,7 +470,36 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         scene.getStylesheets().add(getClass().getResource("/vistas/styles2.css").toExternalForm());
         dialog.setScene(scene);
         dialog.setResizable(false);
-        dialog.showAndWait();
+        
+        // Obtener la ventana padre (la ventana principal de la aplicación)
+        Stage parentStage = (Stage) this.getScene().getWindow();
+        
+        // Crear listeners reutilizables
+        javafx.beans.value.ChangeListener<Number> xListener = (obs, oldVal, newVal) -> {
+            centrarDialogoEnVentanaPadre(dialog, parentStage);
+        };
+        
+        javafx.beans.value.ChangeListener<Number> yListener = (obs, oldVal, newVal) -> {
+            centrarDialogoEnVentanaPadre(dialog, parentStage);
+        };
+        
+        // Agregar listeners para mantener el diálogo centrado cuando se mueva la ventana padre
+        parentStage.xProperty().addListener(xListener);
+        parentStage.yProperty().addListener(yListener);
+        
+        // Mostrar el diálogo y luego centrarlo una vez que tenga dimensiones
+        dialog.show();
+        
+        // Centrar el diálogo después de que se haya mostrado y tenga dimensiones
+        Platform.runLater(() -> {
+            centrarDialogoEnVentanaPadre(dialog, parentStage);
+        });
+        
+        // Limpiar los listeners cuando se cierre el diálogo
+        dialog.setOnHidden(e -> {
+            parentStage.xProperty().removeListener(xListener);
+            parentStage.yProperty().removeListener(yListener);
+        });
     }
 
     private void iniciarSimulacionFinal() {
@@ -735,6 +764,29 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
     private void actualizarVista() {
         // Ya no necesitamos actualizar áreas de texto individuales
         // Solo la tabla de historial se actualiza automáticamente
+    }
+
+    /**
+     * Centra el diálogo respecto a la ventana padre
+     */
+    private void centrarDialogoEnVentanaPadre(Stage dialog, Stage parentStage) {
+        if (dialog != null && parentStage != null) {
+            // Obtener las dimensiones de la pantalla
+            javafx.stage.Screen screen = javafx.stage.Screen.getPrimary();
+            javafx.geometry.Rectangle2D screenBounds = screen.getVisualBounds();
+            
+            // Calcular la posición centrada
+            double centerX = parentStage.getX() + (parentStage.getWidth() / 2) - (dialog.getWidth() / 2);
+            double centerY = parentStage.getY() + (parentStage.getHeight() / 2) - (dialog.getHeight() / 2);
+            
+            // Asegurar que el diálogo no se salga de la pantalla
+            centerX = Math.max(screenBounds.getMinX(), Math.min(centerX, screenBounds.getMaxX() - dialog.getWidth()));
+            centerY = Math.max(screenBounds.getMinY(), Math.min(centerY, screenBounds.getMaxY() - dialog.getHeight()));
+            
+            // Aplicar la posición
+            dialog.setX(centerX);
+            dialog.setY(centerY);
+        }
     }
 
     private boolean esTerminal(String simbolo) {
