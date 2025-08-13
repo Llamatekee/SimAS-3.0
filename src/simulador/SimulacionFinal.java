@@ -544,8 +544,14 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
 
         // Resetear las pestañas hijas al estado inicial si están activas
         if (derivacionTab != null && tabPane.getTabs().contains(derivacionTab)) {
-            TextArea areaDerivacion = (TextArea) derivacionTab.getContent();
-            areaDerivacion.setText(gramatica.getSimbInicial()); // Solo mostrar el símbolo inicial
+            VBox mainContainer = (VBox) derivacionTab.getContent();
+            VBox contentContainer = (VBox) mainContainer.getChildren().get(1); // El segundo elemento es el contentContainer
+            ListView<String> listaDerivacion = (ListView<String>) contentContainer.getChildren().get(1); // El segundo elemento es el ListView
+            
+            // Resetear la lista con solo el símbolo inicial
+            ObservableList<String> itemsDerivacion = FXCollections.observableArrayList();
+            itemsDerivacion.add("Inicia la simulación para ver la derivación...");
+            listaDerivacion.setItems(itemsDerivacion);
         }
 
         if (arbolTab != null && tabPane.getTabs().contains(arbolTab)) {
@@ -821,24 +827,58 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         String childId = "derivacion_" + simulacionId;
         String tituloBase = bundle.getString("simulacionfinal.tab.derivacion");
         
-        // Crear el contenido
-        TextArea areaDerivacion = new TextArea();
-        areaDerivacion.setEditable(false);
-        areaDerivacion.setWrapText(true);
+        // Crear contenedor principal con estilo moderno
+        VBox mainContainer = new VBox(15);
+        mainContainer.setAlignment(Pos.TOP_CENTER);
+        mainContainer.setPadding(new Insets(20, 40, 20, 40));
+        mainContainer.getStyleClass().addAll("wizard-step", "derivacion-tab");
         
-        // Generar la derivación
-        StringBuilder derivacion = new StringBuilder();
-        for (HistorialPaso paso : historialObservable) {
-            derivacion.append(paso.getAccion()).append("\n");
+        // Header del título
+        Label headerLabel = new Label("Derivación de la Simulación");
+        headerLabel.getStyleClass().add("wizard-header");
+        headerLabel.setAlignment(Pos.CENTER);
+        
+        // Contenedor del contenido
+        VBox contentContainer = new VBox(10);
+        contentContainer.getStyleClass().add("wizard-content");
+        contentContainer.setAlignment(Pos.TOP_CENTER);
+        VBox.setVgrow(contentContainer, Priority.ALWAYS);
+        
+        // Label descriptivo
+        Label descriptionLabel = new Label("Secuencia de pasos de la derivación:");
+        descriptionLabel.getStyleClass().add("wizard-section-header");
+        descriptionLabel.setAlignment(Pos.CENTER);
+        
+        // Lista de derivación con estilo moderno
+        ListView<String> listaDerivacion = new ListView<>();
+        listaDerivacion.getStyleClass().add("derivacion-list");
+        listaDerivacion.setEditable(false);
+        VBox.setVgrow(listaDerivacion, Priority.ALWAYS);
+        
+        // Generar la derivación como lista
+        ObservableList<String> itemsDerivacion = FXCollections.observableArrayList();
+        if (historialObservable.isEmpty()) {
+            itemsDerivacion.add("Inicia la simulación para ver la derivación...");
+        } else {
+            for (int i = 0; i < historialObservable.size(); i++) {
+                HistorialPaso paso = historialObservable.get(i);
+                itemsDerivacion.add("Paso " + (i + 1) + ": " + paso.getAccion());
+            }
         }
-        areaDerivacion.setText(derivacion.toString());
+        listaDerivacion.setItems(itemsDerivacion);
+        
+        // Agregar elementos al contenedor de contenido
+        contentContainer.getChildren().addAll(descriptionLabel, listaDerivacion);
+        
+        // Agregar elementos al contenedor principal
+        mainContainer.getChildren().addAll(headerLabel, contentContainer);
         
         // Usar TabManager para crear la pestaña como hija de la simulación
         Tab nuevaPestana = TabManager.getOrCreateTab(
             tabPane,
-            TextArea.class, // Usar TextArea como tipo de contenido
+            VBox.class, // Usar VBox como tipo de contenido
             tituloBase,
-            areaDerivacion,
+            mainContainer,
             simulacionId, // parentId es el ID de la simulación
             childId
         );
@@ -965,12 +1005,21 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
             }
         } else {
             // Si ya existe, actualizar su contenido
-            TextArea areaDerivacion = (TextArea) derivacionTab.getContent();
-            StringBuilder derivacion = new StringBuilder();
-            for (HistorialPaso paso : historialObservable) {
-                derivacion.append(paso.getAccion()).append("\n");
+            VBox mainContainer = (VBox) derivacionTab.getContent();
+            VBox contentContainer = (VBox) mainContainer.getChildren().get(1); // El segundo elemento es el contentContainer
+            ListView<String> listaDerivacion = (ListView<String>) contentContainer.getChildren().get(1); // El segundo elemento es el ListView
+            
+            // Generar la derivación como lista
+            ObservableList<String> itemsDerivacion = FXCollections.observableArrayList();
+            if (historialObservable.isEmpty()) {
+                itemsDerivacion.add("Inicia la simulación para ver la derivación...");
+            } else {
+                for (int i = 0; i < historialObservable.size(); i++) {
+                    HistorialPaso paso = historialObservable.get(i);
+                    itemsDerivacion.add("Paso " + (i + 1) + ": " + paso.getAccion());
+                }
             }
-            areaDerivacion.setText(derivacion.toString());
+            listaDerivacion.setItems(itemsDerivacion);
         }
         
         // Seleccionar la pestaña
@@ -1283,12 +1332,21 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
                 
                 // Actualizar pestaña de derivación si está activa
                 if (userData.equals("derivacion_" + simulacionId)) {
-                    TextArea areaDerivacion = (TextArea) tab.getContent();
-                    StringBuilder derivacion = new StringBuilder();
-                    for (HistorialPaso paso : historialObservable) {
-                        derivacion.append(paso.getAccion()).append("\n");
+                    VBox mainContainer = (VBox) tab.getContent();
+                    VBox contentContainer = (VBox) mainContainer.getChildren().get(1); // El segundo elemento es el contentContainer
+                    ListView<String> listaDerivacion = (ListView<String>) contentContainer.getChildren().get(1); // El segundo elemento es el ListView
+                    
+                    // Generar la derivación como lista
+                    ObservableList<String> itemsDerivacion = FXCollections.observableArrayList();
+                    if (historialObservable.isEmpty()) {
+                        itemsDerivacion.add("Inicia la simulación para ver la derivación...");
+                    } else {
+                        for (int i = 0; i < historialObservable.size(); i++) {
+                            HistorialPaso paso = historialObservable.get(i);
+                            itemsDerivacion.add("Paso " + (i + 1) + ": " + paso.getAccion());
+                        }
                     }
-                    areaDerivacion.setText(derivacion.toString());
+                    listaDerivacion.setItems(itemsDerivacion);
                 }
                 
                 // Actualizar pestaña de árbol si está activa
