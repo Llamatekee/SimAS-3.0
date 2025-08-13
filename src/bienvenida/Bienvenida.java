@@ -17,9 +17,18 @@ public class Bienvenida extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/Bienvenida.fxml"));
         Scene scene = new Scene(loader.load());
 
+        // Configurar la ventana de bienvenida
         primaryStage.initStyle(StageStyle.UNDECORATED);
         primaryStage.setScene(scene);
         primaryStage.setAlwaysOnTop(true);
+        primaryStage.setWidth(700);
+        primaryStage.setHeight(600);
+        primaryStage.setMinWidth(600);
+        primaryStage.setMinHeight(500);
+        
+        // Centrar la ventana en la pantalla
+        primaryStage.centerOnScreen();
+        
         primaryStage.show();
 
         // Espera 2.5 segundos y lanza MenuPrincipal

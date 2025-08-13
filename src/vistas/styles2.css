@@ -1,4 +1,112 @@
 /* ===== ESTILOS GENERALES - SimAS 3.0 ===== */
+
+/* ===== ESTILOS PARA LA PANTALLA DE BIENVENIDA ===== */
+.welcome-screen {
+    -fx-background-color: transparent;
+}
+
+.welcome-background {
+    -fx-fill: linear-gradient(to bottom, #1e3c72, #2a5298, #1e3c72);
+    -fx-width: 100%;
+    -fx-height: 100%;
+}
+
+.welcome-container {
+    -fx-padding: 60px 40px;
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-background-radius: 30px;
+    -fx-border-color: rgba(255, 255, 255, 0.2);
+    -fx-border-width: 2px;
+    -fx-border-radius: 30px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 25, 0.4, 0, 10);
+    -fx-min-width: 500px;
+    -fx-pref-width: 600px;
+    -fx-max-width: 700px;
+}
+
+.welcome-logo {
+    -fx-effect: dropshadow(gaussian, rgba(79, 172, 254, 0.6), 20, 0.5, 0, 0);
+}
+
+.welcome-title {
+    -fx-font-size: 48px;
+    -fx-font-weight: 900;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 15, 0.4, 0, 3);
+    -fx-font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    -fx-letter-spacing: 2px;
+}
+
+.welcome-subtitle {
+    -fx-font-size: 24px;
+    -fx-text-fill: rgba(255, 255, 255, 0.8);
+    -fx-font-weight: 300;
+    -fx-font-style: italic;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 8, 0.3, 0, 2);
+    -fx-letter-spacing: 1px;
+}
+
+.welcome-info {
+    -fx-padding: 20px 0;
+}
+
+.welcome-author {
+    -fx-font-size: 16px;
+    -fx-text-fill: rgba(255, 255, 255, 0.7);
+    -fx-font-weight: 400;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 4, 0.2, 0, 1);
+}
+
+.welcome-director {
+    -fx-font-size: 16px;
+    -fx-text-fill: rgba(255, 255, 255, 0.7);
+    -fx-font-weight: 400;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 4, 0.2, 0, 1);
+}
+
+.welcome-version {
+    -fx-font-size: 20px;
+    -fx-text-fill: rgba(79, 172, 254, 0.9);
+    -fx-font-weight: 600;
+    -fx-effect: dropshadow(gaussian, rgba(79, 172, 254, 0.3), 6, 0.3, 0, 2);
+    -fx-padding: 10px 20px;
+    -fx-background-color: rgba(79, 172, 254, 0.1);
+    -fx-background-radius: 15px;
+    -fx-border-color: rgba(79, 172, 254, 0.3);
+    -fx-border-width: 1px;
+    -fx-border-radius: 15px;
+}
+
+.welcome-loading {
+    -fx-padding: 20px 0 0 0;
+}
+
+.welcome-loading-text {
+    -fx-font-size: 14px;
+    -fx-text-fill: rgba(255, 255, 255, 0.6);
+    -fx-font-weight: 400;
+    -fx-font-style: italic;
+}
+
+.welcome-progress {
+    -fx-progress-color: rgba(79, 172, 254, 0.8);
+    -fx-pref-width: 40px;
+    -fx-pref-height: 40px;
+}
+
+.welcome-progress .spinner {
+    -fx-background-color: transparent;
+}
+
+.welcome-progress .spinner .increment-arrow,
+.welcome-progress .spinner .decrement-arrow {
+    -fx-background-color: transparent;
+}
+
+.welcome-progress .spinner .increment-arrow-button,
+.welcome-progress .spinner .decrement-arrow-button {
+    -fx-background-color: transparent;
+}
 .root {
     -fx-font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
     -fx-background-color: linear-gradient(to bottom, #1e3c72, #2a5298, #1e3c72);
