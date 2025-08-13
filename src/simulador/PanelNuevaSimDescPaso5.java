@@ -70,6 +70,23 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso, Actualizab
     public Parent getRoot() {
         return root;
     }
+    
+    /**
+     * Configura el manejador de eventos para desmarcar la selección cuando se hace clic fuera de la tabla
+     */
+    private void configurarManejadorClicFueraTabla() {
+        // Usar Platform.runLater para asegurar que root esté disponible
+        javafx.application.Platform.runLater(() -> {
+            if (root != null) {
+                root.setOnMouseClicked(event -> {
+                    // Si el clic no fue en la tabla, desmarcar la selección
+                    if (!tablaPredictiva.getBoundsInParent().contains(event.getX(), event.getY())) {
+                        tablaPredictiva.getSelectionModel().clearSelection();
+                    }
+                });
+            }
+        });
+    }
 
     @FXML
     private void initialize() {
@@ -108,6 +125,9 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso, Actualizab
             buttonRellenarEpsilon.setOnAction(e -> handleRellenarEpsilon());
         }
         actualizarTextos(bundle);
+        
+        // Configurar manejador para desmarcar selección cuando se hace clic fuera de la tabla
+        configurarManejadorClicFueraTabla();
     }
 
     private void iniciarSimulacion() {
@@ -179,6 +199,16 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso, Actualizab
         tablaPredictiva.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
         tablaPredictiva.setTableMenuButtonVisible(false);
         tablaPredictiva.setEditable(true);
+        
+        // Permitir scroll horizontal para ver todas las columnas
+        tablaPredictiva.setPrefWidth(800);
+        tablaPredictiva.setMinWidth(600);
+        
+        // Permitir que las columnas se redimensionen para mejor visualización
+        for (TableColumn<FilaTablaPredictiva, ?> col : tablaPredictiva.getColumns()) {
+            col.setResizable(true);
+            col.setMinWidth(80);
+        }
         
         // Forzar un refresh
         tablaPredictiva.refresh();
@@ -266,9 +296,9 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso, Actualizab
         TableColumn<FilaTablaPredictiva, String> colSimbolo = new TableColumn<>("Símbolo");
         colSimbolo.setCellValueFactory(cellData -> 
             new SimpleStringProperty(cellData.getValue().getSimbolo()));
-        colSimbolo.setPrefWidth(150);
-        colSimbolo.setMinWidth(150);
-        colSimbolo.setMaxWidth(150);
+        colSimbolo.setPrefWidth(80);
+        colSimbolo.setMinWidth(60);
+        colSimbolo.setMaxWidth(120);
         
         // Configurar celda factory para la columna de símbolos
         colSimbolo.setCellFactory(column -> {
@@ -306,9 +336,9 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso, Actualizab
                 existeDolar = true;
             }
             TableColumn<FilaTablaPredictiva, String> colT = new TableColumn<>(t.getNombre());
-            colT.setPrefWidth(200);
-            colT.setMinWidth(200);
-            colT.setMaxWidth(200);
+            colT.setPrefWidth(100);
+            colT.setMinWidth(80);
+            colT.setMaxWidth(150);
             final String nombreTerminal = t.getNombre();
             colT.setCellValueFactory(cellData -> 
                 cellData.getValue().getValor(nombreTerminal));
@@ -357,9 +387,9 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso, Actualizab
         // Solo añadir la columna $ si no existe ya en los terminales
         if (!existeDolar) {
             TableColumn<FilaTablaPredictiva, String> colDolar = new TableColumn<>("$");
-            colDolar.setPrefWidth(200);
-            colDolar.setMinWidth(200);
-            colDolar.setMaxWidth(200);
+            colDolar.setPrefWidth(100);
+            colDolar.setMinWidth(80);
+            colDolar.setMaxWidth(150);
             colDolar.setCellValueFactory(cellData -> 
                 cellData.getValue().getValor("$"));
             
@@ -402,8 +432,8 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso, Actualizab
             tabla.getColumns().add(colDolar);
         }
         
-        // Aplicar configuración global
-        tabla.setStyle("-fx-background-color: white; -fx-table-cell-border-color: black;");
+        // Aplicar configuración global - usar CSS en lugar de estilos inline
+        tabla.setStyle("");
     }
 
     private void actualizarComboBoxFuncionesError() {

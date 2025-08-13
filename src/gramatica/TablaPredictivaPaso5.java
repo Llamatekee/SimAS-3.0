@@ -117,9 +117,9 @@ public class TablaPredictivaPaso5 extends TablaPredictiva {
         TableColumn<FilaTablaPredictiva, String> colSimbolo = new TableColumn<>("Símbolo");
         colSimbolo.setCellValueFactory(cellData -> 
             new SimpleStringProperty(cellData.getValue().getSimbolo()));
-        colSimbolo.setPrefWidth(150);
-        colSimbolo.setMinWidth(150);
-        colSimbolo.setMaxWidth(150);
+        colSimbolo.setPrefWidth(80);
+        colSimbolo.setMinWidth(60);
+        colSimbolo.setMaxWidth(120);
         
         // Limpiar columnas existentes
         getTablaPredictiva().getColumns().clear();
@@ -136,9 +136,9 @@ public class TablaPredictivaPaso5 extends TablaPredictiva {
             }
             
             TableColumn<FilaTablaPredictiva, String> colT = new TableColumn<>(t.getNombre());
-            colT.setPrefWidth(200);
-            colT.setMinWidth(200);
-            colT.setMaxWidth(200);
+            colT.setPrefWidth(100);
+            colT.setMinWidth(80);
+            colT.setMaxWidth(150);
             
             colT.setCellValueFactory(cellData -> 
                 cellData.getValue().getValor(t.getNombre()));
@@ -149,12 +149,22 @@ public class TablaPredictivaPaso5 extends TablaPredictiva {
         // Solo añadir columna para $ si no existe ya
         if (!existeDolar) {
             TableColumn<FilaTablaPredictiva, String> colDolar = new TableColumn<>("$");
-            colDolar.setPrefWidth(200);
-            colDolar.setMinWidth(200);
-            colDolar.setMaxWidth(200);
+            colDolar.setPrefWidth(100);
+            colDolar.setMinWidth(80);
+            colDolar.setMaxWidth(150);
             colDolar.setCellValueFactory(cellData -> 
                 cellData.getValue().getValor("$"));
             getTablaPredictiva().getColumns().add(colDolar);
+        }
+        
+        // Permitir scroll horizontal para ver todas las columnas
+        getTablaPredictiva().setPrefWidth(800);
+        getTablaPredictiva().setMinWidth(600);
+        
+        // Permitir que las columnas se redimensionen para mejor visualización
+        for (TableColumn<FilaTablaPredictiva, ?> col : getTablaPredictiva().getColumns()) {
+            col.setResizable(true);
+            col.setMinWidth(80);
         }
         
         columnsCreated = true;
@@ -198,8 +208,8 @@ public class TablaPredictivaPaso5 extends TablaPredictiva {
         // Cambiar el título de la primera columna
         getTablaPredictiva().getColumns().get(0).setText("Símbolo");
 
-        // Configurar el estilo base de la tabla
-        getTablaPredictiva().setStyle("-fx-background-color: white; -fx-table-cell-border-color: black;");
+        // Configurar el estilo base de la tabla - usar CSS en lugar de estilos inline
+        getTablaPredictiva().setStyle("");
 
         for (TableColumn<FilaTablaPredictiva, ?> column : getTablaPredictiva().getColumns()) {
             if (column instanceof TableColumn) {
@@ -214,7 +224,7 @@ public class TablaPredictivaPaso5 extends TablaPredictiva {
                             
                             if (empty) {
                                 setText(null);
-                                setStyle("");
+                                getStyleClass().clear();
                                 return;
                             }
 
@@ -229,65 +239,34 @@ public class TablaPredictivaPaso5 extends TablaPredictiva {
                                 setText("");
                             }
 
-                            // Configurar el estilo
-                            FilaTablaPredictiva fila = getTableRow().getItem();
-                            if (fila == null) return;
+                            // Limpiar estilos anteriores
+                            getStyleClass().clear();
 
-                            StringBuilder style = new StringBuilder();
-                            StringBuilder textStyle = new StringBuilder();
-
-                            // Color base para la columna y fila de símbolos
-                            if (getTableColumn().getText().equals("Símbolo") || fila.getSimbolo().equals(getTableColumn().getText())) {
-                                style.append("-fx-background-color: #F8F9FA;"); // Gris muy claro
-                                textStyle.append("-fx-text-fill: black;");
-                            }
-
-                            // Color para celdas de terminales que solo aparecen en primera posición
-                            if (fila.getEsTerminal()) {
-                                Terminal terminalFila = gramatica.getTerminales().stream()
-                                    .filter(t -> t.getNombre().equals(fila.getSimbolo()))
-                                    .findFirst()
-                                    .orElse(null);
-
-                                if (terminalFila != null && apareceSoloPrimeraPos(terminalFila)) {
-                                    if (!getTableColumn().getText().equals("Símbolo")) {
-                                        style.append("-fx-background-color: #E9ECEF;"); // Gris más oscuro
-                                        textStyle.append("-fx-text-fill: black;");
-                                    }
+                            // Aplicar clases CSS según el tipo de contenido
+                            if (item != null && !item.isEmpty()) {
+                                if (item.startsWith("E")) {
+                                    // Función de error
+                                    getStyleClass().add("error-cell");
+                                } else if (Character.isDigit(item.charAt(0))) {
+                                    // Producción
+                                    getStyleClass().add("production-cell");
+                                } else if (item.startsWith("ε_")) {
+                                    // Épsilon
+                                    getStyleClass().add("epsilon-cell");
+                                } else {
+                                    // Contenido por defecto
+                                    getStyleClass().add("default-cell");
                                 }
+                            } else {
+                                // Celda vacía
+                                getStyleClass().add("empty-cell");
                             }
 
-                            // Estilo para épsilon
-                            if (item != null && item.startsWith("ε_")) {
-                                style.setLength(0);
-                                style.append("-fx-background-color: white;");
-                                textStyle.append("-fx-text-fill: #0D47A1;"); // Azul oscuro para épsilon
-                            }
-
-                            // Estilo para producciones (no editables)
-                            if (item != null && !item.isEmpty() && Character.isDigit(item.charAt(0))) {
-                                style.setLength(0);
-                                style.append("-fx-background-color: white;");
-                                textStyle.append("-fx-text-fill: black;");
-                            }
-
-                            // Estilo para funciones de error
-                            if (item != null && !item.isEmpty() && item.startsWith("E")) {
-                                style.setLength(0);
-                                style.append("-fx-background-color: white;");
-                                textStyle.append("-fx-text-fill: #1976D2;"); // Azul para funciones de error
-                            }
-
-                            // Estilo para celda seleccionada
+                            // Verificar si la celda está seleccionada
                             if (isCellSelected()) {
-                                style.append("; -fx-border-color: #1976D2; -fx-border-width: 2px;");
-                                // Asegurar que el texto sea siempre visible cuando la celda está seleccionada
-                                textStyle.setLength(0);
-                                textStyle.append("-fx-text-fill: black; -fx-font-weight: bold;");
+                                getStyleClass().clear();
+                                getStyleClass().add("selected-cell");
                             }
-
-                            // Aplicar estilos
-                            setStyle(style.toString() + "; " + textStyle.toString() + "; -fx-font-weight: bold;");
                         }
 
                         private boolean isCellSelected() {
@@ -419,6 +398,8 @@ public class TablaPredictivaPaso5 extends TablaPredictiva {
             colSimbolo.setCellValueFactory(cellData -> 
                 new SimpleStringProperty(cellData.getValue().getSimbolo()));
             colSimbolo.setPrefWidth(100);
+            colSimbolo.setMinWidth(100);
+            colSimbolo.setMaxWidth(100);
             
             // Añadir la columna de símbolos
             tabla.getColumns().add(colSimbolo);
@@ -428,7 +409,9 @@ public class TablaPredictivaPaso5 extends TablaPredictiva {
                 if (t.getNombre() == null || t.getNombre().isEmpty()) continue;
                 
                 TableColumn<FilaTablaPredictiva, String> colT = new TableColumn<>(t.getNombre());
-                colT.setPrefWidth(100);
+                colT.setPrefWidth(120);
+                colT.setMinWidth(120);
+                colT.setMaxWidth(120);
                 
                 colT.setCellValueFactory(cellData -> 
                     cellData.getValue().getValor(t.getNombre()));
@@ -438,7 +421,9 @@ public class TablaPredictivaPaso5 extends TablaPredictiva {
             
             // Añadir columna para $
             TableColumn<FilaTablaPredictiva, String> colDolar = new TableColumn<>("$");
-            colDolar.setPrefWidth(100);
+            colDolar.setPrefWidth(120);
+            colDolar.setMinWidth(120);
+            colDolar.setMaxWidth(120);
             colDolar.setCellValueFactory(cellData -> 
                 cellData.getValue().getValor("$"));
             tabla.getColumns().add(colDolar);
