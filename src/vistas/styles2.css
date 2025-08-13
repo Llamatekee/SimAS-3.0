@@ -2743,3 +2743,22 @@ GridPane {
     -fx-effect: dropshadow(gaussian, rgba(79, 172, 254, 0.4), 3, 0.3, 0, 1);
 }
 
+/* Estilos generales para celdas de producción (usados en gramática original) */
+.production-cell {
+    -fx-text-fill: white !important;
+    -fx-font-weight: bold !important;
+    -fx-background-color: rgba(78, 205, 196, 0.15) !important;
+    -fx-border-color: rgba(78, 205, 196, 0.4) !important;
+    -fx-border-width: 1px !important;
+    -fx-border-radius: 4px !important;
+    -fx-background-radius: 4px !important;
+    -fx-alignment: center !important;
+    -fx-padding: 8px 12px !important;
+}
+
+.empty-cell {
+    -fx-text-fill: rgba(255, 255, 255, 0.5) !important;
+    -fx-background-color: transparent !important;
+    -fx-alignment: center !important;
+}
+
