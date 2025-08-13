@@ -2641,6 +2641,168 @@ GridPane {
     -fx-min-width: 600px;
 }
 
+/* ===== ESTILOS ESPECÍFICOS PARA LA TABLA PREDICTIVA DEL PASO 6 ===== */
+/* Estilos para las celdas de la tabla predictiva del paso 6 */
+.wizard-table .error-cell {
+    -fx-text-fill: #1976D2 !important;
+    -fx-font-weight: bold !important;
+    -fx-background-color: rgba(25, 118, 210, 0.1) !important;
+    -fx-border-color: rgba(25, 118, 210, 0.3) !important;
+    -fx-border-width: 1px !important;
+    -fx-border-radius: 4px !important;
+    -fx-background-radius: 4px !important;
+    -fx-alignment: center !important;
+}
+
+/* ===== ESTILOS ESPECÍFICOS PARA LAS LISTAS DEL PASO 6 ===== */
+/* Mejorar el ajuste de las listas en el paso 6 - sobrescribir los tamaños grandes */
+.wizard-step .wizard-list {
+    -fx-min-height: 120px !important;
+    -fx-pref-height: 180px !important;
+    -fx-max-height: 250px !important;
+    -fx-min-width: 200px !important;
+    -fx-pref-width: 300px !important;
+    -fx-max-width: 400px !important;
+    -fx-fill-width: true;
+    -fx-fill-height: true;
+    -fx-background-color: rgba(255, 255, 255, 0.18);
+    -fx-background-radius: 12px;
+    -fx-border-radius: 12px;
+    -fx-border-color: rgba(255, 255, 255, 0.3);
+    -fx-border-width: 2px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 4, 0.3, 0, 2);
+}
+
+/* Asegurar que las secciones de símbolos se ajusten correctamente */
+.wizard-step .symbol-section {
+    -fx-min-height: 160px !important;
+    -fx-pref-height: 220px !important;
+    -fx-max-height: 280px !important;
+    -fx-fill-width: true;
+    -fx-fill-height: true;
+    -fx-background-color: rgba(255, 255, 255, 0.08);
+    -fx-background-radius: 12px;
+    -fx-border-radius: 12px;
+    -fx-border-color: rgba(255, 255, 255, 0.15);
+    -fx-border-width: 1px;
+    -fx-padding: 12px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 4, 0.2, 0, 2);
+}
+
+/* Mejorar el espaciado de las listas */
+.wizard-step .wizard-list .list-cell {
+    -fx-padding: 8px 12px;
+    -fx-font-size: 13px;
+    -fx-font-weight: 500;
+    -fx-min-height: 35px;
+    -fx-pref-height: 35px;
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-border-color: transparent;
+}
+
+.wizard-step .wizard-list .list-cell:selected {
+    -fx-background-color: rgba(52, 152, 219, 0.4);
+    -fx-text-fill: white;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-effect: dropshadow(gaussian, rgba(52, 152, 219, 0.3), 2, 0.2, 0, 1);
+}
+
+.wizard-step .wizard-list .list-cell:hover {
+    -fx-background-color: rgba(52, 152, 219, 0.2);
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+}
+
+/* Asegurar que el contenido del paso 6 se distribuya correctamente */
+.wizard-step .wizard-content {
+    -fx-spacing: 15px;
+    -fx-padding: 0;
+    -fx-fill-height: true;
+    -fx-fill-width: true;
+}
+
+/* ===== ESTILOS ESPECÍFICOS PARA EL PASO 6 ===== */
+/* Clase específica para las listas compactas del paso 6 */
+.paso6-list {
+    -fx-min-height: 120px !important;
+    -fx-pref-height: 180px !important;
+    -fx-max-height: 250px !important;
+    -fx-min-width: 200px !important;
+    -fx-pref-width: 300px !important;
+    -fx-max-width: 400px !important;
+    -fx-fill-width: true;
+    -fx-fill-height: true;
+    -fx-background-color: rgba(255, 255, 255, 0.18);
+    -fx-background-radius: 12px;
+    -fx-border-radius: 12px;
+    -fx-border-color: rgba(255, 255, 255, 0.3);
+    -fx-border-width: 2px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 4, 0.3, 0, 2);
+}
+
+.paso6-section {
+    -fx-min-height: 160px !important;
+    -fx-pref-height: 220px !important;
+    -fx-max-height: 280px !important;
+    -fx-fill-width: true;
+    -fx-fill-height: true;
+    -fx-background-color: rgba(255, 255, 255, 0.08);
+    -fx-background-radius: 12px;
+    -fx-border-radius: 12px;
+    -fx-border-color: rgba(255, 255, 255, 0.15);
+    -fx-border-width: 1px;
+    -fx-padding: 12px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 4, 0.2, 0, 2);
+}
+
+.wizard-table .production-cell {
+    -fx-text-fill: white !important;
+    -fx-font-weight: bold !important;
+    -fx-background-color: rgba(78, 205, 196, 0.15) !important;
+    -fx-border-color: rgba(78, 205, 196, 0.4) !important;
+    -fx-border-width: 1px !important;
+    -fx-border-radius: 4px !important;
+    -fx-background-radius: 4px !important;
+    -fx-alignment: center !important;
+}
+
+.wizard-table .symbol-cell {
+    -fx-background-color: rgba(79, 172, 254, 0.1) !important;
+    -fx-text-fill: white !important;
+    -fx-font-weight: bold !important;
+    -fx-border-color: rgba(79, 172, 254, 0.3) !important;
+    -fx-border-width: 1px !important;
+    -fx-border-radius: 4px !important;
+    -fx-background-radius: 4px !important;
+    -fx-alignment: center !important;
+}
+
+.wizard-table .selected-cell {
+    -fx-background-color: rgba(79, 172, 254, 0.25) !important;
+    -fx-text-fill: white !important;
+    -fx-font-weight: bold !important;
+    -fx-border-color: rgba(79, 172, 254, 0.6) !important;
+    -fx-border-width: 2px !important;
+    -fx-border-radius: 4px !important;
+    -fx-background-radius: 4px !important;
+    -fx-effect: dropshadow(gaussian, rgba(79, 172, 254, 0.4), 3, 0.3, 0, 1);
+    -fx-alignment: center !important;
+}
+
+.wizard-table .default-cell {
+    -fx-text-fill: white !important;
+    -fx-background-color: transparent !important;
+    -fx-alignment: center !important;
+}
+
+.wizard-table .empty-cell {
+    -fx-text-fill: rgba(255, 255, 255, 0.5) !important;
+    -fx-background-color: transparent !important;
+    -fx-alignment: center !important;
+}
+
 .paso5-simulador .wizard-table .table-view {
     -fx-pref-width: 800px;
     -fx-min-width: 600px;

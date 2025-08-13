@@ -1,36 +1,86 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" stylesheets="@styles.css" style="-fx-background-color: #263445;">
-    <top>
-        <VBox spacing="10" alignment="CENTER">
-            <Label fx:id="labelTitulo" text="%simulador.paso6.titulo" styleClass="wizard-header" style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: white; -fx-effect: dropshadow(gaussian, #00000088, 2, 0.5, 0, 1); -fx-padding: 18 0 10 0;"/>
-        </VBox>
-    </top>
+<GridPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
+         styleClass="wizard-step" vgap="0" VBox.vgrow="ALWAYS" stylesheets="@styles2.css">
+    
+    <columnConstraints>
+        <ColumnConstraints hgrow="ALWAYS"/>
+    </columnConstraints>
+    
+    <rowConstraints>
+        <RowConstraints valignment="TOP" minHeight="80" maxHeight="80" fillHeight="false"/> <!-- Header -->
+        <RowConstraints vgrow="ALWAYS" valignment="TOP" fillHeight="true"/> <!-- Content -->
+        <RowConstraints valignment="BOTTOM" minHeight="60" maxHeight="60" fillHeight="false"/> <!-- Navigation -->
+    </rowConstraints>
 
-    <center>
-        <VBox spacing="18" alignment="TOP_CENTER" style="-fx-padding: 10 30 10 30;">
-            <HBox spacing="30" alignment="CENTER">
-                <VBox spacing="7" alignment="TOP_LEFT" style="-fx-background-color: rgba(255,255,255,0.08); -fx-border-color: white; -fx-border-width: 2; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 16;" prefWidth="340">
-                    <Label fx:id="labelProducciones" text="%simulador.paso6.producciones.titulo" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: white; -fx-padding: 0 0 6 0;"/>
-                    <ListView fx:id="listProducciones" prefHeight="180" style="-fx-background-color: white; -fx-border-radius: 6; -fx-background-radius: 6; -fx-font-size: 13px; -fx-text-fill: black;"/>
-                </VBox>
-                <VBox spacing="7" alignment="TOP_LEFT" style="-fx-background-color: rgba(255,255,255,0.08); -fx-border-color: white; -fx-border-width: 2; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 16;" prefWidth="340">
-                    <Label fx:id="labelFuncionesError" text="%simulador.paso6.funciones.error.titulo" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: white; -fx-padding: 0 0 6 0;"/>
-                    <ListView fx:id="listFuncionesError" prefHeight="180" style="-fx-background-color: white; -fx-border-radius: 6; -fx-background-radius: 6; -fx-font-size: 13px; -fx-text-fill: black;"/>
-                </VBox>
-            </HBox>
-            <Label fx:id="labelTabla" text="%simulador.paso6.tabla.titulo" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: white; -fx-padding: 10 0 0 0;"/>
-            <TableView fx:id="tablePredictiva" prefHeight="300" prefWidth="700" styleClass="wizard-table" style="-fx-background-color: white; -fx-border-color: white; -fx-border-width: 2; -fx-border-radius: 10; -fx-background-radius: 10; -fx-font-size: 13px;"/>
-        </VBox>
-    </center>
+    <padding>
+        <Insets top="30" right="40" bottom="30" left="40"/>
+    </padding>
 
-    <bottom>
-        <HBox spacing="25" alignment="CENTER" style="-fx-padding: 18 0 18 0;">
-            <Button fx:id="btnSimular" text="%simulador.paso6.btn.simular" styleClass="button" style="-fx-font-size: 15px; -fx-pref-width: 180; -fx-pref-height: 40; -fx-background-color: #2d8cf0; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8;" onAction="#iniciarSimulacion"/>
-            <Button fx:id="btnModificarErrores" text="%simulador.paso6.btn.modificar.errores" styleClass="button" style="-fx-font-size: 15px; -fx-pref-width: 180; -fx-pref-height: 40; -fx-background-color: #19be6b; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8;" onAction="#modificarErrores"/>
-            <Button fx:id="btnGenerarInforme" text="%simulador.paso6.btn.generar.informe" styleClass="button" style="-fx-font-size: 15px; -fx-pref-width: 180; -fx-pref-height: 40; -fx-background-color: #ff9900; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8;" onAction="#generarInforme"/>
+    <!-- Header -->
+    <Label fx:id="labelTitulo" text="%simulador.paso6.titulo" styleClass="wizard-header"
+           GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.halignment="CENTER"/>
+
+    <!-- Content -->
+    <VBox spacing="20" GridPane.columnIndex="0" GridPane.rowIndex="1" 
+          styleClass="wizard-content" VBox.vgrow="ALWAYS">
+        
+        <!-- Información de la Gramática Section -->
+        <HBox spacing="20" VBox.vgrow="NEVER" minHeight="160" prefHeight="220" maxHeight="280">
+            <!-- Producciones Section -->
+            <VBox spacing="8" HBox.hgrow="ALWAYS" styleClass="paso6-section">
+                <Label fx:id="labelProducciones" text="%simulador.paso6.producciones.titulo" styleClass="wizard-section-header"/>
+                <ListView fx:id="listProducciones" VBox.vgrow="ALWAYS" styleClass="paso6-list" minHeight="120" prefHeight="180"/>
+            </VBox>
+            
+            <!-- Funciones de Error Section -->
+            <VBox spacing="8" HBox.hgrow="ALWAYS" styleClass="paso6-section">
+                <Label fx:id="labelFuncionesError" text="%simulador.paso6.funciones.error.titulo" styleClass="wizard-section-header"/>
+                <ListView fx:id="listFuncionesError" VBox.vgrow="ALWAYS" styleClass="paso6-list" minHeight="120" prefHeight="180"/>
+            </VBox>
         </HBox>
-    </bottom>
-</BorderPane>
+
+        <!-- Tabla Predictiva Section -->
+        <VBox spacing="10" VBox.vgrow="ALWAYS">
+            <Label fx:id="labelTabla" text="%simulador.paso6.tabla.titulo" styleClass="wizard-section-header"/>
+            <TableView fx:id="tablePredictiva" VBox.vgrow="ALWAYS" styleClass="wizard-table"/>
+        </VBox>
+    </VBox>
+
+    <!-- Navigation -->
+    <HBox styleClass="wizard-navigation" GridPane.columnIndex="0" GridPane.rowIndex="2" 
+          GridPane.valignment="BOTTOM">
+        <Button fx:id="btnModificarErrores" text="%simulador.paso6.btn.modificar.errores" styleClass="button-cancel" 
+                onAction="#modificarErrores">
+            <graphic>
+                <ImageView fitWidth="16" fitHeight="16">
+                    <Image url="@../resources/icons/application_preferences.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
+        <Button fx:id="btnGenerarInforme" text="%simulador.paso6.btn.generar.informe" styleClass="button-grammar" 
+                onAction="#generarInforme">
+            <graphic>
+                <ImageView fitWidth="16" fitHeight="16">
+                    <Image url="@../resources/icons/application_certificate.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button fx:id="btnSimular" text="%simulador.paso6.btn.simular" styleClass="button-finish" 
+                onAction="#iniciarSimulacion">
+            <graphic>
+                <ImageView fitWidth="16" fitHeight="16">
+                    <Image url="@../resources/icons/telescope.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
+    </HBox>
+
+</GridPane>

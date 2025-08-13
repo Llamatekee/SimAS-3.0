@@ -63,6 +63,9 @@ public class PanelNuevaSimDescPaso6 extends BorderPane implements PanelNuevaSimD
         this.producciones = FXCollections.observableArrayList();
         this.cadenaEntrada = FXCollections.observableArrayList();
         
+        // Configurar estilos CSS
+        this.getStylesheets().add(getClass().getResource("/vistas/styles2.css").toExternalForm());
+        
         // Cargar UI y datos
         cargarFXML();
         cargarDatos();
@@ -70,7 +73,26 @@ public class PanelNuevaSimDescPaso6 extends BorderPane implements PanelNuevaSimD
 
     // Constructor anterior para compatibilidad
     public PanelNuevaSimDescPaso6(Gramatica gramatica) {
-        this(gramatica, null);
+        this.gramatica = gramatica;
+        this.panelSimuladorDesc = null;
+        this.bundle = ResourceBundle.getBundle("messages");
+        
+        // Usar la tabla predictiva de la gramática
+        this.tablaPredictiva = gramatica.getTPredictiva();
+        
+        // Obtener las funciones de error
+        this.funcionesError = tablaPredictiva.getFuncionesError();
+        
+        // Inicializar componentes
+        this.producciones = FXCollections.observableArrayList();
+        this.cadenaEntrada = FXCollections.observableArrayList();
+        
+        // Configurar estilos CSS
+        this.getStylesheets().add(getClass().getResource("/vistas/styles2.css").toExternalForm());
+        
+        // Cargar UI y datos
+        cargarFXML();
+        cargarDatos();
     }
 
     private void cargarFXML() {
@@ -82,10 +104,16 @@ public class PanelNuevaSimDescPaso6 extends BorderPane implements PanelNuevaSimD
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/PanelNuevaSimDescPaso6.fxml"));
             loader.setController(this);
             loader.setResources(bundle);
-            BorderPane root = loader.load();
-            this.setTop(root.getTop());
-            this.setCenter(root.getCenter());
-            this.setBottom(root.getBottom());
+            GridPane root = loader.load();
+            
+            // Configurar el GridPane para que ocupe todo el espacio disponible
+            root.setPrefWidth(Double.MAX_VALUE);
+            root.setPrefHeight(Double.MAX_VALUE);
+            root.setMaxWidth(Double.MAX_VALUE);
+            root.setMaxHeight(Double.MAX_VALUE);
+            
+            // Establecer el GridPane como contenido principal
+            this.setCenter(root);
             
             // Actualizar los textos después de cargar el FXML
             actualizarTextos(bundle);
@@ -174,19 +202,18 @@ public class PanelNuevaSimDescPaso6 extends BorderPane implements PanelNuevaSimD
                     
                     if (empty || item == null) {
                         setText(null);
-                        setStyle("");
+                        getStyleClass().clear();
                         return;
                     }
                     
                     setText(item);
                     
-                    // Aplicar estilo para columna de símbolos
+                    // Aplicar clases CSS para columna de símbolos
+                    getStyleClass().clear();
                     if (isSelected()) {
-                        // Estilo para celda seleccionada
-                        setStyle("-fx-background-color: #E3F2FD; -fx-text-fill: black; -fx-font-weight: bold; -fx-border-color: #1976D2; -fx-border-width: 1px;");
+                        getStyleClass().add("selected-cell");
                     } else {
-                        // Estilo para símbolos (terminales y no terminales)
-                        setStyle("-fx-background-color: #F8F9FA; -fx-text-fill: black; -fx-font-weight: bold;");
+                        getStyleClass().add("symbol-cell");
                     }
                 }
             };
@@ -216,25 +243,28 @@ public class PanelNuevaSimDescPaso6 extends BorderPane implements PanelNuevaSimD
                         
                         if (empty || item == null) {
                             setText(null);
-                            setStyle("");
+                            getStyleClass().clear();
                             return;
                         }
                         
                         setText(item);
                         
-                        // Aplicar estilo según el tipo de contenido
+                        // Aplicar clases CSS según el tipo de contenido
+                        getStyleClass().clear();
                         if (isSelected()) {
-                            // Estilo para celda seleccionada
-                            setStyle("-fx-background-color: #E3F2FD; -fx-text-fill: black; -fx-font-weight: bold; -fx-border-color: #1976D2; -fx-border-width: 1px;");
+                            getStyleClass().add("selected-cell");
                         } else if (item != null && !item.isEmpty() && item.startsWith("E")) {
                             // Estilo para funciones de error
-                            setStyle("-fx-text-fill: #1976D2; -fx-font-weight: bold;");
+                            getStyleClass().add("error-cell");
                         } else if (item != null && !item.isEmpty() && Character.isDigit(item.charAt(0))) {
                             // Estilo para producciones
-                            setStyle("-fx-text-fill: black; -fx-font-weight: bold;");
+                            getStyleClass().add("production-cell");
+                        } else if (item != null && !item.isEmpty()) {
+                            // Estilo para otros contenidos
+                            getStyleClass().add("default-cell");
                         } else {
-                            // Estilo predeterminado
-                            setStyle("-fx-text-fill: black;");
+                            // Estilo para celdas vacías
+                            getStyleClass().add("empty-cell");
                         }
                     }
                 };
@@ -268,25 +298,28 @@ public class PanelNuevaSimDescPaso6 extends BorderPane implements PanelNuevaSimD
                         
                         if (empty || item == null) {
                             setText(null);
-                            setStyle("");
+                            getStyleClass().clear();
                             return;
                         }
                         
                         setText(item);
                         
-                        // Aplicar estilo según el tipo de contenido
+                        // Aplicar clases CSS según el tipo de contenido
+                        getStyleClass().clear();
                         if (isSelected()) {
-                            // Estilo para celda seleccionada
-                            setStyle("-fx-background-color: #E3F2FD; -fx-text-fill: black; -fx-font-weight: bold; -fx-border-color: #1976D2; -fx-border-width: 1px;");
+                            getStyleClass().add("selected-cell");
                         } else if (item != null && !item.isEmpty() && item.startsWith("E")) {
                             // Estilo para funciones de error
-                            setStyle("-fx-text-fill: #1976D2; -fx-font-weight: bold;");
+                            getStyleClass().add("error-cell");
                         } else if (item != null && !item.isEmpty() && Character.isDigit(item.charAt(0))) {
                             // Estilo para producciones
-                            setStyle("-fx-text-fill: black; -fx-font-weight: bold;");
+                            getStyleClass().add("production-cell");
+                        } else if (item != null && !item.isEmpty()) {
+                            // Estilo para otros contenidos
+                            getStyleClass().add("default-cell");
                         } else {
-                            // Estilo predeterminado
-                            setStyle("-fx-text-fill: black;");
+                            // Estilo para celdas vacías
+                            getStyleClass().add("empty-cell");
                         }
                     }
                 };
@@ -296,7 +329,7 @@ public class PanelNuevaSimDescPaso6 extends BorderPane implements PanelNuevaSimD
         }
         
         // Aplicar configuración global a la tabla
-        tablePredictiva.setStyle("-fx-background-color: white; -fx-table-cell-border-color: black;");
+        // Los estilos se manejan a través de CSS en styles2.css
     }
 
     @FXML
