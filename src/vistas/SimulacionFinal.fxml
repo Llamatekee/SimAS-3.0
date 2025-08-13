@@ -1,49 +1,122 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 
-<BorderPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" styleClass="wizard-step">
-    <top>
-        <HBox spacing="15" alignment="CENTER_LEFT" styleClass="wizard-content" style="-fx-padding: 30 0 20 40;">
-            <Label fx:id="labelEntrada" text="%simulacionfinal.label.entrada" styleClass="wizard-section-header"/>
-            <TextField fx:id="campoEntrada" promptText="%simulacionfinal.prompt.entrada" styleClass="wizard-combo-box" editable="false"/>
-            <Button fx:id="btnEditarCadena" text="%simulacionfinal.btn.editar" styleClass="button-grammar"/>
-            <Button fx:id="btnIniciar" text="%simulacionfinal.btn.iniciar" styleClass="button-grammar"/>
+<GridPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
+         styleClass="wizard-step, simulacion-final" vgap="0" VBox.vgrow="ALWAYS" stylesheets="@styles2.css">
+    
+    <columnConstraints>
+        <ColumnConstraints hgrow="ALWAYS"/>
+    </columnConstraints>
+    
+    <rowConstraints>
+        <RowConstraints valignment="TOP" minHeight="80" maxHeight="80" fillHeight="false"/> <!-- Header -->
+        <RowConstraints valignment="TOP" minHeight="100" maxHeight="100" fillHeight="false"/> <!-- Input Section -->
+        <RowConstraints valignment="TOP" minHeight="80" maxHeight="80" fillHeight="false"/> <!-- Navigation Controls -->
+        <RowConstraints vgrow="ALWAYS" valignment="TOP" fillHeight="true"/> <!-- History Table -->
+        <RowConstraints valignment="BOTTOM" minHeight="80" maxHeight="80" fillHeight="false"/> <!-- Actions -->
+    </rowConstraints>
+
+    <padding>
+        <Insets top="30" right="40" bottom="30" left="40"/>
+    </padding>
+
+    <!-- Header -->
+    <Label text="Simulación" styleClass="wizard-header"
+           GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.halignment="CENTER"/>
+
+    <!-- Input Section -->
+    <VBox spacing="15" GridPane.columnIndex="0" GridPane.rowIndex="1" 
+          styleClass="wizard-content" GridPane.halignment="CENTER">
+        <Label fx:id="labelEntrada" text="%simulacionfinal.label.entrada" styleClass="wizard-section-header"/>
+        <HBox spacing="20" alignment="CENTER">
+            <TextField fx:id="campoEntrada" promptText="%simulacionfinal.prompt.entrada" 
+                      styleClass="wizard-field" prefWidth="400" editable="false"/>
+            <Button fx:id="btnEditarCadena" text="%simulacionfinal.btn.editar" styleClass="wizard-action-button">
+                <graphic>
+                    <ImageView fitWidth="16" fitHeight="16">
+                    <Image url="@../resources/icons/element_edit.png"/>
+                    </ImageView>
+                </graphic>
+            </Button>
+            <Button fx:id="btnIniciar" text="%simulacionfinal.btn.iniciar" styleClass="button-finish">
+                <graphic>
+                    <ImageView fitWidth="16" fitHeight="16">
+                    <Image url="@../resources/icons/play.png"/>
+                    </ImageView>
+                </graphic>
+            </Button>
         </HBox>
-    </top>
-    <center>
-        <VBox spacing="25" styleClass="wizard-content">
-            <HBox spacing="15" alignment="CENTER">
-                <Button fx:id="btnInicio" text="%simulacionfinal.btn.inicio" styleClass="button-cancel"/>
-                <Button fx:id="btnRetroceso" text="%simulacionfinal.btn.retroceso" styleClass="button-prev-next"/>
-                <Button fx:id="btnPaso" text="%simulacionfinal.btn.paso" styleClass="button-prev-next"/>
-                <Button fx:id="btnFinal" text="%simulacionfinal.btn.final" styleClass="button-grammar"/>
-            </HBox>
-            <HBox spacing="40" alignment="CENTER">
-                <VBox spacing="8">
-                    <Label fx:id="labelPila" text="%simulacionfinal.label.pila" style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: white;"/>
-                    <TextArea fx:id="areaPila" editable="false" styleClass="simulacion-output" prefWidth="180" prefHeight="120" wrapText="true"/>
-                </VBox>
-                <VBox spacing="8">
-                    <Label fx:id="labelEntradaStack" text="%simulacionfinal.label.entrada.stack" style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: white;"/>
-                    <TextArea fx:id="areaEntrada" editable="false" styleClass="simulacion-output" prefWidth="180" prefHeight="120" wrapText="true"/>
-                </VBox>
-                <VBox spacing="8" alignment="TOP_LEFT">
-                    <Label fx:id="labelAccion" text="%simulacionfinal.label.accion" style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: white;"/>
-                    <TextArea fx:id="areaMensajes" prefWidth="350" prefHeight="120" wrapText="true" editable="false" styleClass="simulacion-output"/>
-                </VBox>
-            </HBox>
-            <Label fx:id="labelHistorial" text="%simulacionfinal.label.historial" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #3498DB; -fx-padding: 10 0 0 0;"/>
-            <TableView fx:id="tablaHistorial" VBox.vgrow="ALWAYS" styleClass="wizard-table">
-                <columns>
-                    <TableColumn fx:id="colPaso" text="%simulacionfinal.col.paso" minWidth="60" maxWidth="60"/>
-                    <TableColumn fx:id="colPila" text="%simulacionfinal.col.pila" minWidth="100"/>
-                    <TableColumn fx:id="colEntrada" text="%simulacionfinal.col.entrada" minWidth="100"/>
-                    <TableColumn fx:id="colAccion" text="%simulacionfinal.col.accion" minWidth="100"/>
-                </columns>
-            </TableView>
-            <Button fx:id="btnDerivacion" text="%simulacionfinal.btn.derivacion" styleClass="button-grammar" alignment="CENTER"/>
-            <Button fx:id="btnArbol" text="%simulacionfinal.btn.arbol" styleClass="button-grammar" alignment="CENTER"/>
-        </VBox>
-    </center>
-</BorderPane> 
+    </VBox>
+
+    <!-- Navigation Controls -->
+    <HBox spacing="20" alignment="CENTER" GridPane.columnIndex="0" GridPane.rowIndex="2" 
+          styleClass="wizard-navigation">
+        <Button fx:id="btnInicio" text="%simulacionfinal.btn.inicio" styleClass="button-first-last">
+            <graphic>
+                <ImageView fitWidth="16" fitHeight="16">
+                    <Image url="@../resources/icons/arrow_left_blue.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
+        <Button fx:id="btnRetroceso" text="%simulacionfinal.btn.retroceso" styleClass="button-prev-next">
+            <graphic>
+                <ImageView fitWidth="16" fitHeight="16">
+                    <Image url="@../resources/icons/arrow_left_green.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
+        <Button fx:id="btnPaso" text="%simulacionfinal.btn.paso" styleClass="button-prev-next">
+            <graphic>
+                <ImageView fitWidth="16" fitHeight="16">
+                    <Image url="@../resources/icons/arrow_right_green.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
+        <Button fx:id="btnFinal" text="%simulacionfinal.btn.final" styleClass="button-grammar">
+            <graphic>
+                <ImageView fitWidth="16" fitHeight="16">
+                    <Image url="@../resources/icons/arrow_right_blue.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
+    </HBox>
+
+    <!-- History Table -->
+    <VBox spacing="20" GridPane.columnIndex="0" GridPane.rowIndex="3" 
+          styleClass="wizard-content" VBox.vgrow="ALWAYS">
+        <Label fx:id="labelHistorial" text="%simulacionfinal.label.historial" styleClass="wizard-section-header"/>
+        <TableView fx:id="tablaHistorial" VBox.vgrow="ALWAYS" styleClass="wizard-table">
+            <columns>
+                <TableColumn fx:id="colPaso" text="%simulacionfinal.col.paso" minWidth="60" maxWidth="80"/>
+                <TableColumn fx:id="colPila" text="%simulacionfinal.col.pila" minWidth="150"/>
+                <TableColumn fx:id="colEntrada" text="%simulacionfinal.col.entrada" minWidth="150"/>
+                <TableColumn fx:id="colAccion" text="%simulacionfinal.col.accion" minWidth="200"/>
+            </columns>
+        </TableView>
+    </VBox>
+
+    <!-- Action Buttons -->
+    <HBox spacing="25" alignment="CENTER" GridPane.columnIndex="0" GridPane.rowIndex="4" 
+          styleClass="wizard-navigation">
+        <Button fx:id="btnDerivacion" text="%simulacionfinal.btn.derivacion" styleClass="button-grammar">
+            <graphic>
+                <ImageView fitWidth="16" fitHeight="16">
+                    <Image url="@../resources/icons/book_blue_view.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
+        <Button fx:id="btnArbol" text="%simulacionfinal.btn.arbol" styleClass="button-grammar">
+            <graphic>
+                <ImageView fitWidth="16" fitHeight="16">
+                    <Image url="@../resources/icons/branch.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
+    </HBox>
+
+</GridPane> 

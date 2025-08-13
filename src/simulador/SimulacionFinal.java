@@ -50,9 +50,7 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
     @FXML private Button btnFinal;
     @FXML private Button btnRetroceso;
     @FXML private Button btnInicio;
-    @FXML private TextArea areaPila;
-    @FXML private TextArea areaEntrada;
-    @FXML private TextArea areaMensajes;
+    // Las áreas de texto individuales se han eliminado, ahora solo usamos la tabla de historial
     @FXML private Button btnEditarCadena;
     @FXML private Button btnDerivacion;
     @FXML private Button btnArbol;
@@ -246,7 +244,7 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
                  tab.getUserData().toString().equals(simulacionId)) || 
                 tab.getContent() == this) {
                 
-                String tituloBase = bundle.getString("simulador.paso6.simulacion");
+                String tituloBase = "Simulación";
                 String nuevoTitulo = construirTitulo(tituloBase, mostrarGrupo, mostrarInstancia);
                 tab.setText(nuevoTitulo);
                 break;
@@ -334,6 +332,10 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
             if (bundle != null) loader.setResources(bundle);
             Parent root = loader.load();
             this.setCenter(root);
+            
+            // Aplicar estilos CSS específicos para la simulación
+            this.getStylesheets().add(getClass().getResource("/vistas/styles2.css").toExternalForm());
+            
             initialize(); 
         } catch (IOException e) {
             e.printStackTrace();
@@ -351,10 +353,7 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         btnDerivacion.setOnAction(e -> mostrarDerivacion());
         btnArbol.setOnAction(e -> mostrarArbolSintactico());
         
-        // Inicializar áreas de texto
-        areaMensajes.setText("");
-        areaPila.setText("");
-        areaEntrada.setText("");
+        // Las áreas de texto individuales se han eliminado, ahora solo usamos la tabla de historial
         
         // Inicializar tabla de historial
         colPaso.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getPaso()));
@@ -378,21 +377,41 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.setTitle(bundle != null ? bundle.getString("simulacionfinal.dialog.editar.titulo") : "Editar cadena de entrada");
 
+        // Crear contenedor principal con estilo moderno
+        VBox mainContainer = new VBox(20);
+        mainContainer.setAlignment(Pos.CENTER);
+        mainContainer.setPadding(new Insets(30));
+        mainContainer.getStyleClass().add("wizard-step");
+
+        // Header del diálogo
+        Label headerLabel = new Label(bundle != null ? bundle.getString("simulacionfinal.dialog.editar.instruccion") : 
+                                    "Haz clic en los terminales para construir la cadena de entrada:");
+        headerLabel.getStyleClass().add("wizard-section-header");
+        headerLabel.setWrapText(true);
+        headerLabel.setAlignment(Pos.CENTER);
+
+        // Panel de terminales con estilo moderno
         FlowPane terminalPane = new FlowPane();
-        terminalPane.setHgap(10);
-        terminalPane.setVgap(10);
+        terminalPane.setHgap(12);
+        terminalPane.setVgap(12);
         terminalPane.setPadding(new Insets(20));
         terminalPane.setAlignment(Pos.CENTER);
+        terminalPane.getStyleClass().add("wizard-content");
 
         StringBuilder cadenaActual = new StringBuilder(campoEntrada.getText());
+        
+        // Campo de texto con estilo moderno
         TextField campoCadena = new TextField(cadenaActual.toString());
         campoCadena.setEditable(false);
-        campoCadena.setPrefWidth(300);
+        campoCadena.setPrefWidth(350);
+        campoCadena.getStyleClass().add("wizard-field");
 
-        // Botones de terminales
+        // Botones de terminales con iconos
         for (var terminal : gramatica.getTerminales()) {
             Button btn = new Button(terminal.getNombre());
-            btn.getStyleClass().add("button-grammar");
+            btn.getStyleClass().add("wizard-action-button");
+            btn.setMinWidth(80);
+            btn.setPrefWidth(80);
             btn.setOnAction(ev -> {
                 if (cadenaActual.length() > 0) cadenaActual.append(" ");
                 cadenaActual.append(terminal.getNombre());
@@ -418,7 +437,7 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
 
         // Botón aceptar
         Button btnAceptar = new Button(bundle != null ? bundle.getString("button.aceptar") : "Aceptar");
-        btnAceptar.getStyleClass().add("button-grammar");
+        btnAceptar.getStyleClass().add("button-finish");
         btnAceptar.setOnAction(ev -> {
             campoEntrada.setText(campoCadena.getText());
             dialog.close();
@@ -429,20 +448,17 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         btnCancelar.getStyleClass().add("button-cancel");
         btnCancelar.setOnAction(ev -> dialog.close());
 
-        HBox acciones = new HBox(10, btnBorrar, btnAceptar, btnCancelar);
+        // Contenedor de acciones con estilo moderno
+        HBox acciones = new HBox(15);
         acciones.setAlignment(Pos.CENTER);
-        acciones.setPadding(new Insets(10, 0, 0, 0));
+        acciones.setPadding(new Insets(20, 0, 0, 0));
+        acciones.getStyleClass().add("wizard-navigation");
+        acciones.getChildren().addAll(btnBorrar, btnAceptar, btnCancelar);
 
-        VBox layout = new VBox(15,
-            new Label(bundle != null ? bundle.getString("simulacionfinal.dialog.editar.instruccion") : "Haz clic en los terminales para construir la cadena de entrada:"),
-            terminalPane,
-            campoCadena,
-            acciones
-        );
-        layout.setAlignment(Pos.CENTER);
-        layout.setPadding(new Insets(20));
+        // Agregar elementos al contenedor principal
+        mainContainer.getChildren().addAll(headerLabel, terminalPane, campoCadena, acciones);
 
-        Scene scene = new Scene(layout);
+        Scene scene = new Scene(mainContainer);
         scene.getStylesheets().add(getClass().getResource("/vistas/styles2.css").toExternalForm());
         dialog.setScene(scene);
         dialog.setResizable(false);
@@ -455,8 +471,7 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         estadosAnteriores.clear();
         pasoActual = 0;
 
-        // Limpiar el área de mensajes/acción
-        areaMensajes.clear();
+        // Limpiar el historial (las áreas de texto individuales se han eliminado)
 
         // Inicializar la pila con el símbolo inicial y el marcador de fin
         pilaSimulacion = new Stack<>();
@@ -544,6 +559,12 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         alert.setTitle(bundle != null ? bundle.getString("simulacionfinal.alert.cadena.vacia.titulo") : "Cadena de entrada vacía");
         alert.setHeaderText(null);
         alert.setContentText(bundle != null ? bundle.getString("simulacionfinal.alert.cadena.vacia.mensaje") : "Introduce una cadena de entrada válida antes de iniciar la simulación.");
+        
+        // Aplicar estilos modernos al diálogo
+        DialogPane dialogPane = alert.getDialogPane();
+        dialogPane.getStylesheets().add(getClass().getResource("/vistas/styles2.css").toExternalForm());
+        dialogPane.getStyleClass().add("wizard-step");
+        
         alert.showAndWait();
     }
 
@@ -552,7 +573,7 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         if (pilaSimulacion.isEmpty() || entradaSimulacion.isEmpty()) return;
 
         // Guardar estado actual antes de modificarlo
-        estadosAnteriores.add(new EstadoSimulacion(pilaSimulacion, entradaSimulacion, areaMensajes.getText()));
+        estadosAnteriores.add(new EstadoSimulacion(pilaSimulacion, entradaSimulacion, ""));
 
         String cimaPila = pilaSimulacion.peek();
         String simboloEntrada = entradaSimulacion.get(0);
@@ -561,7 +582,6 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         // Caso de aceptación
         if (cimaPila.equals("$") && simboloEntrada.equals("$")) {
             accionRealizada = "Aceptar";
-            areaMensajes.setText(accionRealizada);
             simulacionEnCurso = false;
             btnPaso.setDisable(true);
             btnFinal.setDisable(true);
@@ -577,11 +597,9 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
             pilaSimulacion.pop();
             entradaSimulacion.remove(0);
             accionRealizada = "Emparejar";
-            areaMensajes.setText(accionRealizada);
         } else if (esTerminal(cimaPila)) {
             // Error: terminal en pila distinto de entrada
             accionRealizada = "Error";
-            areaMensajes.setText(accionRealizada);
             simulacionEnCurso = false;
             btnPaso.setDisable(true);
             btnFinal.setDisable(true);
@@ -595,7 +613,6 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
             String accion = buscarAccionTabla(cimaPila, simboloEntrada);
             if (accion == null || accion.isEmpty()) {
                 accionRealizada = "Error";
-                areaMensajes.setText(accionRealizada);
                 simulacionEnCurso = false;
                 btnPaso.setDisable(true);
                 btnFinal.setDisable(true);
@@ -607,11 +624,9 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
             }
             if (accion.startsWith("E")) {
                 accionRealizada = accion;
-                areaMensajes.setText(accionRealizada);
             } else if (accion.equals("ε") || accion.equals("ε_")) {
                 pilaSimulacion.pop();
                 accionRealizada = cimaPila + " → ε";
-                areaMensajes.setText(accionRealizada);
             } else {
                 // Es una producción, ejemplo: "3. D → T L;"
                 String produccion = accion;
@@ -628,10 +643,8 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
                         }
                     }
                     accionRealizada = produccion.trim();
-                    areaMensajes.setText(accionRealizada);
                 } else {
                     accionRealizada = "Error";
-                    areaMensajes.setText(accionRealizada);
                 }
             }
         }
@@ -650,7 +663,7 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
 
     private void retrocederAlInicio() {
         if (estadosAnteriores.size() <= 1) {
-            areaMensajes.setText("Ya estamos en el inicio.");
+            // Ya estamos en el inicio
             return;
         }
 
@@ -666,9 +679,7 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         entradaSimulacion.clear();
         entradaSimulacion.addAll(estadoInicial.entrada);
         
-        areaMensajes.setText(estadoInicial.accion);
-        
-        // Actualizar la vista
+        // Actualizar la vista (solo la tabla de historial)
         actualizarVista();
         
         // Limpiar el historial
@@ -682,7 +693,7 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
 
     private void retrocederPaso() {
         if (estadosAnteriores.size() <= 1) {
-            areaMensajes.setText("No hay pasos anteriores para retroceder.");
+            // No hay pasos anteriores para retroceder
             return;
         }
 
@@ -699,9 +710,7 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         entradaSimulacion.clear();
         entradaSimulacion.addAll(estadoAnterior.entrada);
         
-        areaMensajes.setText(estadoAnterior.accion);
-        
-        // Actualizar la vista
+        // Actualizar la vista (solo la tabla de historial)
         actualizarVista();
         
         // Actualizar el historial
@@ -716,8 +725,8 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
     }
 
     private void actualizarVista() {
-        areaPila.setText(String.join(" ", pilaSimulacion));
-        areaEntrada.setText(String.join(" ", entradaSimulacion));
+        // Ya no necesitamos actualizar áreas de texto individuales
+        // Solo la tabla de historial se actualiza automáticamente
     }
 
     private boolean esTerminal(String simbolo) {

@@ -2998,3 +2998,239 @@ GridPane {
     -fx-alignment: center !important;
 }
 
+/* ===== ESTILOS ESPECÍFICOS PARA LA SIMULACIÓN FINAL ===== */
+/* Estilos para la simulación final */
+.simulacion-final {
+    -fx-background-color: transparent;
+}
+
+/* Las secciones de simulación individuales se han eliminado, ahora solo usamos la tabla de historial */
+
+/* Sección de entrada de la simulación */
+.simulacion-final .wizard-content {
+    -fx-padding: 20px;
+    -fx-spacing: 15px;
+    -fx-alignment: center;
+}
+
+/* Campos de texto de la simulación */
+.simulacion-final .wizard-field {
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-border-color: rgba(255, 255, 255, 0.3);
+    -fx-border-width: 1px;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: 500;
+    -fx-padding: 10px 15px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 2, 0.2, 0, 1);
+}
+
+.simulacion-final .wizard-field:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.2);
+    -fx-border-color: rgba(255, 255, 255, 0.4);
+}
+
+.simulacion-final .wizard-field:focused {
+    -fx-background-color: rgba(79, 172, 254, 0.2);
+    -fx-border-color: rgba(79, 172, 254, 0.6);
+    -fx-effect: dropshadow(gaussian, rgba(79, 172, 254, 0.3), 3, 0.3, 0, 2);
+}
+
+/* Botones específicos de la simulación */
+.simulacion-final .wizard-action-button {
+    -fx-background-color: linear-gradient(to right, #667eea, #764ba2);
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-font-weight: 600;
+    -fx-padding: 10px 15px;
+    -fx-alignment: center;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(102, 126, 234, 0.3), 4, 0.3, 0, 2);
+    -fx-border-color: rgba(255, 255, 255, 0.15);
+    -fx-border-width: 1px;
+    -fx-graphic-text-gap: 6px;
+    -fx-min-height: 40px;
+    -fx-pref-height: 40px;
+}
+
+.simulacion-final .wizard-action-button:hover {
+    -fx-background-color: linear-gradient(to right, #764ba2, #667eea);
+    -fx-effect: dropshadow(gaussian, rgba(102, 126, 234, 0.6), 8, 0.4, 0, 4);
+    -fx-border-color: rgba(255, 255, 255, 0.3);
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+}
+
+.simulacion-final .wizard-action-button:pressed {
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+}
+
+/* Tabla de historial de la simulación */
+.simulacion-final .wizard-table {
+    -fx-background-color: rgba(255, 255, 255, 0.18);
+    -fx-background-radius: 12px;
+    -fx-border-radius: 12px;
+    -fx-border-color: rgba(255, 255, 255, 0.3);
+    -fx-border-width: 2px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 4, 0.3, 0, 2);
+    -fx-fill-height: true;
+    -fx-fill-width: true;
+    -fx-min-height: 250px;
+    -fx-pref-height: 350px;
+    -fx-padding: 5px;
+}
+
+.simulacion-final .wizard-table .table-cell {
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-font-weight: 500;
+    -fx-padding: 8px 12px;
+    -fx-border-color: transparent;
+    -fx-alignment: center;
+}
+
+.simulacion-final .wizard-table .table-row-cell:odd {
+    -fx-background-color: rgba(255, 255, 255, 0.03);
+}
+
+.simulacion-final .wizard-table .table-row-cell:even {
+    -fx-background-color: transparent;
+}
+
+.simulacion-final .wizard-table .table-row-cell:selected {
+    -fx-background-color: rgba(52, 152, 219, 0.3);
+}
+
+.simulacion-final .wizard-table .table-row-cell:hover {
+    -fx-background-color: rgba(52, 152, 219, 0.15);
+}
+
+/* El header de la simulación usa el mismo estilo que wizard-header general */
+
+/* Navegación de la simulación */
+.simulacion-final .wizard-navigation {
+    -fx-padding: 20px 0;
+    -fx-spacing: 20px;
+    -fx-alignment: center;
+    -fx-border-color: rgba(255, 255, 255, 0.1) transparent transparent transparent;
+    -fx-border-width: 1 0 0 0;
+    -fx-min-height: 80px;
+    -fx-pref-height: 80px;
+    -fx-max-height: 80px;
+    -fx-background-color: transparent;
+}
+
+/* ===== ESTILOS PARA DIÁLOGOS Y ALERTAS ===== */
+/* Diálogos de la simulación */
+.wizard-step .dialog-pane {
+    -fx-background-color: linear-gradient(to bottom right, #2c3e50, #34495e);
+    -fx-background-radius: 15px;
+    -fx-border-radius: 15px;
+    -fx-border-color: rgba(255, 255, 255, 0.2);
+    -fx-border-width: 2px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 10, 0.3, 0, 5);
+}
+
+.wizard-step .dialog-pane .header-panel {
+    -fx-background-color: linear-gradient(to right, #667eea, #764ba2);
+    -fx-background-radius: 15px 15px 0 0;
+    -fx-border-radius: 15px 15px 0 0;
+    -fx-padding: 15px 20px;
+}
+
+.wizard-step .dialog-pane .content {
+    -fx-background-color: transparent;
+    -fx-padding: 20px;
+}
+
+.wizard-step .dialog-pane .button-bar {
+    -fx-background-color: rgba(255, 255, 255, 0.05);
+    -fx-background-radius: 0 0 15px 15px;
+    -fx-border-radius: 0 0 15px 15px;
+    -fx-padding: 15px 20px;
+}
+
+/* Alertas de la simulación */
+.wizard-step .alert {
+    -fx-background-color: linear-gradient(to bottom right, #2c3e50, #34495e);
+    -fx-background-radius: 15px;
+    -fx-border-radius: 15px;
+    -fx-border-color: rgba(255, 255, 255, 0.2);
+    -fx-border-width: 2px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 10, 0.3, 0, 5);
+}
+
+.wizard-step .alert .header-panel {
+    -fx-background-color: linear-gradient(to right, #e74c3c, #c0392b);
+    -fx-background-radius: 15px 15px 0 0;
+    -fx-border-radius: 15px 15px 0 0;
+    -fx-padding: 15px 20px;
+}
+
+.wizard-step .alert .content {
+    -fx-background-color: transparent;
+    -fx-padding: 20px;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: 500;
+}
+
+.wizard-step .alert .button-bar {
+    -fx-background-color: rgba(255, 255, 255, 0.05);
+    -fx-background-radius: 0 0 15px 15px;
+    -fx-border-radius: 0 0 15px 15px;
+    -fx-padding: 15px 20px;
+}
+
+/* Botones de diálogo */
+.wizard-step .dialog-pane .button,
+.wizard-step .alert .button {
+    -fx-background-color: linear-gradient(to right, #667eea, #764ba2);
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-font-weight: 600;
+    -fx-padding: 8px 16px;
+    -fx-alignment: center;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(102, 126, 234, 0.3), 3, 0.2, 0, 2);
+    -fx-border-color: rgba(255, 255, 255, 0.15);
+    -fx-border-width: 1px;
+    -fx-min-width: 80px;
+    -fx-pref-width: 80px;
+}
+
+.wizard-step .dialog-pane .button:hover,
+.wizard-step .alert .button:hover {
+    -fx-background-color: linear-gradient(to right, #764ba2, #667eea);
+    -fx-effect: dropshadow(gaussian, rgba(102, 126, 234, 0.5), 5, 0.3, 0, 3);
+    -fx-border-color: rgba(255, 255, 255, 0.3);
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+}
+
+.wizard-step .dialog-pane .button:pressed,
+.wizard-step .alert .button:pressed {
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+}
+
+/* Botones de cancelar en diálogos */
+.wizard-step .dialog-pane .button.cancel-button,
+.wizard-step .alert .button.cancel-button {
+    -fx-background-color: linear-gradient(to right, #95a5a6, #7f8c8d);
+    -fx-effect: dropshadow(gaussian, rgba(149, 165, 166, 0.3), 3, 0.2, 0, 2);
+}
+
+.wizard-step .dialog-pane .button.cancel-button:hover,
+.wizard-step .alert .button.cancel-button:hover {
+    -fx-background-color: linear-gradient(to right, #7f8c8d, #95a5a6);
+    -fx-effect: dropshadow(gaussian, rgba(149, 165, 166, 0.5), 5, 0.3, 0, 3);
+}
+
