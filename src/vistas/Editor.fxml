@@ -25,65 +25,65 @@
                 </padding>
                 <Button fx:id="btnAnadir" text="Nueva" onAction="#onBtnAnadirAction" styleClass="toolbar-button">
                     <graphic>
-                        <ImageView fitHeight="12" fitWidth="12" preserveRatio="true">
-                            <Image url="@../resources/icons/book_blue_new.png"/>
+                        <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
+                            <Image url="@../resources/nueva.png"/>
                         </ImageView>
                     </graphic>
                 </Button>
                 <Button fx:id="btnAbrir" text="Abrir" onAction="#onBtnAbrirAction" styleClass="toolbar-button">
                     <graphic>
-                        <ImageView fitHeight="12" fitWidth="12" preserveRatio="true">
-                            <Image url="@../resources/icons/book_open.png"/>
+                        <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
+                            <Image url="@../resources/abrir.png"/>
                         </ImageView>
                     </graphic>
                 </Button>
                 <Button fx:id="btnGuardar" text="Guardar" onAction="#onBtnGuardarAction" styleClass="toolbar-button">
                     <graphic>
-                        <ImageView fitHeight="12" fitWidth="12" preserveRatio="true">
-                            <Image url="@../resources/icons/book_blue_add.png"/>
+                        <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
+                            <Image url="@../resources/guardar.png"/>
                         </ImageView>
                     </graphic>
                 </Button>
                 <Button fx:id="btnEditar" text="Editar" onAction="#onBtnEditarAction" styleClass="toolbar-button">
                     <graphic>
-                        <ImageView fitHeight="12" fitWidth="12" preserveRatio="true">
-                            <Image url="@../resources/icons/data_edit.png"/>
+                        <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
+                            <Image url="@../resources/editar.png"/>
                         </ImageView>
                     </graphic>
                 </Button>
                 <Button fx:id="btnEliminar" text="Eliminar" onAction="#onBtnEliminarAction" styleClass="toolbar-button">
                     <graphic>
-                        <ImageView fitHeight="12" fitWidth="12" preserveRatio="true">
-                            <Image url="@../resources/icons/book_blue_delete.png"/>
+                        <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
+                            <Image url="@../resources/eliminar.png"/>
                         </ImageView>
                     </graphic>
                 </Button>
                 <Button fx:id="btnValidar" text="Validar" onAction="#onBtnValidarAction" styleClass="toolbar-button">
                     <graphic>
-                        <ImageView fitHeight="12" fitWidth="12" preserveRatio="true">
-                            <Image url="@../resources/icons/target.png"/>
+                        <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
+                            <Image url="@../resources/validar.png"/>
                         </ImageView>
                     </graphic>
                 </Button>
                 <Button fx:id="btnInforme" text="Informe" onAction="#onBtnInformeAction" styleClass="toolbar-button">
                     <graphic>
-                        <ImageView fitHeight="12" fitWidth="12" preserveRatio="true">
-                            <Image url="@../resources/icons/book_blue_view.png"/>
+                        <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
+                            <Image url="@../resources/informeGr.png"/>
                         </ImageView>
                     </graphic>
                 </Button>
                 <Button fx:id="btnSimular" text="Simular" onAction="#onBtnSimularAction" styleClass="toolbar-button">
                     <graphic>
-                        <ImageView fitHeight="12" fitWidth="12" preserveRatio="true">
-                            <Image url="@../resources/icons/telescope.png"/>
+                        <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
+                            <Image url="@../resources/simular.png"/>
                         </ImageView>
                     </graphic>
                 </Button>
                 <Region HBox.hgrow="ALWAYS"/>
                 <Button fx:id="btnSalir" text="Salir" onAction="#onBtnSalirAction" styleClass="toolbar-button">
                     <graphic>
-                        <ImageView fitHeight="12" fitWidth="12" preserveRatio="true">
-                            <Image url="@../resources/icons/book_blue_preferences.png"/>
+                        <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
+                            <Image url="@../resources/salir.png"/>
                         </ImageView>
                     </graphic>
                 </Button>

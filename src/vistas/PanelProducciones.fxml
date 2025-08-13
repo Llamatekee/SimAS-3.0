@@ -49,7 +49,7 @@
                             onAction="#onBtnBorrarAction">
                         <graphic>
                             <ImageView fitHeight="12" fitWidth="12" preserveRatio="true">
-                                <Image url="@../resources/icons/selection_delete.png"/>
+                                <Image url="@../resources/cancelar.png"/>
                             </ImageView>
                         </graphic>
                     </Button>
@@ -129,7 +129,7 @@
                 onAction="#onBtnCancelarAction">
             <graphic>
                 <ImageView fitHeight="12" fitWidth="12" preserveRatio="true">
-                    <Image url="@../resources/icons/selection_delete.png"/>
+                    <Image url="@../resources/cancelar.png"/>
                 </ImageView>
             </graphic>
         </Button>

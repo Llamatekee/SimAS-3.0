@@ -74,7 +74,7 @@
                 onAction="#handleCancelar">
             <graphic>
                 <ImageView fitWidth="16" fitHeight="16">
-                    <Image url="@../resources/icons/application_stop.png"/>
+                    <Image url="@../resources/cancelar.png"/>
                 </ImageView>
             </graphic>
         </Button>

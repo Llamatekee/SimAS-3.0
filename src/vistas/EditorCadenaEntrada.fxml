@@ -22,7 +22,13 @@
     </VBox>
     
     <HBox spacing="10" alignment="CENTER_RIGHT">
-        <Button fx:id="buttonCancelar" text="Cancelar"/>
+        <Button fx:id="buttonCancelar" text="Cancelar">
+            <graphic>
+                <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
+                    <Image url="@../resources/cancelar.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
         <Button fx:id="buttonAceptar" text="Aceptar" defaultButton="true"/>
     </HBox>
 </VBox> 

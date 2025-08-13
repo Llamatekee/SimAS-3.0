@@ -64,7 +64,7 @@
                 onAction="#cancelarSimulacion">
             <graphic>
                 <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
-                    <Image url="@../resources/icons/book_blue_preferences.png"/>
+                    <Image url="@../resources/cancelar.png"/>
                 </ImageView>
             </graphic>
         </Button>
