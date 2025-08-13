@@ -377,41 +377,43 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.setTitle(bundle != null ? bundle.getString("simulacionfinal.dialog.editar.titulo") : "Editar cadena de entrada");
 
-        // Crear contenedor principal con estilo moderno
-        VBox mainContainer = new VBox(20);
+        // Crear contenedor principal con estilo moderno y tamaño más pequeño
+        VBox mainContainer = new VBox(15);
         mainContainer.setAlignment(Pos.CENTER);
-        mainContainer.setPadding(new Insets(30));
-        mainContainer.getStyleClass().add("wizard-step");
+        mainContainer.setPadding(new Insets(20));
+        mainContainer.getStyleClass().add("dialog-container");
 
         // Header del diálogo
         Label headerLabel = new Label(bundle != null ? bundle.getString("simulacionfinal.dialog.editar.instruccion") : 
                                     "Haz clic en los terminales para construir la cadena de entrada:");
-        headerLabel.getStyleClass().add("wizard-section-header");
+        headerLabel.getStyleClass().add("dialog-header");
         headerLabel.setWrapText(true);
         headerLabel.setAlignment(Pos.CENTER);
 
         // Panel de terminales con estilo moderno
         FlowPane terminalPane = new FlowPane();
-        terminalPane.setHgap(12);
-        terminalPane.setVgap(12);
-        terminalPane.setPadding(new Insets(20));
+        terminalPane.setHgap(8);
+        terminalPane.setVgap(8);
+        terminalPane.setPadding(new Insets(15));
         terminalPane.setAlignment(Pos.CENTER);
-        terminalPane.getStyleClass().add("wizard-content");
+        terminalPane.getStyleClass().add("dialog-content");
 
         StringBuilder cadenaActual = new StringBuilder(campoEntrada.getText());
         
         // Campo de texto con estilo moderno
         TextField campoCadena = new TextField(cadenaActual.toString());
         campoCadena.setEditable(false);
-        campoCadena.setPrefWidth(350);
-        campoCadena.getStyleClass().add("wizard-field");
+        campoCadena.setPrefWidth(280);
+        campoCadena.getStyleClass().add("dialog-field");
 
-        // Botones de terminales con iconos
+        // Botones de terminales más pequeños
         for (var terminal : gramatica.getTerminales()) {
             Button btn = new Button(terminal.getNombre());
-            btn.getStyleClass().add("wizard-action-button");
-            btn.setMinWidth(80);
-            btn.setPrefWidth(80);
+            btn.getStyleClass().add("dialog-button");
+            btn.setMinWidth(60);
+            btn.setPrefWidth(60);
+            btn.setMinHeight(35);
+            btn.setPrefHeight(35);
             btn.setOnAction(ev -> {
                 if (cadenaActual.length() > 0) cadenaActual.append(" ");
                 cadenaActual.append(terminal.getNombre());
@@ -423,6 +425,8 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         // Botón para borrar último
         Button btnBorrar = new Button(bundle != null ? bundle.getString("simulacionfinal.btn.borrar.ultimo") : "Borrar último");
         btnBorrar.getStyleClass().add("button-cancel");
+        btnBorrar.setMinWidth(100);
+        btnBorrar.setPrefWidth(100);
         btnBorrar.setOnAction(ev -> {
             String[] partes = campoCadena.getText().trim().split(" ");
             if (partes.length > 0 && !campoCadena.getText().trim().isEmpty()) {
@@ -438,6 +442,8 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         // Botón aceptar
         Button btnAceptar = new Button(bundle != null ? bundle.getString("button.aceptar") : "Aceptar");
         btnAceptar.getStyleClass().add("button-finish");
+        btnAceptar.setMinWidth(80);
+        btnAceptar.setPrefWidth(80);
         btnAceptar.setOnAction(ev -> {
             campoEntrada.setText(campoCadena.getText());
             dialog.close();
@@ -446,13 +452,15 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         // Botón cancelar
         Button btnCancelar = new Button(bundle != null ? bundle.getString("button.cancelar") : "Cancelar");
         btnCancelar.getStyleClass().add("button-cancel");
+        btnCancelar.setMinWidth(80);
+        btnCancelar.setPrefWidth(80);
         btnCancelar.setOnAction(ev -> dialog.close());
 
         // Contenedor de acciones con estilo moderno
-        HBox acciones = new HBox(15);
+        HBox acciones = new HBox(12);
         acciones.setAlignment(Pos.CENTER);
-        acciones.setPadding(new Insets(20, 0, 0, 0));
-        acciones.getStyleClass().add("wizard-navigation");
+        acciones.setPadding(new Insets(15, 0, 0, 0));
+        acciones.getStyleClass().add("dialog-actions");
         acciones.getChildren().addAll(btnBorrar, btnAceptar, btnCancelar);
 
         // Agregar elementos al contenedor principal
