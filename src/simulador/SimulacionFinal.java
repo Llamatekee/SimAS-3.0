@@ -898,6 +898,28 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         String childId = "arbol_" + simulacionId;
         String tituloBase = bundle.getString("simulacionfinal.tab.arbol");
         
+        // Crear contenedor principal con estilo moderno
+        VBox mainContainer = new VBox(15);
+        mainContainer.setAlignment(Pos.TOP_CENTER);
+        mainContainer.setPadding(new Insets(20, 40, 20, 40));
+        mainContainer.getStyleClass().addAll("wizard-step", "arbol-tab");
+        
+        // Header del título
+        Label headerLabel = new Label("Árbol Sintáctico de la Simulación");
+        headerLabel.getStyleClass().add("wizard-header");
+        headerLabel.setAlignment(Pos.CENTER);
+        
+        // Contenedor del contenido
+        VBox contentContainer = new VBox(15);
+        contentContainer.getStyleClass().add("wizard-content");
+        contentContainer.setAlignment(Pos.TOP_CENTER);
+        VBox.setVgrow(contentContainer, Priority.ALWAYS);
+        
+        // Label descriptivo
+        Label descriptionLabel = new Label("Visualización del árbol sintáctico generado:");
+        descriptionLabel.getStyleClass().add("wizard-section-header");
+        descriptionLabel.setAlignment(Pos.CENTER);
+        
         // Crear el árbol con al menos el nodo inicial
         NodoArbol raiz;
         if (historialObservable.isEmpty()) {
@@ -933,11 +955,24 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
             scrollPane.setContent(imageView);
             scrollPane.setFitToWidth(true);
             scrollPane.setFitToHeight(true);
+            scrollPane.getStyleClass().add("arbol-scroll-pane");
+            VBox.setVgrow(scrollPane, Priority.ALWAYS);
+            
+            // Contenedor para controles de zoom
+            VBox controlsContainer = new VBox(10);
+            controlsContainer.getStyleClass().add("arbol-controls");
+            controlsContainer.setAlignment(Pos.CENTER);
+            
+            // Label para el slider
+            Label zoomLabel = new Label("Zoom del árbol:");
+            zoomLabel.getStyleClass().add("wizard-field-label");
+            zoomLabel.setAlignment(Pos.CENTER);
             
             // Añadir controles de zoom
             Slider zoomSlider = new Slider(0.5, 2, 1);
             zoomSlider.setShowTickLabels(true);
             zoomSlider.setShowTickMarks(true);
+            zoomSlider.getStyleClass().add("arbol-zoom-slider");
             
             // Vincular el zoom del slider con la escala de la imagen
             zoomSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
@@ -945,19 +980,21 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
                 imageView.setScaleY(newVal.doubleValue());
             });
             
-            // Crear contenedor para la imagen y el slider
-            VBox contenedor = new VBox(10);
-            contenedor.setPadding(new Insets(10));
-            contenedor.setAlignment(Pos.CENTER);
-            contenedor.getChildren().addAll(scrollPane, zoomSlider);
-            VBox.setVgrow(scrollPane, Priority.ALWAYS);
+            // Agregar controles al contenedor
+            controlsContainer.getChildren().addAll(zoomLabel, zoomSlider);
+            
+            // Agregar elementos al contenedor de contenido
+            contentContainer.getChildren().addAll(descriptionLabel, scrollPane, controlsContainer);
+            
+            // Agregar elementos al contenedor principal
+            mainContainer.getChildren().addAll(headerLabel, contentContainer);
             
             // Usar TabManager para crear la pestaña como hija de la simulación
             Tab nuevaPestana = TabManager.getOrCreateTab(
                 tabPane,
                 VBox.class, // Usar VBox como tipo de contenido
                 tituloBase,
-                contenedor,
+                mainContainer,
                 simulacionId, // parentId es el ID de la simulación
                 childId
             );

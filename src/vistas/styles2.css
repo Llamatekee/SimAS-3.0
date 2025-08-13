@@ -3207,6 +3207,119 @@ GridPane {
 
 
 
+/* ===== ESTILOS ESPECÍFICOS PARA LA PESTAÑA DE ÁRBOL SINTÁCTICO ===== */
+/* Contenedor del árbol para aprovechar mejor el espacio */
+.arbol-tab .wizard-content {
+    -fx-min-height: 450px !important;
+    -fx-pref-height: 550px !important;
+    -fx-max-height: 750px !important;
+    -fx-fill-width: true !important;
+    -fx-fill-height: true !important;
+}
+
+/* ScrollPane del árbol */
+.arbol-scroll-pane {
+    -fx-background-color: rgba(255, 255, 255, 0.18);
+    -fx-background-radius: 12px;
+    -fx-border-radius: 12px;
+    -fx-border-color: rgba(255, 255, 255, 0.3);
+    -fx-border-width: 2px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 4, 0.3, 0, 2);
+    -fx-min-height: 400px !important;
+    -fx-pref-height: 500px !important;
+    -fx-max-height: 600px !important;
+    -fx-fill-width: true !important;
+    -fx-fill-height: true !important;
+}
+
+.arbol-scroll-pane:focused {
+    -fx-background-color: rgba(255, 255, 255, 0.22);
+    -fx-border-color: rgba(79, 172, 254, 0.5);
+    -fx-effect: dropshadow(gaussian, rgba(79, 172, 254, 0.3), 5, 0.3, 0, 3);
+}
+
+/* Contenedor de controles del árbol */
+.arbol-controls {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-border-color: rgba(255, 255, 255, 0.2);
+    -fx-border-width: 1px;
+    -fx-padding: 15px;
+    -fx-min-height: 80px;
+    -fx-pref-height: 80px;
+    -fx-max-height: 80px;
+}
+
+/* Slider de zoom del árbol */
+.arbol-zoom-slider {
+    -fx-show-tick-labels: true;
+    -fx-show-tick-marks: true;
+    -fx-major-tick-unit: 0.5;
+    -fx-minor-tick-count: 1;
+    -fx-snap-to-ticks: true;
+    -fx-pref-width: 300px;
+}
+
+.arbol-zoom-slider .track {
+    -fx-background-color: rgba(255, 255, 255, 0.3);
+    -fx-background-radius: 4px;
+    -fx-border-radius: 4px;
+    -fx-border-color: rgba(255, 255, 255, 0.2);
+    -fx-border-width: 1px;
+}
+
+.arbol-zoom-slider .thumb {
+    -fx-background-color: rgba(79, 172, 254, 0.8);
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-border-color: rgba(255, 255, 255, 0.5);
+    -fx-border-width: 2px;
+    -fx-effect: dropshadow(gaussian, rgba(79, 172, 254, 0.4), 3, 0.3, 0, 1);
+}
+
+.arbol-zoom-slider .thumb:hover {
+    -fx-background-color: rgba(79, 172, 254, 1.0);
+    -fx-effect: dropshadow(gaussian, rgba(79, 172, 254, 0.6), 4, 0.3, 0, 2);
+}
+
+.arbol-zoom-slider .axis {
+    -fx-tick-label-fill: white;
+    -fx-tick-label-font-size: 12px;
+    -fx-tick-label-font-weight: 500;
+}
+
+/* Scrollbar del árbol */
+.arbol-scroll-pane .scroll-bar:vertical {
+    -fx-background-color: rgba(255, 255, 255, 0.2);
+    -fx-background-radius: 6px;
+    -fx-pref-width: 12px;
+}
+
+.arbol-scroll-pane .scroll-bar:vertical .thumb {
+    -fx-background-color: rgba(79, 172, 254, 0.6);
+    -fx-background-radius: 6px;
+}
+
+.arbol-scroll-pane .scroll-bar:vertical .thumb:hover {
+    -fx-background-color: rgba(79, 172, 254, 0.8);
+}
+
+.arbol-scroll-pane .scroll-bar:horizontal {
+    -fx-background-color: rgba(255, 255, 255, 0.2);
+    -fx-background-radius: 6px;
+    -fx-pref-height: 12px;
+}
+
+.arbol-scroll-pane .scroll-bar:horizontal .thumb {
+    -fx-background-color: rgba(79, 172, 254, 0.6);
+    -fx-background-radius: 6px;
+}
+
+.arbol-scroll-pane .scroll-bar:horizontal .thumb:hover {
+    -fx-background-color: rgba(79, 172, 254, 0.8);
+}
+
 /* Navegación de la simulación */
 .simulacion-final .wizard-navigation {
     -fx-padding: 20px 0;
