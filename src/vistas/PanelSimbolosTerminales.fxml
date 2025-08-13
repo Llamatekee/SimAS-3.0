@@ -42,19 +42,19 @@
             <HBox spacing="10">
                 <TextField fx:id="txtSimboloTerminal" styleClass="wizard-field"
                           HBox.hgrow="ALWAYS"/>
-                <Button fx:id="btnInsertar" styleClass="wizard-action-button"
+                                <Button fx:id="btnInsertar" styleClass="wizard-action-button"
                         onAction="#onInsertarAction">
-                                <graphic>
-                <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
-                    <Image url="@../resources/icons/element_add.png"/>
-                </ImageView>
-            </graphic>
+                    <graphic>
+                        <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
+                            <Image url="@../resources/scroll_add.png"/>
+                        </ImageView>
+                    </graphic>
                 </Button>
                 <Button fx:id="btnModificar" styleClass="wizard-action-button"
                         onAction="#onModificarAction">
                     <graphic>
                         <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
-                            <Image url="@../resources/icons/pencil.png"/>
+                            <Image url="@../resources/scroll.png"/>
                         </ImageView>
                     </graphic>
                 </Button>
@@ -62,7 +62,7 @@
                         onAction="#onEliminarAction">
                     <graphic>
                         <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
-                            <Image url="@../resources/icons/book_blue_delete.png"/>
+                            <Image url="@../resources/scroll_delete.png"/>
                         </ImageView>
                     </graphic>
                 </Button>

@@ -44,7 +44,7 @@
                     onAction="#handleEliminar">
                 <graphic>
                     <ImageView fitWidth="16" fitHeight="16">
-                        <Image url="@../resources/icons/application_delete.png"/>
+                        <Image url="@../resources/scroll_delete.png"/>
                     </ImageView>
                 </graphic>
             </Button>

@@ -98,7 +98,7 @@
                         onAction="#onBtnInsertarAction">
                     <graphic>
                         <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
-                            <Image url="@../resources/icons/element_add.png"/>
+                            <Image url="@../resources/scroll_add.png"/>
                         </ImageView>
                     </graphic>
                 </Button>
@@ -106,7 +106,7 @@
                         onAction="#onBtnModificarAction">
                     <graphic>
                         <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
-                            <Image url="@../resources/icons/pencil.png"/>
+                            <Image url="@../resources/scroll.png"/>
                         </ImageView>
                     </graphic>
                 </Button>
@@ -114,7 +114,7 @@
                         onAction="#onBtnEliminarAction">
                     <graphic>
                         <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
-                            <Image url="@../resources/icons/book_blue_delete.png"/>
+                            <Image url="@../resources/scroll_delete.png"/>
                         </ImageView>
                     </graphic>
                 </Button>

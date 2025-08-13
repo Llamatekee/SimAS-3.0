@@ -47,7 +47,7 @@
                         onAction="#handleNueva">
                     <graphic>
                         <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
-                            <Image url="@../resources/icons/element_add.png"/>
+                            <Image url="@../resources/scroll_add.png"/>
                         </ImageView>
                     </graphic>
                 </Button>
@@ -55,7 +55,7 @@
                         onAction="#handleEliminar">
                     <graphic>
                         <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
-                            <Image url="@../resources/icons/application_delete.png"/>
+                            <Image url="@../resources/scroll_delete.png"/>
                         </ImageView>
                     </graphic>
                 </Button>
