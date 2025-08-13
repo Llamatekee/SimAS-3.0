@@ -208,13 +208,13 @@ public class PanelNuevaSimDescPaso6 extends BorderPane implements PanelNuevaSimD
                     
                     setText(item);
                     
-                    // Aplicar clases CSS para columna de símbolos
-                    getStyleClass().clear();
-                    if (isSelected()) {
-                        getStyleClass().add("selected-cell");
-                    } else {
-                        getStyleClass().add("symbol-cell");
-                    }
+                                            // Aplicar clases CSS para columna de símbolos (mismo estilo que paso 5)
+                        getStyleClass().clear();
+                        if (isSelected()) {
+                            getStyleClass().add("selected-cell");
+                        } else {
+                            getStyleClass().add("symbol-cell");
+                        }
                 }
             };
         });
@@ -249,7 +249,7 @@ public class PanelNuevaSimDescPaso6 extends BorderPane implements PanelNuevaSimD
                         
                         setText(item);
                         
-                        // Aplicar clases CSS según el tipo de contenido
+                        // Aplicar clases CSS según el tipo de contenido (mismo estilo que paso 5)
                         getStyleClass().clear();
                         if (isSelected()) {
                             getStyleClass().add("selected-cell");
@@ -259,6 +259,9 @@ public class PanelNuevaSimDescPaso6 extends BorderPane implements PanelNuevaSimD
                         } else if (item != null && !item.isEmpty() && Character.isDigit(item.charAt(0))) {
                             // Estilo para producciones
                             getStyleClass().add("production-cell");
+                        } else if (item != null && !item.isEmpty() && item.equals("ε")) {
+                            // Estilo para epsilon
+                            getStyleClass().add("epsilon-cell");
                         } else if (item != null && !item.isEmpty()) {
                             // Estilo para otros contenidos
                             getStyleClass().add("default-cell");
@@ -304,7 +307,7 @@ public class PanelNuevaSimDescPaso6 extends BorderPane implements PanelNuevaSimD
                         
                         setText(item);
                         
-                        // Aplicar clases CSS según el tipo de contenido
+                        // Aplicar clases CSS según el tipo de contenido (mismo estilo que paso 5)
                         getStyleClass().clear();
                         if (isSelected()) {
                             getStyleClass().add("selected-cell");
@@ -314,6 +317,9 @@ public class PanelNuevaSimDescPaso6 extends BorderPane implements PanelNuevaSimD
                         } else if (item != null && !item.isEmpty() && Character.isDigit(item.charAt(0))) {
                             // Estilo para producciones
                             getStyleClass().add("production-cell");
+                        } else if (item != null && !item.isEmpty() && item.equals("ε")) {
+                            // Estilo para epsilon
+                            getStyleClass().add("epsilon-cell");
                         } else if (item != null && !item.isEmpty()) {
                             // Estilo para otros contenidos
                             getStyleClass().add("default-cell");

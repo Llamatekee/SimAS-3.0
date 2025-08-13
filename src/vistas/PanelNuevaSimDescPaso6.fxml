@@ -7,7 +7,7 @@
 <?import javafx.scene.image.Image?>
 
 <GridPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
-         styleClass="wizard-step" vgap="0" VBox.vgrow="ALWAYS" stylesheets="@styles2.css">
+         styleClass="wizard-step, paso6-simulador" vgap="0" VBox.vgrow="ALWAYS" stylesheets="@styles2.css">
     
     <columnConstraints>
         <ColumnConstraints hgrow="ALWAYS"/>

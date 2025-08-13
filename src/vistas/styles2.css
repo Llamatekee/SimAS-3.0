@@ -1061,8 +1061,10 @@ BorderPane {
     -fx-fill-width: true;
     -fx-min-height: 250px;
     -fx-pref-height: 350px;
-    -fx-min-width: 500px;
-    -fx-pref-width: 700px;
+    -fx-max-height: 500px;
+    -fx-min-width: 300px;
+    -fx-pref-width: 600px;
+    -fx-max-width: 800px;
 }
 
 .wizard-list .list-cell {
@@ -1648,17 +1650,7 @@ BorderPane {
     -fx-scale-y: 0.97;
 }
 
-/* Mejorar las listas */
-.wizard-list {
-    -fx-background-color: rgba(255, 255, 255, 0.1);
-    -fx-background-radius: 8px;
-    -fx-border-radius: 8px;
-    -fx-border-color: rgba(255, 255, 255, 0.2);
-    -fx-border-width: 1px;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 2, 0.2, 0, 1);
-    -fx-fill-height: true;
-    -fx-fill-width: true;
-}
+/* Mejorar las listas - eliminada definición duplicada */
 
 .wizard-list .list-cell {
     -fx-background-color: transparent;
@@ -2466,21 +2458,7 @@ GridPane {
     -fx-scale-y: 0.8;
 }
 
-/* Mejorar la lista del paso 4 para que aproveche mejor el espacio */
-.wizard-list {
-    -fx-background-color: rgba(255, 255, 255, 0.18);
-    -fx-background-radius: 12px;
-    -fx-border-radius: 12px;
-    -fx-border-color: rgba(255, 255, 255, 0.3);
-    -fx-border-width: 2px;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 4, 0.3, 0, 2);
-    -fx-fill-height: true;
-    -fx-fill-width: true;
-    -fx-min-height: 250px;
-    -fx-pref-height: 350px;
-    -fx-min-width: 500px;
-    -fx-pref-width: 700px;
-}
+/* Mejorar la lista del paso 4 para que aproveche mejor el espacio - eliminada definición duplicada */
 
 /* ===== ESTILOS PARA CAMPOS DE TEXTO DEL FORMULARIO ===== */
 /* Estilos para los campos de texto del formulario de nueva función de error */
@@ -2642,16 +2620,112 @@ GridPane {
 }
 
 /* ===== ESTILOS ESPECÍFICOS PARA LA TABLA PREDICTIVA DEL PASO 6 ===== */
-/* Estilos para las celdas de la tabla predictiva del paso 6 */
-.wizard-table .error-cell {
-    -fx-text-fill: #1976D2 !important;
+/* Configuración específica para el paso 6 - misma que paso 5 */
+.paso6-simulador .wizard-table {
+    -fx-pref-width: 800px;
+    -fx-min-width: 600px;
+}
+
+.paso6-simulador .wizard-table .table-view {
+    -fx-pref-width: 800px;
+    -fx-min-width: 600px;
+}
+
+/* Estilos para el scroll horizontal del paso 6 (mismo que paso 5) */
+.paso6-simulador .wizard-table .scroll-bar:horizontal {
+    -fx-background-color: rgba(255, 255, 255, 0.3);
+    -fx-background-radius: 6px;
+    -fx-pref-height: 12px;
+}
+
+.paso6-simulador .wizard-table .scroll-bar:horizontal .thumb {
+    -fx-background-color: rgba(79, 172, 254, 0.6);
+    -fx-background-radius: 6px;
+}
+
+.paso6-simulador .wizard-table .scroll-bar:horizontal .thumb:hover {
+    -fx-background-color: rgba(79, 172, 254, 0.8);
+}
+
+/* Clases CSS específicas para las celdas del paso 6 (exactamente igual que paso 5) */
+.paso6-simulador .wizard-table .error-cell {
+    -fx-text-fill: white !important;
     -fx-font-weight: bold !important;
-    -fx-background-color: rgba(25, 118, 210, 0.1) !important;
-    -fx-border-color: rgba(25, 118, 210, 0.3) !important;
+    -fx-background-color: rgba(255, 107, 107, 0.15) !important;
+    -fx-border-color: rgba(255, 107, 107, 0.4) !important;
     -fx-border-width: 1px !important;
     -fx-border-radius: 4px !important;
     -fx-background-radius: 4px !important;
     -fx-alignment: center !important;
+}
+
+.paso6-simulador .wizard-table .production-cell {
+    -fx-text-fill: white !important;
+    -fx-font-weight: bold !important;
+    -fx-background-color: rgba(78, 205, 196, 0.15) !important;
+    -fx-border-color: rgba(78, 205, 196, 0.4) !important;
+    -fx-border-width: 1px !important;
+    -fx-border-radius: 4px !important;
+    -fx-background-radius: 4px !important;
+    -fx-alignment: center !important;
+}
+
+.paso6-simulador .wizard-table .epsilon-cell {
+    -fx-text-fill: white !important;
+    -fx-font-weight: bold !important;
+    -fx-background-color: rgba(69, 183, 209, 0.15) !important;
+    -fx-border-color: rgba(69, 183, 209, 0.4) !important;
+    -fx-border-width: 1px !important;
+    -fx-border-radius: 4px !important;
+    -fx-background-radius: 4px !important;
+    -fx-alignment: center !important;
+}
+
+.paso6-simulador .wizard-table .symbol-cell {
+    -fx-background-color: rgba(79, 172, 254, 0.1) !important;
+    -fx-text-fill: white !important;
+    -fx-font-weight: bold !important;
+    -fx-border-color: rgba(79, 172, 254, 0.3) !important;
+    -fx-border-width: 1px !important;
+    -fx-border-radius: 4px !important;
+    -fx-background-radius: 4px !important;
+    -fx-alignment: center !important;
+}
+
+.paso6-simulador .wizard-table .selected-cell {
+    -fx-background-color: rgba(79, 172, 254, 0.25) !important;
+    -fx-text-fill: white !important;
+    -fx-font-weight: bold !important;
+    -fx-border-color: rgba(79, 172, 254, 0.6) !important;
+    -fx-border-width: 2px !important;
+    -fx-border-radius: 4px !important;
+    -fx-background-radius: 4px !important;
+    -fx-effect: dropshadow(gaussian, rgba(79, 172, 254, 0.4), 3, 0.3, 0, 1);
+    -fx-alignment: center !important;
+}
+
+.paso6-simulador .wizard-table .default-cell {
+    -fx-text-fill: white !important;
+    -fx-background-color: transparent !important;
+    -fx-alignment: center !important;
+}
+
+.paso6-simulador .wizard-table .empty-cell {
+    -fx-text-fill: rgba(255, 255, 255, 0.5) !important;
+    -fx-background-color: transparent !important;
+    -fx-alignment: center !important;
+}
+
+/* Estilos para celdas seleccionadas del paso 6 (mismo que paso 5) */
+.paso6-simulador .wizard-table .table-cell[style*="background-color: #E3F2FD"] {
+    -fx-background-color: rgba(79, 172, 254, 0.25) !important;
+    -fx-text-fill: white !important;
+    -fx-font-weight: bold !important;
+    -fx-border-color: rgba(79, 172, 254, 0.6) !important;
+    -fx-border-width: 2px !important;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-effect: dropshadow(gaussian, rgba(79, 172, 254, 0.4), 3, 0.3, 0, 1);
 }
 
 /* ===== ESTILOS ESPECÍFICOS PARA LAS LISTAS DEL PASO 6 ===== */
