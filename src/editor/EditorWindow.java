@@ -3,6 +3,7 @@ package editor;
 import javafx.scene.Scene;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.scene.Node;
 import java.util.ResourceBundle;
@@ -28,6 +29,10 @@ public class EditorWindow {
         stage = new Stage();
         tabPane = new TabPane();
         
+        // Crear un contenedor raíz para aplicar el fondo
+        BorderPane rootContainer = new BorderPane();
+        rootContainer.setCenter(tabPane);
+        
         // Configurar la ventana
         stage.setTitle("SimAS 3.0");
         stage.setWidth(800);
@@ -36,7 +41,7 @@ public class EditorWindow {
         stage.setMinHeight(700);
 
         // Crear la escena
-        Scene scene = new Scene(tabPane);
+        Scene scene = new Scene(rootContainer);
         
         // Aplicar estilos CSS
         scene.getStylesheets().add(getClass().getResource("/vistas/styles2.css").toExternalForm());

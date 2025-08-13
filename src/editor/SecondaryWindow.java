@@ -3,6 +3,7 @@ package editor;
 import javafx.scene.Scene;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.scene.input.KeyCode;
@@ -64,9 +65,13 @@ public class SecondaryWindow extends EditorWindow {
         localTabPane = new TabPane();
         configureTabPane();
         
+        // Crear un contenedor raíz para aplicar el fondo
+        BorderPane rootContainer = new BorderPane();
+        rootContainer.setCenter(localTabPane);
+        
         // Configurar la ventana
         stage = new Stage();
-        Scene scene = new Scene(localTabPane);
+        Scene scene = new Scene(rootContainer);
         stage.setScene(scene);
         
         // Configurar el título con el número de ventana
