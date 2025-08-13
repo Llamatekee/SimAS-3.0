@@ -318,7 +318,7 @@ public class TablaPredictivaPaso5 extends TablaPredictiva {
                         .orElse(null);
 
                     if (terminalFila != null && apareceSoloPrimeraPos(terminalFila)) {
-                        mostrarError("invalida",
+                        mostrarError("terminal_no_permitido",
                                    "No se permiten funciones de error",
                                    "Este terminal solo aparece en primera posición de las producciones.");
                         return;
@@ -357,6 +357,9 @@ public class TablaPredictivaPaso5 extends TablaPredictiva {
             } else if ("invalida".equals(titulo)) {
                 alert.setHeaderText(bundle.getString("simulador.paso5.alert.celda.invalida.header"));
                 alert.setContentText(bundle.getString("simulador.paso5.alert.celda.invalida.content"));
+            } else if ("terminal_no_permitido".equals(titulo)) {
+                alert.setHeaderText(bundle.getString("simulador.paso5.alert.terminal.no.permitido.header"));
+                alert.setContentText(bundle.getString("simulador.paso5.alert.terminal.no.permitido.content"));
             } else {
                 alert.setHeaderText(header);
                 alert.setContentText(contenido);
