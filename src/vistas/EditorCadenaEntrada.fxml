@@ -24,7 +24,7 @@
     <HBox spacing="10" alignment="CENTER_RIGHT">
         <Button fx:id="buttonCancelar" text="Cancelar">
             <graphic>
-                <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
+                <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
                     <Image url="@../resources/cancelar.png"/>
                 </ImageView>
             </graphic>

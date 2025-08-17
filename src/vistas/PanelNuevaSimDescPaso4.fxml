@@ -82,7 +82,7 @@
                 </ImageView>
             </graphic>
         </Button>
-        <Button fx:id="buttonVisualizarGramatica" text="%simulador.paso1.btn.gramatica" styleClass="button-grammar" 
+        <Button fx:id="btnVisualizarGramatica" text="Gramática" styleClass="button-grammar" 
                 onAction="#handleVisualizarGramatica">
             <graphic>
                 <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">

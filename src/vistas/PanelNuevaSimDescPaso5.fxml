@@ -43,7 +43,7 @@
             <Button fx:id="buttonEliminar" text="%simulador.paso5.btn.eliminar" styleClass="button-cancel" 
                     onAction="#handleEliminar">
                 <graphic>
-                    <ImageView fitWidth="16" fitHeight="16">
+                    <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
                         <Image url="@../resources/scroll_delete.png"/>
                     </ImageView>
                 </graphic>
@@ -51,7 +51,7 @@
             <Button fx:id="buttonRellenarEpsilon" text="%simulador.paso5.btn.rellenar.epsilon" styleClass="button-grammar" 
                     onAction="#handleRellenarEpsilon">
                 <graphic>
-                    <ImageView fitWidth="16" fitHeight="16">
+                    <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
                         <Image url="@../resources/icons/element_add.png"/>
                     </ImageView>
                 </graphic>
@@ -59,7 +59,7 @@
             <Button fx:id="buttonResetearTabla" text="%simulador.paso5.btn.resetear" styleClass="button-cancel" 
                     onAction="#handleResetearTabla">
                 <graphic>
-                    <ImageView fitWidth="16" fitHeight="16">
+                    <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
                         <Image url="@../resources/icons/application_stop.png"/>
                     </ImageView>
                 </graphic>
@@ -73,15 +73,15 @@
         <Button fx:id="buttonCancelar" text="%simulador.paso5.btn.cancelar" styleClass="button-cancel" 
                 onAction="#handleCancelar">
             <graphic>
-                <ImageView fitWidth="16" fitHeight="16">
+                <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
                     <Image url="@../resources/cancelar.png"/>
                 </ImageView>
             </graphic>
         </Button>
-        <Button fx:id="buttonGramatica" text="%simulador.paso5.btn.gramatica" styleClass="button-grammar" 
+        <Button fx:id="buttonGramatica" text="Gramática" styleClass="button-grammar" 
                 onAction="#handleGramatica">
             <graphic>
-                <ImageView fitWidth="16" fitHeight="16">
+                <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
                     <Image url="@../resources/icons/book_blue_view.png"/>
                 </ImageView>
             </graphic>
@@ -90,7 +90,7 @@
         <Button fx:id="buttonPrimero" text="%simulador.paso5.btn.primero" styleClass="button-next" 
                 onAction="#handlePrimero">
             <graphic>
-                <ImageView fitWidth="16" fitHeight="16">
+                <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
                     <Image url="@../resources/primero.png"/>
                 </ImageView>
             </graphic>
@@ -98,7 +98,7 @@
         <Button fx:id="buttonAnterior" text="%simulador.paso5.btn.anterior" styleClass="button-next" 
                 onAction="#handleAnterior">
             <graphic>
-                <ImageView fitWidth="16" fitHeight="16">
+                <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
                     <Image url="@../resources/anterior.png"/>
                 </ImageView>
             </graphic>
@@ -106,14 +106,14 @@
         <Button fx:id="buttonSiguiente" text="%simulador.paso5.btn.siguiente" styleClass="button-next" 
                 onAction="#handleSiguiente">
             <graphic>
-                <ImageView fitWidth="16" fitHeight="16">
+                <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
                     <Image url="@../resources/siguiente.png"/>
                 </ImageView>
             </graphic>
         </Button>
         <Button fx:id="buttonSimulacion" text="%simulador.paso5.btn.simulacion" styleClass="button-grammar">
             <graphic>
-                <ImageView fitWidth="16" fitHeight="16">
+                <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
                     <Image url="@../resources/icons/telescope.png"/>
                 </ImageView>
             </graphic>

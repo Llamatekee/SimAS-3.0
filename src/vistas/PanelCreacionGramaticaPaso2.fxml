@@ -69,7 +69,7 @@
         <Button fx:id="btnCancelar" text="Cancelar" styleClass="button-cancel" 
                 onAction="#onBtnCancelarAction">
             <graphic>
-                <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
+                <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
                     <Image url="@../resources/cancelar.png"/>
                 </ImageView>
             </graphic>

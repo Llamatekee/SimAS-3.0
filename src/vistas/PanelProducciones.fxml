@@ -48,7 +48,7 @@
                     <Button fx:id="btnBorrar" styleClass="button-cancel"
                             onAction="#onBtnBorrarAction">
                         <graphic>
-                            <ImageView fitHeight="12" fitWidth="12" preserveRatio="true">
+                            <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
                                 <Image url="@../resources/cancelar.png"/>
                             </ImageView>
                         </graphic>
@@ -128,7 +128,7 @@
         <Button fx:id="btnCancelar" styleClass="button-cancel" 
                 onAction="#onBtnCancelarAction">
             <graphic>
-                <ImageView fitHeight="12" fitWidth="12" preserveRatio="true">
+                <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
                     <Image url="@../resources/cancelar.png"/>
                 </ImageView>
             </graphic>

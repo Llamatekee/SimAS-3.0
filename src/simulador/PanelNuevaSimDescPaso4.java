@@ -42,7 +42,8 @@ public class PanelNuevaSimDescPaso4 implements PanelNuevaSimDescPaso, Actualizab
         this.gramatica = panelPadre.gramatica;
         this.bundle = panelPadre.getBundle();
         cargarFXML();
-        initialize();
+        // El método initialize() se llama automáticamente después de cargar el FXML
+        // No lo llamamos manualmente aquí
     }
 
     private void cargarFXML() {
@@ -69,8 +70,12 @@ public class PanelNuevaSimDescPaso4 implements PanelNuevaSimDescPaso, Actualizab
         
         // Inicializar funciones de error si no existen
         inicializarFuncionesError();
-        // Mostrar las funciones de error existentes
-        funcionError();
+        
+        // Mostrar las funciones de error existentes después de un pequeño delay
+        // para asegurar que todos los componentes estén completamente inicializados
+        javafx.application.Platform.runLater(() -> {
+            funcionError();
+        });
     }
 
     private void inicializarFuncionesError() {
@@ -145,15 +150,15 @@ public class PanelNuevaSimDescPaso4 implements PanelNuevaSimDescPaso, Actualizab
         this.listViewFuncionesError.setItems(lista);
     
         if (!this.listViewFuncionesError.getItems().isEmpty()) {
-            this.buttonFinalizar.setVisible(false);
-            this.buttonSiguiente.setDisable(false);
-            this.buttonNueva.setDisable(false);
-            this.buttonEliminar.setDisable(false);
+            if (this.buttonFinalizar != null) this.buttonFinalizar.setVisible(false);
+            if (this.buttonSiguiente != null) this.buttonSiguiente.setDisable(false);
+            if (this.buttonNueva != null) this.buttonNueva.setDisable(false);
+            if (this.buttonEliminar != null) this.buttonEliminar.setDisable(false);
         } else {
-            this.buttonNueva.setDisable(false);
-            this.buttonEliminar.setDisable(true);
-            this.buttonFinalizar.setVisible(true);
-            this.buttonSiguiente.setDisable(true);
+            if (this.buttonNueva != null) this.buttonNueva.setDisable(false);
+            if (this.buttonEliminar != null) this.buttonEliminar.setDisable(true);
+            if (this.buttonFinalizar != null) this.buttonFinalizar.setVisible(true);
+            if (this.buttonSiguiente != null) this.buttonSiguiente.setDisable(true);
         }
     }
 
@@ -187,27 +192,27 @@ public class PanelNuevaSimDescPaso4 implements PanelNuevaSimDescPaso, Actualizab
         boolean noUsarFuncionesError = this.checkBoxNoFuncionesError.isSelected();
         
         if (noUsarFuncionesError) {
-            this.buttonNueva.setDisable(true);
-            this.buttonEliminar.setDisable(true);
-            this.buttonFinalizar.setVisible(true);
-            this.buttonUltimo.setDisable(true);
-            this.buttonSiguiente.setDisable(true);
+            if (this.buttonNueva != null) this.buttonNueva.setDisable(true);
+            if (this.buttonEliminar != null) this.buttonEliminar.setDisable(true);
+            if (this.buttonFinalizar != null) this.buttonFinalizar.setVisible(true);
+            if (this.buttonUltimo != null) this.buttonUltimo.setDisable(true);
+            if (this.buttonSiguiente != null) this.buttonSiguiente.setDisable(true);
             
             // Cerrar la pestaña de funciones de error si está abierta
             cerrarPestañaFuncionesError();
         } else {
             if (!this.listViewFuncionesError.getItems().isEmpty()) {
-                this.buttonFinalizar.setVisible(false);
-                this.buttonUltimo.setDisable(false);
-                this.buttonSiguiente.setDisable(false);
-                this.buttonNueva.setDisable(false);
-                this.buttonEliminar.setDisable(false);
+                if (this.buttonFinalizar != null) this.buttonFinalizar.setVisible(false);
+                if (this.buttonUltimo != null) this.buttonUltimo.setDisable(false);
+                if (this.buttonSiguiente != null) this.buttonSiguiente.setDisable(false);
+                if (this.buttonNueva != null) this.buttonNueva.setDisable(false);
+                if (this.buttonEliminar != null) this.buttonEliminar.setDisable(false);
             } else {
-                this.buttonNueva.setDisable(false);
-                this.buttonEliminar.setDisable(true);
-                this.buttonFinalizar.setVisible(true);
-                this.buttonUltimo.setDisable(true);
-                this.buttonSiguiente.setDisable(true);
+                if (this.buttonNueva != null) this.buttonNueva.setDisable(false);
+                if (this.buttonEliminar != null) this.buttonEliminar.setDisable(true);
+                if (this.buttonFinalizar != null) this.buttonFinalizar.setVisible(true);
+                if (this.buttonUltimo != null) this.buttonUltimo.setDisable(true);
+                if (this.buttonSiguiente != null) this.buttonSiguiente.setDisable(true);
             }
         }
     }
@@ -327,7 +332,7 @@ public class PanelNuevaSimDescPaso4 implements PanelNuevaSimDescPaso, Actualizab
         if (buttonEliminar != null) buttonEliminar.setText(bundle.getString("simulador.paso4.btn.eliminar.corta"));
         if (buttonFinalizar != null) buttonFinalizar.setText(bundle.getString("button.finalizar"));
         if (buttonCancelar != null) buttonCancelar.setText(bundle.getString("button.cancelar"));
-        if (buttonVisualizarGramatica != null) buttonVisualizarGramatica.setText(bundle.getString("simulador.paso1.btn.gramatica"));
+        if (buttonVisualizarGramatica != null) buttonVisualizarGramatica.setText("Gramática");
         if (buttonPrimero != null) buttonPrimero.setText(bundle.getString("button.primero"));
         if (buttonAnterior != null) buttonAnterior.setText(bundle.getString("button.anterior"));
         if (buttonSiguiente != null) buttonSiguiente.setText(bundle.getString("button.siguiente"));

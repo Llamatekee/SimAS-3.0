@@ -333,6 +333,11 @@ public class PanelSimuladorDesc {
         // Construir el título final - siempre aplicamos la numeración si está disponible
         String tituloPestaña = construirTituloConNumeracion(tituloBase);
         
+        // Verificar que el paso esté dentro de los límites
+        if (paso < 0 || paso >= pasos.size()) {
+            return;
+        }
+        
         // Actualizar el paso actual con el bundle actual
         PanelNuevaSimDescPaso pasoActual = pasos.get(paso);
         if (pasoActual instanceof editor.ActualizableTextos) {

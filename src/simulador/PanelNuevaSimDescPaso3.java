@@ -136,6 +136,6 @@ public class PanelNuevaSimDescPaso3 implements PanelNuevaSimDescPaso, Actualizab
         if (btnSiguiente != null) btnSiguiente.setText(bundle.getString("button.siguiente"));
         if (btnUltimo != null) btnUltimo.setText(bundle.getString("button.ultimo"));
         if (btnCancelar != null) btnCancelar.setText(bundle.getString("button.cancelar"));
-        if (btnVisualizarGramatica != null) btnVisualizarGramatica.setText(bundle.getString("simulador.paso1.btn.gramatica"));
+        if (btnVisualizarGramatica != null) btnVisualizarGramatica.setText("Gramática");
     }
 }

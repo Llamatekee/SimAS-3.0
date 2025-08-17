@@ -490,6 +490,9 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso, Actualizab
 
     private void actualizarTablaPredictiva() {
         if (tablaPredictiva == null) return;
+        
+        // Verificar que la tabla tenga columnas antes de intentar acceder a ellas
+        if (tablaPredictiva.getColumns().isEmpty()) return;
 
         @SuppressWarnings("unchecked")
         TableColumn<FilaTablaPredictiva, String> columnaNoTerminal = 
@@ -554,6 +557,9 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso, Actualizab
 
     @FXML
     private void handleEliminar() {
+        // Verificar que la tabla esté disponible
+        if (tablaPredictiva == null) return;
+        
         // Obtener la celda seleccionada
         @SuppressWarnings("unchecked")
         TableColumn<FilaTablaPredictiva, String> column = 
@@ -667,6 +673,8 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso, Actualizab
      */
     @FXML
     private void handleRellenarEpsilon() {
+        if (tablaPredictiva == null) return;
+        
         if (comboBoxFuncionesError.getValue() == null) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle(bundle.getString("simulador.paso5.alert.error"));
@@ -733,6 +741,8 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso, Actualizab
 
     @FXML
     private void handleResetearTabla() {
+        if (tablaPredictiva == null) return;
+        
         for (FilaTablaPredictiva fila : tablaPredictiva.getItems()) {
             for (TableColumn<FilaTablaPredictiva, ?> col : tablaPredictiva.getColumns()) {
                 String nombreCol = col.getText();
@@ -758,7 +768,7 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso, Actualizab
         if (buttonRellenarEpsilon != null) buttonRellenarEpsilon.setText(bundle.getString("simulador.paso5.btn.rellenar.epsilon"));
         if (buttonResetearTabla != null) buttonResetearTabla.setText(bundle.getString("simulador.paso5.btn.resetear"));
         if (buttonCancelar != null) buttonCancelar.setText(bundle.getString("simulador.paso5.btn.cancelar"));
-        if (buttonGramatica != null) buttonGramatica.setText(bundle.getString("simulador.paso5.btn.gramatica"));
+        if (buttonGramatica != null) buttonGramatica.setText("Gramática");
         if (buttonPrimero != null) buttonPrimero.setText(bundle.getString("simulador.paso5.btn.primero"));
         if (buttonAnterior != null) buttonAnterior.setText(bundle.getString("simulador.paso5.btn.anterior"));
         if (buttonSiguiente != null) buttonSiguiente.setText(bundle.getString("simulador.paso5.btn.siguiente"));
