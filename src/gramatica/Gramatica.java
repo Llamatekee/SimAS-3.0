@@ -743,6 +743,7 @@ public class Gramatica {
                 
                 // Página 1: Portada
                 document.add(imagen);
+                
                 document.add(new Paragraph(" ", new Font(bf, 20))); // Espacio
                 
                 Paragraph parrafoTitulo = new Paragraph("INFORME DE GRAMÁTICA", titulo);
@@ -759,19 +760,12 @@ public class Gramatica {
                 document.add(new Chunk(ls));
                 document.add(new Paragraph(" ", new Font(bf, 15))); // Espacio
                 
-                // Solo el nombre de la gramática centrado
-                Paragraph parrafoNombre = new Paragraph(this.getNombre(), seccion);
+                // Solo el nombre de la gramática centrado con fuente más grande
+                Font nombreGrande = new Font(bf, 20, Font.BOLD);
+                nombreGrande.setColor(colorPrincipal);
+                Paragraph parrafoNombre = new Paragraph(this.getNombre(), nombreGrande);
                 parrafoNombre.setAlignment(Paragraph.ALIGN_CENTER);
                 document.add(parrafoNombre);
-                
-                document.add(new Paragraph(" ", new Font(bf, 10))); // Espacio
-                
-                // Fecha de generación en la esquina inferior derecha
-                Paragraph parrafoFecha = new Paragraph("Fecha de generación: " + 
-                    java.time.LocalDate.now().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")), 
-                    contenidoPequeno);
-                parrafoFecha.setAlignment(Paragraph.ALIGN_RIGHT);
-                document.add(parrafoFecha);
                 
                 // Nueva página para el contenido detallado
                 document.newPage();
@@ -857,6 +851,15 @@ public class Gramatica {
                 document.add(infoTerminales);
                 
                 document.add(new Paragraph(" ", new Font(bf, 15))); // Espacio
+                
+                // Fecha de generación encima del pie de página
+                Paragraph parrafoFecha = new Paragraph("Fecha de generación: " + 
+                    java.time.LocalDate.now().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")), 
+                    contenidoPequeno);
+                parrafoFecha.setAlignment(Paragraph.ALIGN_CENTER);
+                document.add(parrafoFecha);
+                
+                document.add(new Paragraph(" ", new Font(bf, 5))); // Espacio pequeño
                 
                 // Pie de página con información de la aplicación
                 Paragraph piePagina = new Paragraph("Documento generado por SimAS v3.0 - Simulador de Análisis Sintáctico", contenidoPequeno);
