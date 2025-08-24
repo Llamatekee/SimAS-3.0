@@ -28,6 +28,9 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import java.util.Enumeration;
+import java.util.Arrays;
+import java.util.Collections;
 
 
 public class Gramatica {
@@ -688,8 +691,58 @@ public class Gramatica {
 
 
     public Boolean generarInforme(String fichero) throws DocumentException {
+        // Método original para compatibilidad - usa español por defecto
+        try {
+            ResourceBundle bundle = ResourceBundle.getBundle("messages", new java.util.Locale("es"));
+            return generarInforme(fichero, bundle);
+        } catch (Exception e) {
+            // Si no se puede cargar el bundle, usar valores por defecto
+            return generarInforme(fichero, null);
+        }
+    }
+    
+    public Boolean generarInforme(String fichero, ResourceBundle bundle) throws DocumentException {
         // Solo genera el informe si la gramática está validada (estado==1)
         if (this.getEstado() == 1) {
+            // Si no hay bundle, usar valores por defecto en español
+            if (bundle == null) {
+                bundle = new ResourceBundle() {
+                    @Override
+                    protected Object handleGetObject(String key) {
+                        switch (key) {
+                            case "informe.titulo": return "INFORME DE GRAMÁTICA";
+                            case "informe.detalles": return "DETALLES DE LA GRAMÁTICA";
+                            case "informe.descripcion": return "Descripción";
+                            case "informe.simbolo.inicial": return "Símbolo Inicial";
+                            case "informe.simbolos.no.terminales": return "Símbolos No Terminales";
+                            case "informe.simbolos.terminales": return "Símbolos Terminales";
+                            case "informe.producciones": return "Producciones";
+                            case "informe.informacion.adicional": return "Información Adicional";
+                            case "informe.estado.validacion": return "Estado de validación";
+                            case "informe.numero.producciones": return "Número total de producciones";
+                            case "informe.numero.no.terminales": return "Número de símbolos no terminales";
+                            case "informe.numero.terminales": return "Número de símbolos terminales";
+                            case "informe.fecha.generacion": return "Fecha de generación";
+                            case "informe.documento.generado": return "Documento generado por SimAS v3.0 - Simulador de Análisis Sintáctico";
+                            case "informe.pagina": return "Página";
+                            default: return key;
+                        }
+                    }
+                    
+                    @Override
+                    public Enumeration<String> getKeys() {
+                        return Collections.enumeration(Arrays.asList(
+                            "informe.titulo", "informe.detalles", "informe.descripcion", 
+                            "informe.simbolo.inicial", "informe.simbolos.no.terminales", 
+                            "informe.simbolos.terminales", "informe.producciones", 
+                            "informe.informacion.adicional", "informe.estado.validacion",
+                            "informe.numero.producciones", "informe.numero.no.terminales", 
+                            "informe.numero.terminales", "informe.fecha.generacion", 
+                            "informe.documento.generado", "informe.pagina"
+                        ));
+                    }
+                };
+            }
             try {
                 // Configuración de la fuente y del documento PDF
                 String fontPath = "fonts/arial.ttf";
@@ -699,6 +752,7 @@ public class Gramatica {
                 PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(fichero));
                 
                 // Configurar numeración de páginas
+                final ResourceBundle finalBundle = bundle;
                 writer.setPageEvent(new PdfPageEventHelper() {
                     @Override
                     public void onEndPage(PdfWriter writer, Document document) {
@@ -707,7 +761,7 @@ public class Gramatica {
                             Font font = new Font(bf, 10);
                             ColumnText.showTextAligned(writer.getDirectContent(), 
                                 Paragraph.ALIGN_CENTER, 
-                                new Phrase(String.format("Página %d", writer.getPageNumber()), font), 
+                                new Phrase(String.format("%s %d", finalBundle.getString("informe.pagina"), writer.getPageNumber()), font), 
                                 (document.right() - document.left()) / 2 + document.leftMargin(), 
                                 document.bottom() - 10, 0);
                         } catch (Exception e) {
@@ -746,7 +800,7 @@ public class Gramatica {
                 
                 document.add(new Paragraph(" ", new Font(bf, 20))); // Espacio
                 
-                Paragraph parrafoTitulo = new Paragraph("INFORME DE GRAMÁTICA", titulo);
+                Paragraph parrafoTitulo = new Paragraph(bundle.getString("informe.titulo"), titulo);
                 parrafoTitulo.setAlignment(Paragraph.ALIGN_CENTER);
                 document.add(parrafoTitulo);
                 
@@ -771,14 +825,14 @@ public class Gramatica {
                 document.newPage();
                 
                 // Título de la página de contenido
-                Paragraph tituloContenido = new Paragraph("DETALLES DE LA GRAMÁTICA", subtitulo);
+                Paragraph tituloContenido = new Paragraph(bundle.getString("informe.detalles"), subtitulo);
                 tituloContenido.setAlignment(Paragraph.ALIGN_CENTER);
                 document.add(tituloContenido);
                 document.add(new Chunk(ls));
                 document.add(new Paragraph(" ", new Font(bf, 10))); // Espacio
                 
                 // Descripción de la gramática
-                Paragraph parrafoDescripcion = new Paragraph("Descripción:", seccion);
+                Paragraph parrafoDescripcion = new Paragraph(bundle.getString("informe.descripcion") + ":", seccion);
                 document.add(parrafoDescripcion);
                 Paragraph descripcion = new Paragraph("    " + this.getDescripcion(), contenido);
                 descripcion.setIndentationLeft(20);
@@ -786,7 +840,7 @@ public class Gramatica {
                 document.add(new Paragraph(" ", new Font(bf, 8))); // Espacio
                 
                 // Símbolo inicial
-                Paragraph parrafoSimboloInicial = new Paragraph("Símbolo Inicial:", seccion);
+                Paragraph parrafoSimboloInicial = new Paragraph(bundle.getString("informe.simbolo.inicial") + ":", seccion);
                 document.add(parrafoSimboloInicial);
                 Paragraph simboloInicial = new Paragraph("    " + this.getSimbInicial(), contenido);
                 simboloInicial.setIndentationLeft(20);
@@ -794,7 +848,7 @@ public class Gramatica {
                 document.add(new Paragraph(" ", new Font(bf, 8))); // Espacio
                 
                 // Símbolos no terminales
-                Paragraph parrafoNoTerminales = new Paragraph("Símbolos No Terminales:", seccion);
+                Paragraph parrafoNoTerminales = new Paragraph(bundle.getString("informe.simbolos.no.terminales") + ":", seccion);
                 document.add(parrafoNoTerminales);
                 ObservableList<String> noTermModel = this.getNoTerminalesModel();
                 for (String nt : noTermModel) {
@@ -805,7 +859,7 @@ public class Gramatica {
                 document.add(new Paragraph(" ", new Font(bf, 8))); // Espacio
                 
                 // Símbolos terminales
-                Paragraph parrafoTerminales = new Paragraph("Símbolos Terminales:", seccion);
+                Paragraph parrafoTerminales = new Paragraph(bundle.getString("informe.simbolos.terminales") + ":", seccion);
                 document.add(parrafoTerminales);
                 ObservableList<String> termModel = this.getTerminalesModel();
                 for (String t : termModel) {
@@ -816,7 +870,7 @@ public class Gramatica {
                 document.add(new Paragraph(" ", new Font(bf, 8))); // Espacio
                 
                 // Producciones
-                Paragraph parrafoProducciones = new Paragraph("Producciones:", seccion);
+                Paragraph parrafoProducciones = new Paragraph(bundle.getString("informe.producciones") + ":", seccion);
                 document.add(parrafoProducciones);
                 
                 ObservableList<String> prodModel = this.getProduccionesModel();
@@ -831,29 +885,29 @@ public class Gramatica {
                 document.add(new Paragraph(" ", new Font(bf, 15))); // Espacio
                 
                 // Información adicional
-                Paragraph parrafoInfo = new Paragraph("Información Adicional:", seccion);
+                Paragraph parrafoInfo = new Paragraph(bundle.getString("informe.informacion.adicional") + ":", seccion);
                 document.add(parrafoInfo);
                 
-                Paragraph infoValidacion = new Paragraph("    • Estado de validación: VÁLIDA", contenido);
+                Paragraph infoValidacion = new Paragraph("    • " + bundle.getString("informe.estado.validacion") + ": VÁLIDA", contenido);
                 infoValidacion.setIndentationLeft(20);
                 document.add(infoValidacion);
                 
-                Paragraph infoProducciones = new Paragraph("    • Número total de producciones: " + prodModel.size(), contenido);
+                Paragraph infoProducciones = new Paragraph("    • " + bundle.getString("informe.numero.producciones") + ": " + prodModel.size(), contenido);
                 infoProducciones.setIndentationLeft(20);
                 document.add(infoProducciones);
                 
-                Paragraph infoNoTerminales = new Paragraph("    • Número de símbolos no terminales: " + noTermModel.size(), contenido);
+                Paragraph infoNoTerminales = new Paragraph("    • " + bundle.getString("informe.numero.no.terminales") + ": " + noTermModel.size(), contenido);
                 infoNoTerminales.setIndentationLeft(20);
                 document.add(infoNoTerminales);
                 
-                Paragraph infoTerminales = new Paragraph("    • Número de símbolos terminales: " + termModel.size(), contenido);
+                Paragraph infoTerminales = new Paragraph("    • " + bundle.getString("informe.numero.terminales") + ": " + termModel.size(), contenido);
                 infoTerminales.setIndentationLeft(20);
                 document.add(infoTerminales);
                 
                 document.add(new Paragraph(" ", new Font(bf, 15))); // Espacio
                 
                 // Fecha de generación encima del pie de página
-                Paragraph parrafoFecha = new Paragraph("Fecha de generación: " + 
+                Paragraph parrafoFecha = new Paragraph(bundle.getString("informe.fecha.generacion") + ": " + 
                     java.time.LocalDate.now().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")), 
                     contenidoPequeno);
                 parrafoFecha.setAlignment(Paragraph.ALIGN_CENTER);
@@ -862,7 +916,7 @@ public class Gramatica {
                 document.add(new Paragraph(" ", new Font(bf, 5))); // Espacio pequeño
                 
                 // Pie de página con información de la aplicación
-                Paragraph piePagina = new Paragraph("Documento generado por SimAS v3.0 - Simulador de Análisis Sintáctico", contenidoPequeno);
+                Paragraph piePagina = new Paragraph(bundle.getString("informe.documento.generado"), contenidoPequeno);
                 piePagina.setAlignment(Paragraph.ALIGN_CENTER);
                 document.add(piePagina);
                 

@@ -502,7 +502,7 @@ public class Editor extends VBox implements ActualizableTextos {
 
         try {
             // Generar el informe usando el método de la clase Gramatica
-            boolean exito = this.gramatica.generarInforme(archivo.getAbsolutePath());
+            boolean exito = this.gramatica.generarInforme(archivo.getAbsolutePath(), bundle);
             
             if (exito) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
