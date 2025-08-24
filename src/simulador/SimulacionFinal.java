@@ -54,6 +54,7 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
     @FXML private Button btnEditarCadena;
     @FXML private Button btnDerivacion;
     @FXML private Button btnArbol;
+    @FXML private Label labelTitulo;
     @FXML private TableView<HistorialPaso> tablaHistorial;
     @FXML private TableColumn<HistorialPaso, String> colPaso;
     @FXML private TableColumn<HistorialPaso, String> colPila;
@@ -241,7 +242,7 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
                  tab.getUserData().toString().equals(simulacionId)) || 
                 tab.getContent() == this) {
                 
-                String tituloBase = "Simulación";
+                String tituloBase = bundle != null ? bundle.getString("simulacionfinal.titulo") : "Simulación";
                 String nuevoTitulo = construirTitulo(tituloBase, mostrarGrupo, mostrarInstancia);
                 tab.setText(nuevoTitulo);
                 break;
@@ -831,7 +832,7 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         mainContainer.getStyleClass().addAll("wizard-step", "derivacion-tab");
         
         // Header del título
-        Label headerLabel = new Label("Derivación de la Simulación");
+        Label headerLabel = new Label(bundle.getString("simulacionfinal.derivacion.titulo"));
         headerLabel.getStyleClass().add("wizard-header");
         headerLabel.setAlignment(Pos.CENTER);
         
@@ -842,7 +843,7 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         VBox.setVgrow(contentContainer, Priority.ALWAYS);
         
         // Label descriptivo
-        Label descriptionLabel = new Label("Secuencia de pasos de la derivación:");
+        Label descriptionLabel = new Label(bundle.getString("simulacionfinal.derivacion.descripcion"));
         descriptionLabel.getStyleClass().add("wizard-section-header");
         descriptionLabel.setAlignment(Pos.CENTER);
         
@@ -855,11 +856,11 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         // Generar la derivación como lista
         ObservableList<String> itemsDerivacion = FXCollections.observableArrayList();
         if (historialObservable.isEmpty()) {
-            itemsDerivacion.add("Inicia la simulación para ver la derivación...");
+            itemsDerivacion.add(bundle.getString("simulacionfinal.derivacion.iniciar"));
         } else {
             for (int i = 0; i < historialObservable.size(); i++) {
                 HistorialPaso paso = historialObservable.get(i);
-                itemsDerivacion.add("Paso " + (i + 1) + ": " + paso.getAccion());
+                itemsDerivacion.add(bundle.getString("simulacionfinal.derivacion.paso") + " " + (i + 1) + ": " + paso.getAccion());
             }
         }
         listaDerivacion.setItems(itemsDerivacion);
@@ -902,7 +903,7 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         mainContainer.getStyleClass().addAll("wizard-step", "arbol-tab");
         
         // Header del título
-        Label headerLabel = new Label("Árbol Sintáctico de la Simulación");
+        Label headerLabel = new Label(bundle.getString("simulacionfinal.arbol.titulo"));
         headerLabel.getStyleClass().add("wizard-header");
         headerLabel.setAlignment(Pos.CENTER);
         
@@ -913,7 +914,7 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         VBox.setVgrow(contentContainer, Priority.ALWAYS);
         
         // Label descriptivo
-        Label descriptionLabel = new Label("Visualización del árbol sintáctico generado:");
+        Label descriptionLabel = new Label(bundle.getString("simulacionfinal.arbol.descripcion"));
         descriptionLabel.getStyleClass().add("wizard-section-header");
         descriptionLabel.setAlignment(Pos.CENTER);
         
@@ -961,7 +962,7 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
             controlsContainer.setAlignment(Pos.CENTER);
             
             // Label para el slider
-            Label zoomLabel = new Label("Zoom del árbol:");
+            Label zoomLabel = new Label(bundle.getString("simulacionfinal.arbol.zoom"));
             zoomLabel.getStyleClass().add("wizard-field-label");
             zoomLabel.setAlignment(Pos.CENTER);
             
@@ -1201,6 +1202,9 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         this.bundle = bundle;
         
         // Actualizar textos de los controles que existen en el FXML
+        if (labelTitulo != null) {
+            labelTitulo.setText(bundle.getString("simulacionfinal.titulo"));
+        }
         if (labelEntrada != null) {
             labelEntrada.setText(bundle.getString("simulacionfinal.label.entrada"));
         }
@@ -1236,6 +1240,137 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         
         // Actualizar títulos de las pestañas
         actualizarTitulosPestañas();
+        
+        // Actualizar contenido de las pestañas de derivación y árbol sintáctico
+        actualizarContenidoPestañasHijas();
+    }
+
+    /**
+     * Actualiza el contenido de las pestañas de derivación y árbol sintáctico.
+     */
+    private void actualizarContenidoPestañasHijas() {
+        if (tabPane == null || bundle == null) return;
+        
+        for (Tab tab : tabPane.getTabs()) {
+            if (tab.getUserData() != null) {
+                String userData = tab.getUserData().toString();
+                
+                // Actualizar pestaña de derivación
+                if (userData.equals("derivacion_" + simulacionId)) {
+                    actualizarContenidoPestañaDerivacion(tab);
+                }
+                // Actualizar pestaña de árbol sintáctico
+                else if (userData.equals("arbol_" + simulacionId)) {
+                    actualizarContenidoPestañaArbol(tab);
+                }
+            }
+        }
+    }
+    
+    /**
+     * Actualiza el contenido de la pestaña de derivación.
+     */
+    private void actualizarContenidoPestañaDerivacion(Tab tab) {
+        if (tab.getContent() instanceof VBox) {
+            VBox mainContainer = (VBox) tab.getContent();
+            
+            // Actualizar título del header
+            if (mainContainer.getChildren().size() > 0 && mainContainer.getChildren().get(0) instanceof Label) {
+                Label headerLabel = (Label) mainContainer.getChildren().get(0);
+                headerLabel.setText(bundle.getString("simulacionfinal.derivacion.titulo"));
+            }
+            
+            // Actualizar descripción
+            if (mainContainer.getChildren().size() > 1 && mainContainer.getChildren().get(1) instanceof VBox) {
+                VBox contentContainer = (VBox) mainContainer.getChildren().get(1);
+                if (contentContainer.getChildren().size() > 0 && contentContainer.getChildren().get(0) instanceof Label) {
+                    Label descriptionLabel = (Label) contentContainer.getChildren().get(0);
+                    descriptionLabel.setText(bundle.getString("simulacionfinal.derivacion.descripcion"));
+                }
+                
+                // Actualizar lista de derivación
+                if (contentContainer.getChildren().size() > 1 && contentContainer.getChildren().get(1) instanceof ListView) {
+                    ListView<String> listaDerivacion = (ListView<String>) contentContainer.getChildren().get(1);
+                    actualizarListaDerivacion(listaDerivacion);
+                }
+            }
+        }
+    }
+    
+    /**
+     * Actualiza el contenido de la pestaña de árbol sintáctico.
+     */
+    private void actualizarContenidoPestañaArbol(Tab tab) {
+        if (tab.getContent() instanceof VBox) {
+            VBox mainContainer = (VBox) tab.getContent();
+            
+            // Actualizar título del header
+            if (mainContainer.getChildren().size() > 0 && mainContainer.getChildren().get(0) instanceof Label) {
+                Label headerLabel = (Label) mainContainer.getChildren().get(0);
+                headerLabel.setText(bundle.getString("simulacionfinal.arbol.titulo"));
+            }
+            
+            // Actualizar descripción
+            if (mainContainer.getChildren().size() > 1 && mainContainer.getChildren().get(1) instanceof VBox) {
+                VBox contentContainer = (VBox) mainContainer.getChildren().get(1);
+                if (contentContainer.getChildren().size() > 0 && contentContainer.getChildren().get(0) instanceof Label) {
+                    Label descriptionLabel = (Label) contentContainer.getChildren().get(0);
+                    descriptionLabel.setText(bundle.getString("simulacionfinal.arbol.descripcion"));
+                }
+                
+                // Buscar y actualizar el label de zoom
+                actualizarLabelZoom(contentContainer);
+            }
+        }
+    }
+    
+    /**
+     * Busca y actualiza el label de zoom en el contenedor del árbol.
+     */
+    private void actualizarLabelZoom(VBox contentContainer) {
+        // Buscar recursivamente en todos los nodos del contenedor
+        buscarYActualizarLabelZoom(contentContainer);
+    }
+    
+    /**
+     * Busca recursivamente el label de zoom y lo actualiza.
+     */
+    private void buscarYActualizarLabelZoom(javafx.scene.Node node) {
+        if (node instanceof Label) {
+            Label label = (Label) node;
+            // Verificar si es el label de zoom (contiene "Zoom" o "Tree Zoom" o "Zoom de l'arbre")
+            if (label.getText() != null && 
+                (label.getText().contains("Zoom") || 
+                 label.getText().contains("Tree Zoom") || 
+                 label.getText().contains("Zoom de l'arbre"))) {
+                label.setText(bundle.getString("simulacionfinal.arbol.zoom"));
+                return;
+            }
+        } else if (node instanceof javafx.scene.Parent) {
+            javafx.scene.Parent parent = (javafx.scene.Parent) node;
+            for (javafx.scene.Node child : parent.getChildrenUnmodifiable()) {
+                buscarYActualizarLabelZoom(child);
+            }
+        }
+    }
+    
+    /**
+     * Actualiza la lista de derivación con textos internacionalizados.
+     */
+    private void actualizarListaDerivacion(ListView<String> listaDerivacion) {
+        ObservableList<String> itemsDerivacion = FXCollections.observableArrayList();
+        
+        if (historialObservable.isEmpty()) {
+            itemsDerivacion.add(bundle.getString("simulacionfinal.derivacion.iniciar"));
+        } else {
+            for (int i = 0; i < historialObservable.size(); i++) {
+                HistorialPaso paso = historialObservable.get(i);
+                String pasoText = bundle.getString("simulacionfinal.derivacion.paso") + " " + (i + 1) + ": " + paso.getAccion();
+                itemsDerivacion.add(pasoText);
+            }
+        }
+        
+        listaDerivacion.setItems(itemsDerivacion);
     }
 
     /**

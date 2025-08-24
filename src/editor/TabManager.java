@@ -2302,7 +2302,7 @@ public class TabManager {
                 } else if (childId.startsWith("funciones_error_")) {
                     return bundle.getString("simulador.paso4.btn.nueva");
                 } else if (childId.startsWith("simulacion_")) {
-                    return bundle.getString("simulador.simulacion");
+                    return bundle.getString("simulacionfinal.titulo");
                 } else if (childId.startsWith("derivacion_")) {
                     return bundle.getString("simulacionfinal.tab.derivacion");
                 } else if (childId.startsWith("arbol_")) {

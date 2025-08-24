@@ -188,7 +188,8 @@ public class PanelNuevaSimDescPaso6 extends BorderPane implements PanelNuevaSimD
      */
     private void crearColumnasManualmente() {
         // Columna para símbolos
-        TableColumn<FilaTablaPredictiva, String> colSimbolo = new TableColumn<>("Símbolo");
+        String tituloSimbolo = bundle != null ? bundle.getString("simulador.paso6.tabla.columna.simbolo") : "Símbolo";
+        TableColumn<FilaTablaPredictiva, String> colSimbolo = new TableColumn<>(tituloSimbolo);
         colSimbolo.setCellValueFactory(cellData -> 
             new SimpleStringProperty(cellData.getValue().getSimbolo()));
         colSimbolo.setPrefWidth(100);
@@ -451,8 +452,15 @@ public class PanelNuevaSimDescPaso6 extends BorderPane implements PanelNuevaSimD
             if (labelTabla != null) labelTabla.setText(bundle.getString("simulador.paso6.tabla.titulo"));
             // Actualizar textos de los botones
             if (btnSimular != null) btnSimular.setText(bundle.getString("simulador.paso6.btn.simular"));
-            if (btnModificarErrores != null) btnModificarErrores.setText(bundle.getString("simulador.paso6.btn.modificar.errores"));
-            if (btnGenerarInforme != null) btnGenerarInforme.setText(bundle.getString("simulador.paso6.btn.generar.informe"));
+            if (btnModificarErrores != null) btnModificarErrores.setText(bundle.getString("simulador.paso6.btn.editar"));
+            if (btnGenerarInforme != null) btnGenerarInforme.setText(bundle.getString("simulador.paso6.btn.informe"));
+            // Actualizar columna de símbolos si existe
+            if (tablePredictiva != null && !tablePredictiva.getColumns().isEmpty()) {
+                TableColumn<?, ?> colSimbolo = tablePredictiva.getColumns().get(0);
+                if (colSimbolo != null) {
+                    colSimbolo.setText(bundle.getString("simulador.paso6.tabla.columna.simbolo"));
+                }
+            }
             // Recargar datos para actualizar textos dinámicos y funciones de error
             cargarDatos();
         } catch (MissingResourceException e) {

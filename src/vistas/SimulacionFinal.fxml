@@ -26,7 +26,7 @@
     </padding>
 
     <!-- Header -->
-    <Label text="Simulación" styleClass="wizard-header"
+    <Label fx:id="labelTitulo" text="%simulacionfinal.titulo" styleClass="wizard-header"
            GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.halignment="CENTER"/>
 
     <!-- Input Section -->
