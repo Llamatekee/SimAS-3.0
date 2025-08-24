@@ -3654,3 +3654,51 @@ GridPane {
     -fx-effect: dropshadow(gaussian, rgba(149, 165, 166, 0.5), 5, 0.3, 0, 3);
 }
 
+/* ===== ESTILOS ESPECÍFICOS PARA LA PESTAÑA DE GRAMÁTICA ORIGINAL ===== */
+/* Lista personalizada para la gramática original - hereda de wizard-list pero con modificaciones */
+.gramatica-original-list {
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+    -fx-background-radius: 15px;
+    -fx-border-radius: 15px;
+    -fx-border-color: rgba(255, 255, 255, 0.25);
+    -fx-border-width: 2px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 6, 0.4, 0, 3);
+    -fx-fill-height: true;
+    -fx-fill-width: true;
+    -fx-min-height: 300px;
+    -fx-pref-height: 350px;
+    -fx-max-height: 400px;
+    -fx-min-width: 200px;
+    -fx-pref-width: 600px;
+    -fx-max-width: 800px;
+}
+
+.gramatica-original-list .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-padding: 8px 12px;
+    -fx-font-size: 14px;
+    -fx-font-weight: 600;
+    -fx-border-color: transparent;
+    -fx-min-height: 40px;
+    -fx-pref-height: 40px;
+}
+
+.gramatica-original-list .list-cell:selected {
+    -fx-background-color: rgba(79, 172, 254, 0.5);
+    -fx-text-fill: white;
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-effect: dropshadow(gaussian, rgba(79, 172, 254, 0.4), 3, 0.3, 0, 2);
+}
+
+.gramatica-original-list .list-cell:hover {
+    -fx-background-color: rgba(79, 172, 254, 0.25);
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+}
+
+.gramatica-original-list:empty {
+    -fx-background-color: rgba(255, 255, 255, 0.08);
+    -fx-border-color: rgba(255, 255, 255, 0.15);
+}

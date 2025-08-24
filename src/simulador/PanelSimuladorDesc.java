@@ -18,6 +18,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
+import javafx.scene.layout.Priority;
 import editor.TabManager;
 
 import java.util.ArrayList;
@@ -213,21 +214,24 @@ public class PanelSimuladorDesc {
     public void mostrarGramaticaOriginal() {
         try {
             // Crear el contenido de la pestaña con estilo moderno
-            VBox content = new VBox(20);
-            content.setPadding(new Insets(20));
+            VBox content = new VBox(30);
+            content.setPadding(new Insets(40));
             content.getStyleClass().add("wizard-step");
             
-            // Título con estilo moderno y centrado
+            // Título con estilo moderno (mantiene posición original)
             Label titulo = new Label(bundle.getString("simulador.gramatica.titulo"));
             titulo.getStyleClass().add("wizard-header");
             titulo.setMaxWidth(Double.MAX_VALUE);
             titulo.setAlignment(javafx.geometry.Pos.CENTER);
             
-            // Lista de producciones con estilo moderno
+            // Lista de producciones con estilo personalizado
             ListView<String> listView = new ListView<>();
             listView.setItems(FXCollections.observableArrayList(gramaticaOriginal.getProduccionesModel()));
-            listView.setPrefHeight(400);
-            listView.getStyleClass().add("wizard-list");
+            listView.setPrefHeight(350);
+            listView.setMaxHeight(400);
+            listView.setMaxWidth(Double.MAX_VALUE);
+            listView.setPrefWidth(Double.MAX_VALUE);
+            listView.getStyleClass().add("gramatica-original-list");
             
             // Configurar el estilo de las celdas de la lista
             listView.setCellFactory(param -> new ListCell<String>() {
@@ -241,39 +245,14 @@ public class PanelSimuladorDesc {
                     } else {
                         setText(item);
                         getStyleClass().clear();
-                        // Solo aplicar estilo de texto blanco sin fondo
-                        setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8px 12px;");
+                        // Aplicar estilo personalizado para las celdas
+                        setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 10px 15px;");
                     }
                 }
             });
             
-            // Contenedor para el botón con alineación centrada
-            HBox buttonContainer = new HBox();
-            buttonContainer.setAlignment(javafx.geometry.Pos.CENTER);
-            
-            // Botón de cerrar con estilo moderno e icono
-            Button btnCerrar = new Button("Cerrar");
-            btnCerrar.getStyleClass().add("button-cancel");
-            btnCerrar.setOnAction(e -> tabPane.getTabs().remove(tabPane.getSelectionModel().getSelectedItem()));
-            
-            // Agregar icono al botón
-            try {
-                javafx.scene.image.ImageView iconView = new javafx.scene.image.ImageView(
-                    new javafx.scene.image.Image(getClass().getResourceAsStream("/resources/icons/application_delete.png"))
-                );
-                iconView.setFitHeight(14);
-                iconView.setFitWidth(14);
-                iconView.setPreserveRatio(true);
-                btnCerrar.setGraphic(iconView);
-            } catch (Exception e) {
-                // Si no se puede cargar el icono, continuar sin él
-                System.out.println("No se pudo cargar el icono del botón cerrar");
-            }
-            
-            buttonContainer.getChildren().add(btnCerrar);
-            
-            // Añadir elementos al contenido
-            content.getChildren().addAll(titulo, listView, buttonContainer);
+            // Añadir elementos al contenido (sin botón de cerrar)
+            content.getChildren().addAll(titulo, listView);
             
             // Usar TabManager para obtener o crear la pestaña como hija del simulador
             String childId = "gramatica_" + simuladorId;
