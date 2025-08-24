@@ -56,19 +56,19 @@
     <!-- Navigation -->
     <HBox styleClass="wizard-navigation" GridPane.columnIndex="0" GridPane.rowIndex="2" 
           GridPane.valignment="BOTTOM">
-        <Button fx:id="btnModificarErrores" text="%simulador.paso6.btn.modificar.errores" styleClass="button-cancel" 
+        <Button fx:id="btnModificarErrores" text="%simulador.paso6.btn.editar" styleClass="button-cancel" 
                 onAction="#modificarErrores">
             <graphic>
                 <ImageView fitWidth="16" fitHeight="16">
-                    <Image url="@../resources/icons/application_preferences.png"/>
+                    <Image url="@../resources/primero.png"/>
                 </ImageView>
             </graphic>
         </Button>
-        <Button fx:id="btnGenerarInforme" text="%simulador.paso6.btn.generar.informe" styleClass="button-grammar" 
+        <Button fx:id="btnGenerarInforme" text="%simulador.paso6.btn.informe" styleClass="button-grammar" 
                 onAction="#generarInforme">
             <graphic>
                 <ImageView fitWidth="16" fitHeight="16">
-                    <Image url="@../resources/icons/application_certificate.png"/>
+                    <Image url="@../resources/icons/document_new.png"/>
                 </ImageView>
             </graphic>
         </Button>
