@@ -341,22 +341,70 @@ public class PanelNuevaSimDescPaso6 extends BorderPane implements PanelNuevaSimD
 
     @FXML
     private void generarInforme() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(bundle.getString("simulador.paso6.informe.filtro"), "*.pdf"));
-        fileChooser.setTitle(bundle.getString("simulador.paso6.informe.titulo"));
-        File file = fileChooser.showSaveDialog(null);
+        if (this.gramatica == null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle(bundle.getString("editor.informe.error.titulo"));
+            alert.setHeaderText(null);
+            alert.setContentText(bundle.getString("editor.informe.error.sin.gramatica"));
+            alert.showAndWait();
+            return;
+        }
 
-        if (file != null) {
-            try {
-                boolean resultado = gramatica.generarInforme(file.getAbsolutePath());
-                if (!resultado) {
-                    mostrarAlerta(bundle.getString("simulador.paso6.error.titulo"), 
-                                bundle.getString("simulador.paso6.error.informe"));
-                }
-            } catch (DocumentException e) {
-                mostrarAlerta(bundle.getString("simulador.paso6.error.titulo"), 
-                            bundle.getString("simulador.paso6.error.informe") + ": " + e.getMessage());
+        // Crear y configurar el FileChooser
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle(bundle.getString("editor.informe.guardar.titulo"));
+        fileChooser.getExtensionFilters().add(
+            new FileChooser.ExtensionFilter("Documentos PDF", "*.pdf")
+        );
+        
+        // Sugerir nombre de archivo basado en el nombre de la gramática
+        String nombreArchivo = this.gramatica.getNombre().replaceAll("[^a-zA-Z0-9]", "_") + "_InformeSimulacion.pdf";
+        fileChooser.setInitialFileName(nombreArchivo);
+
+        // Mostrar diálogo de guardado
+        File archivo = fileChooser.showSaveDialog(this.getScene().getWindow());
+        if (archivo == null) {
+            return; // Usuario canceló
+        }
+
+        try {
+            // Obtener la gramática original del simulador
+            Gramatica gramaticaOriginal = null;
+            if (panelSimuladorDesc != null) {
+                gramaticaOriginal = panelSimuladorDesc.getGramaticaOriginal();
+            } else {
+                gramaticaOriginal = this.gramatica;
             }
+            
+            // Generar el informe del simulador
+            boolean exito = this.gramatica.generarInformeSimulador(
+                archivo.getAbsolutePath(), 
+                gramaticaOriginal, 
+                this.tablaPredictiva, 
+                this.funcionesError, 
+                bundle
+            );
+            
+            if (exito) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle(bundle.getString("editor.informe.exito.titulo"));
+                alert.setHeaderText(null);
+                alert.setContentText(bundle.getString("editor.informe.exito.mensaje") + "\n" + archivo.getAbsolutePath());
+                alert.showAndWait();
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle(bundle.getString("editor.informe.error.titulo"));
+                alert.setHeaderText(null);
+                alert.setContentText(bundle.getString("editor.informe.error.generacion"));
+                alert.showAndWait();
+            }
+        } catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle(bundle.getString("editor.informe.error.titulo"));
+            alert.setHeaderText(null);
+            alert.setContentText(bundle.getString("editor.informe.error.generacion") + "\n" + e.getMessage());
+            alert.showAndWait();
+            e.printStackTrace();
         }
     }
 

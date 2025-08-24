@@ -207,6 +207,13 @@ public class PanelSimuladorDesc {
     public void setTablaPredictivaExtendidaGlobal(TablaPredictivaPaso5 tabla) {
         this.tablaPredictivaExtendidaGlobal = tabla;
     }
+    
+    /**
+     * Obtiene la gramática original del simulador.
+     */
+    public Gramatica getGramaticaOriginal() {
+        return gramaticaOriginal;
+    }
 
     /**
      * Muestra la gramática original en una nueva pestaña.
