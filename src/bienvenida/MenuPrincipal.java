@@ -446,6 +446,9 @@ public class MenuPrincipal extends Application {
             // SINCRONIZAR IDIOMA CON TODAS LAS VENTANAS SECUNDARIAS
             sincronizarIdiomaConVentanasSecundarias();
             
+            // ACTUALIZAR TODOS LOS SIMULADORES ACTIVOS
+            actualizarTodosLosSimuladores();
+            
         } catch (Exception e) {
             e.printStackTrace();
         }

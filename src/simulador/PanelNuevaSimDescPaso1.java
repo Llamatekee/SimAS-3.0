@@ -42,8 +42,7 @@ public class PanelNuevaSimDescPaso1 implements PanelNuevaSimDescPaso, Actualizab
         this.gramatica = panelPadre.gramatica;
         this.bundle = panelPadre.getBundle();
         cargarFXML();
-        inicializarBotones();
-        verificarEstadoGramatica();
+        // Los botones y el estado se inicializan automáticamente en el método initialize()
     }
 
     private void cargarFXML() {
@@ -53,10 +52,8 @@ public class PanelNuevaSimDescPaso1 implements PanelNuevaSimDescPaso, Actualizab
             loader.setResources(bundle);
             root = loader.load();
             
-            // Inicializar los textos después de cargar el FXML
-            if (lblTitulo != null) lblTitulo.setText(bundle.getString("simulador.window.paso1"));
-            if (lblEstadoTitulo != null) lblEstadoTitulo.setText(bundle.getString("simulador.paso1.estado.titulo"));
-            if (lblProduccionesTitulo != null) lblProduccionesTitulo.setText(bundle.getString("simulador.paso1.producciones.titulo"));
+            // Los textos se inicializan automáticamente desde el FXML
+            // El método initialize() se llamará automáticamente después
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -65,6 +62,8 @@ public class PanelNuevaSimDescPaso1 implements PanelNuevaSimDescPaso, Actualizab
     @FXML
     private void initialize() {
         // Este método se llama automáticamente después de cargar el FXML
+        // Inicializar los textos con el bundle actual
+        actualizarTextos(bundle);
         inicializarBotones();
         verificarEstadoGramatica();
     }
@@ -73,39 +72,56 @@ public class PanelNuevaSimDescPaso1 implements PanelNuevaSimDescPaso, Actualizab
         // En el paso 1, los botones Primero y Anterior están deshabilitados
         if (btnPrimero != null) btnPrimero.setDisable(true);
         if (btnAnterior != null) btnAnterior.setDisable(true);
+        
+        // Habilitar los botones Siguiente y Último
+        if (btnSiguiente != null) btnSiguiente.setDisable(false);
+        if (btnUltimo != null) btnUltimo.setDisable(false);
     }
 
     private void verificarEstadoGramatica() {
         boolean esRecursiva = gramatica.eliminarRecursividad();
         boolean necesitaFactorizacion = gramatica.factorizar();
 
-        // Limpiar estilos previos
-        lblRecursividad.getStyleClass().removeAll("error-label", "wizard-label");
-        lblFactorizacion.getStyleClass().removeAll("error-label", "wizard-label");
-        lblEstadoGramatica.getStyleClass().removeAll("error-label", "wizard-label");
-
-        if (esRecursiva) {
-            lblRecursividad.setText(bundle.getString("simulador.gramatica.recursiva"));
-            lblRecursividad.getStyleClass().add("error-label");
-        } else {
-            lblRecursividad.setText("");
+        // Verificar que los labels existan antes de usarlos
+        if (lblRecursividad != null) {
+            // Limpiar estilos previos
+            lblRecursividad.getStyleClass().removeAll("error-label", "wizard-label");
+            
+            if (esRecursiva) {
+                lblRecursividad.setText(bundle.getString("simulador.gramatica.recursiva"));
+                lblRecursividad.getStyleClass().add("error-label");
+            } else {
+                lblRecursividad.setText("");
+            }
         }
         
-        if (necesitaFactorizacion) {
-            lblFactorizacion.setText(bundle.getString("simulador.gramatica.no.factorizada"));
-            lblFactorizacion.getStyleClass().add("error-label");
-        } else {
-            lblFactorizacion.setText("");
+        if (lblFactorizacion != null) {
+            // Limpiar estilos previos
+            lblFactorizacion.getStyleClass().removeAll("error-label", "wizard-label");
+            
+            if (necesitaFactorizacion) {
+                lblFactorizacion.setText(bundle.getString("simulador.gramatica.no.factorizada"));
+                lblFactorizacion.getStyleClass().add("error-label");
+            } else {
+                lblFactorizacion.setText("");
+            }
         }
         
-        if (!esRecursiva && !necesitaFactorizacion) {
-            lblEstadoGramatica.setText(bundle.getString("simulador.gramatica.correcta"));
-            lblEstadoGramatica.getStyleClass().add("wizard-label");
-        } else {
-            lblEstadoGramatica.setText("");
+        if (lblEstadoGramatica != null) {
+            // Limpiar estilos previos
+            lblEstadoGramatica.getStyleClass().removeAll("error-label", "wizard-label");
+            
+            if (!esRecursiva && !necesitaFactorizacion) {
+                lblEstadoGramatica.setText(bundle.getString("simulador.gramatica.correcta"));
+                lblEstadoGramatica.getStyleClass().add("wizard-label");
+            } else {
+                lblEstadoGramatica.setText("");
+            }
         }
         
-        listProducciones.setItems(gramatica.getProduccionesModel());
+        if (listProducciones != null) {
+            listProducciones.setItems(gramatica.getProduccionesModel());
+        }
     }
 
     @FXML
@@ -156,22 +172,21 @@ public class PanelNuevaSimDescPaso1 implements PanelNuevaSimDescPaso, Actualizab
     @Override
     public void actualizarTextos(ResourceBundle bundle) {
         this.bundle = bundle;
-        try {
-            // Recargar el FXML con el nuevo bundle
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/PanelNuevaSimDescPaso1.fxml"));
-            loader.setController(this);
-            loader.setResources(bundle);
-            root = loader.load();
-            
-            // Actualizar los textos
-            if (lblTitulo != null) lblTitulo.setText(bundle.getString("simulador.window.paso1"));
-            if (lblEstadoTitulo != null) lblEstadoTitulo.setText(bundle.getString("simulador.paso1.estado.titulo"));
-            if (lblProduccionesTitulo != null) lblProduccionesTitulo.setText(bundle.getString("simulador.paso1.producciones.titulo"));
-            
-            // Actualizar el estado de la gramática
-            verificarEstadoGramatica();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        
+        // Actualizar los textos directamente como en el editor
+        if (lblTitulo != null) lblTitulo.setText(bundle.getString("simulador.window.paso1"));
+        if (lblEstadoTitulo != null) lblEstadoTitulo.setText(bundle.getString("simulador.paso1.estado.titulo"));
+        if (lblProduccionesTitulo != null) lblProduccionesTitulo.setText(bundle.getString("simulador.paso1.producciones.titulo"));
+        
+        // Actualizar textos de los botones de navegación
+        if (btnCancelar != null) btnCancelar.setText(bundle.getString("button.cancelar"));
+        if (btnAnterior != null) btnAnterior.setText(bundle.getString("button.anterior"));
+        if (btnSiguiente != null) btnSiguiente.setText(bundle.getString("button.siguiente"));
+        if (btnPrimero != null) btnPrimero.setText(bundle.getString("button.primero"));
+        if (btnUltimo != null) btnUltimo.setText(bundle.getString("button.ultimo"));
+        if (btnVisualizarGramatica != null) btnVisualizarGramatica.setText(bundle.getString("simulador.paso1.btn.gramatica"));
+        
+        // Actualizar el estado de la gramática
+        verificarEstadoGramatica();
     }
 }

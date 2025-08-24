@@ -24,7 +24,7 @@
     </padding>
 
     <!-- Header -->
-    <Label fx:id="lblTitulo" styleClass="wizard-header"
+    <Label fx:id="lblTitulo" text="Producciones para la Simulación Descendente" styleClass="wizard-header"
            GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.halignment="CENTER"/>
 
     <!-- Content -->
@@ -33,7 +33,7 @@
         
         <!-- Estado Section -->
         <VBox spacing="15" VBox.vgrow="NEVER">
-            <Label fx:id="lblEstadoTitulo" styleClass="wizard-section-header"/>
+            <Label fx:id="lblEstadoTitulo" text="Estado de la Gramática" styleClass="wizard-section-header"/>
             <Label fx:id="lblEstadoGramatica" styleClass="wizard-label"/>
             <Label fx:id="lblRecursividad" styleClass="error-label"/>
             <Label fx:id="lblFactorizacion" styleClass="error-label"/>
@@ -41,7 +41,7 @@
 
         <!-- Producciones Section -->
         <VBox spacing="10" VBox.vgrow="ALWAYS">
-            <Label fx:id="lblProduccionesTitulo" styleClass="wizard-section-header"/>
+            <Label fx:id="lblProduccionesTitulo" text="Producciones" styleClass="wizard-section-header"/>
             <ListView fx:id="listProducciones" VBox.vgrow="ALWAYS" styleClass="wizard-list"/>
         </VBox>
     </VBox>
@@ -49,7 +49,7 @@
     <!-- Navigation -->
     <HBox styleClass="wizard-navigation" GridPane.columnIndex="0" GridPane.rowIndex="2" 
           GridPane.valignment="BOTTOM" GridPane.halignment="CENTER">
-        <Button fx:id="btnCancelar" text="%button.cancelar" styleClass="button-cancel" 
+        <Button fx:id="btnCancelar" text="Cancelar" styleClass="button-cancel" 
                 onAction="#cancelarSimulacion">
             <graphic>
                 <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
@@ -66,7 +66,7 @@
             </graphic>
         </Button>
         <Region HBox.hgrow="ALWAYS"/>
-        <Button fx:id="btnPrimero" text="%button.primero" styleClass="button-next" 
+        <Button fx:id="btnPrimero" text="Primero" styleClass="button-next" 
                 onAction="#handlePrimero" disable="true">
             <graphic>
                 <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
@@ -74,7 +74,7 @@
                 </ImageView>
             </graphic>
         </Button>
-        <Button fx:id="btnAnterior" text="%button.anterior" styleClass="button-next" 
+        <Button fx:id="btnAnterior" text="Anterior" styleClass="button-next" 
                 onAction="#handleAnterior" disable="true">
             <graphic>
                 <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
@@ -82,7 +82,7 @@
                 </ImageView>
             </graphic>
         </Button>
-        <Button fx:id="btnSiguiente" text="%button.siguiente" styleClass="button-next" 
+        <Button fx:id="btnSiguiente" text="Siguiente" styleClass="button-next" 
                 onAction="#handleSiguiente">
             <graphic>
                 <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
@@ -90,7 +90,7 @@
                 </ImageView>
             </graphic>
         </Button>
-        <Button fx:id="btnUltimo" text="%button.ultimo" styleClass="button-next" 
+        <Button fx:id="btnUltimo" text="Último" styleClass="button-next" 
                 onAction="#handleUltimo">
             <graphic>
                 <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
