@@ -1173,12 +1173,9 @@ public class Gramatica {
                 Paragraph parrafoTablaPredictiva = new Paragraph(bundle.getString("informe.simulador.tabla.predictiva") + ":", seccion);
                 document.add(parrafoTablaPredictiva);
                 
-                // Información básica de la tabla
-                Paragraph infoTabla = new Paragraph("    • " + bundle.getString("informe.simulador.tabla.predictiva") + " generada correctamente", contenido);
-                infoTabla.setIndentationLeft(20);
-                document.add(infoTabla);
+                document.add(new Paragraph(" ", new Font(bf, 8))); // Espacio entre título y tabla
                 
-                // Agregar tabla predictiva detallada
+                // Agregar tabla predictiva directamente
                 agregarTablaPredictivaAlPDF(document, tablaPredictiva, bundle, bf, contenido);
                 
                 document.add(new Paragraph(" ", new Font(bf, 8))); // Espacio
@@ -1671,30 +1668,97 @@ public class Gramatica {
     }
     
     /**
-     * Agrega la tabla predictiva al PDF.
+     * Agrega la tabla predictiva del Paso 5 al PDF.
      */
     private void agregarTablaPredictivaAlPDF(Document document, TablaPredictiva tablaPredictiva, ResourceBundle bundle, BaseFont bf, Font contenido) {
         try {
-            // Obtener los datos de la tabla predictiva
+            // Obtener los datos de la tabla predictiva (Paso 5)
             List<FilaTablaPredictiva> filas = tablaPredictiva.getFilas();
             if (filas == null || filas.isEmpty()) {
                 return;
             }
             
-            // Información básica de la tabla predictiva
-            Paragraph infoTablaDetalle = new Paragraph("    • " + bundle.getString("informe.simulador.tabla.predictiva.detalle") + ":", contenido);
-            infoTablaDetalle.setIndentationLeft(20);
-            document.add(infoTablaDetalle);
-            
-            // Mostrar información de cada fila
-            for (FilaTablaPredictiva fila : filas) {
-                String simbolo = fila.getSimbolo();
-                String prediccion = fila.getPrediccion();
-                
-                Paragraph infoFila = new Paragraph("        - " + simbolo + ": " + prediccion, contenido);
-                infoFila.setIndentationLeft(20);
-                document.add(infoFila);
+            // Obtener los terminales de la gramática para las columnas
+            List<Terminal> terminales = this.getTerminales();
+            if (terminales.isEmpty()) {
+                return;
             }
+            
+            // Crear tabla PDF con columnas: Símbolo + Terminales
+            int numColumnas = terminales.size() + 1; // +1 para la columna del símbolo
+            PdfPTable tabla = new PdfPTable(numColumnas);
+            tabla.setWidthPercentage(100);
+            
+            // Configurar fuentes para encabezados
+            Font encabezado = new Font(bf, 8, Font.BOLD);
+            encabezado.setColor(new BaseColor(33, 77, 72));
+            
+            // Agregar encabezado de la columna de Símbolos
+            PdfPCell celdaSimbolo = new PdfPCell(new Phrase("Símbolo", encabezado));
+            celdaSimbolo.setBackgroundColor(new BaseColor(240, 240, 240));
+            celdaSimbolo.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+            celdaSimbolo.setVerticalAlignment(PdfPCell.ALIGN_MIDDLE);
+            celdaSimbolo.setPadding(3);
+            celdaSimbolo.setMinimumHeight(20);
+            tabla.addCell(celdaSimbolo);
+            
+            // Agregar encabezados de terminales
+            for (Terminal terminal : terminales) {
+                PdfPCell celdaTerminal = new PdfPCell(new Phrase(terminal.getNombre(), encabezado));
+                celdaTerminal.setBackgroundColor(new BaseColor(240, 240, 240));
+                celdaTerminal.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+                celdaTerminal.setVerticalAlignment(PdfPCell.ALIGN_MIDDLE);
+                celdaTerminal.setPadding(3);
+                celdaTerminal.setMinimumHeight(20);
+                tabla.addCell(celdaTerminal);
+            }
+            
+            // Agregar TODAS las filas de datos (no terminales Y terminales)
+            for (FilaTablaPredictiva fila : filas) {
+                // Celda del símbolo (no terminal o terminal)
+                String simbolo = fila.getSimbolo();
+                PdfPCell celdaSim = new PdfPCell(new Phrase(simbolo, contenido));
+                celdaSim.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+                celdaSim.setVerticalAlignment(PdfPCell.ALIGN_MIDDLE);
+                celdaSim.setPadding(3);
+                celdaSim.setMinimumHeight(20);
+                
+                // Color de fondo según el tipo de símbolo
+                if (fila.getEsTerminal()) {
+                    celdaSim.setBackgroundColor(new BaseColor(255, 240, 240)); // Rojo muy claro para terminales
+                } else {
+                    celdaSim.setBackgroundColor(new BaseColor(240, 255, 240)); // Verde muy claro para no terminales
+                }
+                tabla.addCell(celdaSim);
+                
+                // Celdas de las producciones/funciones de error para cada terminal
+                for (Terminal terminal : terminales) {
+                    String valor = fila.getValor(terminal.getNombre()).get();
+                    String textoCelda = (valor != null && !valor.isEmpty()) ? valor : "";
+                    
+                    PdfPCell celdaDato = new PdfPCell(new Phrase(textoCelda, contenido));
+                    celdaDato.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+                    celdaDato.setVerticalAlignment(PdfPCell.ALIGN_MIDDLE);
+                    celdaDato.setPadding(3);
+                    celdaDato.setMinimumHeight(20);
+                    
+                    // Colores según el tipo de contenido
+                    if (textoCelda.contains("→")) {
+                        celdaDato.setBackgroundColor(new BaseColor(220, 255, 220)); // Verde claro para producciones
+                    } else if (textoCelda.startsWith("ε_")) {
+                        celdaDato.setBackgroundColor(new BaseColor(255, 255, 200)); // Amarillo claro para épsilon
+                    } else if (textoCelda.matches("\\d+")) {
+                        celdaDato.setBackgroundColor(new BaseColor(255, 220, 220)); // Rojo claro para funciones de error
+                    } else if (!textoCelda.isEmpty()) {
+                        celdaDato.setBackgroundColor(new BaseColor(255, 240, 255)); // Magenta claro para otros valores
+                    }
+                    
+                    tabla.addCell(celdaDato);
+                }
+            }
+            
+            // Agregar la tabla al documento
+            document.add(tabla);
             
         } catch (Exception e) {
             // Si hay error, agregar un mensaje simple
