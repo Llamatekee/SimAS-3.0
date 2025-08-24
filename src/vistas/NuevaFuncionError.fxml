@@ -32,7 +32,7 @@
         
         <!-- Formulario de Función de Error -->
         <VBox spacing="15" VBox.vgrow="ALWAYS">
-            <Label text="Configuración de la Función" styleClass="wizard-section-header"/>
+            <Label fx:id="labelConfiguracion" text="Configuración de la Función" styleClass="wizard-section-header"/>
             
             <GridPane vgap="15" hgap="15" VBox.vgrow="ALWAYS">
                 <columnConstraints>

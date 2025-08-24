@@ -213,51 +213,13 @@ public class PanelSimuladorDesc {
      */
     public void mostrarGramaticaOriginal() {
         try {
-            // Crear el contenido de la pestaña con estilo moderno
-            VBox content = new VBox(30);
-            content.setPadding(new Insets(40));
-            content.getStyleClass().add("wizard-step");
-            
-            // Título con estilo moderno (mantiene posición original)
-            Label titulo = new Label(bundle.getString("simulador.gramatica.titulo"));
-            titulo.getStyleClass().add("wizard-header");
-            titulo.setMaxWidth(Double.MAX_VALUE);
-            titulo.setAlignment(javafx.geometry.Pos.CENTER);
-            
-            // Lista de producciones con estilo personalizado
-            ListView<String> listView = new ListView<>();
-            listView.setItems(FXCollections.observableArrayList(gramaticaOriginal.getProduccionesModel()));
-            listView.setPrefHeight(350);
-            listView.setMaxHeight(400);
-            listView.setMaxWidth(Double.MAX_VALUE);
-            listView.setPrefWidth(Double.MAX_VALUE);
-            listView.getStyleClass().add("gramatica-original-list");
-            
-            // Configurar el estilo de las celdas de la lista
-            listView.setCellFactory(param -> new ListCell<String>() {
-                @Override
-                protected void updateItem(String item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (empty || item == null) {
-                        setText(null);
-                        setGraphic(null);
-                        getStyleClass().clear();
-                    } else {
-                        setText(item);
-                        getStyleClass().clear();
-                        // Aplicar estilo personalizado para las celdas
-                        setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 10px 15px;");
-                    }
-                }
-            });
-            
-            // Añadir elementos al contenido (sin botón de cerrar)
-            content.getChildren().addAll(titulo, listView);
+            // Crear el panel de gramática original con soporte de internacionalización
+            PanelGramaticaOriginal panelGramatica = new PanelGramaticaOriginal(gramaticaOriginal, bundle);
             
             // Usar TabManager para obtener o crear la pestaña como hija del simulador
             String childId = "gramatica_" + simuladorId;
-            Tab tab = TabManager.getOrCreateTab(tabPane, Parent.class, 
-                bundle.getString("simulador.gramatica.titulo"), content, simuladorId, childId);
+            Tab tab = TabManager.getOrCreateTab(tabPane, PanelGramaticaOriginal.class, 
+                bundle.getString("simulador.gramatica.titulo"), panelGramatica, simuladorId, childId);
             tab.setUserData(childId);
             
         } catch (Exception e) {
@@ -451,6 +413,11 @@ public class PanelSimuladorDesc {
                     } else {
                         tab.setText(tituloBase);
                     }
+                    
+                    // Actualizar contenido de la pestaña de gramática
+                    if (tab.getContent() instanceof editor.ActualizableTextos) {
+                        ((editor.ActualizableTextos) tab.getContent()).actualizarTextos(bundle);
+                    }
                 }
                 
                 // Actualizar pestaña de funciones de error
@@ -462,6 +429,16 @@ public class PanelSimuladorDesc {
                         tab.setText(numeroGrupo + "-" + tituloBase);
                     } else {
                         tab.setText(tituloBase);
+                    }
+                    
+                    // Actualizar contenido de la pestaña de funciones de error
+                    // Buscar la instancia de NuevaFuncionError a través del paso 4
+                    if (pasos.size() > 3 && pasos.get(3) instanceof PanelNuevaSimDescPaso4) {
+                        PanelNuevaSimDescPaso4 paso4 = (PanelNuevaSimDescPaso4) pasos.get(3);
+                        NuevaFuncionError nuevaFuncionError = paso4.getNuevaFuncionErrorInstance();
+                        if (nuevaFuncionError != null) {
+                            nuevaFuncionError.actualizarTextos(bundle);
+                        }
                     }
                 }
             }

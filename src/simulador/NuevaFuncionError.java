@@ -19,6 +19,7 @@ import java.util.ResourceBundle;
 public class NuevaFuncionError implements ActualizableTextos {
 
     @FXML private Label labelTitulo;
+    @FXML private Label labelConfiguracion;
     @FXML private Label labelIdentificador;
     @FXML private TextField textFieldIdentificador;
     @FXML private Label labelAccion;
@@ -211,6 +212,7 @@ public class NuevaFuncionError implements ActualizableTextos {
     public void actualizarTextos(ResourceBundle bundle) {
         this.bundle = bundle;
         if (labelTitulo != null) labelTitulo.setText(bundle.getString("nuevaFuncionError.titulo"));
+        if (labelConfiguracion != null) labelConfiguracion.setText(bundle.getString("nuevaFuncionError.label.configuracion"));
         if (labelIdentificador != null) labelIdentificador.setText(bundle.getString("nuevaFuncionError.label.identificador"));
         if (labelAccion != null) labelAccion.setText(bundle.getString("nuevaFuncionError.label.accion"));
         if (labelSimbolo != null) labelSimbolo.setText(bundle.getString("nuevaFuncionError.label.simbolo"));

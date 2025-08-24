@@ -36,6 +36,7 @@ public class PanelNuevaSimDescPaso4 implements PanelNuevaSimDescPaso, Actualizab
     private PanelSimuladorDesc panelPadre;
     private Gramatica gramatica;
     private java.util.ResourceBundle bundle;
+    private NuevaFuncionError nuevaFuncionErrorInstance; // Referencia al objeto NuevaFuncionError
 
     public PanelNuevaSimDescPaso4(PanelSimuladorDesc panelPadre) {
         this.panelPadre = panelPadre;
@@ -236,8 +237,8 @@ public class PanelNuevaSimDescPaso4 implements PanelNuevaSimDescPaso, Actualizab
             
         // Si la pestaña es nueva, configurar su contenido
         if (tab.getContent() == null) {
-            NuevaFuncionError nuevaFuncionError = new NuevaFuncionError(this.gramatica, this, bundle);
-            tab.setContent(nuevaFuncionError.getRoot());
+            nuevaFuncionErrorInstance = new NuevaFuncionError(this.gramatica, this, bundle);
+            tab.setContent(nuevaFuncionErrorInstance.getRoot());
         }
         
         // Seleccionar la pestaña
@@ -312,6 +313,13 @@ public class PanelNuevaSimDescPaso4 implements PanelNuevaSimDescPaso, Actualizab
         funcionesError.addAll(funcionesPredefinidas);
         funcionesError.addAll(funcionesOrdenadas);
     }
+    
+    /**
+     * Obtiene la instancia de NuevaFuncionError para actualización de idioma
+     */
+    public NuevaFuncionError getNuevaFuncionErrorInstance() {
+        return nuevaFuncionErrorInstance;
+    }
 
     @FXML
     private void handleFinalizar() {
@@ -332,7 +340,7 @@ public class PanelNuevaSimDescPaso4 implements PanelNuevaSimDescPaso, Actualizab
         if (buttonEliminar != null) buttonEliminar.setText(bundle.getString("simulador.paso4.btn.eliminar.corta"));
         if (buttonFinalizar != null) buttonFinalizar.setText(bundle.getString("button.finalizar"));
         if (buttonCancelar != null) buttonCancelar.setText(bundle.getString("button.cancelar"));
-        if (buttonVisualizarGramatica != null) buttonVisualizarGramatica.setText("Gramática");
+        if (buttonVisualizarGramatica != null) buttonVisualizarGramatica.setText(bundle.getString("simulador.paso1.btn.gramatica"));
         if (buttonPrimero != null) buttonPrimero.setText(bundle.getString("button.primero"));
         if (buttonAnterior != null) buttonAnterior.setText(bundle.getString("button.anterior"));
         if (buttonSiguiente != null) buttonSiguiente.setText(bundle.getString("button.siguiente"));

@@ -153,7 +153,7 @@ public class PanelNuevaSimDescPaso2 implements PanelNuevaSimDescPaso, Actualizab
         btnSiguiente.setText(bundle.getString("button.siguiente"));
         btnPrimero.setText(bundle.getString("button.primero"));
         btnUltimo.setText(bundle.getString("button.ultimo"));
-        btnVisualizarGramatica.setText("Gramática");
+        btnVisualizarGramatica.setText(bundle.getString("simulador.paso1.btn.gramatica"));
     }
 
     /**

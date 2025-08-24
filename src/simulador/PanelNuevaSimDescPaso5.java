@@ -764,11 +764,11 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso, Actualizab
         // Actualizar textos de la interfaz
         if (labelTitulo != null) labelTitulo.setText(bundle.getString("simulador.paso5.titulo"));
         if (labelSeleccioneFuncion != null) labelSeleccioneFuncion.setText(bundle.getString("simulador.paso5.seleccione.funcion"));
-        if (buttonEliminar != null) buttonEliminar.setText("Borrar");
-        if (buttonRellenarEpsilon != null) buttonRellenarEpsilon.setText("Rellenar");
-        if (buttonResetearTabla != null) buttonResetearTabla.setText("Resetear");
+        if (buttonEliminar != null) buttonEliminar.setText(bundle.getString("producciones.btn.borrar"));
+        if (buttonRellenarEpsilon != null) buttonRellenarEpsilon.setText(bundle.getString("simulador.paso5.btn.rellenar"));
+        if (buttonResetearTabla != null) buttonResetearTabla.setText(bundle.getString("simulador.paso5.btn.resetear.corto"));
         if (buttonCancelar != null) buttonCancelar.setText(bundle.getString("simulador.paso5.btn.cancelar"));
-        if (buttonGramatica != null) buttonGramatica.setText("Gramática");
+        if (buttonGramatica != null) buttonGramatica.setText(bundle.getString("simulador.paso1.btn.gramatica"));
         if (buttonPrimero != null) buttonPrimero.setText(bundle.getString("simulador.paso5.btn.primero"));
         if (buttonAnterior != null) buttonAnterior.setText(bundle.getString("simulador.paso5.btn.anterior"));
         if (buttonSiguiente != null) buttonSiguiente.setText(bundle.getString("simulador.paso5.btn.siguiente"));
