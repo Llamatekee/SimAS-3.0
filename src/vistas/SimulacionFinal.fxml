@@ -36,17 +36,17 @@
         <HBox spacing="20" alignment="CENTER">
             <TextField fx:id="campoEntrada" promptText="%simulacionfinal.prompt.entrada" 
                       styleClass="wizard-field" prefWidth="400" editable="false"/>
-            <Button fx:id="btnEditarCadena" text="%simulacionfinal.btn.editar" styleClass="wizard-action-button">
+            <Button fx:id="btnEditarCadena" text="%simulacionfinal.btn.editar.solo" styleClass="wizard-action-button">
                 <graphic>
                     <ImageView fitWidth="16" fitHeight="16">
-                    <Image url="@../resources/icons/element_edit.png"/>
+                    <Image url="@../resources/scroll.png"/>
                     </ImageView>
                 </graphic>
             </Button>
-            <Button fx:id="btnIniciar" text="%simulacionfinal.btn.iniciar" styleClass="button-finish">
+            <Button fx:id="btnIniciar" text="%simulacionfinal.btn.iniciar.solo" styleClass="button-finish">
                 <graphic>
                     <ImageView fitWidth="16" fitHeight="16">
-                    <Image url="@../resources/icons/play.png"/>
+                    <Image url="@../resources/icons/scroll_run.png"/>
                     </ImageView>
                 </graphic>
             </Button>
@@ -56,31 +56,31 @@
     <!-- Navigation Controls -->
     <HBox spacing="20" alignment="CENTER" GridPane.columnIndex="0" GridPane.rowIndex="2" 
           styleClass="wizard-navigation">
-        <Button fx:id="btnInicio" text="%simulacionfinal.btn.inicio" styleClass="button-first-last">
+        <Button fx:id="btnInicio" text="%simulacionfinal.btn.inicio.solo" styleClass="button-first-last">
             <graphic>
                 <ImageView fitWidth="16" fitHeight="16">
-                    <Image url="@../resources/icons/arrow_left_blue.png"/>
+                    <Image url="@../resources/primero.png"/>
                 </ImageView>
             </graphic>
         </Button>
-        <Button fx:id="btnRetroceso" text="%simulacionfinal.btn.retroceso" styleClass="button-prev-next">
+        <Button fx:id="btnRetroceso" text="%simulacionfinal.btn.retroceso.solo" styleClass="button-prev-next">
             <graphic>
                 <ImageView fitWidth="16" fitHeight="16">
-                    <Image url="@../resources/icons/arrow_left_green.png"/>
+                    <Image url="@../resources/anterior.png"/>
                 </ImageView>
             </graphic>
         </Button>
-        <Button fx:id="btnPaso" text="%simulacionfinal.btn.paso" styleClass="button-prev-next">
+        <Button fx:id="btnPaso" text="%simulacionfinal.btn.paso.solo" styleClass="button-prev-next">
             <graphic>
                 <ImageView fitWidth="16" fitHeight="16">
-                    <Image url="@../resources/icons/arrow_right_green.png"/>
+                    <Image url="@../resources/siguiente.png"/>
                 </ImageView>
             </graphic>
         </Button>
-        <Button fx:id="btnFinal" text="%simulacionfinal.btn.final" styleClass="button-grammar">
+        <Button fx:id="btnFinal" text="%simulacionfinal.btn.final.solo" styleClass="button-grammar">
             <graphic>
                 <ImageView fitWidth="16" fitHeight="16">
-                    <Image url="@../resources/icons/arrow_right_blue.png"/>
+                    <Image url="@../resources/ultimo.png"/>
                 </ImageView>
             </graphic>
         </Button>
@@ -103,17 +103,17 @@
     <!-- Action Buttons -->
     <HBox spacing="25" alignment="CENTER" GridPane.columnIndex="0" GridPane.rowIndex="4" 
           styleClass="wizard-navigation">
-        <Button fx:id="btnDerivacion" text="%simulacionfinal.btn.derivacion" styleClass="button-grammar">
+        <Button fx:id="btnDerivacion" text="%simulacionfinal.btn.derivacion.solo" styleClass="button-grammar">
             <graphic>
                 <ImageView fitWidth="16" fitHeight="16">
-                    <Image url="@../resources/icons/book_blue_view.png"/>
+                    <Image url="@../resources/simular.png"/>
                 </ImageView>
             </graphic>
         </Button>
-        <Button fx:id="btnArbol" text="%simulacionfinal.btn.arbol" styleClass="button-grammar">
+        <Button fx:id="btnArbol" text="%simulacionfinal.btn.informe.solo" styleClass="button-grammar">
             <graphic>
                 <ImageView fitWidth="16" fitHeight="16">
-                    <Image url="@../resources/icons/branch.png"/>
+                    <Image url="@../resources/icons/text_tree.png"/>
                 </ImageView>
             </graphic>
         </Button>

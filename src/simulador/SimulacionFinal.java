@@ -61,9 +61,6 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
     @FXML private TableColumn<HistorialPaso, String> colAccion;
     // Labels para internacionalización
     @FXML private Label labelEntrada;
-    @FXML private Label labelPila;
-    @FXML private Label labelEntradaStack;
-    @FXML private Label labelAccion;
     @FXML private Label labelHistorial;
 
     private Gramatica gramatica;
@@ -425,8 +422,8 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         // Botón para borrar último
         Button btnBorrar = new Button(bundle != null ? bundle.getString("simulacionfinal.btn.borrar.ultimo") : "Borrar último");
         btnBorrar.getStyleClass().add("button-cancel");
-        btnBorrar.setMinWidth(100);
-        btnBorrar.setPrefWidth(100);
+        btnBorrar.setMinWidth(120);
+        btnBorrar.setPrefWidth(120);
         btnBorrar.setOnAction(ev -> {
             String[] partes = campoCadena.getText().trim().split(" ");
             if (partes.length > 0 && !campoCadena.getText().trim().isEmpty()) {
@@ -442,8 +439,8 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         // Botón aceptar
         Button btnAceptar = new Button(bundle != null ? bundle.getString("button.aceptar") : "Aceptar");
         btnAceptar.getStyleClass().add("button-finish");
-        btnAceptar.setMinWidth(80);
-        btnAceptar.setPrefWidth(80);
+        btnAceptar.setMinWidth(120);
+        btnAceptar.setPrefWidth(120);
         btnAceptar.setOnAction(ev -> {
             campoEntrada.setText(campoCadena.getText());
             dialog.close();
@@ -452,12 +449,12 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         // Botón cancelar
         Button btnCancelar = new Button(bundle != null ? bundle.getString("button.cancelar") : "Cancelar");
         btnCancelar.getStyleClass().add("button-cancel");
-        btnCancelar.setMinWidth(80);
-        btnCancelar.setPrefWidth(80);
+        btnCancelar.setMinWidth(120);
+        btnCancelar.setPrefWidth(120);
         btnCancelar.setOnAction(ev -> dialog.close());
 
         // Contenedor de acciones con estilo moderno
-        HBox acciones = new HBox(12);
+        HBox acciones = new HBox(15);
         acciones.setAlignment(Pos.CENTER);
         acciones.setPadding(new Insets(15, 0, 0, 0));
         acciones.getStyleClass().add("dialog-actions");
@@ -1203,21 +1200,39 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
     public void actualizarTextos(ResourceBundle bundle) {
         this.bundle = bundle;
         
-        // Actualizar textos de los controles
-        labelEntrada.setText(bundle.getString("simulacionfinal.label.entrada"));
-        labelPila.setText(bundle.getString("simulacionfinal.label.pila"));
-        labelEntradaStack.setText(bundle.getString("simulacionfinal.label.entrada"));
-        labelAccion.setText(bundle.getString("simulacionfinal.label.accion"));
-        labelHistorial.setText(bundle.getString("simulacionfinal.label.historial"));
+        // Actualizar textos de los controles que existen en el FXML
+        if (labelEntrada != null) {
+            labelEntrada.setText(bundle.getString("simulacionfinal.label.entrada"));
+        }
+        if (labelHistorial != null) {
+            labelHistorial.setText(bundle.getString("simulacionfinal.label.historial"));
+        }
         
-        btnIniciar.setText(bundle.getString("simulacionfinal.btn.iniciar"));
-        btnPaso.setText(bundle.getString("simulacionfinal.btn.paso"));
-        btnFinal.setText(bundle.getString("simulacionfinal.btn.final"));
-        btnRetroceso.setText(bundle.getString("simulacionfinal.btn.retroceso"));
-        btnInicio.setText(bundle.getString("simulacionfinal.btn.inicio"));
-        btnEditarCadena.setText(bundle.getString("simulacionfinal.btn.editar.cadena"));
-        btnDerivacion.setText(bundle.getString("simulacionfinal.btn.derivacion"));
-        btnArbol.setText(bundle.getString("simulacionfinal.btn.arbol"));
+        // Actualizar textos de los botones
+        if (btnIniciar != null) {
+            btnIniciar.setText(bundle.getString("simulacionfinal.btn.iniciar.solo"));
+        }
+        if (btnPaso != null) {
+            btnPaso.setText(bundle.getString("simulacionfinal.btn.paso.solo"));
+        }
+        if (btnFinal != null) {
+            btnFinal.setText(bundle.getString("simulacionfinal.btn.final.solo"));
+        }
+        if (btnRetroceso != null) {
+            btnRetroceso.setText(bundle.getString("simulacionfinal.btn.retroceso.solo"));
+        }
+        if (btnInicio != null) {
+            btnInicio.setText(bundle.getString("simulacionfinal.btn.inicio.solo"));
+        }
+        if (btnEditarCadena != null) {
+            btnEditarCadena.setText(bundle.getString("simulacionfinal.btn.editar.solo"));
+        }
+        if (btnDerivacion != null) {
+            btnDerivacion.setText(bundle.getString("simulacionfinal.btn.derivacion.solo"));
+        }
+        if (btnArbol != null) {
+            btnArbol.setText(bundle.getString("simulacionfinal.btn.informe.solo"));
+        }
         
         // Actualizar títulos de las pestañas
         actualizarTitulosPestañas();
