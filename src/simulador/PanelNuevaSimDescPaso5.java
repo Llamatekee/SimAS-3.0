@@ -764,9 +764,9 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso, Actualizab
         // Actualizar textos de la interfaz
         if (labelTitulo != null) labelTitulo.setText(bundle.getString("simulador.paso5.titulo"));
         if (labelSeleccioneFuncion != null) labelSeleccioneFuncion.setText(bundle.getString("simulador.paso5.seleccione.funcion"));
-        if (buttonEliminar != null) buttonEliminar.setText(bundle.getString("simulador.paso5.btn.eliminar"));
-        if (buttonRellenarEpsilon != null) buttonRellenarEpsilon.setText(bundle.getString("simulador.paso5.btn.rellenar.epsilon"));
-        if (buttonResetearTabla != null) buttonResetearTabla.setText(bundle.getString("simulador.paso5.btn.resetear"));
+        if (buttonEliminar != null) buttonEliminar.setText("Borrar");
+        if (buttonRellenarEpsilon != null) buttonRellenarEpsilon.setText("Rellenar");
+        if (buttonResetearTabla != null) buttonResetearTabla.setText("Resetear");
         if (buttonCancelar != null) buttonCancelar.setText(bundle.getString("simulador.paso5.btn.cancelar"));
         if (buttonGramatica != null) buttonGramatica.setText("Gramática");
         if (buttonPrimero != null) buttonPrimero.setText(bundle.getString("simulador.paso5.btn.primero"));

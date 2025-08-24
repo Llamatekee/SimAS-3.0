@@ -52,7 +52,7 @@
                     onAction="#handleRellenarEpsilon">
                 <graphic>
                     <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
-                        <Image url="@../resources/icons/element_add.png"/>
+                        <Image url="@../resources/icons/scroll_preferences.png"/>
                     </ImageView>
                 </graphic>
             </Button>
@@ -60,7 +60,7 @@
                     onAction="#handleResetearTabla">
                 <graphic>
                     <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
-                        <Image url="@../resources/icons/application_stop.png"/>
+                        <Image url="@../resources/icons/scroll_replace.png"/>
                     </ImageView>
                 </graphic>
             </Button>
