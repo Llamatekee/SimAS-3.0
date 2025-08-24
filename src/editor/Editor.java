@@ -16,8 +16,10 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.stage.FileChooser;
 
 import java.io.IOException;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -472,7 +474,57 @@ public class Editor extends VBox implements ActualizableTextos {
     }
 
     private void generarInformePDF() {
-        // Implementar la generación del informe PDF
+        if (this.gramatica == null || this.gramatica.getNombre() == null || this.gramatica.getNombre().isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle(bundle.getString("editor.informe.error.titulo"));
+            alert.setHeaderText(null);
+            alert.setContentText(bundle.getString("editor.informe.error.sin.gramatica"));
+            alert.showAndWait();
+            return;
+        }
+
+        // Crear y configurar el FileChooser
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle(bundle.getString("editor.informe.guardar.titulo"));
+        fileChooser.getExtensionFilters().add(
+            new FileChooser.ExtensionFilter("Documentos PDF", "*.pdf")
+        );
+        
+        // Sugerir nombre de archivo basado en el nombre de la gramática
+        String nombreArchivo = this.gramatica.getNombre().replaceAll("[^a-zA-Z0-9]", "_") + "_Informe.pdf";
+        fileChooser.setInitialFileName(nombreArchivo);
+
+        // Mostrar diálogo de guardado
+        File archivo = fileChooser.showSaveDialog(rootPane.getScene().getWindow());
+        if (archivo == null) {
+            return; // Usuario canceló
+        }
+
+        try {
+            // Generar el informe usando el método de la clase Gramatica
+            boolean exito = this.gramatica.generarInforme(archivo.getAbsolutePath());
+            
+            if (exito) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle(bundle.getString("editor.informe.exito.titulo"));
+                alert.setHeaderText(null);
+                alert.setContentText(bundle.getString("editor.informe.exito.mensaje") + "\n" + archivo.getAbsolutePath());
+                alert.showAndWait();
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle(bundle.getString("editor.informe.error.titulo"));
+                alert.setHeaderText(null);
+                alert.setContentText(bundle.getString("editor.informe.error.gramatica.no.validada"));
+                alert.showAndWait();
+            }
+        } catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle(bundle.getString("editor.informe.error.titulo"));
+            alert.setHeaderText(null);
+            alert.setContentText(bundle.getString("editor.informe.error.generacion") + "\n" + e.getMessage());
+            alert.showAndWait();
+            e.printStackTrace();
+        }
     }
 
     public void actualizarTextos(ResourceBundle nuevoBundle) {

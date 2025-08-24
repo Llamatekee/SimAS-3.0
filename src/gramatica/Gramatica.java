@@ -3,6 +3,8 @@ package gramatica;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.pdf.PdfPageEventHelper;
+import com.itextpdf.text.pdf.ColumnText;
 import com.itextpdf.text.pdf.draw.LineSeparator;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -691,90 +693,178 @@ public class Gramatica {
             try {
                 // Configuración de la fuente y del documento PDF
                 String fontPath = "fonts/arial.ttf";
-                Document document = new Document(PageSize.LETTER, 45, 45, 54, 45);
+                Document document = new Document(PageSize.A4, 50, 50, 80, 50);
+                
+                // Crear el PdfWriter con numeración de páginas
+                PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(fichero));
+                
+                // Configurar numeración de páginas
+                writer.setPageEvent(new PdfPageEventHelper() {
+                    @Override
+                    public void onEndPage(PdfWriter writer, Document document) {
+                        try {
+                            BaseFont bf = BaseFont.createFont(fontPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+                            Font font = new Font(bf, 10);
+                            ColumnText.showTextAligned(writer.getDirectContent(), 
+                                Paragraph.ALIGN_CENTER, 
+                                new Phrase(String.format("Página %d", writer.getPageNumber()), font), 
+                                (document.right() - document.left()) / 2 + document.leftMargin(), 
+                                document.bottom() - 10, 0);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+                
+                // Cargar logo de la aplicación
                 Image imagen = Image.getInstance(Objects.requireNonNull(getClass().getResource("/resources/logo2Antes.png")).toExternalForm());
                 imagen.setAlignment(Image.ALIGN_CENTER);
-                imagen.scalePercent(40);
+                imagen.scalePercent(35);
 
                 LineSeparator ls = new LineSeparator();
                 BaseFont bf = BaseFont.createFont(fontPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-                Font titulo = new Font(bf, 21, Font.BOLD);
-                Font font2 = new Font(bf, 15, Font.BOLD);
-                Font font3 = new Font(bf, 12);
-                BaseColor claro = new BaseColor(63, 171, 160);
+                Font titulo = new Font(bf, 24, Font.BOLD);
+                Font subtitulo = new Font(bf, 18, Font.BOLD);
+                Font seccion = new Font(bf, 14, Font.BOLD);
+                Font contenido = new Font(bf, 12);
+                Font contenidoPequeno = new Font(bf, 10);
+                BaseColor colorPrincipal = new BaseColor(33, 77, 72);
+                BaseColor colorSecundario = new BaseColor(63, 171, 160);
+                BaseColor colorAcento = new BaseColor(255, 140, 0);
 
-                titulo.setColor(33, 77, 72);
-                font2.setColor(BaseColor.BLACK);
+                titulo.setColor(colorPrincipal);
+                subtitulo.setColor(colorSecundario);
+                seccion.setColor(colorPrincipal);
 
-                ls.setLineWidth(1);
-                ls.setLineColor(claro);
-
-                // Crear párrafos para el informe
-                Paragraph parrafoTitulo = new Paragraph(" INFORME DE LA GRAMÁTICA ", titulo);
-                parrafoTitulo.setAlignment(Paragraph.ALIGN_CENTER);
-
-                Paragraph parrafoNombre = new Paragraph("\n Nombre de la gramática: ", font2);
-                parrafoNombre.add(new Paragraph("    " + this.getNombre() + "\n", font3));
-
-                Paragraph parrafoDescripcion = new Paragraph("\n Descripción de la gramática: ", font2);
-                parrafoDescripcion.add(new Paragraph("    " + this.getDescripcion() + "\n", font3));
-
-                // Símbolos terminales: se itera sobre la lista de terminales (ObservableList<String>)
-                Paragraph parrafoTerminales = new Paragraph("\n Símbolos terminales: ", font2);
-                ObservableList<String> termModel = this.getTerminalesModel(); // Método que devuelve ObservableList<String>
-                for (String t : termModel) {
-                    parrafoTerminales.add(new Paragraph("    " + t, font3));
-                }
-
-                // Símbolos no terminales
-                Paragraph parrafoNoTerminales = new Paragraph("\n Símbolos no terminales: ", font2);
-                ObservableList<String> noTermModel = this.getNoTerminalesModel();
-                for (String nt : noTermModel) {
-                    parrafoNoTerminales.add(new Paragraph("    " + nt, font3));
-                }
-
-                // Símbolo inicial
-                Paragraph parrafoSimboloInicial = new Paragraph("\n Símbolo inicial de la gramática: ", font2);
-                parrafoSimboloInicial.add(new Paragraph("    " + this.getSimbInicial(), font3));
-
-                // Producciones: se prepara una nueva lista para formatear la salida
-                Paragraph parrafoProducciones = new Paragraph("\n Producciones de la gramática: ", font2);
-                ObservableList<String> prodModel = this.getProduccionesModel();
-                // Crear una lista auxiliar para añadir cabecera y cierre
-                ObservableList<String> prodFormateadas = FXCollections.observableArrayList();
-                prodFormateadas.add("P {");
-                int index = 1;
-                for (String prod : prodModel) {
-                    prodFormateadas.add("   " + (index++) + ")   " + prod);
-                }
-                prodFormateadas.add("}");
-                for (String prodStr : prodFormateadas) {
-                    parrafoProducciones.add(new Paragraph("    " + prodStr, font3));
-                }
-
-                // Crear el PdfWriter para escribir el documento en el fichero
-                try {
-                    PdfWriter.getInstance(document, new FileOutputStream(fichero));
-                } catch (DocumentException | FileNotFoundException ex) {
-                    Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
-                }
+                ls.setLineWidth(2);
+                ls.setLineColor(colorSecundario);
 
                 document.open();
-                try {
-                    document.add(imagen);
-                    document.add(parrafoTitulo);
-                    document.add(new Chunk(ls));
-                    document.add(parrafoNombre);
-                    document.add(parrafoDescripcion);
-                    document.add(parrafoTerminales);
-                    document.add(parrafoNoTerminales);
-                    document.add(parrafoSimboloInicial);
-                    document.add(parrafoProducciones);
-                } catch (DocumentException ex) {
-                    Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
+                
+                // Página 1: Portada
+                document.add(imagen);
+                document.add(new Paragraph(" ", new Font(bf, 20))); // Espacio
+                
+                Paragraph parrafoTitulo = new Paragraph("INFORME DE GRAMÁTICA", titulo);
+                parrafoTitulo.setAlignment(Paragraph.ALIGN_CENTER);
+                document.add(parrafoTitulo);
+                
+                document.add(new Paragraph(" ", new Font(bf, 15))); // Espacio
+                
+                Paragraph parrafoSubtitulo = new Paragraph("SimAS - Simulador de Análisis Sintáctico", subtitulo);
+                parrafoSubtitulo.setAlignment(Paragraph.ALIGN_CENTER);
+                document.add(parrafoSubtitulo);
+                
+                document.add(new Paragraph(" ", new Font(bf, 20))); // Espacio
+                document.add(new Chunk(ls));
+                document.add(new Paragraph(" ", new Font(bf, 15))); // Espacio
+                
+                // Solo el nombre de la gramática centrado
+                Paragraph parrafoNombre = new Paragraph(this.getNombre(), seccion);
+                parrafoNombre.setAlignment(Paragraph.ALIGN_CENTER);
+                document.add(parrafoNombre);
+                
+                document.add(new Paragraph(" ", new Font(bf, 10))); // Espacio
+                
+                // Fecha de generación en la esquina inferior derecha
+                Paragraph parrafoFecha = new Paragraph("Fecha de generación: " + 
+                    java.time.LocalDate.now().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")), 
+                    contenidoPequeno);
+                parrafoFecha.setAlignment(Paragraph.ALIGN_RIGHT);
+                document.add(parrafoFecha);
+                
+                // Nueva página para el contenido detallado
+                document.newPage();
+                
+                // Título de la página de contenido
+                Paragraph tituloContenido = new Paragraph("DETALLES DE LA GRAMÁTICA", subtitulo);
+                tituloContenido.setAlignment(Paragraph.ALIGN_CENTER);
+                document.add(tituloContenido);
+                document.add(new Chunk(ls));
+                document.add(new Paragraph(" ", new Font(bf, 10))); // Espacio
+                
+                // Descripción de la gramática
+                Paragraph parrafoDescripcion = new Paragraph("Descripción:", seccion);
+                document.add(parrafoDescripcion);
+                Paragraph descripcion = new Paragraph("    " + this.getDescripcion(), contenido);
+                descripcion.setIndentationLeft(20);
+                document.add(descripcion);
+                document.add(new Paragraph(" ", new Font(bf, 8))); // Espacio
+                
+                // Símbolo inicial
+                Paragraph parrafoSimboloInicial = new Paragraph("Símbolo Inicial:", seccion);
+                document.add(parrafoSimboloInicial);
+                Paragraph simboloInicial = new Paragraph("    " + this.getSimbInicial(), contenido);
+                simboloInicial.setIndentationLeft(20);
+                document.add(simboloInicial);
+                document.add(new Paragraph(" ", new Font(bf, 8))); // Espacio
+                
+                // Símbolos no terminales
+                Paragraph parrafoNoTerminales = new Paragraph("Símbolos No Terminales:", seccion);
+                document.add(parrafoNoTerminales);
+                ObservableList<String> noTermModel = this.getNoTerminalesModel();
+                for (String nt : noTermModel) {
+                    Paragraph noTerm = new Paragraph("    • " + nt, contenido);
+                    noTerm.setIndentationLeft(20);
+                    document.add(noTerm);
                 }
-
+                document.add(new Paragraph(" ", new Font(bf, 8))); // Espacio
+                
+                // Símbolos terminales
+                Paragraph parrafoTerminales = new Paragraph("Símbolos Terminales:", seccion);
+                document.add(parrafoTerminales);
+                ObservableList<String> termModel = this.getTerminalesModel();
+                for (String t : termModel) {
+                    Paragraph term = new Paragraph("    • " + t, contenido);
+                    term.setIndentationLeft(20);
+                    document.add(term);
+                }
+                document.add(new Paragraph(" ", new Font(bf, 8))); // Espacio
+                
+                // Producciones
+                Paragraph parrafoProducciones = new Paragraph("Producciones:", seccion);
+                document.add(parrafoProducciones);
+                
+                ObservableList<String> prodModel = this.getProduccionesModel();
+                int index = 1;
+                for (String prod : prodModel) {
+                    Paragraph produccion = new Paragraph("    " + index + ") " + prod, contenido);
+                    produccion.setIndentationLeft(20);
+                    document.add(produccion);
+                    index++;
+                }
+                
+                document.add(new Paragraph(" ", new Font(bf, 15))); // Espacio
+                
+                // Información adicional
+                Paragraph parrafoInfo = new Paragraph("Información Adicional:", seccion);
+                document.add(parrafoInfo);
+                
+                Paragraph infoValidacion = new Paragraph("    • Estado de validación: VÁLIDA", contenido);
+                infoValidacion.setIndentationLeft(20);
+                document.add(infoValidacion);
+                
+                Paragraph infoProducciones = new Paragraph("    • Número total de producciones: " + prodModel.size(), contenido);
+                infoProducciones.setIndentationLeft(20);
+                document.add(infoProducciones);
+                
+                Paragraph infoNoTerminales = new Paragraph("    • Número de símbolos no terminales: " + noTermModel.size(), contenido);
+                infoNoTerminales.setIndentationLeft(20);
+                document.add(infoNoTerminales);
+                
+                Paragraph infoTerminales = new Paragraph("    • Número de símbolos terminales: " + termModel.size(), contenido);
+                infoTerminales.setIndentationLeft(20);
+                document.add(infoTerminales);
+                
+                document.add(new Paragraph(" ", new Font(bf, 15))); // Espacio
+                
+                // Pie de página con información de la aplicación
+                Paragraph piePagina = new Paragraph("Documento generado por SimAS v3.0 - Simulador de Análisis Sintáctico", contenidoPequeno);
+                piePagina.setAlignment(Paragraph.ALIGN_CENTER);
+                document.add(piePagina);
+                
                 document.close();
+                
             } catch (BadElementException ex) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
