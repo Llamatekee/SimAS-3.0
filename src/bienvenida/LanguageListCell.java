@@ -5,6 +5,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.paint.Color;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 
 /**
  * Celda personalizada para mostrar idiomas con banderas en el ComboBox
@@ -37,8 +38,14 @@ public class LanguageListCell extends ListCell<LanguageItem> {
             // Limpiar contenido anterior
             content.getChildren().clear();
             
+            // Crear una nueva instancia del ImageView para evitar problemas de referencia
+            ImageView flagView = new ImageView(item.getFlagImageView().getImage());
+            flagView.setFitHeight(16);
+            flagView.setFitWidth(24);
+            flagView.setPreserveRatio(true);
+            
             // Agregar la bandera
-            content.getChildren().add(item.getFlagImageView());
+            content.getChildren().add(flagView);
             
             // Agregar el texto del idioma
             textLabel.setText(item.getName());
