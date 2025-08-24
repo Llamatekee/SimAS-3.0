@@ -29,7 +29,7 @@ public class MenuPrincipal extends Application {
     @FXML private TabPane tabPane;
     @FXML private Tab mainTab;
     @FXML private Button btnCerrarTabs;
-    @FXML private ComboBox<String> comboIdioma;
+    @FXML private ComboBox<LanguageItem> comboIdioma;
     @FXML private Button btnEditor;
     @FXML private Button btnSalir;
     @FXML private Button btnSimulador;
@@ -259,9 +259,22 @@ public class MenuPrincipal extends Application {
 
     @FXML
     private void initialize() {
-        // Inicializar idiomas
-        comboIdioma.getItems().addAll("Español", "English", "Français");
-        comboIdioma.setValue("Español");
+        // Inicializar idiomas con banderas
+        comboIdioma.getItems().addAll(
+            new LanguageItem("Español", "es", "espana.png"),
+            new LanguageItem("English", "en", "england.png"),
+            new LanguageItem("Français", "fr", "francia.png"),
+            new LanguageItem("Português", "pt", "portugal.png"),
+            new LanguageItem("Deutsch", "de", "alemania.png"),
+            new LanguageItem("日本語", "ja", "japon.png")
+        );
+        
+        // Configurar la celda personalizada para mostrar banderas
+        comboIdioma.setCellFactory(param -> new LanguageListCell());
+        comboIdioma.setButtonCell(new LanguageListCell());
+        
+        // Establecer el idioma por defecto (Español)
+        comboIdioma.setValue(comboIdioma.getItems().get(0));
         comboIdioma.setOnAction(e -> cambiarIdioma());
         cargarBundle(currentLocale);
         
@@ -384,19 +397,12 @@ public class MenuPrincipal extends Application {
     }
 
     private void cambiarIdioma() {
-        String idioma = comboIdioma.getValue();
-        switch (idioma) {
-            case "English":
-                currentLocale = new Locale("en");
-                break;
-            case "Français":
-                currentLocale = new Locale("fr");
-                break;
-            default:
-                currentLocale = new Locale("es");
+        LanguageItem selectedLanguage = comboIdioma.getValue();
+        if (selectedLanguage != null) {
+            currentLocale = new Locale(selectedLanguage.getLocale());
+            cargarBundle(currentLocale);
+            actualizarTextos();
         }
-        cargarBundle(currentLocale);
-        actualizarTextos();
     }
 
     private void cargarBundle(Locale locale) {
