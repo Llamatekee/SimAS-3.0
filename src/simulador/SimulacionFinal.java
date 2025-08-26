@@ -2,6 +2,8 @@ package simulador;
 
 import gramatica.Gramatica;
 import gramatica.TablaPredictivaPaso5;
+import gramatica.FuncionError;
+import simulador.PanelSimuladorDesc;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -9,6 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.FileChooser;
 import javafx.scene.Scene;
 import javafx.scene.layout.FlowPane;
 import javafx.geometry.Insets;
@@ -54,6 +57,7 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
     @FXML private Button btnEditarCadena;
     @FXML private Button btnDerivacion;
     @FXML private Button btnArbol;
+    @FXML private Button btnGenerarInforme;
     @FXML private Label labelTitulo;
     @FXML private TableView<HistorialPaso> tablaHistorial;
     @FXML private TableColumn<HistorialPaso, String> colPaso;
@@ -68,6 +72,9 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
     private TablaPredictivaPaso5 tablaPredictiva;
     private TabPane tabPane;
     private ResourceBundle bundle;
+    
+    // Variables para el informe PDF (copiadas del paso 6)
+    private List<FuncionError> funcionesError;
 
     // Estado de la simulación
     private Stack<String> pilaSimulacion;
@@ -115,6 +122,11 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         this.tablaPredictiva = tablaPredictiva;
         this.tabPane = tabPane;
         this.bundle = bundle;
+        
+        // Inicializar funciones de error para el informe PDF
+        if (tablaPredictiva != null) {
+            this.funcionesError = tablaPredictiva.getFuncionesError();
+        }
         // El simulacionId se asignará desde fuera (PanelNuevaSimDescPaso6)
         this.simulacionId = null; // Se asignará después
         
@@ -350,6 +362,7 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         btnRetroceso.setOnAction(e -> retrocederPaso());
         btnDerivacion.setOnAction(e -> mostrarDerivacion());
         btnArbol.setOnAction(e -> mostrarArbolSintactico());
+        btnGenerarInforme.setOnAction(e -> generarInforme());
         
         // Las áreas de texto individuales se han eliminado, ahora solo usamos la tabla de historial
         
@@ -368,6 +381,7 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         btnFinal.setDisable(true);
         btnRetroceso.setDisable(true);
         btnInicio.setDisable(true);
+        btnGenerarInforme.setDisable(true); // Deshabilitar botón de informe inicialmente
     }
 
     private void mostrarDialogoEditarCadena() {
@@ -536,6 +550,7 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         btnInicio.setDisable(true);
         campoEntrada.setDisable(true);
         btnEditarCadena.setDisable(false);
+        btnGenerarInforme.setDisable(true); // Deshabilitar botón al iniciar nueva simulación
 
         // Actualizar la vista
         actualizarVista();
@@ -626,6 +641,7 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
             simulacionEnCurso = false;
             btnPaso.setDisable(true);
             btnFinal.setDisable(true);
+            btnGenerarInforme.setDisable(false); // Habilitar botón cuando la simulación termine
             pasoActual++;
             agregarPasoHistorial(accionRealizada);
             actualizarVista();
@@ -644,6 +660,7 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
             simulacionEnCurso = false;
             btnPaso.setDisable(true);
             btnFinal.setDisable(true);
+            btnGenerarInforme.setDisable(false); // Habilitar botón cuando la simulación termine
             pasoActual++;
             agregarPasoHistorial(accionRealizada);
             actualizarVista();
@@ -657,6 +674,7 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
                 simulacionEnCurso = false;
                 btnPaso.setDisable(true);
                 btnFinal.setDisable(true);
+                btnGenerarInforme.setDisable(false); // Habilitar botón cuando la simulación termine
                 pasoActual++;
                 agregarPasoHistorial(accionRealizada);
                 actualizarVista();
@@ -1237,6 +1255,9 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         if (btnArbol != null) {
             btnArbol.setText(bundle.getString("simulacionfinal.btn.informe.solo"));
         }
+        if (btnGenerarInforme != null) {
+            btnGenerarInforme.setText(bundle.getString("simulacionfinal.btn.informe.pdf"));
+        }
         
         // Actualizar títulos de las pestañas
         actualizarTitulosPestañas();
@@ -1541,6 +1562,70 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
                     actualizarContenidoArbol(tab);
                 }
             }
+        }
+    }
+
+    @FXML
+    private void generarInforme() {
+        if (this.gramatica == null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle(bundle.getString("editor.informe.error.titulo"));
+            alert.setHeaderText(null);
+            alert.setContentText(bundle.getString("editor.informe.error.sin.gramatica"));
+            alert.showAndWait();
+            return;
+        }
+
+        // Crear y configurar el FileChooser
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle(bundle.getString("editor.informe.guardar.titulo"));
+        fileChooser.getExtensionFilters().add(
+            new FileChooser.ExtensionFilter("Documentos PDF", "*.pdf")
+        );
+        
+        // Sugerir nombre de archivo basado en el nombre de la gramática
+        String nombreArchivo = this.gramatica.getNombre().replaceAll("[^a-zA-Z0-9]", "_") + "_InformeSimulacion.pdf";
+        fileChooser.setInitialFileName(nombreArchivo);
+
+        // Mostrar diálogo de guardado
+        File archivo = fileChooser.showSaveDialog(this.getScene().getWindow());
+        if (archivo == null) {
+            return; // Usuario canceló
+        }
+
+        try {
+            // Usar la gramática actual para generar el informe
+            Gramatica gramaticaOriginal = this.gramatica;
+            
+            // Generar el informe del simulador
+            boolean exito = this.gramatica.generarInformeSimulador(
+                archivo.getAbsolutePath(), 
+                gramaticaOriginal, 
+                this.tablaPredictiva, 
+                this.funcionesError, 
+                bundle
+            );
+            
+            if (exito) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle(bundle.getString("editor.informe.exito.titulo"));
+                alert.setHeaderText(null);
+                alert.setContentText(bundle.getString("editor.informe.exito.mensaje") + "\n" + archivo.getAbsolutePath());
+                alert.showAndWait();
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle(bundle.getString("editor.informe.error.titulo"));
+                alert.setHeaderText(null);
+                alert.setContentText(bundle.getString("editor.informe.error.generacion"));
+                alert.showAndWait();
+            }
+        } catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle(bundle.getString("editor.informe.error.titulo"));
+            alert.setHeaderText(null);
+            alert.setContentText(bundle.getString("editor.informe.error.generacion") + "\n" + e.getMessage());
+            alert.showAndWait();
+            e.printStackTrace();
         }
     }
 } 
