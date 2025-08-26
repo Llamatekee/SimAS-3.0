@@ -28,6 +28,7 @@ import java.io.*;
 import java.util.List;
 import java.util.*;
 import java.util.logging.Level;
+import simulador.SimulacionFinal.HistorialPaso;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.Enumeration;
@@ -1255,9 +1256,9 @@ public class Gramatica {
     /**
      * Genera un informe PDF completo del simulador incluyendo gramática original, modificada y detalles de simulación.
      */
-    public Boolean generarInformeSimulacionFinal(String fichero, Gramatica gramaticaOriginal, TablaPredictiva tablaPredictiva, 
-                                         List<FuncionError> funcionesError, ResourceBundle bundle, String cadenaEntrada, 
-                                         String estadoSimulacion) throws DocumentException {
+    public Boolean generarInformeSimulacionFinal(String fichero, Gramatica gramaticaOriginal, TablaPredictiva tablaPredictiva,
+                                         List<FuncionError> funcionesError, ResourceBundle bundle, String cadenaEntrada,
+                                         String estadoSimulacion, List<HistorialPaso> historialPasos) throws DocumentException {
         try {
             // Configuración de la fuente y del documento PDF
             String fontPath = "fonts/arial.ttf";
@@ -1575,8 +1576,95 @@ public class Gramatica {
             Paragraph estadoSim = new Paragraph("        " + (estadoSimulacion != null ? estadoSimulacion : "No especificado"), estadoFont);
             estadoSim.setIndentationLeft(20);
             document.add(estadoSim);
+            document.add(new Paragraph(" ", new Font(bf, 8))); // Espacio
+
+            // Historial de pasos
+            if (historialPasos != null && !historialPasos.isEmpty()) {
+                Paragraph parrafoHistorial = new Paragraph("    Historial de Pasos:", contenido);
+                parrafoHistorial.setIndentationLeft(20);
+                document.add(parrafoHistorial);
+                document.add(new Paragraph(" ", new Font(bf, 8))); // Espacio pequeño
+
+                // Crear tabla para el historial
+                PdfPTable tablaHistorial = new PdfPTable(4);
+                tablaHistorial.setWidthPercentage(100);
+                tablaHistorial.setWidths(new float[]{1, 2, 2, 3});
+
+                // Encabezados
+                Font headerFont = new Font(bf, 10, Font.BOLD);
+                headerFont.setColor(colorSecundario);
+                PdfPCell cellPaso = new PdfPCell(new Phrase("Paso", headerFont));
+                cellPaso.setBackgroundColor(colorPrincipal);
+                cellPaso.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+                tablaHistorial.addCell(cellPaso);
+
+                PdfPCell cellPila = new PdfPCell(new Phrase("Pila", headerFont));
+                cellPila.setBackgroundColor(colorPrincipal);
+                cellPila.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+                tablaHistorial.addCell(cellPila);
+
+                PdfPCell cellEntrada = new PdfPCell(new Phrase("Entrada", headerFont));
+                cellEntrada.setBackgroundColor(colorPrincipal);
+                cellEntrada.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+                tablaHistorial.addCell(cellEntrada);
+
+                PdfPCell cellAccion = new PdfPCell(new Phrase("Acción", headerFont));
+                cellAccion.setBackgroundColor(colorPrincipal);
+                cellAccion.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+                tablaHistorial.addCell(cellAccion);
+
+                // Datos
+                Font dataFont = new Font(bf, 9);
+                for (HistorialPaso paso : historialPasos) {
+                    PdfPCell cellPasoData = new PdfPCell(new Phrase(paso.getPaso(), dataFont));
+                    cellPasoData.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+                    tablaHistorial.addCell(cellPasoData);
+
+                    PdfPCell cellPilaData = new PdfPCell(new Phrase(paso.getPila(), dataFont));
+                    cellPilaData.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
+                    tablaHistorial.addCell(cellPilaData);
+
+                    PdfPCell cellEntradaData = new PdfPCell(new Phrase(paso.getEntrada(), dataFont));
+                    cellEntradaData.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
+                    tablaHistorial.addCell(cellEntradaData);
+
+                    PdfPCell cellAccionData = new PdfPCell(new Phrase(paso.getAccion(), dataFont));
+                    cellAccionData.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
+                    tablaHistorial.addCell(cellAccionData);
+                }
+
+                document.add(tablaHistorial);
+                document.add(new Paragraph(" ", new Font(bf, 8))); // Espacio
+            }
+
+            // Derivación
+            if (historialPasos != null && !historialPasos.isEmpty()) {
+                Paragraph parrafoDerivacion = new Paragraph("    Derivación:", contenido);
+                parrafoDerivacion.setIndentationLeft(20);
+                document.add(parrafoDerivacion);
+                document.add(new Paragraph(" ", new Font(bf, 8))); // Espacio pequeño
+
+                // Generar derivación basada en el historial
+                for (int i = 0; i < historialPasos.size(); i++) {
+                    HistorialPaso paso = historialPasos.get(i);
+                    String derivacionLine = "        Paso " + (i + 1) + ": " + paso.getAccion();
+                    Paragraph derivacionPaso = new Paragraph(derivacionLine, contenido);
+                    derivacionPaso.setIndentationLeft(20);
+                    document.add(derivacionPaso);
+                }
+                document.add(new Paragraph(" ", new Font(bf, 8))); // Espacio
+            }
+
+            // Nota sobre el árbol sintáctico
+            Paragraph parrafoArbol = new Paragraph("    Árbol Sintáctico:", contenido);
+            parrafoArbol.setIndentationLeft(20);
+            document.add(parrafoArbol);
+            Paragraph notaArbol = new Paragraph("        El árbol sintáctico completo se encuentra disponible en la interfaz de usuario del simulador.", contenidoPequeno);
+            notaArbol.setIndentationLeft(20);
+            document.add(notaArbol);
+
             document.add(new Paragraph(" ", new Font(bf, 15))); // Espacio
-            
+
             // Fecha de generación encima del pie de página
             Paragraph parrafoFecha = new Paragraph(bundle.getString("informe.fecha.generacion") + ": " + 
                 java.time.LocalDate.now().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")), 
