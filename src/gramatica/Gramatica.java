@@ -1506,21 +1506,7 @@ public class Gramatica {
 
                 @Override
                 public void onStartPage(PdfWriter writer, Document document) {
-                    if (writer.getPageNumber() > 1) { // No agregar encabezado en portada
-                        try {
-                            // Encabezado con título del informe
-                            Font fontEncabezado = new Font(finalBf, 10, Font.BOLD);
-                            fontEncabezado.setColor(finalColorPrimario);
-
-                            ColumnText.showTextAligned(writer.getDirectContent(),
-                                Paragraph.ALIGN_CENTER,
-                                new Phrase(finalBundle.getString("informe.simulador.titulo"), fontEncabezado),
-                                (document.right() - document.left()) / 2 + document.leftMargin(),
-                                document.top() + 15, 0);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
+                    // Encabezado eliminado - no mostrar título en cada página
                 }
             });
 
@@ -1648,6 +1634,7 @@ public class Gramatica {
             bundle.getString("informe.profesional.indice.resumen"),
             bundle.getString("informe.profesional.indice.gramatica.original"),
             bundle.getString("informe.profesional.indice.gramatica.modificada"),
+            bundle.getString("informe.profesional.indice.funciones.error"),
             bundle.getString("informe.profesional.indice.tabla.predictiva"),
             bundle.getString("informe.profesional.indice.simulacion"),
             bundle.getString("informe.profesional.indice.historial"),
@@ -1694,18 +1681,35 @@ public class Gramatica {
         document.add(valorCadena);
         document.add(new Paragraph(" ", new Font(bf, 10)));
 
-        // Resultado final
+        // Resultado final con recuadro destacado
         Paragraph labelResultado = new Paragraph(bundle.getString("informe.profesional.resultado.final"), labelFont);
         document.add(labelResultado);
+        document.add(new Paragraph(" ", new Font(bf, 5)));
 
         BaseColor colorEstado = estadoSimulacion != null && estadoSimulacion.equals(bundle.getString("informe.simulador.estado.aceptada")) ?
                                colorExito : colorError;
-        Font estadoFont = new Font(bf, 14, Font.BOLD);
+        String textoEstado = estadoSimulacion != null ? estadoSimulacion : bundle.getString("informe.profesional.no.especificado");
+
+        // Crear tabla para resaltar el resultado
+        PdfPTable tablaResultado = new PdfPTable(1);
+        tablaResultado.setWidthPercentage(80);
+        tablaResultado.setSpacingBefore(5);
+        tablaResultado.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+
+        Font estadoFont = new Font(bf, 16, Font.BOLD);
         estadoFont.setColor(colorEstado);
-        Paragraph valorResultado = new Paragraph("    " + (estadoSimulacion != null ? estadoSimulacion : bundle.getString("informe.profesional.no.especificado")), estadoFont);
-        valorResultado.setIndentationLeft(20);
-        document.add(valorResultado);
-        document.add(new Paragraph(" ", new Font(bf, 10)));
+
+        PdfPCell cellResultado = new PdfPCell(new Phrase(textoEstado, estadoFont));
+        cellResultado.setBackgroundColor(new BaseColor(250, 250, 250)); // Fondo gris muy claro
+        cellResultado.setBorderColor(colorEstado);
+        cellResultado.setBorderWidth(2);
+        cellResultado.setPadding(15);
+        cellResultado.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+        cellResultado.setVerticalAlignment(PdfPCell.ALIGN_MIDDLE);
+
+        tablaResultado.addCell(cellResultado);
+        document.add(tablaResultado);
+        document.add(new Paragraph(" ", new Font(bf, 15)));
 
         // Número de pasos
         int numPasos = historialPasos != null ? historialPasos.size() : 0;
@@ -1754,7 +1758,21 @@ public class Gramatica {
                                   bundle, this, "modificada", colorPrimario, colorSecundario);
 
         // ========================================
-        // SECCIÓN 3: TABLA PREDICTIVA
+        // SECCIÓN 3: FUNCIONES DE ERROR
+        // ========================================
+        if (funcionesError != null && !funcionesError.isEmpty()) {
+            document.newPage();
+            Paragraph tituloFuncionesError = new Paragraph(bundle.getString("informe.profesional.seccion.funciones.error"), tituloSeccion);
+            document.add(tituloFuncionesError);
+            document.add(new Chunk(separador));
+            document.add(new Paragraph(" ", new Font(bf, 10)));
+
+            agregarFuncionesError(document, bf, contenidoNormal, bundle, funcionesError,
+                                colorPrimario, colorSecundario, colorFondoCabecera, colorAcento);
+        }
+
+        // ========================================
+        // SECCIÓN 4: TABLA PREDICTIVA
         // ========================================
         if (tablaPredictiva != null) {
             document.newPage();
@@ -1768,7 +1786,7 @@ public class Gramatica {
         }
 
         // ========================================
-        // SECCIÓN 4: INFORMACIÓN DE SIMULACIÓN
+        // SECCIÓN 5: INFORMACIÓN DE SIMULACIÓN
         // ========================================
         document.newPage();
         Paragraph tituloSimulacion = new Paragraph(bundle.getString("informe.profesional.seccion.simulacion"), tituloSeccion);
@@ -1780,7 +1798,7 @@ public class Gramatica {
                                    cadenaEntrada, estadoSimulacion, colorExito, colorError);
 
         // ========================================
-        // SECCIÓN 5: HISTORIAL DE PASOS
+        // SECCIÓN 6: HISTORIAL DE PASOS
         // ========================================
         if (historialPasos != null && !historialPasos.isEmpty()) {
             document.newPage();
@@ -1794,7 +1812,7 @@ public class Gramatica {
         }
 
         // ========================================
-        // SECCIÓN 6: DERIVACIÓN
+        // SECCIÓN 7: DERIVACIÓN
         // ========================================
         if (historialPasos != null && !historialPasos.isEmpty()) {
             document.newPage();
@@ -1807,7 +1825,7 @@ public class Gramatica {
         }
 
         // ========================================
-        // SECCIÓN 7: ÁRBOL SINTÁCTICO
+        // SECCIÓN 8: ÁRBOL SINTÁCTICO
         // ========================================
         document.newPage();
         Paragraph tituloArbol = new Paragraph(bundle.getString("informe.profesional.seccion.arbol"), tituloSeccion);
@@ -1880,23 +1898,130 @@ public class Gramatica {
         ObservableList<String> prod = gramatica.getProduccionesModel();
         int index = 1;
         for (String produccion : prod) {
-            // Crear bloque de código para producciones
-            PdfPTable tablaProd = new PdfPTable(1);
-            tablaProd.setWidthPercentage(90);
+            // Crear tabla para producción con formato simplificado
+            PdfPTable tablaProd = new PdfPTable(2);
+            tablaProd.setWidthPercentage(95);
+            tablaProd.setWidths(new float[]{0.15f, 0.85f}); // Proporciones: número, producción completa
 
+            Font numeroFont = new Font(bf, 10, Font.BOLD);
+            numeroFont.setColor(colorPrimario);
             Font prodFont = new Font(contenidoMono);
             prodFont.setColor(BaseColor.BLACK);
-            PdfPCell cellProd = new PdfPCell(new Phrase(index + ") " + produccion, prodFont));
+
+            // Convertir la flecha Unicode a ASCII solo para el PDF
+            String produccionFormateada = produccion.replace("→", " -> ");
+
+            // Celda del número
+            PdfPCell cellNumero = new PdfPCell(new Phrase(String.valueOf(index), numeroFont));
+            cellNumero.setBackgroundColor(new BaseColor(240, 248, 255)); // Azul muy claro
+            cellNumero.setBorderColor(colorPrimario);
+            cellNumero.setBorderWidth(1);
+            cellNumero.setPadding(8);
+            cellNumero.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+            cellNumero.setVerticalAlignment(PdfPCell.ALIGN_MIDDLE);
+            tablaProd.addCell(cellNumero);
+
+            // Celda de la producción completa
+            PdfPCell cellProd = new PdfPCell(new Phrase(produccionFormateada, prodFont));
             cellProd.setBackgroundColor(new BaseColor(248, 249, 250)); // Gris muy claro
-            cellProd.setPadding(8);
             cellProd.setBorderColor(colorSecundario);
             cellProd.setBorderWidth(1);
-
+            cellProd.setPadding(8);
+            cellProd.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
+            cellProd.setVerticalAlignment(PdfPCell.ALIGN_MIDDLE);
             tablaProd.addCell(cellProd);
+
             document.add(tablaProd);
-            document.add(new Paragraph(" ", new Font(bf, 3)));
+            document.add(new Paragraph(" ", new Font(bf, 5)));
             index++;
         }
+    }
+
+    /**
+     * Agrega sección de funciones de error con formato tabular mejorado
+     */
+    private void agregarFuncionesError(Document document, BaseFont bf, Font contenidoNormal, ResourceBundle bundle,
+                                     List<FuncionError> funcionesError, BaseColor colorPrimario,
+                                     BaseColor colorSecundario, BaseColor colorFondo, BaseColor colorAcento)
+                                     throws DocumentException {
+
+        PdfPTable tablaFunciones = new PdfPTable(4);
+        tablaFunciones.setWidthPercentage(100);
+        tablaFunciones.setSpacingBefore(5);
+        tablaFunciones.setWidths(new float[]{1, 2, 2, 4});
+
+        // Fuentes
+        Font headerFont = new Font(bf, 9, Font.BOLD);
+        headerFont.setColor(BaseColor.WHITE);
+        Font dataFont = new Font(bf, 8);
+
+        // Encabezados
+        String[] headers = {"ID", "Acción", "Símbolo", "Descripción"};
+        for (String header : headers) {
+            PdfPCell cell = new PdfPCell(new Phrase(header, headerFont));
+            cell.setBackgroundColor(colorPrimario);
+            cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+            cell.setPadding(8);
+            cell.setBorderColor(colorSecundario);
+            cell.setBorderWidth(1);
+            tablaFunciones.addCell(cell);
+        }
+
+        // Datos
+        boolean filaAlterna = false;
+        for (FuncionError funcion : funcionesError) {
+            BaseColor colorFondoFila = filaAlterna ? colorFondo : BaseColor.WHITE;
+
+            // ID
+            PdfPCell cellId = new PdfPCell(new Phrase(String.valueOf(funcion.getIdentificador()), dataFont));
+            cellId.setBackgroundColor(colorFondoFila);
+            cellId.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+            cellId.setPadding(6);
+            cellId.setBorderColor(colorSecundario);
+            cellId.setBorderWidth(0.5f);
+            tablaFunciones.addCell(cellId);
+
+            // Acción
+            String nombreAccion = bundle.getString(funcion.getNombreAccion());
+            Font accionFont = new Font(bf, 8);
+            accionFont.setColor(colorAcento);
+            PdfPCell cellAccion = new PdfPCell(new Phrase(nombreAccion, accionFont));
+            cellAccion.setBackgroundColor(colorFondoFila);
+            cellAccion.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
+            cellAccion.setPadding(6);
+            cellAccion.setBorderColor(colorSecundario);
+            cellAccion.setBorderWidth(0.5f);
+            tablaFunciones.addCell(cellAccion);
+
+            // Símbolo
+            String simbolo = funcion.getSimbolo() != null ? funcion.getSimbolo().getNombre() : "-";
+            Font simboloFont = new Font(bf, 8, Font.BOLD);
+            simboloFont.setColor(funcion.getSimbolo() != null ? BaseColor.BLACK : BaseColor.GRAY);
+            PdfPCell cellSimbolo = new PdfPCell(new Phrase(simbolo, simboloFont));
+            cellSimbolo.setBackgroundColor(colorFondoFila);
+            cellSimbolo.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+            cellSimbolo.setPadding(6);
+            cellSimbolo.setBorderColor(colorSecundario);
+            cellSimbolo.setBorderWidth(0.5f);
+            tablaFunciones.addCell(cellSimbolo);
+
+            // Descripción completa
+            String descripcion = getDescripcionFuncionError(funcion, bundle);
+            if (funcion.getMensaje() != null && !funcion.getMensaje().isEmpty()) {
+                descripcion += " (" + funcion.getMensaje() + ")";
+            }
+            PdfPCell cellDescripcion = new PdfPCell(new Phrase(descripcion, dataFont));
+            cellDescripcion.setBackgroundColor(colorFondoFila);
+            cellDescripcion.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
+            cellDescripcion.setPadding(6);
+            cellDescripcion.setBorderColor(colorSecundario);
+            cellDescripcion.setBorderWidth(0.5f);
+            tablaFunciones.addCell(cellDescripcion);
+
+            filaAlterna = !filaAlterna;
+        }
+
+        document.add(tablaFunciones);
     }
 
     /**
@@ -1916,7 +2041,7 @@ public class Gramatica {
         int numColumnas = terminales.size() + 1;
         PdfPTable tabla = new PdfPTable(numColumnas);
         tabla.setWidthPercentage(100);
-        tabla.setSpacingBefore(10);
+        tabla.setSpacingBefore(5);
 
         // Fuentes para la tabla
         Font headerFont = new Font(bf, 9, Font.BOLD);
@@ -2039,7 +2164,7 @@ public class Gramatica {
 
         PdfPTable tablaHistorial = new PdfPTable(4);
         tablaHistorial.setWidthPercentage(100);
-        tablaHistorial.setSpacingBefore(10);
+        tablaHistorial.setSpacingBefore(5);
         tablaHistorial.setWidths(new float[]{1, 2, 2, 3});
 
         // Fuentes
@@ -2239,11 +2364,25 @@ public class Gramatica {
         }
 
         conclusionFont.setColor(colorConclusion);
-        Paragraph parrafoConclusion = new Paragraph(conclusion, conclusionFont);
-        parrafoConclusion.setAlignment(Paragraph.ALIGN_CENTER);
-        document.add(parrafoConclusion);
 
-        document.add(new Paragraph(" ", new Font(bf, 20)));
+        // Crear tabla para resaltar la conclusión
+        PdfPTable tablaConclusion = new PdfPTable(1);
+        tablaConclusion.setWidthPercentage(85);
+        tablaConclusion.setSpacingBefore(5);
+        tablaConclusion.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+
+        PdfPCell cellConclusion = new PdfPCell(new Phrase(conclusion, conclusionFont));
+        cellConclusion.setBackgroundColor(new BaseColor(250, 250, 250)); // Fondo gris muy claro
+        cellConclusion.setBorderColor(colorConclusion);
+        cellConclusion.setBorderWidth(2);
+        cellConclusion.setPadding(20);
+        cellConclusion.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+        cellConclusion.setVerticalAlignment(PdfPCell.ALIGN_MIDDLE);
+
+        tablaConclusion.addCell(cellConclusion);
+        document.add(tablaConclusion);
+
+        document.add(new Paragraph(" ", new Font(bf, 25)));
 
         // Información adicional
         Font infoFont = new Font(bf, 10);
