@@ -1597,13 +1597,26 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
             // Usar la gramática actual para generar el informe
             Gramatica gramaticaOriginal = this.gramatica;
             
+            // Determinar el estado de la simulación
+            String estadoSimulacion = "NO ESPECIFICADO";
+            if (historialObservable.size() > 0) {
+                HistorialPaso ultimoPaso = historialObservable.get(historialObservable.size() - 1);
+                if (ultimoPaso.getAccion().equals("Aceptar")) {
+                    estadoSimulacion = "ACEPTADA";
+                } else if (ultimoPaso.getAccion().equals("Error")) {
+                    estadoSimulacion = "RECHAZADA";
+                }
+            }
+            
             // Generar el informe del simulador
             boolean exito = this.gramatica.generarInformeSimulacionFinal(
                 archivo.getAbsolutePath(), 
                 gramaticaOriginal, 
                 this.tablaPredictiva, 
                 this.funcionesError, 
-                bundle
+                bundle,
+                campoEntrada.getText(),
+                estadoSimulacion
             );
             
             if (exito) {

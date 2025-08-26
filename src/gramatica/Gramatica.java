@@ -1256,7 +1256,8 @@ public class Gramatica {
      * Genera un informe PDF completo del simulador incluyendo gramática original, modificada y detalles de simulación.
      */
     public Boolean generarInformeSimulacionFinal(String fichero, Gramatica gramaticaOriginal, TablaPredictiva tablaPredictiva, 
-                                         List<FuncionError> funcionesError, ResourceBundle bundle) throws DocumentException {
+                                         List<FuncionError> funcionesError, ResourceBundle bundle, String cadenaEntrada, 
+                                         String estadoSimulacion) throws DocumentException {
         try {
             // Configuración de la fuente y del documento PDF
             String fontPath = "fonts/arial.ttf";
@@ -1538,7 +1539,42 @@ public class Gramatica {
             Paragraph infoTerminalesModificados = new Paragraph("    • " + bundle.getString("informe.simulador.simbolos.modificados") + " (Terminales): " + termModificados.size(), contenido);
             infoTerminalesModificados.setIndentationLeft(20);
             document.add(infoTerminalesModificados);
+
+            document.add(new Paragraph(" ", new Font(bf, 8))); // Espacio
+
+            // Información de la simulación
+            Paragraph parrafoSimulacion = new Paragraph("Información de la Simulación:", seccion);
+            document.add(parrafoSimulacion);
             
+            // Cadena de entrada
+            Paragraph parrafoCadenaEntrada = new Paragraph("    Cadena de Entrada:", contenido);
+            parrafoCadenaEntrada.setIndentationLeft(20);
+            document.add(parrafoCadenaEntrada);
+            Paragraph parrafoCadena = new Paragraph("        " + (cadenaEntrada != null ? cadenaEntrada : "No especificada"), contenido);
+            parrafoCadena.setIndentationLeft(20);
+            document.add(parrafoCadena);
+            document.add(new Paragraph(" ", new Font(bf, 8))); // Espacio
+            
+            // Estado de la simulación
+            Paragraph parrafoEstadoSimulacion = new Paragraph("    Estado de la Simulación:", contenido);
+            parrafoEstadoSimulacion.setIndentationLeft(20);
+            document.add(parrafoEstadoSimulacion);
+            
+            // Determinar el color del estado
+            BaseColor colorEstado;
+            if (estadoSimulacion != null && estadoSimulacion.equals("ACEPTADA")) {
+                colorEstado = new BaseColor(0, 128, 0); // Verde para aceptada
+            } else if (estadoSimulacion != null && estadoSimulacion.equals("RECHAZADA")) {
+                colorEstado = new BaseColor(255, 0, 0); // Rojo para rechazada
+            } else {
+                colorEstado = new BaseColor(128, 128, 128); // Gris para no especificado
+            }
+            
+            Font estadoFont = new Font(bf, 12, Font.BOLD);
+            estadoFont.setColor(colorEstado);
+            Paragraph estadoSim = new Paragraph("        " + (estadoSimulacion != null ? estadoSimulacion : "No especificado"), estadoFont);
+            estadoSim.setIndentationLeft(20);
+            document.add(estadoSim);
             document.add(new Paragraph(" ", new Font(bf, 15))); // Espacio
             
             // Fecha de generación encima del pie de página
@@ -1547,7 +1583,6 @@ public class Gramatica {
                 contenidoPequeno);
             parrafoFecha.setAlignment(Paragraph.ALIGN_CENTER);
             document.add(parrafoFecha);
-            
             document.add(new Paragraph(" ", new Font(bf, 5))); // Espacio pequeño
             
             // Pie de página con información de la aplicación
