@@ -1252,6 +1252,321 @@ public class Gramatica {
         return true;
     }
 
+    /**
+     * Genera un informe PDF completo del simulador incluyendo gramática original, modificada y detalles de simulación.
+     */
+    public Boolean generarInformeSimulacionFinal(String fichero, Gramatica gramaticaOriginal, TablaPredictiva tablaPredictiva, 
+                                         List<FuncionError> funcionesError, ResourceBundle bundle) throws DocumentException {
+        try {
+            // Configuración de la fuente y del documento PDF
+            String fontPath = "fonts/arial.ttf";
+            Document document = new Document(PageSize.A4, 50, 50, 80, 50);
+            
+            // Crear el PdfWriter con numeración de páginas
+            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(fichero));
+            
+            // Configurar numeración de páginas
+            final ResourceBundle finalBundle = bundle;
+            writer.setPageEvent(new PdfPageEventHelper() {
+                @Override
+                public void onEndPage(PdfWriter writer, Document document) {
+                    try {
+                        BaseFont bf = BaseFont.createFont(fontPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+                        Font font = new Font(bf, 10);
+                        ColumnText.showTextAligned(writer.getDirectContent(), 
+                            Paragraph.ALIGN_CENTER, 
+                            new Phrase(String.format("%s %d", finalBundle.getString("informe.pagina"), writer.getPageNumber()), font), 
+                            (document.right() - document.left()) / 2 + document.leftMargin(), 
+                            document.bottom() - 10, 0);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            
+            // Cargar logo de la aplicación
+            Image imagen = Image.getInstance(Objects.requireNonNull(getClass().getResource("/resources/logo2Antes.png")).toExternalForm());
+            imagen.setAlignment(Image.ALIGN_CENTER);
+            imagen.scalePercent(35);
+
+            LineSeparator ls = new LineSeparator();
+            BaseFont bf = BaseFont.createFont(fontPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+            Font titulo = new Font(bf, 24, Font.BOLD);
+            Font subtitulo = new Font(bf, 18, Font.BOLD);
+            Font seccion = new Font(bf, 14, Font.BOLD);
+            Font contenido = new Font(bf, 12);
+            Font contenidoPequeno = new Font(bf, 10);
+            BaseColor colorPrincipal = new BaseColor(33, 77, 72);
+            BaseColor colorSecundario = new BaseColor(63, 171, 160);
+            BaseColor colorAcento = new BaseColor(255, 140, 0);
+
+            titulo.setColor(colorPrincipal);
+            subtitulo.setColor(colorSecundario);
+            seccion.setColor(colorPrincipal);
+
+            ls.setLineWidth(2);
+            ls.setLineColor(colorSecundario);
+
+            document.open();
+            
+            // Página 1: Portada
+            document.add(imagen);
+            
+            document.add(new Paragraph(" ", new Font(bf, 20))); // Espacio
+            
+            Paragraph parrafoTitulo = new Paragraph(bundle.getString("informe.simulador.titulo"), titulo);
+            parrafoTitulo.setAlignment(Paragraph.ALIGN_CENTER);
+            document.add(parrafoTitulo);
+            
+            document.add(new Paragraph(" ", new Font(bf, 15))); // Espacio
+            
+            Paragraph parrafoSubtitulo = new Paragraph("SimAS - Simulador de Análisis Sintáctico", subtitulo);
+            parrafoSubtitulo.setAlignment(Paragraph.ALIGN_CENTER);
+            document.add(parrafoSubtitulo);
+            
+            document.add(new Paragraph(" ", new Font(bf, 20))); // Espacio
+            document.add(new Chunk(ls));
+            document.add(new Paragraph(" ", new Font(bf, 15))); // Espacio
+            
+            // Nombre de la gramática centrado
+            Font nombreGrande = new Font(bf, 20, Font.BOLD);
+            nombreGrande.setColor(colorPrincipal);
+            Paragraph parrafoNombre = new Paragraph(this.getNombre(), nombreGrande);
+            parrafoNombre.setAlignment(Paragraph.ALIGN_CENTER);
+            document.add(parrafoNombre);
+            
+            // Nueva página para el contenido detallado
+            document.newPage();
+            
+            // Título de la página de contenido
+            Paragraph tituloContenido = new Paragraph(bundle.getString("informe.simulador.titulo"), subtitulo);
+            tituloContenido.setAlignment(Paragraph.ALIGN_CENTER);
+            document.add(tituloContenido);
+            document.add(new Chunk(ls));
+            document.add(new Paragraph(" ", new Font(bf, 10))); // Espacio
+            
+            // Descripción de la gramática
+            Paragraph parrafoDescripcion = new Paragraph(bundle.getString("informe.descripcion") + ":", seccion);
+            document.add(parrafoDescripcion);
+            Paragraph descripcion = new Paragraph("    " + this.getDescripcion(), contenido);
+            descripcion.setIndentationLeft(20);
+            document.add(descripcion);
+            document.add(new Paragraph(" ", new Font(bf, 8))); // Espacio
+            
+            // Símbolo inicial
+            Paragraph parrafoSimboloInicial = new Paragraph(bundle.getString("informe.simbolo.inicial") + ":", seccion);
+            document.add(parrafoSimboloInicial);
+            Paragraph simboloInicial = new Paragraph("    " + this.getSimbInicial(), contenido);
+            simboloInicial.setIndentationLeft(20);
+            document.add(simboloInicial);
+            document.add(new Paragraph(" ", new Font(bf, 8))); // Espacio
+            
+            // Transformaciones aplicadas
+            Paragraph parrafoTransformaciones = new Paragraph(bundle.getString("informe.simulador.transformaciones") + ":", seccion);
+            document.add(parrafoTransformaciones);
+            
+            // Verificar si se aplicaron transformaciones
+            boolean esRecursiva = gramaticaOriginal.eliminarRecursividad();
+            boolean necesitaFactorizacion = gramaticaOriginal.factorizar();
+            
+            if (esRecursiva || necesitaFactorizacion) {
+                if (esRecursiva) {
+                    Paragraph recursividad = new Paragraph("    • " + bundle.getString("informe.simulador.eliminacion.recursividad"), contenido);
+                    recursividad.setIndentationLeft(20);
+                    document.add(recursividad);
+                }
+                if (necesitaFactorizacion) {
+                    Paragraph factorizacion = new Paragraph("    • " + bundle.getString("informe.simulador.factorizacion"), contenido);
+                    factorizacion.setIndentationLeft(20);
+                    document.add(factorizacion);
+                }
+            } else {
+                Paragraph noTransformaciones = new Paragraph("    • " + bundle.getString("informe.simulador.no.transformaciones"), contenido);
+                noTransformaciones.setIndentationLeft(20);
+                document.add(noTransformaciones);
+            }
+            document.add(new Paragraph(" ", new Font(bf, 8))); // Espacio
+            
+            // Gramática Original
+            Paragraph parrafoGramaticaOriginal = new Paragraph(bundle.getString("informe.simulador.gramatica.original") + ":", seccion);
+            document.add(parrafoGramaticaOriginal);
+            
+            // Símbolos originales
+            Paragraph parrafoSimbolosOriginales = new Paragraph("    " + bundle.getString("informe.simulador.simbolos.originales") + ":", contenido);
+            parrafoSimbolosOriginales.setIndentationLeft(20);
+            document.add(parrafoSimbolosOriginales);
+            
+            // No terminales originales
+            Paragraph parrafoNoTermOriginales = new Paragraph("        " + bundle.getString("informe.simbolos.no.terminales") + ":", contenido);
+            parrafoNoTermOriginales.setIndentationLeft(20);
+            document.add(parrafoNoTermOriginales);
+            
+            ObservableList<String> noTermOriginales = gramaticaOriginal.getNoTerminalesModel();
+            for (String nt : noTermOriginales) {
+                Paragraph noTerm = new Paragraph("            • " + nt, contenido);
+                noTerm.setIndentationLeft(20);
+                document.add(noTerm);
+            }
+            
+            // Terminales originales
+            Paragraph parrafoTermOriginales = new Paragraph("        " + bundle.getString("informe.simbolos.terminales") + ":", contenido);
+            parrafoTermOriginales.setIndentationLeft(20);
+            document.add(parrafoTermOriginales);
+            
+            ObservableList<String> termOriginales = gramaticaOriginal.getTerminalesModel();
+            for (String t : termOriginales) {
+                Paragraph term = new Paragraph("            • " + t, contenido);
+                term.setIndentationLeft(20);
+                document.add(term);
+            }
+            
+            // Producciones originales
+            Paragraph parrafoProduccionesOriginales = new Paragraph("    " + bundle.getString("informe.simulador.producciones.originales") + ":", contenido);
+            parrafoProduccionesOriginales.setIndentationLeft(20);
+            document.add(parrafoProduccionesOriginales);
+            
+            ObservableList<String> prodOriginales = gramaticaOriginal.getProduccionesModel();
+            int index = 1;
+            for (String prod : prodOriginales) {
+                Paragraph produccion = new Paragraph("        " + index + ") " + prod, contenido);
+                produccion.setIndentationLeft(20);
+                document.add(produccion);
+                index++;
+            }
+            document.add(new Paragraph(" ", new Font(bf, 8))); // Espacio
+            
+            // Gramática Modificada
+            Paragraph parrafoGramaticaModificada = new Paragraph(bundle.getString("informe.simulador.gramatica.modificada") + ":", seccion);
+            document.add(parrafoGramaticaModificada);
+            
+            // Símbolos modificados
+            Paragraph parrafoSimbolosModificados = new Paragraph("    " + bundle.getString("informe.simulador.simbolos.modificados") + ":", contenido);
+            parrafoSimbolosModificados.setIndentationLeft(20);
+            document.add(parrafoSimbolosModificados);
+            
+            // No terminales modificados
+            Paragraph parrafoNoTermModificados = new Paragraph("        " + bundle.getString("informe.simbolos.no.terminales") + ":", contenido);
+            parrafoNoTermModificados.setIndentationLeft(20);
+            document.add(parrafoNoTermModificados);
+            
+            ObservableList<String> noTermModificados = this.getNoTerminalesModel();
+            for (String nt : noTermModificados) {
+                Paragraph noTerm = new Paragraph("            • " + nt, contenido);
+                noTerm.setIndentationLeft(20);
+                document.add(noTerm);
+            }
+            
+            // Terminales modificados
+            Paragraph parrafoTermModificados = new Paragraph("        " + bundle.getString("informe.simbolos.terminales") + ":", contenido);
+            parrafoTermModificados.setIndentationLeft(20);
+            document.add(parrafoTermModificados);
+            
+            ObservableList<String> termModificados = this.getTerminalesModel();
+            for (String t : termModificados) {
+                Paragraph term = new Paragraph("            • " + t, contenido);
+                term.setIndentationLeft(20);
+                document.add(term);
+            }
+            
+            // Producciones modificadas
+            Paragraph parrafoProduccionesModificadas = new Paragraph("    " + bundle.getString("informe.simulador.producciones.modificadas") + ":", contenido);
+            parrafoProduccionesModificadas.setIndentationLeft(20);
+            document.add(parrafoProduccionesModificadas);
+            
+            ObservableList<String> prodModificadas = this.getProduccionesModel();
+            index = 1;
+            for (String prod : prodModificadas) {
+                Paragraph produccion = new Paragraph("        " + index + ") " + prod, contenido);
+                produccion.setIndentationLeft(20);
+                document.add(produccion);
+                index++;
+            }
+            document.add(new Paragraph(" ", new Font(bf, 8))); // Espacio
+            
+            // Tabla Predictiva
+            if (tablaPredictiva != null) {
+                Paragraph parrafoTablaPredictiva = new Paragraph(bundle.getString("informe.simulador.tabla.predictiva") + ":", seccion);
+                document.add(parrafoTablaPredictiva);
+                
+                document.add(new Paragraph(" ", new Font(bf, 8))); // Espacio entre título y tabla
+                
+                // Agregar tabla predictiva directamente
+                agregarTablaPredictivaAlPDF(document, tablaPredictiva, bundle, bf, contenido);
+                
+                document.add(new Paragraph(" ", new Font(bf, 8))); // Espacio
+            }
+            
+            // Funciones de Error
+            if (funcionesError != null && !funcionesError.isEmpty()) {
+                Paragraph parrafoFuncionesError = new Paragraph(bundle.getString("informe.simulador.funciones.error") + ":", seccion);
+                document.add(parrafoFuncionesError);
+                
+                for (int i = 0; i < funcionesError.size(); i++) {
+                    FuncionError fe = funcionesError.get(i);
+                    String descripcionFuncion = getDescripcionFuncionError(fe, bundle);
+                    Paragraph funcion = new Paragraph("    " + i + ". " + descripcionFuncion, contenido);
+                    funcion.setIndentationLeft(20);
+                    document.add(funcion);
+                }
+                document.add(new Paragraph(" ", new Font(bf, 8))); // Espacio
+            }
+            
+            // Información adicional
+            Paragraph parrafoInfo = new Paragraph(bundle.getString("informe.informacion.adicional") + ":", seccion);
+            document.add(parrafoInfo);
+            
+            Paragraph infoProduccionesOriginales = new Paragraph("    • " + bundle.getString("informe.simulador.producciones.originales") + ": " + prodOriginales.size(), contenido);
+            infoProduccionesOriginales.setIndentationLeft(20);
+            document.add(infoProduccionesOriginales);
+            
+            Paragraph infoProduccionesModificadas = new Paragraph("    • " + bundle.getString("informe.simulador.producciones.modificadas") + ": " + prodModificadas.size(), contenido);
+            infoProduccionesModificadas.setIndentationLeft(20);
+            document.add(infoProduccionesModificadas);
+            
+            Paragraph infoNoTerminalesOriginales = new Paragraph("    • " + bundle.getString("informe.simulador.simbolos.originales") + " (No Terminales): " + noTermOriginales.size(), contenido);
+            infoNoTerminalesOriginales.setIndentationLeft(20);
+            document.add(infoNoTerminalesOriginales);
+            
+            Paragraph infoTerminalesOriginales = new Paragraph("    • " + bundle.getString("informe.simulador.simbolos.originales") + " (Terminales): " + termOriginales.size(), contenido);
+            infoTerminalesOriginales.setIndentationLeft(20);
+            document.add(infoTerminalesOriginales);
+            
+            Paragraph infoNoTerminalesModificados = new Paragraph("    • " + bundle.getString("informe.simulador.simbolos.modificados") + " (No Terminales): " + noTermModificados.size(), contenido);
+            infoNoTerminalesModificados.setIndentationLeft(20);
+            document.add(infoNoTerminalesModificados);
+            
+            Paragraph infoTerminalesModificados = new Paragraph("    • " + bundle.getString("informe.simulador.simbolos.modificados") + " (Terminales): " + termModificados.size(), contenido);
+            infoTerminalesModificados.setIndentationLeft(20);
+            document.add(infoTerminalesModificados);
+            
+            document.add(new Paragraph(" ", new Font(bf, 15))); // Espacio
+            
+            // Fecha de generación encima del pie de página
+            Paragraph parrafoFecha = new Paragraph(bundle.getString("informe.fecha.generacion") + ": " + 
+                java.time.LocalDate.now().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")), 
+                contenidoPequeno);
+            parrafoFecha.setAlignment(Paragraph.ALIGN_CENTER);
+            document.add(parrafoFecha);
+            
+            document.add(new Paragraph(" ", new Font(bf, 5))); // Espacio pequeño
+            
+            // Pie de página con información de la aplicación
+            Paragraph piePagina = new Paragraph(bundle.getString("informe.documento.generado"), contenidoPequeno);
+            piePagina.setAlignment(Paragraph.ALIGN_CENTER);
+            document.add(piePagina);
+            
+            document.close();
+            
+        } catch (BadElementException ex) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
+        }
+        return true;
+    }
+
     public boolean isNoTerminal(String nombre) {
         for (NoTerminal nt : this.getNoTerminales()) {
             if (nt.getNombre().equals(nombre)) {
