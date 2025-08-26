@@ -2217,14 +2217,16 @@ public class Gramatica {
             tablaHistorial.addCell(cellEntrada);
 
             // Acción con colores diferenciados
-            String accion = paso.getAccion();
+            String accionOriginal = paso.getAccion();
+            // Convertir flechas Unicode a ASCII para mostrar en el PDF
+            String accion = accionOriginal.replace("→", " -> ");
             Font accionFont = new Font(bf, 8);
             BaseColor colorFondoAccion = colorFondoFila;
 
             if (accion.equals("Emparejar")) {
                 accionFont.setColor(new BaseColor(52, 152, 219)); // Azul para emparejar
                 colorFondoAccion = new BaseColor(240, 248, 255);
-            } else if (accion.contains("→")) {
+            } else if (accion.contains(" -> ")) {
                 accionFont.setColor(new BaseColor(46, 204, 113)); // Verde para derivaciones
                 colorFondoAccion = new BaseColor(240, 255, 240);
             } else if (accion.equals("Error")) {
@@ -2262,7 +2264,9 @@ public class Gramatica {
 
         for (int i = 0; i < historialPasos.size(); i++) {
             HistorialPaso paso = historialPasos.get(i);
-            String derivacionLine = "Paso " + (i + 1) + ": " + paso.getAccion();
+            // Convertir flechas Unicode a ASCII para mostrar en el PDF
+            String accionFormateada = paso.getAccion().replace("→", " -> ");
+            String derivacionLine = "Paso " + (i + 1) + ": " + accionFormateada;
 
             // Crear bloque para cada paso
             PdfPTable tablaPaso = new PdfPTable(1);
@@ -2880,7 +2884,9 @@ public class Gramatica {
                 for (Terminal terminal : terminales) {
                     String valor = fila.getValor(terminal.getNombre()).get();
                     String textoCelda = (valor != null && !valor.isEmpty()) ? valor : "";
-                    
+                    // Convertir flechas Unicode a ASCII para mostrar en el PDF
+                    textoCelda = textoCelda.replace("→", " -> ");
+
                     PdfPCell celdaDato = new PdfPCell(new Phrase(textoCelda, contenido));
                     celdaDato.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
                     celdaDato.setVerticalAlignment(PdfPCell.ALIGN_MIDDLE);
@@ -2888,7 +2894,7 @@ public class Gramatica {
                     celdaDato.setMinimumHeight(20);
                     
                     // Colores según el tipo de contenido
-                    if (textoCelda.contains("→")) {
+                    if (textoCelda.contains(" -> ")) {
                         celdaDato.setBackgroundColor(new BaseColor(220, 255, 220)); // Verde claro para producciones
                     } else if (textoCelda.startsWith("ε_")) {
                         celdaDato.setBackgroundColor(new BaseColor(255, 255, 200)); // Amarillo claro para épsilon
