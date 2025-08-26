@@ -1431,6 +1431,10 @@ public class Gramatica {
     /**
      * Genera un informe PDF completo del simulador incluyendo gramática original, modificada y detalles de simulación.
      */
+    /**
+     * Genera un informe PDF profesional y visualmente atractivo de la simulación
+     * Incluye portada, índice, resumen ejecutivo, y contenido formateado con colores y estilos
+     */
     public Boolean generarInformeSimulacionFinal(String fichero, Gramatica gramaticaOriginal, TablaPredictiva tablaPredictiva,
                                          List<FuncionError> funcionesError, ResourceBundle bundle, String cadenaEntrada,
                                          String estadoSimulacion, List<HistorialPaso> historialPasos) throws DocumentException {
@@ -1871,6 +1875,836 @@ public class Gramatica {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
         }
         return true;
+    }
+
+    /**
+     * Genera un informe PDF profesional y visualmente atractivo de la simulación
+     * Incluye portada, índice, resumen ejecutivo, y contenido formateado con colores y estilos
+     */
+    public Boolean generarInformeSimulacionFinalProfesional(String fichero, Gramatica gramaticaOriginal, TablaPredictiva tablaPredictiva,
+                                         List<FuncionError> funcionesError, ResourceBundle bundle, String cadenaEntrada,
+                                         String estadoSimulacion, List<HistorialPaso> historialPasos) throws DocumentException {
+        try {
+            // Configuración inicial del documento
+            String fontPath = "fonts/arial.ttf";
+            Document document = new Document(PageSize.A4, 50, 50, 80, 50);
+
+            // Crear el PdfWriter con gestión avanzada de páginas
+            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(fichero));
+
+            // Configurar esquema de colores profesional
+            BaseColor colorPrimario = new BaseColor(41, 128, 185);     // Azul profesional
+            BaseColor colorSecundario = new BaseColor(52, 152, 219);   // Azul claro
+            BaseColor colorAcento = new BaseColor(230, 126, 34);       // Naranja
+            BaseColor colorExito = new BaseColor(46, 204, 113);        // Verde éxito
+            BaseColor colorError = new BaseColor(231, 76, 60);         // Rojo error
+            BaseColor colorNeutro = new BaseColor(149, 165, 166);      // Gris neutro
+            BaseColor colorFondoCabecera = new BaseColor(236, 240, 241); // Gris muy claro
+
+            // Fuentes tipográficas profesionales
+            BaseFont bf = BaseFont.createFont(fontPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+            BaseFont bfMono = BaseFont.createFont(BaseFont.COURIER, BaseFont.CP1252, BaseFont.EMBEDDED);
+
+            Font tituloPortada = new Font(bf, 32, Font.BOLD);
+            Font subtituloPortada = new Font(bf, 20, Font.BOLD);
+            Font tituloSeccion = new Font(bf, 18, Font.BOLD);
+            Font subtituloSeccion = new Font(bf, 14, Font.BOLD);
+            Font contenidoNormal = new Font(bf, 11);
+            Font contenidoMono = new Font(bfMono, 10);
+            Font piePagina = new Font(bf, 9, Font.ITALIC);
+
+            tituloPortada.setColor(colorPrimario);
+            subtituloPortada.setColor(colorSecundario);
+            tituloSeccion.setColor(colorPrimario);
+            subtituloSeccion.setColor(colorAcento);
+            contenidoNormal.setColor(BaseColor.BLACK);
+            piePagina.setColor(colorNeutro);
+
+            // Configurar separadores visuales
+            LineSeparator separadorPrincipal = new LineSeparator();
+            separadorPrincipal.setLineWidth(3);
+            separadorPrincipal.setLineColor(colorPrimario);
+
+            LineSeparator separadorSecundario = new LineSeparator();
+            separadorSecundario.setLineWidth(1);
+            separadorSecundario.setLineColor(colorNeutro);
+
+            // Event handler para encabezados y pies de página
+            final ResourceBundle finalBundle = bundle;
+            final BaseFont finalBf = bf;
+            final BaseColor finalColorNeutro = colorNeutro;
+            final BaseColor finalColorPrimario = colorPrimario;
+
+            writer.setPageEvent(new PdfPageEventHelper() {
+                @Override
+                public void onEndPage(PdfWriter writer, Document document) {
+                    try {
+                        // Pie de página con numeración
+                        Font fontPie = new Font(finalBf, 9, Font.ITALIC);
+                        fontPie.setColor(finalColorNeutro);
+
+                        ColumnText.showTextAligned(writer.getDirectContent(),
+                            Paragraph.ALIGN_CENTER,
+                            new Phrase(String.format("%s %d", finalBundle.getString("informe.pagina"), writer.getPageNumber()), fontPie),
+                            (document.right() - document.left()) / 2 + document.leftMargin(),
+                            document.bottom() - 15, 0);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onStartPage(PdfWriter writer, Document document) {
+                    if (writer.getPageNumber() > 1) { // No agregar encabezado en portada
+                        try {
+                            // Encabezado con título del informe
+                            Font fontEncabezado = new Font(finalBf, 10, Font.BOLD);
+                            fontEncabezado.setColor(finalColorPrimario);
+
+                            ColumnText.showTextAligned(writer.getDirectContent(),
+                                Paragraph.ALIGN_CENTER,
+                                new Phrase(finalBundle.getString("informe.simulador.titulo"), fontEncabezado),
+                                (document.right() - document.left()) / 2 + document.leftMargin(),
+                                document.top() + 15, 0);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            });
+
+            document.open();
+
+            // ========================================
+            // PÁGINA 1: PORTADA PROFESIONAL
+            // ========================================
+            crearPortadaProfesional(document, bf, tituloPortada, subtituloPortada, separadorPrincipal, bundle, colorPrimario, colorSecundario);
+
+            // ========================================
+            // PÁGINA 2: ÍNDICE AUTOMÁTICO
+            // ========================================
+            document.newPage();
+            crearIndiceAutomatico(document, bf, tituloSeccion, contenidoNormal, separadorSecundario, bundle);
+
+            // ========================================
+            // PÁGINA 3: RESUMEN EJECUTIVO
+            // ========================================
+            document.newPage();
+            crearResumenEjecutivo(document, bf, tituloSeccion, subtituloSeccion, contenidoNormal,
+                                separadorSecundario, bundle, cadenaEntrada, estadoSimulacion, historialPasos, colorExito, colorError, colorPrimario);
+
+            // ========================================
+            // CONTENIDO DETALLADO
+            // ========================================
+            document.newPage();
+            crearContenidoDetallado(document, bf, bfMono, tituloSeccion, subtituloSeccion, contenidoNormal,
+                                  contenidoMono, separadorSecundario, bundle, gramaticaOriginal,
+                                  tablaPredictiva, funcionesError, cadenaEntrada, estadoSimulacion,
+                                  historialPasos, colorPrimario, colorSecundario, colorAcento,
+                                  colorExito, colorError, colorFondoCabecera);
+
+            // ========================================
+            // CONCLUSIÓN AUTOMÁTICA
+            // ========================================
+            document.newPage();
+            crearConclusionAutomatica(document, bf, tituloSeccion, contenidoNormal,
+                                    separadorPrincipal, bundle, estadoSimulacion, colorExito, colorError);
+
+            document.close();
+
+        } catch (BadElementException ex) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Error de elemento en PDF", ex);
+        } catch (IOException ex) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Error de E/S en PDF", ex);
+        } catch (Exception ex) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Error general en generación de PDF", ex);
+        }
+        return true;
+    }
+
+    /**
+     * Crea la portada profesional del informe
+     */
+    private void crearPortadaProfesional(Document document, BaseFont bf, Font tituloPortada, Font subtituloPortada,
+                                       LineSeparator separador, ResourceBundle bundle, BaseColor colorPrimario, BaseColor colorSecundario)
+                                       throws DocumentException, IOException {
+
+        // Logo de la aplicación
+        try {
+            Image logo = Image.getInstance(Objects.requireNonNull(getClass().getResource("/resources/logo2Antes.png")).toExternalForm());
+            logo.setAlignment(Image.ALIGN_CENTER);
+            logo.scalePercent(40);
+            document.add(logo);
+        } catch (Exception e) {
+            // Si no hay logo, continuar sin él
+        }
+
+        // Espacios
+        document.add(new Paragraph(" ", new Font(bf, 30)));
+        document.add(new Paragraph(" ", new Font(bf, 20)));
+
+        // Título principal grande
+        Paragraph tituloPrincipal = new Paragraph("INFORME DE SIMULACIÓN", tituloPortada);
+        tituloPrincipal.setAlignment(Paragraph.ALIGN_CENTER);
+        document.add(tituloPrincipal);
+
+        document.add(new Paragraph(" ", new Font(bf, 15)));
+
+        // Subtítulo con nombre de la gramática
+        Font subtituloGramatica = new Font(bf, 22, Font.BOLD);
+        subtituloGramatica.setColor(colorSecundario);
+        Paragraph subtitulo = new Paragraph(this.getNombre(), subtituloGramatica);
+        subtitulo.setAlignment(Paragraph.ALIGN_CENTER);
+        document.add(subtitulo);
+
+        document.add(new Paragraph(" ", new Font(bf, 25)));
+        document.add(new Chunk(separador));
+        document.add(new Paragraph(" ", new Font(bf, 20)));
+
+        // Información adicional
+        Font infoFont = new Font(bf, 14);
+        infoFont.setColor(colorPrimario);
+
+        Paragraph appInfo = new Paragraph("SimAS - Simulador de Análisis Sintáctico", infoFont);
+        appInfo.setAlignment(Paragraph.ALIGN_CENTER);
+        document.add(appInfo);
+
+        document.add(new Paragraph(" ", new Font(bf, 10)));
+
+        // Fecha de generación
+        Font fechaFont = new Font(bf, 12);
+        fechaFont.setColor(BaseColor.GRAY);
+        Paragraph fecha = new Paragraph("Generado: " +
+            java.time.LocalDate.now().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")), fechaFont);
+        fecha.setAlignment(Paragraph.ALIGN_CENTER);
+        document.add(fecha);
+    }
+
+    /**
+     * Crea el índice automático del informe
+     */
+    private void crearIndiceAutomatico(Document document, BaseFont bf, Font tituloSeccion, Font contenidoNormal,
+                                     LineSeparator separador, ResourceBundle bundle) throws DocumentException {
+
+        Paragraph tituloIndice = new Paragraph("ÍNDICE", tituloSeccion);
+        tituloIndice.setAlignment(Paragraph.ALIGN_CENTER);
+        document.add(tituloIndice);
+        document.add(new Chunk(separador));
+        document.add(new Paragraph(" ", new Font(bf, 15)));
+
+        // Estructura del índice
+        String[] secciones = {
+            "Resumen Ejecutivo",
+            "Gramática Original",
+            "Gramática Modificada",
+            "Tabla Predictiva",
+            "Información de Simulación",
+            "Historial de Pasos",
+            "Derivación",
+            "Árbol Sintáctico",
+            "Conclusión"
+        };
+
+        for (int i = 0; i < secciones.length; i++) {
+            String entrada = String.format("%d. %s", i + 1, secciones[i]);
+            Paragraph itemIndice = new Paragraph(entrada, contenidoNormal);
+            itemIndice.setIndentationLeft(50);
+            document.add(itemIndice);
+            document.add(new Paragraph(" ", new Font(bf, 5)));
+        }
+    }
+
+    /**
+     * Crea el resumen ejecutivo del informe
+     */
+    private void crearResumenEjecutivo(Document document, BaseFont bf, Font tituloSeccion, Font subtituloSeccion,
+                                     Font contenidoNormal, LineSeparator separador, ResourceBundle bundle,
+                                     String cadenaEntrada, String estadoSimulacion, List<HistorialPaso> historialPasos,
+                                     BaseColor colorExito, BaseColor colorError, BaseColor colorPrimario)
+                                     throws DocumentException {
+
+        Paragraph tituloResumen = new Paragraph("RESUMEN EJECUTIVO", tituloSeccion);
+        tituloResumen.setAlignment(Paragraph.ALIGN_CENTER);
+        document.add(tituloResumen);
+        document.add(new Chunk(separador));
+        document.add(new Paragraph(" ", new Font(bf, 15)));
+
+        // Información clave
+        Font labelFont = new Font(bf, 12, Font.BOLD);
+        labelFont.setColor(colorPrimario);
+
+        // Cadena de entrada
+        Paragraph labelCadena = new Paragraph("Cadena de Entrada:", labelFont);
+        document.add(labelCadena);
+
+        Font valorFont = new Font(bf, 12);
+        Paragraph valorCadena = new Paragraph("    " + (cadenaEntrada != null ? cadenaEntrada : "No especificada"), valorFont);
+        valorCadena.setIndentationLeft(20);
+        document.add(valorCadena);
+        document.add(new Paragraph(" ", new Font(bf, 10)));
+
+        // Resultado final
+        Paragraph labelResultado = new Paragraph("Resultado Final:", labelFont);
+        document.add(labelResultado);
+
+        BaseColor colorEstado = estadoSimulacion != null && estadoSimulacion.equals(bundle.getString("informe.simulador.estado.aceptada")) ?
+                               colorExito : colorError;
+        Font estadoFont = new Font(bf, 14, Font.BOLD);
+        estadoFont.setColor(colorEstado);
+        Paragraph valorResultado = new Paragraph("    " + (estadoSimulacion != null ? estadoSimulacion : "No especificado"), estadoFont);
+        valorResultado.setIndentationLeft(20);
+        document.add(valorResultado);
+        document.add(new Paragraph(" ", new Font(bf, 10)));
+
+        // Número de pasos
+        int numPasos = historialPasos != null ? historialPasos.size() : 0;
+        Paragraph labelPasos = new Paragraph("Número de Pasos:", labelFont);
+        document.add(labelPasos);
+
+        Paragraph valorPasos = new Paragraph("    " + numPasos + " pasos", valorFont);
+        valorPasos.setIndentationLeft(20);
+        document.add(valorPasos);
+    }
+
+    /**
+     * Crea el contenido detallado del informe
+     */
+    private void crearContenidoDetallado(Document document, BaseFont bf, BaseFont bfMono, Font tituloSeccion,
+                                       Font subtituloSeccion, Font contenidoNormal, Font contenidoMono,
+                                       LineSeparator separador, ResourceBundle bundle, Gramatica gramaticaOriginal,
+                                       TablaPredictiva tablaPredictiva, List<FuncionError> funcionesError,
+                                       String cadenaEntrada, String estadoSimulacion, List<HistorialPaso> historialPasos,
+                                       BaseColor colorPrimario, BaseColor colorSecundario, BaseColor colorAcento,
+                                       BaseColor colorExito, BaseColor colorError, BaseColor colorFondoCabecera)
+                                       throws DocumentException {
+
+        // ========================================
+        // SECCIÓN 1: GRAMÁTICA ORIGINAL
+        // ========================================
+        Paragraph tituloGramaticaOriginal = new Paragraph("1. GRAMÁTICA ORIGINAL", tituloSeccion);
+        document.add(tituloGramaticaOriginal);
+        document.add(new Chunk(separador));
+        document.add(new Paragraph(" ", new Font(bf, 10)));
+
+        // Información básica
+        agregarInformacionGramatica(document, bf, subtituloSeccion, contenidoNormal, contenidoMono,
+                                  bundle, gramaticaOriginal, "original", colorPrimario, colorSecundario);
+
+        // ========================================
+        // SECCIÓN 2: GRAMÁTICA MODIFICADA
+        // ========================================
+        document.newPage();
+        Paragraph tituloGramaticaModificada = new Paragraph("2. GRAMÁTICA MODIFICADA", tituloSeccion);
+        document.add(tituloGramaticaModificada);
+        document.add(new Chunk(separador));
+        document.add(new Paragraph(" ", new Font(bf, 10)));
+
+        agregarInformacionGramatica(document, bf, subtituloSeccion, contenidoNormal, contenidoMono,
+                                  bundle, this, "modificada", colorPrimario, colorSecundario);
+
+        // ========================================
+        // SECCIÓN 3: TABLA PREDICTIVA
+        // ========================================
+        if (tablaPredictiva != null) {
+            document.newPage();
+            Paragraph tituloTablaPredictiva = new Paragraph("3. TABLA PREDICTIVA", tituloSeccion);
+            document.add(tituloTablaPredictiva);
+            document.add(new Chunk(separador));
+            document.add(new Paragraph(" ", new Font(bf, 10)));
+
+            agregarTablaPredictivaMejorada(document, tablaPredictiva, bundle, bf, contenidoNormal,
+                                         colorPrimario, colorSecundario, colorFondoCabecera);
+        }
+
+        // ========================================
+        // SECCIÓN 4: INFORMACIÓN DE SIMULACIÓN
+        // ========================================
+        document.newPage();
+        Paragraph tituloSimulacion = new Paragraph("4. INFORMACIÓN DE SIMULACIÓN", tituloSeccion);
+        document.add(tituloSimulacion);
+        document.add(new Chunk(separador));
+        document.add(new Paragraph(" ", new Font(bf, 10)));
+
+        agregarInformacionSimulacion(document, bf, subtituloSeccion, contenidoNormal, bundle,
+                                   cadenaEntrada, estadoSimulacion, colorExito, colorError);
+
+        // ========================================
+        // SECCIÓN 5: HISTORIAL DE PASOS
+        // ========================================
+        if (historialPasos != null && !historialPasos.isEmpty()) {
+            document.newPage();
+            Paragraph tituloHistorial = new Paragraph("5. HISTORIAL DE PASOS", tituloSeccion);
+            document.add(tituloHistorial);
+            document.add(new Chunk(separador));
+            document.add(new Paragraph(" ", new Font(bf, 10)));
+
+            agregarHistorialMejorado(document, bf, contenidoNormal, bundle, historialPasos,
+                                   colorPrimario, colorSecundario, colorFondoCabecera, colorAcento);
+        }
+
+        // ========================================
+        // SECCIÓN 6: DERIVACIÓN
+        // ========================================
+        if (historialPasos != null && !historialPasos.isEmpty()) {
+            document.newPage();
+            Paragraph tituloDerivacion = new Paragraph("6. DERIVACIÓN", tituloSeccion);
+            document.add(tituloDerivacion);
+            document.add(new Chunk(separador));
+            document.add(new Paragraph(" ", new Font(bf, 10)));
+
+            agregarDerivacionMejorada(document, bfMono, contenidoMono, bundle, historialPasos, colorPrimario);
+        }
+
+        // ========================================
+        // SECCIÓN 7: ÁRBOL SINTÁCTICO
+        // ========================================
+        document.newPage();
+        Paragraph tituloArbol = new Paragraph("7. ÁRBOL SINTÁCTICO", tituloSeccion);
+        document.add(tituloArbol);
+        document.add(new Chunk(separador));
+        document.add(new Paragraph(" ", new Font(bf, 10)));
+
+        agregarArbolSintacticoMejorado(document, bf, contenidoNormal, bundle, historialPasos, colorPrimario);
+    }
+
+    /**
+     * Agrega información detallada de una gramática con formato mejorado
+     */
+    private void agregarInformacionGramatica(Document document, BaseFont bf, Font subtituloSeccion, Font contenidoNormal,
+                                           Font contenidoMono, ResourceBundle bundle, Gramatica gramatica,
+                                           String tipo, BaseColor colorPrimario, BaseColor colorSecundario)
+                                           throws DocumentException {
+
+        // Descripción
+        Paragraph subDesc = new Paragraph("Descripción:", subtituloSeccion);
+        document.add(subDesc);
+        Paragraph desc = new Paragraph("    " + gramatica.getDescripcion(), contenidoNormal);
+        desc.setIndentationLeft(20);
+        document.add(desc);
+        document.add(new Paragraph(" ", new Font(bf, 8)));
+
+        // Símbolo inicial
+        Paragraph subSimbolo = new Paragraph("Símbolo Inicial:", subtituloSeccion);
+        document.add(subSimbolo);
+        Font simboloFont = new Font(bf, 12, Font.BOLD);
+        simboloFont.setColor(colorPrimario);
+        Paragraph simbolo = new Paragraph("    " + gramatica.getSimbInicial(), simboloFont);
+        simbolo.setIndentationLeft(20);
+        document.add(simbolo);
+        document.add(new Paragraph(" ", new Font(bf, 8)));
+
+        // Símbolos no terminales
+        Paragraph subNoTerm = new Paragraph("Símbolos No Terminales:", subtituloSeccion);
+        document.add(subNoTerm);
+
+        ObservableList<String> noTerm = gramatica.getNoTerminalesModel();
+        for (String nt : noTerm) {
+            Font ntFont = new Font(bf, 11);
+            ntFont.setColor(colorPrimario);
+            Paragraph ntPara = new Paragraph("    • " + nt, ntFont);
+            ntPara.setIndentationLeft(20);
+            document.add(ntPara);
+        }
+        document.add(new Paragraph(" ", new Font(bf, 8)));
+
+        // Símbolos terminales
+        Paragraph subTerm = new Paragraph("Símbolos Terminales:", subtituloSeccion);
+        document.add(subTerm);
+
+        ObservableList<String> term = gramatica.getTerminalesModel();
+        for (String t : term) {
+            Font termFont = new Font(bf, 11);
+            termFont.setColor(BaseColor.BLACK);
+            Paragraph termPara = new Paragraph("    • " + t, termFont);
+            termPara.setIndentationLeft(20);
+            document.add(termPara);
+        }
+        document.add(new Paragraph(" ", new Font(bf, 8)));
+
+        // Producciones
+        Paragraph subProd = new Paragraph("Producciones:", subtituloSeccion);
+        document.add(subProd);
+        document.add(new Paragraph(" ", new Font(bf, 5)));
+
+        ObservableList<String> prod = gramatica.getProduccionesModel();
+        int index = 1;
+        for (String produccion : prod) {
+            // Crear bloque de código para producciones
+            PdfPTable tablaProd = new PdfPTable(1);
+            tablaProd.setWidthPercentage(90);
+
+            Font prodFont = new Font(contenidoMono);
+            prodFont.setColor(BaseColor.BLACK);
+            PdfPCell cellProd = new PdfPCell(new Phrase(index + ") " + produccion, prodFont));
+            cellProd.setBackgroundColor(new BaseColor(248, 249, 250)); // Gris muy claro
+            cellProd.setPadding(8);
+            cellProd.setBorderColor(colorSecundario);
+            cellProd.setBorderWidth(1);
+
+            tablaProd.addCell(cellProd);
+            document.add(tablaProd);
+            document.add(new Paragraph(" ", new Font(bf, 3)));
+            index++;
+        }
+    }
+
+    /**
+     * Agrega tabla predictiva con mejor formato visual
+     */
+    private void agregarTablaPredictivaMejorada(Document document, TablaPredictiva tablaPredictiva,
+                                              ResourceBundle bundle, BaseFont bf, Font contenido,
+                                              BaseColor colorPrimario, BaseColor colorSecundario, BaseColor colorFondo)
+                                              throws DocumentException {
+
+        List<FilaTablaPredictiva> filas = tablaPredictiva.getFilas();
+        if (filas == null || filas.isEmpty()) return;
+
+        List<Terminal> terminales = this.getTerminales();
+        if (terminales.isEmpty()) return;
+
+        int numColumnas = terminales.size() + 1;
+        PdfPTable tabla = new PdfPTable(numColumnas);
+        tabla.setWidthPercentage(100);
+        tabla.setSpacingBefore(10);
+
+        // Fuentes para la tabla
+        Font headerFont = new Font(bf, 9, Font.BOLD);
+        headerFont.setColor(BaseColor.WHITE);
+        Font dataFont = new Font(bf, 8);
+
+        // Encabezado de símbolo
+        PdfPCell cellSimbolo = new PdfPCell(new Phrase("Símbolo", headerFont));
+        cellSimbolo.setBackgroundColor(colorPrimario);
+        cellSimbolo.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+        cellSimbolo.setPadding(8);
+        cellSimbolo.setBorderColor(colorSecundario);
+        cellSimbolo.setBorderWidth(1);
+        tabla.addCell(cellSimbolo);
+
+        // Encabezados de terminales
+        for (Terminal terminal : terminales) {
+            PdfPCell cellTerm = new PdfPCell(new Phrase(terminal.getNombre(), headerFont));
+            cellTerm.setBackgroundColor(colorPrimario);
+            cellTerm.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+            cellTerm.setPadding(8);
+            cellTerm.setBorderColor(colorSecundario);
+            cellTerm.setBorderWidth(1);
+            tabla.addCell(cellTerm);
+        }
+
+        // Filas de datos
+        boolean filaAlterna = false;
+        for (FilaTablaPredictiva fila : filas) {
+            BaseColor colorFondoFila = filaAlterna ? colorFondo : BaseColor.WHITE;
+
+            // Celda del símbolo
+            String simbolo = fila.getSimbolo();
+            Font simboloFont = new Font(bf, 8, fila.getEsTerminal() ? Font.NORMAL : Font.BOLD);
+            simboloFont.setColor(fila.getEsTerminal() ? BaseColor.BLACK : colorPrimario);
+
+            PdfPCell cellSim = new PdfPCell(new Phrase(simbolo, simboloFont));
+            cellSim.setBackgroundColor(colorFondoFila);
+            cellSim.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+            cellSim.setPadding(6);
+            cellSim.setBorderColor(colorSecundario);
+            cellSim.setBorderWidth(0.5f);
+            tabla.addCell(cellSim);
+
+            // Celdas de valores
+            for (Terminal terminal : terminales) {
+                String valor = fila.getValor(terminal.getNombre()).get();
+                String textoCelda = (valor != null && !valor.isEmpty()) ? valor : "";
+
+                Font valorFont = new Font(bf, 8);
+                BaseColor colorFondoValor = colorFondoFila;
+
+                // Colores específicos según tipo de contenido
+                if (textoCelda.contains("→")) {
+                    valorFont.setColor(new BaseColor(0, 100, 0)); // Verde para producciones
+                    colorFondoValor = new BaseColor(240, 255, 240); // Verde muy claro
+                } else if (textoCelda.startsWith("ε")) {
+                    valorFont.setColor(new BaseColor(255, 140, 0)); // Naranja para épsilon
+                    colorFondoValor = new BaseColor(255, 248, 240); // Naranja muy claro
+                } else if (textoCelda.matches("\\d+")) {
+                    valorFont.setColor(new BaseColor(100, 100, 255)); // Azul para funciones error
+                    colorFondoValor = new BaseColor(240, 240, 255); // Azul muy claro
+                }
+
+                PdfPCell cellValor = new PdfPCell(new Phrase(textoCelda, valorFont));
+                cellValor.setBackgroundColor(colorFondoValor);
+                cellValor.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+                cellValor.setPadding(6);
+                cellValor.setBorderColor(colorSecundario);
+                cellValor.setBorderWidth(0.5f);
+                tabla.addCell(cellValor);
+            }
+
+            filaAlterna = !filaAlterna;
+        }
+
+        document.add(tabla);
+    }
+
+    /**
+     * Agrega información de simulación mejorada
+     */
+    private void agregarInformacionSimulacion(Document document, BaseFont bf, Font subtituloSeccion, Font contenidoNormal,
+                                            ResourceBundle bundle, String cadenaEntrada, String estadoSimulacion,
+                                            BaseColor colorExito, BaseColor colorError) throws DocumentException {
+
+        // Cadena de entrada
+        Paragraph subCadena = new Paragraph("Cadena de Entrada:", subtituloSeccion);
+        document.add(subCadena);
+
+        Font cadenaFont = new Font(bf, 12, Font.BOLD);
+        cadenaFont.setColor(BaseColor.BLACK);
+        Paragraph cadena = new Paragraph("    " + (cadenaEntrada != null ? cadenaEntrada : "No especificada"), cadenaFont);
+        cadena.setIndentationLeft(20);
+        document.add(cadena);
+        document.add(new Paragraph(" ", new Font(bf, 10)));
+
+        // Estado final destacado
+        Paragraph subEstado = new Paragraph("Estado Final:", subtituloSeccion);
+        document.add(subEstado);
+
+        BaseColor colorEstado = estadoSimulacion != null && estadoSimulacion.equals(bundle.getString("informe.simulador.estado.aceptada")) ?
+                               colorExito : colorError;
+        Font estadoFont = new Font(bf, 16, Font.BOLD);
+        estadoFont.setColor(colorEstado);
+
+        Paragraph estado = new Paragraph("    " + (estadoSimulacion != null ? estadoSimulacion : "No especificado"), estadoFont);
+        estado.setAlignment(Paragraph.ALIGN_CENTER);
+        estado.setIndentationLeft(20);
+        document.add(estado);
+    }
+
+    /**
+     * Agrega historial de pasos mejorado con colores
+     */
+    private void agregarHistorialMejorado(Document document, BaseFont bf, Font contenidoNormal, ResourceBundle bundle,
+                                        List<HistorialPaso> historialPasos, BaseColor colorPrimario,
+                                        BaseColor colorSecundario, BaseColor colorFondo, BaseColor colorAcento)
+                                        throws DocumentException {
+
+        PdfPTable tablaHistorial = new PdfPTable(4);
+        tablaHistorial.setWidthPercentage(100);
+        tablaHistorial.setSpacingBefore(10);
+        tablaHistorial.setWidths(new float[]{1, 2, 2, 3});
+
+        // Fuentes
+        Font headerFont = new Font(bf, 9, Font.BOLD);
+        headerFont.setColor(BaseColor.WHITE);
+        Font dataFont = new Font(bf, 8);
+
+        // Encabezados usando las claves correctas del bundle
+        String[] headerKeys = {"paso", "pila", "entrada", "accion"};
+        for (String key : headerKeys) {
+            PdfPCell cell = new PdfPCell(new Phrase(bundle.getString("informe.simulador.historial." + key), headerFont));
+            cell.setBackgroundColor(colorPrimario);
+            cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+            cell.setPadding(8);
+            cell.setBorderColor(colorSecundario);
+            cell.setBorderWidth(1);
+            tablaHistorial.addCell(cell);
+        }
+
+        // Datos con colores diferenciados
+        boolean filaAlterna = false;
+        for (HistorialPaso paso : historialPasos) {
+            BaseColor colorFondoFila = filaAlterna ? colorFondo : BaseColor.WHITE;
+
+            // Paso
+            PdfPCell cellPaso = new PdfPCell(new Phrase(paso.getPaso(), dataFont));
+            cellPaso.setBackgroundColor(colorFondoFila);
+            cellPaso.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+            cellPaso.setPadding(6);
+            cellPaso.setBorderColor(colorSecundario);
+            cellPaso.setBorderWidth(0.5f);
+            tablaHistorial.addCell(cellPaso);
+
+            // Pila
+            PdfPCell cellPila = new PdfPCell(new Phrase(paso.getPila(), dataFont));
+            cellPila.setBackgroundColor(colorFondoFila);
+            cellPila.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
+            cellPila.setPadding(6);
+            cellPila.setBorderColor(colorSecundario);
+            cellPila.setBorderWidth(0.5f);
+            tablaHistorial.addCell(cellPila);
+
+            // Entrada
+            PdfPCell cellEntrada = new PdfPCell(new Phrase(paso.getEntrada(), dataFont));
+            cellEntrada.setBackgroundColor(colorFondoFila);
+            cellEntrada.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
+            cellEntrada.setPadding(6);
+            cellEntrada.setBorderColor(colorSecundario);
+            cellEntrada.setBorderWidth(0.5f);
+            tablaHistorial.addCell(cellEntrada);
+
+            // Acción con colores diferenciados
+            String accion = paso.getAccion();
+            Font accionFont = new Font(bf, 8);
+            BaseColor colorFondoAccion = colorFondoFila;
+
+            if (accion.equals("Emparejar")) {
+                accionFont.setColor(new BaseColor(52, 152, 219)); // Azul para emparejar
+                colorFondoAccion = new BaseColor(240, 248, 255);
+            } else if (accion.contains("→")) {
+                accionFont.setColor(new BaseColor(46, 204, 113)); // Verde para derivaciones
+                colorFondoAccion = new BaseColor(240, 255, 240);
+            } else if (accion.equals("Error")) {
+                accionFont.setColor(new BaseColor(231, 76, 60)); // Rojo para errores
+                colorFondoAccion = new BaseColor(255, 240, 240);
+            } else if (accion.equals("Aceptar")) {
+                accionFont.setColor(new BaseColor(230, 126, 34)); // Naranja para aceptar
+                accionFont.setStyle(Font.BOLD);
+                colorFondoAccion = new BaseColor(255, 248, 240);
+            }
+
+            PdfPCell cellAccion = new PdfPCell(new Phrase(accion, accionFont));
+            cellAccion.setBackgroundColor(colorFondoAccion);
+            cellAccion.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
+            cellAccion.setPadding(6);
+            cellAccion.setBorderColor(colorSecundario);
+            cellAccion.setBorderWidth(0.5f);
+            tablaHistorial.addCell(cellAccion);
+
+            filaAlterna = !filaAlterna;
+        }
+
+        document.add(tablaHistorial);
+    }
+
+    /**
+     * Agrega derivación con formato de código
+     */
+    private void agregarDerivacionMejorada(Document document, BaseFont bfMono, Font contenidoMono,
+                                         ResourceBundle bundle, List<HistorialPaso> historialPasos,
+                                         BaseColor colorPrimario) throws DocumentException {
+
+        Font tituloFont = new Font(bfMono, 11, Font.BOLD);
+        tituloFont.setColor(colorPrimario);
+
+        for (int i = 0; i < historialPasos.size(); i++) {
+            HistorialPaso paso = historialPasos.get(i);
+            String derivacionLine = "Paso " + (i + 1) + ": " + paso.getAccion();
+
+            // Crear bloque para cada paso
+            PdfPTable tablaPaso = new PdfPTable(1);
+            tablaPaso.setWidthPercentage(95);
+
+            PdfPCell cellPaso = new PdfPCell(new Phrase(derivacionLine, contenidoMono));
+            cellPaso.setBackgroundColor(new BaseColor(248, 249, 250));
+            cellPaso.setPadding(8);
+            cellPaso.setBorderColor(colorPrimario);
+            cellPaso.setBorderWidth(1);
+
+            tablaPaso.addCell(cellPaso);
+            document.add(tablaPaso);
+            document.add(new Paragraph(" ", new Font(bfMono, 3)));
+        }
+    }
+
+    /**
+     * Agrega árbol sintáctico con colores diferenciados
+     */
+    private void agregarArbolSintacticoMejorado(Document document, BaseFont bf, Font contenidoNormal,
+                                               ResourceBundle bundle, List<HistorialPaso> historialPasos,
+                                               BaseColor colorPrimario) throws DocumentException {
+
+        try {
+            agregarImagenArbolAlPDF(document, historialPasos);
+        } catch (Exception e) {
+            // Si no se puede generar la imagen, mostrar información textual con colores
+            Paragraph notaArbol = new Paragraph("Árbol Sintáctico (Vista Textual):", contenidoNormal);
+            document.add(notaArbol);
+            document.add(new Paragraph(" ", new Font(bf, 8)));
+
+            // Crear representación textual coloreada
+            if (historialPasos != null && !historialPasos.isEmpty()) {
+                NodoArbol raiz = construirArbolDesdeHistorial(historialPasos);
+                agregarRepresentacionArbolTextual(document, bf, raiz, "", colorPrimario);
+            }
+        }
+    }
+
+    /**
+     * Agrega representación textual del árbol con colores
+     */
+    private void agregarRepresentacionArbolTextual(Document document, BaseFont bf, NodoArbol nodo,
+                                                 String prefijo, BaseColor colorPrimario) throws DocumentException {
+
+        Font nodoFont = new Font(bf, 10);
+        if (esTerminal(nodo.valor)) {
+            nodoFont.setColor(BaseColor.BLACK); // Terminales en negro
+        } else {
+            nodoFont.setColor(colorPrimario); // No terminales en azul
+        }
+
+        String simboloEspecial = "";
+        if (nodo.valor.equals("$") || nodo.valor.equals("ε") || nodo.valor.equals(";")) {
+            nodoFont.setColor(BaseColor.GRAY); // Símbolos especiales en gris
+            simboloEspecial = " (" + nodo.valor + ")";
+        }
+
+        Paragraph nodoPara = new Paragraph(prefijo + "├── " + nodo.valor + simboloEspecial, nodoFont);
+        nodoPara.setIndentationLeft(20 + prefijo.length() * 10);
+        document.add(nodoPara);
+
+        // Procesar hijos recursivamente
+        for (int i = 0; i < nodo.hijos.size(); i++) {
+            NodoArbol hijo = nodo.hijos.get(i);
+            String nuevoPrefijo = prefijo + (i < nodo.hijos.size() - 1 ? "│   " : "    ");
+            agregarRepresentacionArbolTextual(document, bf, hijo, nuevoPrefijo, colorPrimario);
+        }
+    }
+
+    /**
+     * Crea la conclusión automática del informe
+     */
+    private void crearConclusionAutomatica(Document document, BaseFont bf, Font tituloSeccion, Font contenidoNormal,
+                                         LineSeparator separador, ResourceBundle bundle, String estadoSimulacion,
+                                         BaseColor colorExito, BaseColor colorError) throws DocumentException {
+
+        Paragraph tituloConclusion = new Paragraph("CONCLUSIÓN", tituloSeccion);
+        tituloConclusion.setAlignment(Paragraph.ALIGN_CENTER);
+        document.add(tituloConclusion);
+        document.add(new Chunk(separador));
+        document.add(new Paragraph(" ", new Font(bf, 15)));
+
+        // Conclusión automática basada en el estado
+        String conclusion;
+        BaseColor colorConclusion;
+        Font conclusionFont = new Font(bf, 14, Font.BOLD);
+
+        if (estadoSimulacion != null && estadoSimulacion.equals(bundle.getString("informe.simulador.estado.aceptada"))) {
+            conclusion = "La cadena fue ACEPTADA según la gramática dada.";
+            colorConclusion = colorExito;
+        } else if (estadoSimulacion != null && estadoSimulacion.equals(bundle.getString("informe.simulador.estado.rechazada"))) {
+            conclusion = "La cadena fue RECHAZADA según la gramática dada.";
+            colorConclusion = colorError;
+        } else {
+            conclusion = "No se pudo determinar el estado final de la simulación.";
+            colorConclusion = BaseColor.GRAY;
+        }
+
+        conclusionFont.setColor(colorConclusion);
+        Paragraph parrafoConclusion = new Paragraph(conclusion, conclusionFont);
+        parrafoConclusion.setAlignment(Paragraph.ALIGN_CENTER);
+        document.add(parrafoConclusion);
+
+        document.add(new Paragraph(" ", new Font(bf, 20)));
+
+        // Información adicional
+        Font infoFont = new Font(bf, 10);
+        infoFont.setColor(BaseColor.GRAY);
+        Paragraph infoAdicional = new Paragraph("Este informe fue generado automáticamente por SimAS - Simulador de Análisis Sintáctico", infoFont);
+        infoAdicional.setAlignment(Paragraph.ALIGN_CENTER);
+        document.add(infoAdicional);
+
+        Paragraph fechaConclusion = new Paragraph("Fecha: " +
+            java.time.LocalDate.now().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")), infoFont);
+        fechaConclusion.setAlignment(Paragraph.ALIGN_CENTER);
+        document.add(fechaConclusion);
     }
 
     public boolean isNoTerminal(String nombre) {

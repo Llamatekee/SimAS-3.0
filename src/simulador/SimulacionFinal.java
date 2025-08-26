@@ -1608,8 +1608,8 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
                 }
             }
             
-            // Generar el informe del simulador
-            boolean exito = this.gramatica.generarInformeSimulacionFinal(
+            // Generar el informe del simulador con formato profesional
+            boolean exito = this.gramatica.generarInformeSimulacionFinalProfesional(
                 archivo.getAbsolutePath(),
                 gramaticaOriginal,
                 this.tablaPredictiva,
