@@ -57,6 +57,16 @@ public class Gramatica {
     private TablaPredictiva tpredictiva = new TablaPredictiva();
     //private NuevaDerivacionDescGenerada derivacionGeneradaDesc;
 
+    // Clase interna para representar nodos del árbol sintáctico
+    private static class NodoArbol {
+        String valor;
+        List<NodoArbol> hijos = new ArrayList<>();
+
+        NodoArbol(String valor) {
+            this.valor = valor;
+        }
+    }
+
     // Constructor con parámetros
     public Gramatica(String nombre, String descripcion) {
         this.nombre.set(nombre);
@@ -1253,6 +1263,171 @@ public class Gramatica {
         return true;
     }
 
+        /**
+     * Verifica si un símbolo es terminal
+     */
+    private boolean esTerminal(String simbolo) {
+        return !this.getNoTerminalesModel().contains(simbolo);
+    }
+
+    /**
+     * Construye el árbol sintáctico desde el historial de simulación
+     */
+    private NodoArbol construirArbolDesdeHistorial(List<HistorialPaso> historial) {
+        // Creamos la raíz con el símbolo inicial
+        NodoArbol raiz = new NodoArbol(this.getSimbInicial());
+
+        // Crear una copia del historial para no modificar el original
+        List<HistorialPaso> historialCopia = new ArrayList<>(historial);
+        construirRecursivo(raiz, historialCopia);
+
+        return raiz;
+    }
+
+    /**
+     * Función recursiva para construir el árbol
+     */
+    private void construirRecursivo(NodoArbol nodo, List<HistorialPaso> pasos) {
+        if (pasos.isEmpty()) {
+            return;
+        }
+
+        // Buscar la producción que expande este nodo
+        for (int i = 0; i < pasos.size(); i++) {
+            HistorialPaso paso = pasos.get(i);
+            String accion = paso.getAccion();
+
+            // Si es una producción (contiene una flecha)
+            if (accion.contains("→")) {
+                // Eliminar el número de producción si existe
+                String accionLimpia = accion.replaceAll("^\\d+\\.\\s*", "").trim();
+                String[] partes = accionLimpia.split("→");
+                String izquierda = partes[0].trim();
+                String derecha = partes[1].trim();
+
+                // Si esta producción corresponde al nodo actual
+                if (izquierda.equals(nodo.valor)) {
+                    // Dividir la parte derecha en símbolos
+                    String[] simbolos = derecha.split("\\s+");
+
+                    // Crear nodos hijos para cada símbolo
+                    for (String simbolo : simbolos) {
+                        if (!simbolo.isEmpty()) {
+                            NodoArbol hijo = new NodoArbol(simbolo);
+                            nodo.hijos.add(hijo);
+
+                            // Si el hijo es no terminal, procesarlo recursivamente
+                            if (!esTerminal(simbolo)) {
+                                // Crear una nueva lista con los pasos restantes
+                                List<HistorialPaso> pasosRestantes = new ArrayList<>(pasos.subList(i + 1, pasos.size()));
+                                construirRecursivo(hijo, pasosRestantes);
+                            }
+                        }
+                    }
+                    break; // Solo procesar la primera producción que coincida
+                }
+            }
+        }
+    }
+
+    /**
+     * Genera código DOT desde el árbol sintáctico
+     */
+    private String generarDotDesdeArbol(NodoArbol raiz) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("digraph G {\n");
+        sb.append("  node [shape=box, style=rounded, fontname=\"Arial\"];\n");
+        sb.append("  edge [arrowhead=none];\n");
+
+        // Usar un contador para generar IDs únicos de nodos
+        int[] idCounter = {0};
+        generarDotRec(raiz, sb, idCounter, null);
+
+        sb.append("}\n");
+        return sb.toString();
+    }
+
+    /**
+     * Función recursiva para generar código DOT
+     */
+    private void generarDotRec(NodoArbol nodo, StringBuilder sb, int[] id, String parentId) {
+        String myId = "n" + id[0]++;
+        sb.append(myId + " [label=\"" + nodo.valor.replace("\"", "\\\"") + "\"];\n");
+        if (parentId != null) {
+            sb.append(parentId + " -> " + myId + ";\n");
+        }
+        for (NodoArbol hijo : nodo.hijos) {
+            generarDotRec(hijo, sb, id, myId);
+        }
+    }
+
+    /**
+     * Genera la imagen del árbol sintáctico y la añade al PDF
+     */
+    private void agregarImagenArbolAlPDF(Document document, List<HistorialPaso> historialPasos) {
+        try {
+            // Verificar si hay historial disponible
+            if (historialPasos == null || historialPasos.isEmpty()) {
+                return;
+            }
+
+            // Construir el árbol desde el historial
+            NodoArbol raiz = construirArbolDesdeHistorial(historialPasos);
+
+            // Generar código DOT
+            String dotCode = generarDotDesdeArbol(raiz);
+
+            // Crear archivos temporales
+            java.nio.file.Path dotFile = java.nio.file.Files.createTempFile("arbol_pdf_", ".dot");
+            java.nio.file.Path imgFile = java.nio.file.Files.createTempFile("arbol_pdf_", ".png");
+
+            try {
+                // Escribir código DOT al archivo
+                java.nio.file.Files.write(dotFile, dotCode.getBytes());
+
+                // Ejecutar Graphviz para generar la imagen
+                ProcessBuilder pb = new ProcessBuilder("dot", "-Tpng", dotFile.toString(), "-o", imgFile.toString());
+                Process process = pb.start();
+                int exitCode = process.waitFor();
+
+                if (exitCode == 0 && java.nio.file.Files.exists(imgFile)) {
+                    // Crear imagen para el PDF usando iText
+                    com.itextpdf.text.Image imagenArbol = com.itextpdf.text.Image.getInstance(imgFile.toString());
+
+                    // Configurar la imagen para que quepa en el PDF
+                    float maxWidth = document.getPageSize().getWidth() - document.leftMargin() - document.rightMargin();
+                    float maxHeight = 300; // Altura máxima fija
+
+                    // Calcular escala para ajustar la imagen
+                    float scaleX = maxWidth / imagenArbol.getWidth();
+                    float scaleY = maxHeight / imagenArbol.getHeight();
+                    float scale = Math.min(scaleX, scaleY);
+
+                    imagenArbol.scalePercent(scale * 100);
+
+                    // Centrar la imagen
+                    imagenArbol.setAlignment(com.itextpdf.text.Image.ALIGN_CENTER);
+
+                    // Añadir la imagen al documento
+                    document.add(imagenArbol);
+                }
+            } finally {
+                // Limpiar archivos temporales
+                try {
+                    java.nio.file.Files.deleteIfExists(dotFile);
+                    java.nio.file.Files.deleteIfExists(imgFile);
+                } catch (Exception e) {
+                    // Ignorar errores al limpiar archivos temporales
+                }
+            }
+        } catch (Exception e) {
+            // Si hay algún error (GraphViz no disponible, etc.), simplemente no añadir la imagen
+            // Esto es mejor que fallar toda la generación del PDF
+            Logger.getLogger(getClass().getName()).log(Level.WARNING,
+                "No se pudo generar la imagen del árbol sintáctico: " + e.getMessage());
+        }
+    }
+
     /**
      * Genera un informe PDF completo del simulador incluyendo gramática original, modificada y detalles de simulación.
      */
@@ -1544,28 +1719,28 @@ public class Gramatica {
             document.add(new Paragraph(" ", new Font(bf, 8))); // Espacio
 
             // Información de la simulación
-            Paragraph parrafoSimulacion = new Paragraph("Información de la Simulación:", seccion);
+            Paragraph parrafoSimulacion = new Paragraph(bundle.getString("informe.simulador.informacion.simulacion"), seccion);
             document.add(parrafoSimulacion);
-            
+
             // Cadena de entrada
-            Paragraph parrafoCadenaEntrada = new Paragraph("    Cadena de Entrada:", contenido);
+            Paragraph parrafoCadenaEntrada = new Paragraph("    " + bundle.getString("informe.simulador.cadena.entrada"), contenido);
             parrafoCadenaEntrada.setIndentationLeft(20);
             document.add(parrafoCadenaEntrada);
-            Paragraph parrafoCadena = new Paragraph("        " + (cadenaEntrada != null ? cadenaEntrada : "No especificada"), contenido);
+            Paragraph parrafoCadena = new Paragraph("        " + (cadenaEntrada != null ? cadenaEntrada : bundle.getString("informe.simulador.no.especificado")), contenido);
             parrafoCadena.setIndentationLeft(20);
             document.add(parrafoCadena);
             document.add(new Paragraph(" ", new Font(bf, 8))); // Espacio
-            
+
             // Estado de la simulación
-            Paragraph parrafoEstadoSimulacion = new Paragraph("    Estado de la Simulación:", contenido);
+            Paragraph parrafoEstadoSimulacion = new Paragraph("    " + bundle.getString("informe.simulador.estado.simulacion"), contenido);
             parrafoEstadoSimulacion.setIndentationLeft(20);
             document.add(parrafoEstadoSimulacion);
             
             // Determinar el color del estado
             BaseColor colorEstado;
-            if (estadoSimulacion != null && estadoSimulacion.equals("ACEPTADA")) {
+            if (estadoSimulacion != null && estadoSimulacion.equals(bundle.getString("informe.simulador.estado.aceptada"))) {
                 colorEstado = new BaseColor(0, 128, 0); // Verde para aceptada
-            } else if (estadoSimulacion != null && estadoSimulacion.equals("RECHAZADA")) {
+            } else if (estadoSimulacion != null && estadoSimulacion.equals(bundle.getString("informe.simulador.estado.rechazada"))) {
                 colorEstado = new BaseColor(255, 0, 0); // Rojo para rechazada
             } else {
                 colorEstado = new BaseColor(128, 128, 128); // Gris para no especificado
@@ -1573,14 +1748,14 @@ public class Gramatica {
             
             Font estadoFont = new Font(bf, 12, Font.BOLD);
             estadoFont.setColor(colorEstado);
-            Paragraph estadoSim = new Paragraph("        " + (estadoSimulacion != null ? estadoSimulacion : "No especificado"), estadoFont);
+            Paragraph estadoSim = new Paragraph("        " + (estadoSimulacion != null ? estadoSimulacion : bundle.getString("informe.simulador.no.especificado")), estadoFont);
             estadoSim.setIndentationLeft(20);
             document.add(estadoSim);
             document.add(new Paragraph(" ", new Font(bf, 8))); // Espacio
 
             // Historial de pasos
             if (historialPasos != null && !historialPasos.isEmpty()) {
-                Paragraph parrafoHistorial = new Paragraph("    Historial de Pasos:", contenido);
+                Paragraph parrafoHistorial = new Paragraph("    " + bundle.getString("informe.simulador.historial.pasos"), contenido);
                 parrafoHistorial.setIndentationLeft(20);
                 document.add(parrafoHistorial);
                 document.add(new Paragraph(" ", new Font(bf, 8))); // Espacio pequeño
@@ -1593,22 +1768,22 @@ public class Gramatica {
                 // Encabezados
                 Font headerFont = new Font(bf, 10, Font.BOLD);
                 headerFont.setColor(colorSecundario);
-                PdfPCell cellPaso = new PdfPCell(new Phrase("Paso", headerFont));
+                PdfPCell cellPaso = new PdfPCell(new Phrase(bundle.getString("informe.simulador.historial.paso"), headerFont));
                 cellPaso.setBackgroundColor(colorPrincipal);
                 cellPaso.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
                 tablaHistorial.addCell(cellPaso);
 
-                PdfPCell cellPila = new PdfPCell(new Phrase("Pila", headerFont));
+                PdfPCell cellPila = new PdfPCell(new Phrase(bundle.getString("informe.simulador.historial.pila"), headerFont));
                 cellPila.setBackgroundColor(colorPrincipal);
                 cellPila.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
                 tablaHistorial.addCell(cellPila);
 
-                PdfPCell cellEntrada = new PdfPCell(new Phrase("Entrada", headerFont));
+                PdfPCell cellEntrada = new PdfPCell(new Phrase(bundle.getString("informe.simulador.historial.entrada"), headerFont));
                 cellEntrada.setBackgroundColor(colorPrincipal);
                 cellEntrada.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
                 tablaHistorial.addCell(cellEntrada);
 
-                PdfPCell cellAccion = new PdfPCell(new Phrase("Acción", headerFont));
+                PdfPCell cellAccion = new PdfPCell(new Phrase(bundle.getString("informe.simulador.historial.accion"), headerFont));
                 cellAccion.setBackgroundColor(colorPrincipal);
                 cellAccion.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
                 tablaHistorial.addCell(cellAccion);
@@ -1639,7 +1814,7 @@ public class Gramatica {
 
             // Derivación
             if (historialPasos != null && !historialPasos.isEmpty()) {
-                Paragraph parrafoDerivacion = new Paragraph("    Derivación:", contenido);
+                Paragraph parrafoDerivacion = new Paragraph("    " + bundle.getString("informe.simulador.derivacion"), contenido);
                 parrafoDerivacion.setIndentationLeft(20);
                 document.add(parrafoDerivacion);
                 document.add(new Paragraph(" ", new Font(bf, 8))); // Espacio pequeño
@@ -1647,7 +1822,7 @@ public class Gramatica {
                 // Generar derivación basada en el historial
                 for (int i = 0; i < historialPasos.size(); i++) {
                     HistorialPaso paso = historialPasos.get(i);
-                    String derivacionLine = "        Paso " + (i + 1) + ": " + paso.getAccion();
+                    String derivacionLine = "        " + bundle.getString("informe.simulador.historial.paso") + " " + (i + 1) + ": " + paso.getAccion();
                     Paragraph derivacionPaso = new Paragraph(derivacionLine, contenido);
                     derivacionPaso.setIndentationLeft(20);
                     document.add(derivacionPaso);
@@ -1655,13 +1830,21 @@ public class Gramatica {
                 document.add(new Paragraph(" ", new Font(bf, 8))); // Espacio
             }
 
-            // Nota sobre el árbol sintáctico
-            Paragraph parrafoArbol = new Paragraph("    Árbol Sintáctico:", contenido);
+            // Árbol sintáctico
+            Paragraph parrafoArbol = new Paragraph("    " + bundle.getString("informe.simulador.arbol.sintactico"), contenido);
             parrafoArbol.setIndentationLeft(20);
             document.add(parrafoArbol);
-            Paragraph notaArbol = new Paragraph("        El árbol sintáctico completo se encuentra disponible en la interfaz de usuario del simulador.", contenidoPequeno);
-            notaArbol.setIndentationLeft(20);
-            document.add(notaArbol);
+            document.add(new Paragraph(" ", new Font(bf, 8))); // Espacio pequeño
+
+            // Intentar generar la imagen del árbol
+            try {
+                agregarImagenArbolAlPDF(document, historialPasos);
+            } catch (Exception e) {
+                // Si no se puede generar la imagen, mostrar nota informativa
+                Paragraph notaArbol = new Paragraph("        " + bundle.getString("informe.simulador.arbol.descripcion"), contenidoPequeno);
+                notaArbol.setIndentationLeft(20);
+                document.add(notaArbol);
+            }
 
             document.add(new Paragraph(" ", new Font(bf, 15))); // Espacio
 

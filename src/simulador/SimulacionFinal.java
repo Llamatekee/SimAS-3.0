@@ -1598,13 +1598,13 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
             Gramatica gramaticaOriginal = this.gramatica;
             
             // Determinar el estado de la simulación
-            String estadoSimulacion = "NO ESPECIFICADO";
+            String estadoSimulacion = bundle.getString("informe.simulador.no.especificado");
             if (historialObservable.size() > 0) {
                 HistorialPaso ultimoPaso = historialObservable.get(historialObservable.size() - 1);
                 if (ultimoPaso.getAccion().equals("Aceptar")) {
-                    estadoSimulacion = "ACEPTADA";
+                    estadoSimulacion = bundle.getString("informe.simulador.estado.aceptada");
                 } else if (ultimoPaso.getAccion().equals("Error")) {
-                    estadoSimulacion = "RECHAZADA";
+                    estadoSimulacion = bundle.getString("informe.simulador.estado.rechazada");
                 }
             }
             
