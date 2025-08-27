@@ -42,6 +42,7 @@ public class Gramatica {
     private StringProperty nombre = new SimpleStringProperty();
     private StringProperty descripcion = new SimpleStringProperty();
     private StringProperty simbInicial = new SimpleStringProperty();
+    private StringProperty archivoFuente = new SimpleStringProperty(); // Nombre del archivo fuente (sin extensión)
     private final IntegerProperty estado = new SimpleIntegerProperty();
 
     // Colecciones de objetos de la gramática (modelo)
@@ -71,12 +72,14 @@ public class Gramatica {
     public Gramatica(String nombre, String descripcion) {
         this.nombre.set(nombre);
         this.descripcion.set(descripcion);
+        this.archivoFuente.set("untitled"); // Valor por defecto para gramáticas creadas desde cero
     }
 
     // Constructor con parámetros
     public Gramatica(Gramatica gramatica) {
         this.nombre.set(gramatica.getNombre());
         this.descripcion.set(gramatica.getDescripcion());
+        this.archivoFuente.set(gramatica.getArchivoFuente());
         this.estado.set(gramatica.getEstado());
         this.noTerm.setAll(gramatica.getNoTerminalesModel());
         this.term.setAll(gramatica.getTerminalesModel());
@@ -91,8 +94,29 @@ public class Gramatica {
     public Gramatica() {
         // En la versión Swing se llamaba a initComponents() para inicializar la UI,
         // pero aquí la clase Gramatica es parte del modelo, por lo que no se requiere.
+        this.archivoFuente.set("untitled"); // Valor por defecto para gramáticas creadas desde cero
     }
 
+
+    /**
+     * Genera el nombre del archivo PDF según el tipo de informe
+     * @param tipoInforme Tipo de informe: "editor", "simulador", "simulacion"
+     * @return Nombre del archivo PDF
+     */
+    public String generarNombreArchivoPDF(String tipoInforme) {
+        String baseNombre = getArchivoFuente();
+
+        switch (tipoInforme.toLowerCase()) {
+            case "editor":
+                return baseNombre + ".pdf";
+            case "simulador":
+                return baseNombre + "_sim.pdf";
+            case "simulacion":
+                return baseNombre + "_sim_final.pdf";
+            default:
+                return baseNombre + ".pdf";
+        }
+    }
 
     public void actualizarNoTerminalesDesdeModel() {
         // Crear un mapa para mantener las referencias originales de los NoTerminales
@@ -136,6 +160,18 @@ public class Gramatica {
 
     public StringProperty descripcionProperty() {
         return descripcion;
+    }
+
+    public String getArchivoFuente() {
+        return archivoFuente.get();
+    }
+
+    public void setArchivoFuente(String archivoFuente) {
+        this.archivoFuente.set(archivoFuente);
+    }
+
+    public StringProperty archivoFuenteProperty() {
+        return archivoFuente;
     }
 
     public int getEstado() {
@@ -419,6 +455,12 @@ public class Gramatica {
             return null;
         }
 
+        // Extraer el nombre del archivo sin extensión
+        String nombreArchivo = file.getName();
+        if (nombreArchivo.contains(".")) {
+            nombreArchivo = nombreArchivo.substring(0, nombreArchivo.lastIndexOf('.'));
+        }
+
         // Variables para almacenar información del XML
         String nombre = null;
         String descripcion = null;
@@ -559,6 +601,8 @@ public class Gramatica {
             }
             // Asumimos que gramatica tiene un método setProducciones que acepta ObservableList<String>
             gramatica.setProduccionesModel(prodModel);
+            // Guardar el nombre del archivo fuente
+            gramatica.setArchivoFuente(nombreArchivo);
             //gramatica.numerarProducciones();
 
             return gramatica;

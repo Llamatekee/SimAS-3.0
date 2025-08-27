@@ -357,8 +357,8 @@ public class PanelNuevaSimDescPaso6 extends BorderPane implements PanelNuevaSimD
             new FileChooser.ExtensionFilter("Documentos PDF", "*.pdf")
         );
         
-        // Sugerir nombre de archivo basado en el nombre de la gramática
-        String nombreArchivo = this.gramatica.getNombre().replaceAll("[^a-zA-Z0-9]", "_") + "_InformeSimulacion.pdf";
+        // Sugerir nombre de archivo basado en el nombre del archivo fuente
+        String nombreArchivo = this.gramatica.generarNombreArchivoPDF("simulador");
         fileChooser.setInitialFileName(nombreArchivo);
 
         // Mostrar diálogo de guardado

@@ -1583,8 +1583,8 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
             new FileChooser.ExtensionFilter("Documentos PDF", "*.pdf")
         );
         
-        // Sugerir nombre de archivo basado en el nombre de la gramática
-        String nombreArchivo = this.gramatica.getNombre().replaceAll("[^a-zA-Z0-9]", "_") + "_InformeSimulacion.pdf";
+        // Sugerir nombre de archivo basado en el nombre del archivo fuente
+        String nombreArchivo = this.gramatica.generarNombreArchivoPDF("simulacion");
         fileChooser.setInitialFileName(nombreArchivo);
 
         // Mostrar diálogo de guardado
