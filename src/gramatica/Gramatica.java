@@ -2049,7 +2049,7 @@ public class Gramatica {
         Font dataFont = new Font(bf, 8);
 
         // Encabezado de símbolo
-        PdfPCell cellSimbolo = new PdfPCell(new Phrase("Símbolo", headerFont));
+        PdfPCell cellSimbolo = new PdfPCell(new Phrase(bundle.getString("informe.profesional.tabla.simbolo"), headerFont));
         cellSimbolo.setBackgroundColor(colorPrimario);
         cellSimbolo.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
         cellSimbolo.setPadding(8);
@@ -2266,7 +2266,7 @@ public class Gramatica {
             HistorialPaso paso = historialPasos.get(i);
             // Convertir flechas Unicode a ASCII para mostrar en el PDF
             String accionFormateada = paso.getAccion().replace("→", " -> ");
-            String derivacionLine = "Paso " + (i + 1) + ": " + accionFormateada;
+            String derivacionLine = bundle.getString("informe.profesional.derivacion.paso") + " " + (i + 1) + ": " + accionFormateada;
 
             // Crear bloque para cada paso
             PdfPTable tablaPaso = new PdfPTable(1);
@@ -2843,7 +2843,7 @@ public class Gramatica {
             encabezado.setColor(new BaseColor(33, 77, 72));
             
             // Agregar encabezado de la columna de Símbolos
-            PdfPCell celdaSimbolo = new PdfPCell(new Phrase("Símbolo", encabezado));
+            PdfPCell celdaSimbolo = new PdfPCell(new Phrase(bundle.getString("informe.profesional.tabla.simbolo"), encabezado));
             celdaSimbolo.setBackgroundColor(new BaseColor(240, 240, 240));
             celdaSimbolo.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
             celdaSimbolo.setVerticalAlignment(PdfPCell.ALIGN_MIDDLE);
