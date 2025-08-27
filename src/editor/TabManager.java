@@ -1250,17 +1250,37 @@ public class TabManager {
             else if (elementId.startsWith("simulacion_")) {
                 if (childId.startsWith("derivacion_")) {
                     String tituloBase = obtenerTituloBaseParaHija(tabPane, childId);
-                    // Para pestañas hijas de simulación, usar el número de instancia de la simulación padre
+                    // Para pestañas hijas de simulación, combinar grupo e instancia
                     int numeroInstancia = obtenerNumeroInstanciaSimulacion(tabPane, elementId);
                     boolean hayMultiplesSimulaciones = contarSimulacionesDelSimulador(tabPane, elementId) > 1;
-                    String nuevoTitulo = hayMultiplesSimulaciones ? tituloBase + " (" + numeroInstancia + ")" : tituloBase;
+
+                    String nuevoTitulo;
+                    if (mostrarGrupo && hayMultiplesSimulaciones) {
+                        nuevoTitulo = numeroGrupo + "-" + tituloBase + " (" + numeroInstancia + ")";
+                    } else if (mostrarGrupo) {
+                        nuevoTitulo = numeroGrupo + "-" + tituloBase;
+                    } else if (hayMultiplesSimulaciones) {
+                        nuevoTitulo = tituloBase + " (" + numeroInstancia + ")";
+                    } else {
+                        nuevoTitulo = tituloBase;
+                    }
                     tab.setText(nuevoTitulo);
                 } else if (childId.startsWith("arbol_")) {
                     String tituloBase = obtenerTituloBaseParaHija(tabPane, childId);
-                    // Para pestañas hijas de simulación, usar el número de instancia de la simulación padre
+                    // Para pestañas hijas de simulación, combinar grupo e instancia
                     int numeroInstancia = obtenerNumeroInstanciaSimulacion(tabPane, elementId);
                     boolean hayMultiplesSimulaciones = contarSimulacionesDelSimulador(tabPane, elementId) > 1;
-                    String nuevoTitulo = hayMultiplesSimulaciones ? tituloBase + " (" + numeroInstancia + ")" : tituloBase;
+
+                    String nuevoTitulo;
+                    if (mostrarGrupo && hayMultiplesSimulaciones) {
+                        nuevoTitulo = numeroGrupo + "-" + tituloBase + " (" + numeroInstancia + ")";
+                    } else if (mostrarGrupo) {
+                        nuevoTitulo = numeroGrupo + "-" + tituloBase;
+                    } else if (hayMultiplesSimulaciones) {
+                        nuevoTitulo = tituloBase + " (" + numeroInstancia + ")";
+                    } else {
+                        nuevoTitulo = tituloBase;
+                    }
                     tab.setText(nuevoTitulo);
                 }
             }
@@ -2052,11 +2072,11 @@ public class TabManager {
             if (tab.getUserData() != null) {
                 String elementId = tab.getUserData().toString();
                 String grupoId = elementos.get(elementId);
-                
+
                 if (grupoId != null) {
                     Integer numero = grupos.get(grupoId);
                     if (numero != null) {
-                        
+
                         // Es un elemento principal (editor o simulador)
                         if (elementId.startsWith("editor_")) {
                             actualizarTituloEditor(tab, numero, hayMultiplesGrupos);
@@ -2066,7 +2086,7 @@ public class TabManager {
                             // Las simulaciones se actualizan desde SimulacionFinal.actualizarTitulosPestañas()
                             // pero necesitamos actualizar sus pestañas hijas (derivación y árbol)
                         }
-                        
+
                         // Actualizar sus pestañas hijas
                         actualizarTitulosPestañasHijas(tabPane, elementId, numero, hayMultiplesGrupos);
                     }
@@ -2075,11 +2095,15 @@ public class TabManager {
                     for (Map.Entry<String, String> entry : elementos.entrySet()) {
                         String elementoPadre = entry.getKey();
                         String grupoDelPadre = entry.getValue();
-                        
+
                         if (isPestañaHijaDeElemento(elementId, elementoPadre)) {
                             Integer numero = grupos.get(grupoDelPadre);
                             if (numero != null) {
-                                actualizarTituloHija(tab, elementId, numero, hayMultiplesGrupos);
+                                // IMPORTANTE: Solo actualizar si NO es una pestaña hija de simulación
+                                // (las hijas de simulación se manejan en actualizarTitulosPestañasHijas)
+                                if (!elementoPadre.startsWith("simulacion_")) {
+                                    actualizarTituloHija(tab, elementId, numero, hayMultiplesGrupos);
+                                }
                             }
                             break;
                         }
