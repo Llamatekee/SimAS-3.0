@@ -810,26 +810,62 @@ public class TabManager {
      */
     public static void closeChildTabs(TabPane tabPane, String parentId) {
         if (tabPane == null || parentId == null) return;
-        
+
         // Obtener las relaciones padre-hijo para este TabPane específico
         Map<String, List<Tab>> relations = getParentChildRelations(tabPane);
-        
+
         // Si hay pestañas hijas para este padre en este TabPane específico
         if (relations.containsKey(parentId)) {
             // Crear una copia de la lista para evitar ConcurrentModificationException
             List<Tab> childTabs = new ArrayList<>(relations.get(parentId));
-            
+
             // Usar Platform.runLater para modificar la UI thread de manera segura
             Platform.runLater(() -> {
                 // Cerrar cada pestaña hija
                 for (Tab childTab : childTabs) {
                     if (tabPane.getTabs().contains(childTab)) {
+                        // Si es una simulación, cerrar también sus derivaciones y árboles
+                        String childId = childTab.getUserData() != null ? childTab.getUserData().toString() : null;
+                        if (childId != null && childId.startsWith("simulacion_")) {
+                            closeChildTabs(tabPane, childId); // Cerrar derivaciones y árboles
+                        }
                         tabPane.getTabs().remove(childTab);
                     }
                 }
                 // Limpiar la relación después de cerrar todas las pestañas
                 relations.remove(parentId);
             });
+        }
+    }
+
+    /**
+     * Cierra TODAS las pestañas descendientes (hijas, nietas, etc.) de un elemento.
+     * Útil cuando se cierra un abuelo y se quieren cerrar todos sus descendientes.
+     */
+    public static void closeAllDescendantTabs(TabPane tabPane, String ancestorId) {
+        if (tabPane == null || ancestorId == null) return;
+
+        // Primero cerrar las pestañas hijas directas del ancestro
+        closeChildTabs(tabPane, ancestorId);
+
+        // Si el ancestro es un simulador, necesitamos cerrar también las simulaciones y sus derivaciones/árboles
+        if (ancestorId.startsWith("simulador_")) {
+            // Buscar todas las simulaciones que pertenecen a este simulador
+            for (Tab tab : new ArrayList<>(tabPane.getTabs())) {
+                if (tab.getUserData() != null) {
+                    String tabId = tab.getUserData().toString();
+                    if (tabId.startsWith("simulacion_") && tabId.contains(ancestorId)) {
+                        // Esta es una simulación de este simulador, cerrar también sus derivaciones y árboles
+                        closeChildTabs(tabPane, tabId);
+                        // Cerrar la simulación misma
+                        Platform.runLater(() -> {
+                            if (tabPane.getTabs().contains(tab)) {
+                                tabPane.getTabs().remove(tab);
+                            }
+                        });
+                    }
+                }
+            }
         }
     }
     
@@ -1621,7 +1657,12 @@ public class TabManager {
                 String elementId = selectedTab.getUserData() != null ? selectedTab.getUserData().toString() : null;
                 
                 if (elementId != null) {
-                    closeChildTabs(tabPane, elementId);
+                    // Si es un simulador, cerrar TODOS sus descendientes (simulaciones, derivaciones, árboles)
+                    if (elementId.startsWith("simulador_")) {
+                        closeAllDescendantTabs(tabPane, elementId);
+                    } else {
+                        closeChildTabs(tabPane, elementId);
+                    }
                     String grupoId = obtenerGrupoDeElemento(tabPane, elementId);
                     tabPane.getTabs().remove(selectedTab);
                     eliminarElementoDeGrupo(tabPane, elementId, grupoId);
@@ -1638,7 +1679,12 @@ public class TabManager {
                 if (tab.isClosable()) {
                     String elementId = tab.getUserData() != null ? tab.getUserData().toString() : null;
                     if (elementId != null) {
-                        closeChildTabs(tabPane, elementId);
+                        // Si es un simulador, cerrar TODOS sus descendientes (simulaciones, derivaciones, árboles)
+                        if (elementId.startsWith("simulador_")) {
+                            closeAllDescendantTabs(tabPane, elementId);
+                        } else {
+                            closeChildTabs(tabPane, elementId);
+                        }
                         String grupoId = obtenerGrupoDeElemento(tabPane, elementId);
                         eliminarElementoDeGrupo(tabPane, elementId, grupoId);
                     }
