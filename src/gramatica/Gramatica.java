@@ -949,316 +949,185 @@ public class Gramatica {
     }
 
     /**
-     * Genera un informe PDF completo del simulador incluyendo gramática original, modificada y detalles de simulación.
+     * Genera un informe PDF completo del simulador siguiendo el mismo formato profesional
+     * pero sin las secciones: resumen ejecutivo, información de simulación, historial de pasos,
+     * derivación, árbol sintáctico y conclusión.
      */
     public Boolean generarInformeSimulador(String fichero, Gramatica gramaticaOriginal, TablaPredictiva tablaPredictiva, 
                                          List<FuncionError> funcionesError, ResourceBundle bundle) throws DocumentException {
         try {
-            // Configuración de la fuente y del documento PDF
+            // Configuración inicial del documento
             String fontPath = "fonts/arial.ttf";
             Document document = new Document(PageSize.A4, 50, 50, 80, 50);
             
-            // Crear el PdfWriter con numeración de páginas
+            // Crear el PdfWriter con gestión avanzada de páginas
             PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(fichero));
             
-            // Configurar numeración de páginas
+            // Configurar esquema de colores profesional
+            BaseColor colorPrimario = new BaseColor(41, 128, 185);     // Azul profesional
+            BaseColor colorSecundario = new BaseColor(52, 152, 219);   // Azul claro
+            BaseColor colorAcento = new BaseColor(230, 126, 34);       // Naranja
+            BaseColor colorExito = new BaseColor(46, 204, 113);        // Verde éxito
+            BaseColor colorError = new BaseColor(231, 76, 60);         // Rojo error
+            BaseColor colorNeutro = new BaseColor(149, 165, 166);      // Gris neutro
+            BaseColor colorFondoCabecera = new BaseColor(236, 240, 241); // Gris muy claro
+
+            // Fuentes tipográficas profesionales
+            BaseFont bf = BaseFont.createFont(fontPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+            BaseFont bfMono = BaseFont.createFont(BaseFont.COURIER, BaseFont.CP1252, BaseFont.EMBEDDED);
+
+            Font tituloPortada = new Font(bf, 32, Font.BOLD);
+            Font subtituloPortada = new Font(bf, 20, Font.BOLD);
+            Font tituloSeccion = new Font(bf, 18, Font.BOLD);
+            Font subtituloSeccion = new Font(bf, 14, Font.BOLD);
+            Font contenidoNormal = new Font(bf, 11);
+            Font contenidoMono = new Font(bfMono, 10);
+            Font piePagina = new Font(bf, 9, Font.ITALIC);
+
+            tituloPortada.setColor(colorPrimario);
+            subtituloPortada.setColor(colorSecundario);
+            tituloSeccion.setColor(colorPrimario);
+            subtituloSeccion.setColor(colorAcento);
+            contenidoNormal.setColor(BaseColor.BLACK);
+            piePagina.setColor(colorNeutro);
+
+            // Configurar separadores visuales
+            LineSeparator separadorPrincipal = new LineSeparator();
+            separadorPrincipal.setLineWidth(3);
+            separadorPrincipal.setLineColor(colorPrimario);
+
+            LineSeparator separadorSecundario = new LineSeparator();
+            separadorSecundario.setLineWidth(1);
+            separadorSecundario.setLineColor(colorNeutro);
+
+            // Event handler para encabezados y pies de página
             final ResourceBundle finalBundle = bundle;
+            final BaseFont finalBf = bf;
+            final BaseColor finalColorNeutro = colorNeutro;
+            final BaseColor finalColorPrimario = colorPrimario;
+
             writer.setPageEvent(new PdfPageEventHelper() {
                 @Override
                 public void onEndPage(PdfWriter writer, Document document) {
                     try {
-                        BaseFont bf = BaseFont.createFont(fontPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-                        Font font = new Font(bf, 10);
+                        // Pie de página con numeración
+                        Font fontPie = new Font(finalBf, 9, Font.ITALIC);
+                        fontPie.setColor(finalColorNeutro);
+
                         ColumnText.showTextAligned(writer.getDirectContent(), 
                             Paragraph.ALIGN_CENTER, 
-                            new Phrase(String.format("%s %d", finalBundle.getString("informe.pagina"), writer.getPageNumber()), font), 
+                            new Phrase(String.format("%s %d", finalBundle.getString("informe.pagina"), writer.getPageNumber()), fontPie),
                             (document.right() - document.left()) / 2 + document.leftMargin(), 
-                            document.bottom() - 10, 0);
+                            document.bottom() - 15, 0);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
+
+                @Override
+                public void onStartPage(PdfWriter writer, Document document) {
+                    // Encabezado eliminado - no mostrar título en cada página
+                }
             });
-            
-            // Cargar logo de la aplicación
-            Image imagen = Image.getInstance(Objects.requireNonNull(getClass().getResource("/resources/logo2Antes.png")).toExternalForm());
-            imagen.setAlignment(Image.ALIGN_CENTER);
-            imagen.scalePercent(35);
-
-            LineSeparator ls = new LineSeparator();
-            BaseFont bf = BaseFont.createFont(fontPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-            Font titulo = new Font(bf, 24, Font.BOLD);
-            Font subtitulo = new Font(bf, 18, Font.BOLD);
-            Font seccion = new Font(bf, 14, Font.BOLD);
-            Font contenido = new Font(bf, 12);
-            Font contenidoPequeno = new Font(bf, 10);
-            BaseColor colorPrincipal = new BaseColor(33, 77, 72);
-            BaseColor colorSecundario = new BaseColor(63, 171, 160);
-            BaseColor colorAcento = new BaseColor(255, 140, 0);
-
-            titulo.setColor(colorPrincipal);
-            subtitulo.setColor(colorSecundario);
-            seccion.setColor(colorPrincipal);
-
-            ls.setLineWidth(2);
-            ls.setLineColor(colorSecundario);
 
             document.open();
             
-            // Página 1: Portada
-            document.add(imagen);
-            
-            document.add(new Paragraph(" ", new Font(bf, 20))); // Espacio
-            
-            Paragraph parrafoTitulo = new Paragraph(bundle.getString("informe.simulador.titulo"), titulo);
-            parrafoTitulo.setAlignment(Paragraph.ALIGN_CENTER);
-            document.add(parrafoTitulo);
-            
-            document.add(new Paragraph(" ", new Font(bf, 15))); // Espacio
-            
-            Paragraph parrafoSubtitulo = new Paragraph("SimAS - Simulador de Análisis Sintáctico", subtitulo);
-            parrafoSubtitulo.setAlignment(Paragraph.ALIGN_CENTER);
-            document.add(parrafoSubtitulo);
-            
-            document.add(new Paragraph(" ", new Font(bf, 20))); // Espacio
-            document.add(new Chunk(ls));
-            document.add(new Paragraph(" ", new Font(bf, 15))); // Espacio
-            
-            // Nombre de la gramática centrado
-            Font nombreGrande = new Font(bf, 20, Font.BOLD);
-            nombreGrande.setColor(colorPrincipal);
-            Paragraph parrafoNombre = new Paragraph(this.getNombre(), nombreGrande);
-            parrafoNombre.setAlignment(Paragraph.ALIGN_CENTER);
-            document.add(parrafoNombre);
-            
-            // Nueva página para el contenido detallado
+            // Determinar qué secciones estarán presentes
+            boolean hasFuncionesError = funcionesError != null && !funcionesError.isEmpty();
+            boolean hasTablaPredictiva = tablaPredictiva != null;
+
+            // ========================================
+            // PÁGINA 1: PORTADA PROFESIONAL
+            // ========================================
+            crearPortadaProfesional(document, bf, tituloPortada, subtituloPortada, separadorPrincipal, bundle, colorPrimario, colorSecundario);
+
+            // ========================================
+            // PÁGINA 2: ÍNDICE AUTOMÁTICO
+            // ========================================
             document.newPage();
-            
-            // Título de la página de contenido
-            Paragraph tituloContenido = new Paragraph(bundle.getString("informe.simulador.titulo"), subtitulo);
-            tituloContenido.setAlignment(Paragraph.ALIGN_CENTER);
-            document.add(tituloContenido);
-            document.add(new Chunk(ls));
-            document.add(new Paragraph(" ", new Font(bf, 10))); // Espacio
-            
-            // Descripción de la gramática
-            Paragraph parrafoDescripcion = new Paragraph(bundle.getString("informe.descripcion") + ":", seccion);
-            document.add(parrafoDescripcion);
-            Paragraph descripcion = new Paragraph("    " + this.getDescripcion(), contenido);
-            descripcion.setIndentationLeft(20);
-            document.add(descripcion);
-            document.add(new Paragraph(" ", new Font(bf, 8))); // Espacio
-            
-            // Símbolo inicial
-            Paragraph parrafoSimboloInicial = new Paragraph(bundle.getString("informe.simbolo.inicial") + ":", seccion);
-            document.add(parrafoSimboloInicial);
-            Paragraph simboloInicial = new Paragraph("    " + this.getSimbInicial(), contenido);
-            simboloInicial.setIndentationLeft(20);
-            document.add(simboloInicial);
-            document.add(new Paragraph(" ", new Font(bf, 8))); // Espacio
-            
-            // Transformaciones aplicadas
-            Paragraph parrafoTransformaciones = new Paragraph(bundle.getString("informe.simulador.transformaciones") + ":", seccion);
-            document.add(parrafoTransformaciones);
-            
-            // Verificar si se aplicaron transformaciones
-            boolean esRecursiva = gramaticaOriginal.eliminarRecursividad();
-            boolean necesitaFactorizacion = gramaticaOriginal.factorizar();
-            
-            if (esRecursiva || necesitaFactorizacion) {
-                if (esRecursiva) {
-                    Paragraph recursividad = new Paragraph("    • " + bundle.getString("informe.simulador.eliminacion.recursividad"), contenido);
-                    recursividad.setIndentationLeft(20);
-                    document.add(recursividad);
-                }
-                if (necesitaFactorizacion) {
-                    Paragraph factorizacion = new Paragraph("    • " + bundle.getString("informe.simulador.factorizacion"), contenido);
-                    factorizacion.setIndentationLeft(20);
-                    document.add(factorizacion);
-                }
-            } else {
-                Paragraph noTransformaciones = new Paragraph("    • " + bundle.getString("informe.simulador.no.transformaciones"), contenido);
-                noTransformaciones.setIndentationLeft(20);
-                document.add(noTransformaciones);
-            }
-            document.add(new Paragraph(" ", new Font(bf, 8))); // Espacio
-            
-            // Gramática Original
-            Paragraph parrafoGramaticaOriginal = new Paragraph(bundle.getString("informe.simulador.gramatica.original") + ":", seccion);
-            document.add(parrafoGramaticaOriginal);
-            
-            // Símbolos originales
-            Paragraph parrafoSimbolosOriginales = new Paragraph("    " + bundle.getString("informe.simulador.simbolos.originales") + ":", contenido);
-            parrafoSimbolosOriginales.setIndentationLeft(20);
-            document.add(parrafoSimbolosOriginales);
-            
-            // No terminales originales
-            Paragraph parrafoNoTermOriginales = new Paragraph("        " + bundle.getString("informe.simbolos.no.terminales") + ":", contenido);
-            parrafoNoTermOriginales.setIndentationLeft(20);
-            document.add(parrafoNoTermOriginales);
-            
-            ObservableList<String> noTermOriginales = gramaticaOriginal.getNoTerminalesModel();
-            for (String nt : noTermOriginales) {
-                Paragraph noTerm = new Paragraph("            • " + nt, contenido);
-                noTerm.setIndentationLeft(20);
-                document.add(noTerm);
-            }
-            
-            // Terminales originales
-            Paragraph parrafoTermOriginales = new Paragraph("        " + bundle.getString("informe.simbolos.terminales") + ":", contenido);
-            parrafoTermOriginales.setIndentationLeft(20);
-            document.add(parrafoTermOriginales);
-            
-            ObservableList<String> termOriginales = gramaticaOriginal.getTerminalesModel();
-            for (String t : termOriginales) {
-                Paragraph term = new Paragraph("            • " + t, contenido);
-                term.setIndentationLeft(20);
-                document.add(term);
-            }
-            
-            // Producciones originales
-            Paragraph parrafoProduccionesOriginales = new Paragraph("    " + bundle.getString("informe.simulador.producciones.originales") + ":", contenido);
-            parrafoProduccionesOriginales.setIndentationLeft(20);
-            document.add(parrafoProduccionesOriginales);
-            
-            ObservableList<String> prodOriginales = gramaticaOriginal.getProduccionesModel();
-            int index = 1;
-            for (String prod : prodOriginales) {
-                Paragraph produccion = new Paragraph("        " + index + ") " + prod, contenido);
-                produccion.setIndentationLeft(20);
-                document.add(produccion);
-                index++;
-            }
-            document.add(new Paragraph(" ", new Font(bf, 8))); // Espacio
-            
-            // Gramática Modificada
-            Paragraph parrafoGramaticaModificada = new Paragraph(bundle.getString("informe.simulador.gramatica.modificada") + ":", seccion);
-            document.add(parrafoGramaticaModificada);
-            
-            // Símbolos modificados
-            Paragraph parrafoSimbolosModificados = new Paragraph("    " + bundle.getString("informe.simulador.simbolos.modificados") + ":", contenido);
-            parrafoSimbolosModificados.setIndentationLeft(20);
-            document.add(parrafoSimbolosModificados);
-            
-            // No terminales modificados
-            Paragraph parrafoNoTermModificados = new Paragraph("        " + bundle.getString("informe.simbolos.no.terminales") + ":", contenido);
-            parrafoNoTermModificados.setIndentationLeft(20);
-            document.add(parrafoNoTermModificados);
-            
-            ObservableList<String> noTermModificados = this.getNoTerminalesModel();
-            for (String nt : noTermModificados) {
-                Paragraph noTerm = new Paragraph("            • " + nt, contenido);
-                noTerm.setIndentationLeft(20);
-                document.add(noTerm);
-            }
-            
-            // Terminales modificados
-            Paragraph parrafoTermModificados = new Paragraph("        " + bundle.getString("informe.simbolos.terminales") + ":", contenido);
-            parrafoTermModificados.setIndentationLeft(20);
-            document.add(parrafoTermModificados);
-            
-            ObservableList<String> termModificados = this.getTerminalesModel();
-            for (String t : termModificados) {
-                Paragraph term = new Paragraph("            • " + t, contenido);
-                term.setIndentationLeft(20);
-                document.add(term);
-            }
-            
-            // Producciones modificadas
-            Paragraph parrafoProduccionesModificadas = new Paragraph("    " + bundle.getString("informe.simulador.producciones.modificadas") + ":", contenido);
-            parrafoProduccionesModificadas.setIndentationLeft(20);
-            document.add(parrafoProduccionesModificadas);
-            
-            ObservableList<String> prodModificadas = this.getProduccionesModel();
-            index = 1;
-            for (String prod : prodModificadas) {
-                Paragraph produccion = new Paragraph("        " + index + ") " + prod, contenido);
-                produccion.setIndentationLeft(20);
-                document.add(produccion);
-                index++;
-            }
-            document.add(new Paragraph(" ", new Font(bf, 8))); // Espacio
-            
-            // Tabla Predictiva
-            if (tablaPredictiva != null) {
-                Paragraph parrafoTablaPredictiva = new Paragraph(bundle.getString("informe.simulador.tabla.predictiva") + ":", seccion);
-                document.add(parrafoTablaPredictiva);
-                
-                document.add(new Paragraph(" ", new Font(bf, 8))); // Espacio entre título y tabla
-                
-                // Agregar tabla predictiva directamente
-                agregarTablaPredictivaAlPDF(document, tablaPredictiva, bundle, bf, contenido);
-                
-                document.add(new Paragraph(" ", new Font(bf, 8))); // Espacio
-            }
-            
-            // Funciones de Error
+            crearIndiceSimulador(document, bf, tituloSeccion, contenidoNormal, separadorSecundario, bundle, hasFuncionesError, hasTablaPredictiva);
+
+            // ========================================
+            // CONTENIDO DETALLADO (SIN SECCIONES EXCLUIDAS)
+            // ========================================
+            document.newPage();
+
+            // ========================================
+            // SECCIÓN 1: GRAMÁTICA ORIGINAL
+            // ========================================
+            Paragraph tituloGramaticaOriginal = new Paragraph("1. " + bundle.getString("informe.simulador.gramatica.original").toUpperCase(), tituloSeccion);
+            document.add(tituloGramaticaOriginal);
+            document.add(new Chunk(separadorSecundario));
+            document.add(new Paragraph(" ", new Font(bf, 10)));
+
+            // Información básica
+            agregarInformacionGramatica(document, bf, subtituloSeccion, contenidoNormal, contenidoMono,
+                                      bundle, gramaticaOriginal, "original", colorPrimario, colorSecundario);
+
+            // ========================================
+            // SECCIÓN 2: GRAMÁTICA MODIFICADA
+            // ========================================
+            document.newPage();
+            Paragraph tituloGramaticaModificada = new Paragraph("2. " + bundle.getString("informe.simulador.gramatica.modificada").toUpperCase(), tituloSeccion);
+            document.add(tituloGramaticaModificada);
+            document.add(new Chunk(separadorSecundario));
+            document.add(new Paragraph(" ", new Font(bf, 10)));
+
+            agregarInformacionGramatica(document, bf, subtituloSeccion, contenidoNormal, contenidoMono,
+                                      bundle, this, "modificada", colorPrimario, colorSecundario);
+
+            // ========================================
+            // SECCIÓN 3: FUNCIONES DE ERROR
+            // ========================================
+            int seccionNumero = 3;
             if (funcionesError != null && !funcionesError.isEmpty()) {
-                Paragraph parrafoFuncionesError = new Paragraph(bundle.getString("informe.simulador.funciones.error") + ":", seccion);
-                document.add(parrafoFuncionesError);
-                
-                for (int i = 0; i < funcionesError.size(); i++) {
-                    FuncionError fe = funcionesError.get(i);
-                    String descripcionFuncion = getDescripcionFuncionError(fe, bundle);
-                    Paragraph funcion = new Paragraph("    " + i + ". " + descripcionFuncion, contenido);
-                    funcion.setIndentationLeft(20);
-                    document.add(funcion);
-                }
-                document.add(new Paragraph(" ", new Font(bf, 8))); // Espacio
+                document.newPage();
+                Paragraph tituloFuncionesError = new Paragraph(seccionNumero + ". " + bundle.getString("informe.simulador.funciones.error").toUpperCase(), tituloSeccion);
+                document.add(tituloFuncionesError);
+                document.add(new Chunk(separadorSecundario));
+                document.add(new Paragraph(" ", new Font(bf, 10)));
+
+                agregarFuncionesError(document, bf, contenidoNormal, bundle, funcionesError,
+                                    colorPrimario, colorSecundario, colorFondoCabecera, colorAcento);
+                seccionNumero++;
             }
-            
-            // Información adicional
-            Paragraph parrafoInfo = new Paragraph(bundle.getString("informe.informacion.adicional") + ":", seccion);
-            document.add(parrafoInfo);
-            
-            Paragraph infoProduccionesOriginales = new Paragraph("    • " + bundle.getString("informe.simulador.producciones.originales") + ": " + prodOriginales.size(), contenido);
-            infoProduccionesOriginales.setIndentationLeft(20);
-            document.add(infoProduccionesOriginales);
-            
-            Paragraph infoProduccionesModificadas = new Paragraph("    • " + bundle.getString("informe.simulador.producciones.modificadas") + ": " + prodModificadas.size(), contenido);
-            infoProduccionesModificadas.setIndentationLeft(20);
-            document.add(infoProduccionesModificadas);
-            
-            Paragraph infoNoTerminalesOriginales = new Paragraph("    • " + bundle.getString("informe.simulador.simbolos.originales") + " (No Terminales): " + noTermOriginales.size(), contenido);
-            infoNoTerminalesOriginales.setIndentationLeft(20);
-            document.add(infoNoTerminalesOriginales);
-            
-            Paragraph infoTerminalesOriginales = new Paragraph("    • " + bundle.getString("informe.simulador.simbolos.originales") + " (Terminales): " + termOriginales.size(), contenido);
-            infoTerminalesOriginales.setIndentationLeft(20);
-            document.add(infoTerminalesOriginales);
-            
-            Paragraph infoNoTerminalesModificados = new Paragraph("    • " + bundle.getString("informe.simulador.simbolos.modificados") + " (No Terminales): " + noTermModificados.size(), contenido);
-            infoNoTerminalesModificados.setIndentationLeft(20);
-            document.add(infoNoTerminalesModificados);
-            
-            Paragraph infoTerminalesModificados = new Paragraph("    • " + bundle.getString("informe.simulador.simbolos.modificados") + " (Terminales): " + termModificados.size(), contenido);
-            infoTerminalesModificados.setIndentationLeft(20);
-            document.add(infoTerminalesModificados);
-            
-            document.add(new Paragraph(" ", new Font(bf, 15))); // Espacio
-            
-            // Fecha de generación encima del pie de página
-            Paragraph parrafoFecha = new Paragraph(bundle.getString("informe.fecha.generacion") + ": " + 
-                java.time.LocalDate.now().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")), 
-                contenidoPequeno);
-            parrafoFecha.setAlignment(Paragraph.ALIGN_CENTER);
-            document.add(parrafoFecha);
-            
-            document.add(new Paragraph(" ", new Font(bf, 5))); // Espacio pequeño
-            
-            // Pie de página con información de la aplicación
-            Paragraph piePagina = new Paragraph(bundle.getString("informe.documento.generado"), contenidoPequeno);
-            piePagina.setAlignment(Paragraph.ALIGN_CENTER);
-            document.add(piePagina);
+
+            // ========================================
+            // SECCIÓN 4: TABLA PREDICTIVA
+            // ========================================
+            if (tablaPredictiva != null) {
+            document.newPage();
+                Paragraph tituloTablaPredictiva = new Paragraph(seccionNumero + ". " + bundle.getString("informe.simulador.tabla.predictiva").toUpperCase(), tituloSeccion);
+                document.add(tituloTablaPredictiva);
+                document.add(new Chunk(separadorSecundario));
+                document.add(new Paragraph(" ", new Font(bf, 10)));
+
+                agregarTablaPredictivaMejorada(document, tablaPredictiva, bundle, bf, contenidoNormal,
+                                             colorPrimario, colorSecundario, colorFondoCabecera);
+                seccionNumero++;
+            }
+
+            // ========================================
+            // FECHA DE GENERACIÓN
+            // ========================================
+            document.add(new Paragraph(" ", new Font(bf, 20)));
+
+            // Fecha de generación
+            Font fechaFont = new Font(bf, 12);
+            fechaFont.setColor(colorNeutro);
+            Paragraph fecha = new Paragraph(bundle.getString("informe.profesional.generado") + " " +
+                java.time.LocalDate.now().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")), fechaFont);
+            fecha.setAlignment(Paragraph.ALIGN_CENTER);
+            document.add(fecha);
             
             document.close();
             
         } catch (BadElementException ex) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Error de elemento en PDF", ex);
         } catch (IOException ex) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Error de E/S en PDF", ex);
         } catch (Exception ex) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Error general en generación de PDF", ex);
         }
         return true;
     }
@@ -1648,6 +1517,53 @@ public class Gramatica {
             Paragraph itemIndice = new Paragraph(entrada, contenidoNormal);
             itemIndice.setIndentationLeft(50);
             document.add(itemIndice);
+            document.add(new Paragraph(" ", new Font(bf, 5)));
+        }
+    }
+
+    /**
+     * Crea el índice automático específico para el informe del simulador
+     */
+    private void crearIndiceSimulador(Document document, BaseFont bf, Font tituloSeccion, Font contenidoNormal,
+                                    LineSeparator separador, ResourceBundle bundle, boolean hasFuncionesError, boolean hasTablaPredictiva) throws DocumentException {
+
+        Paragraph tituloIndice = new Paragraph(bundle.getString("informe.profesional.indice.titulo"), tituloSeccion);
+        tituloIndice.setAlignment(Paragraph.ALIGN_CENTER);
+        document.add(tituloIndice);
+        document.add(new Chunk(separador));
+        document.add(new Paragraph(" ", new Font(bf, 15)));
+
+        int seccionNumero = 1;
+
+        // Sección 1: Gramática Original (siempre presente)
+        String entrada1 = String.format("%d. %s", seccionNumero++, bundle.getString("informe.profesional.indice.gramatica.original"));
+        Paragraph itemIndice1 = new Paragraph(entrada1, contenidoNormal);
+        itemIndice1.setIndentationLeft(50);
+        document.add(itemIndice1);
+        document.add(new Paragraph(" ", new Font(bf, 5)));
+
+        // Sección 2: Gramática Modificada (siempre presente)
+        String entrada2 = String.format("%d. %s", seccionNumero++, bundle.getString("informe.profesional.indice.gramatica.modificada"));
+        Paragraph itemIndice2 = new Paragraph(entrada2, contenidoNormal);
+        itemIndice2.setIndentationLeft(50);
+        document.add(itemIndice2);
+        document.add(new Paragraph(" ", new Font(bf, 5)));
+
+        // Sección 3: Funciones de Error (solo si existen)
+        if (hasFuncionesError) {
+            String entrada3 = String.format("%d. %s", seccionNumero++, bundle.getString("informe.profesional.indice.funciones.error"));
+            Paragraph itemIndice3 = new Paragraph(entrada3, contenidoNormal);
+            itemIndice3.setIndentationLeft(50);
+            document.add(itemIndice3);
+            document.add(new Paragraph(" ", new Font(bf, 5)));
+        }
+
+        // Sección 4: Tabla Predictiva (última sección si existe)
+        if (hasTablaPredictiva) {
+            String entrada4 = String.format("%d. %s", seccionNumero++, bundle.getString("informe.profesional.indice.tabla.predictiva"));
+            Paragraph itemIndice4 = new Paragraph(entrada4, contenidoNormal);
+            itemIndice4.setIndentationLeft(50);
+            document.add(itemIndice4);
             document.add(new Paragraph(" ", new Font(bf, 5)));
         }
     }
