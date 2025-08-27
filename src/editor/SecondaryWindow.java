@@ -18,6 +18,14 @@ import javafx.application.Platform;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Comparator;
+import gramatica.Gramatica;
+import simulador.PanelSimuladorDesc;
+import java.awt.Desktop;
+import java.io.File;
+import java.io.IOException;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.TextArea;
 
 public class SecondaryWindow extends EditorWindow {
     
@@ -184,6 +192,49 @@ public class SecondaryWindow extends EditorWindow {
                 }
             );
         }
+
+        // ===== ATAJOS PRINCIPALES PARA VENTANAS SECUNDARIAS =====
+
+        // Nuevo editor (Cmd/Ctrl + N)
+        scene.getAccelerators().put(
+            new KeyCodeCombination(KeyCode.N, KeyCombination.SHORTCUT_DOWN),
+            () -> abrirEditorEnVentanaSecundaria()
+        );
+
+        // Simulador directo (Cmd/Ctrl + S)
+        scene.getAccelerators().put(
+            new KeyCodeCombination(KeyCode.S, KeyCombination.SHORTCUT_DOWN),
+            () -> abrirSimuladorEnVentanaSecundaria()
+        );
+
+        // Ayuda (Cmd/Ctrl + H)
+        scene.getAccelerators().put(
+            new KeyCodeCombination(KeyCode.H, KeyCombination.SHORTCUT_DOWN),
+            () -> abrirAyuda()
+        );
+
+        // Tutorial (Cmd/Ctrl + T)
+        scene.getAccelerators().put(
+            new KeyCodeCombination(KeyCode.T, KeyCombination.SHORTCUT_DOWN),
+            () -> abrirTutorial()
+        );
+
+        // Salir (Cmd/Ctrl + Q)
+        scene.getAccelerators().put(
+            new KeyCodeCombination(KeyCode.Q, KeyCombination.SHORTCUT_DOWN),
+            () -> salirAplicacion()
+        );
+
+        // Atajo para ir al menú principal (Cmd/Ctrl + 0)
+        scene.getAccelerators().put(
+            new KeyCodeCombination(KeyCode.DIGIT0, KeyCombination.SHORTCUT_DOWN),
+            () -> {
+                // Seleccionar la primera pestaña (menú principal) si existe
+                if (!localTabPane.getTabs().isEmpty()) {
+                    localTabPane.getSelectionModel().selectFirst();
+                }
+            }
+        );
     }
     
     private Tab findFirstTabInGroup(int groupNumber) {
@@ -448,8 +499,220 @@ public class SecondaryWindow extends EditorWindow {
                 }
             }
         }
-        
+
         // Actualizar el título de la ventana si es necesario
         updateWindowTitle("SimAS 3.0");
+    }
+
+    // ===== MÉTODOS PARA ATAJOS DE TECLADO EN VENTANAS SECUNDARIAS =====
+
+    /**
+     * Abre un nuevo editor en esta ventana secundaria
+     */
+    private void abrirEditorEnVentanaSecundaria() {
+        try {
+            // Establecer el ResourceBundle en TabManager para internacionalización
+            TabManager.setResourceBundle(localTabPane, bundle);
+
+            // Crear un nuevo editor usando TabManager para posicionamiento correcto
+            Editor editor = new Editor(localTabPane, null, bundle);
+
+            // CREAR NUEVO GRUPO: Editor independiente desde ventana secundaria
+            Tab editorTab = TabManager.getOrCreateTab(localTabPane, Editor.class,
+                bundle.getString("editor.title"), editor, editor.getEditorId(), null);
+
+            // Asegurar que el editorId esté configurado como userData
+            editorTab.setUserData(editor.getEditorId());
+
+            // Reasignar numeración para reflejar los cambios
+            TabManager.reasignarNumerosGruposGramatica(localTabPane);
+        } catch (Exception e) {
+            e.printStackTrace();
+            mostrarError("Error", "No se pudo abrir el editor: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Abre el simulador directo en esta ventana secundaria
+     */
+    private void abrirSimuladorEnVentanaSecundaria() {
+        cargarGramaticaYSimularDirectamenteEnSecundaria();
+    }
+
+    /**
+     * Carga una gramática desde archivo y va directamente al paso 6 de la simulación en ventana secundaria
+     */
+    private void cargarGramaticaYSimularDirectamenteEnSecundaria() {
+        try {
+            // Crear una nueva gramática
+            Gramatica nuevaGramatica = new Gramatica();
+
+            // Cargar gramática desde archivo (esto abrirá el selector de archivos)
+            Gramatica gramaticaCargada = nuevaGramatica.cargarGramatica(null);
+
+            if (gramaticaCargada != null) {
+                // Validar la gramática cargada
+                javafx.collections.ObservableList<String> errores = gramaticaCargada.validarGramatica();
+
+                if (gramaticaCargada.getEstado() == 1) {
+                    // Gramática válida - proceder con la simulación
+                    crearSimuladorDirectoAlPaso6EnSecundaria(gramaticaCargada);
+                } else {
+                    // Gramática inválida - mostrar errores
+                    mostrarErroresValidacion(errores);
+                }
+            }
+            // Si gramaticaCargada es null, significa que el usuario canceló la selección
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            mostrarError("Error", "No se pudo cargar la gramática: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Crea un simulador y lo lleva directamente al paso 6 en ventana secundaria
+     */
+    private void crearSimuladorDirectoAlPaso6EnSecundaria(Gramatica gramatica) {
+        try {
+            // Establecer el ResourceBundle en TabManager para internacionalización
+            TabManager.setResourceBundle(localTabPane, bundle);
+
+            // Generar ID único para el simulador
+            String simuladorId = "simulador_" + System.currentTimeMillis();
+
+            // ASIGNAR A NUEVO GRUPO ANTES de crear la pestaña: Simulador independiente desde ventana secundaria
+            TabManager.asignarElementoANuevoGrupo(localTabPane, simuladorId);
+
+            // Crear el simulador descendente
+            PanelSimuladorDesc simulador = new PanelSimuladorDesc(gramatica, localTabPane, bundle, simuladorId);
+
+            // Crear la pestaña del simulador con el título correcto
+            String tituloBase = bundle.getString("simulador.tab.paso6");
+            int numeroGrupo = TabManager.obtenerNumeroGrupo(localTabPane, simuladorId);
+            String tituloFinal = numeroGrupo > 0 ? numeroGrupo + "-" + tituloBase : tituloBase;
+
+            // Crear la pestaña usando TabManager
+            Tab pestañaSimulador = TabManager.getOrCreateTab(
+                localTabPane,
+                PanelSimuladorDesc.class,
+                tituloFinal,
+                simulador,
+                simuladorId,
+                null
+            );
+
+            // Establecer la pestaña en el simulador
+            simulador.setPestañaSimulacion(pestañaSimulador);
+
+            // Asegurarse de que la pestaña esté seleccionada
+            localTabPane.getSelectionModel().select(pestañaSimulador);
+
+            // Saltar directamente al paso 6 (índice 5)
+            simulador.cambiarPaso(5);
+
+            // Reasignar numeración para reflejar los cambios
+            TabManager.reasignarNumerosGruposGramatica(localTabPane);
+        } catch (Exception e) {
+            e.printStackTrace();
+            mostrarError("Error", "No se pudo crear el simulador: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Abre el manual de ayuda
+     */
+    private void abrirAyuda() {
+        File manual = new File("ManualDeUsuario.pdf");
+        if (manual.exists()) {
+            try {
+                if (Desktop.isDesktopSupported()) {
+                    Desktop.getDesktop().open(manual);
+                } else {
+                    mostrarError("Error", bundle.getString("msg.error.escritorio"));
+                }
+            } catch (IOException e) {
+                mostrarError("Error", bundle.getString("msg.error.manual") + ": " + e.getMessage());
+            }
+        } else {
+            mostrarError("Error", bundle.getString("msg.error.archivo"));
+        }
+    }
+
+    /**
+     * Abre el tutorial
+     */
+    private void abrirTutorial() {
+        File tutorial = new File("src/centroayuda/SimAS.html");
+        if (tutorial.exists()) {
+            try {
+                if (Desktop.isDesktopSupported()) {
+                    Desktop.getDesktop().browse(tutorial.toURI());
+                } else {
+                    mostrarError("Error", bundle.getString("msg.error.escritorio"));
+                }
+            } catch (IOException e) {
+                mostrarError("Error", bundle.getString("msg.error.tutorial") + ": " + e.getMessage());
+            }
+        } else {
+            mostrarError("Error", bundle.getString("msg.error.archivo"));
+        }
+    }
+
+    /**
+     * Sale de la aplicación
+     */
+    private void salirAplicacion() {
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION,
+                bundle.getString("msg.confirmar.salir"),
+                ButtonType.YES, ButtonType.NO);
+        confirm.setTitle(bundle.getString("title.menu"));
+        confirm.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.YES) {
+                System.exit(0);
+            }
+        });
+    }
+
+    /**
+     * Muestra errores de validación de la gramática
+     */
+    private void mostrarErroresValidacion(javafx.collections.ObservableList<String> errores) {
+        StringBuilder mensaje = new StringBuilder(bundle.getString("editor.msg.validar.errores") + "\n\n");
+        for (int i = 0; i < errores.size(); i++) {
+            mensaje.append(i + 1).append(". ").append(errores.get(i)).append("\n\n");
+        }
+
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error de Validación");
+        alert.setHeaderText("La gramática seleccionada contiene errores");
+        alert.setContentText(mensaje.toString());
+
+        // Expandir el diálogo para mostrar todo el texto
+        TextArea textArea = new TextArea(mensaje.toString());
+        textArea.setEditable(false);
+        textArea.setWrapText(true);
+        textArea.setMaxWidth(Double.MAX_VALUE);
+        textArea.setMaxHeight(Double.MAX_VALUE);
+        javafx.scene.layout.GridPane.setVgrow(textArea, javafx.scene.layout.Priority.ALWAYS);
+        javafx.scene.layout.GridPane.setHgrow(textArea, javafx.scene.layout.Priority.ALWAYS);
+
+        javafx.scene.layout.GridPane gridPane = new javafx.scene.layout.GridPane();
+        gridPane.setMaxWidth(Double.MAX_VALUE);
+        gridPane.add(textArea, 0, 0);
+
+        alert.getDialogPane().setExpandableContent(gridPane);
+        alert.showAndWait();
+    }
+
+    /**
+     * Muestra un mensaje de error simple
+     */
+    private void mostrarError(String titulo, String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
     }
 } 
