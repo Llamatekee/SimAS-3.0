@@ -738,209 +738,150 @@ public class Gramatica {
                             case "informe.fecha.generacion": return "Fecha de generación";
                             case "informe.documento.generado": return "Documento generado por SimAS v3.0 - Simulador de Análisis Sintáctico";
                             case "informe.pagina": return "Página";
+                            case "informe.profesional.generado": return "Documento generado el";
                             default: return key;
                         }
                     }
-                    
+
                     @Override
                     public Enumeration<String> getKeys() {
                         return Collections.enumeration(Arrays.asList(
-                            "informe.titulo", "informe.detalles", "informe.descripcion", 
-                            "informe.simbolo.inicial", "informe.simbolos.no.terminales", 
-                            "informe.simbolos.terminales", "informe.producciones", 
+                            "informe.titulo", "informe.detalles", "informe.descripcion",
+                            "informe.simbolo.inicial", "informe.simbolos.no.terminales",
+                            "informe.simbolos.terminales", "informe.producciones",
                             "informe.informacion.adicional", "informe.estado.validacion",
-                            "informe.numero.producciones", "informe.numero.no.terminales", 
-                            "informe.numero.terminales", "informe.fecha.generacion", 
-                            "informe.documento.generado", "informe.pagina"
+                            "informe.numero.producciones", "informe.numero.no.terminales",
+                            "informe.numero.terminales", "informe.fecha.generacion",
+                            "informe.documento.generado", "informe.pagina",
+                            "informe.profesional.generado"
                         ));
                     }
                 };
             }
             try {
-                // Configuración de la fuente y del documento PDF
+                // Configuración inicial del documento - ESTILOS PROFESIONALES IDÉNTICOS
                 String fontPath = "fonts/arial.ttf";
                 Document document = new Document(PageSize.A4, 50, 50, 80, 50);
-                
-                // Crear el PdfWriter con numeración de páginas
+
+                // Crear el PdfWriter con gestión avanzada de páginas
                 PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(fichero));
-                
-                // Configurar numeración de páginas
+
+                // Configurar esquema de colores profesional - IDÉNTICOS a los métodos profesionales
+                BaseColor colorPrimario = new BaseColor(41, 128, 185);     // Azul profesional
+                BaseColor colorSecundario = new BaseColor(52, 152, 219);   // Azul claro
+                BaseColor colorAcento = new BaseColor(230, 126, 34);       // Naranja
+                BaseColor colorExito = new BaseColor(46, 204, 113);        // Verde éxito
+                BaseColor colorError = new BaseColor(231, 76, 60);         // Rojo error
+                BaseColor colorNeutro = new BaseColor(149, 165, 166);      // Gris neutro
+                BaseColor colorFondoCabecera = new BaseColor(236, 240, 241); // Gris muy claro
+
+                // Fuentes tipográficas profesionales - IDÉNTICAS
+                BaseFont bf = BaseFont.createFont(fontPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+                BaseFont bfMono = BaseFont.createFont(BaseFont.COURIER, BaseFont.CP1252, BaseFont.EMBEDDED);
+
+                Font tituloPortada = new Font(bf, 32, Font.BOLD);
+                Font subtituloPortada = new Font(bf, 20, Font.BOLD);
+                Font tituloSeccion = new Font(bf, 18, Font.BOLD);
+                Font subtituloSeccion = new Font(bf, 14, Font.BOLD);
+                Font contenidoNormal = new Font(bf, 11);
+                Font contenidoMono = new Font(bfMono, 10);
+                Font piePagina = new Font(bf, 9, Font.ITALIC);
+
+                tituloPortada.setColor(colorPrimario);
+                subtituloPortada.setColor(colorSecundario);
+                tituloSeccion.setColor(colorPrimario);
+                subtituloSeccion.setColor(colorAcento);
+                contenidoNormal.setColor(BaseColor.BLACK);
+                piePagina.setColor(colorNeutro);
+
+                // Configurar separadores visuales - IDÉNTICOS
+                LineSeparator separadorPrincipal = new LineSeparator();
+                separadorPrincipal.setLineWidth(3);
+                separadorPrincipal.setLineColor(colorPrimario);
+
+                LineSeparator separadorSecundario = new LineSeparator();
+                separadorSecundario.setLineWidth(1);
+                separadorSecundario.setLineColor(colorNeutro);
+
+                // Event handler para encabezados y pies de página - IDÉNTICO
                 final ResourceBundle finalBundle = bundle;
+                final BaseFont finalBf = bf;
+                final BaseColor finalColorNeutro = colorNeutro;
+                final BaseColor finalColorPrimario = colorPrimario;
+
                 writer.setPageEvent(new PdfPageEventHelper() {
                     @Override
                     public void onEndPage(PdfWriter writer, Document document) {
                         try {
-                            BaseFont bf = BaseFont.createFont(fontPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-                            Font font = new Font(bf, 10);
-                            ColumnText.showTextAligned(writer.getDirectContent(), 
-                                Paragraph.ALIGN_CENTER, 
-                                new Phrase(String.format("%s %d", finalBundle.getString("informe.pagina"), writer.getPageNumber()), font), 
-                                (document.right() - document.left()) / 2 + document.leftMargin(), 
-                                document.bottom() - 10, 0);
+                            // Pie de página con numeración
+                            Font fontPie = new Font(finalBf, 9, Font.ITALIC);
+                            fontPie.setColor(finalColorNeutro);
+
+                            ColumnText.showTextAligned(writer.getDirectContent(),
+                                Paragraph.ALIGN_CENTER,
+                                new Phrase(String.format("%s %d", finalBundle.getString("informe.pagina"), writer.getPageNumber()), fontPie),
+                                (document.right() - document.left()) / 2 + document.leftMargin(),
+                                document.bottom() - 15, 0);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
+
+                    @Override
+                    public void onStartPage(PdfWriter writer, Document document) {
+                        // Encabezado eliminado - no mostrar título en cada página
+                    }
                 });
-                
-                // Cargar logo de la aplicación
-                Image imagen = Image.getInstance(Objects.requireNonNull(getClass().getResource("/resources/logo2Antes.png")).toExternalForm());
-                imagen.setAlignment(Image.ALIGN_CENTER);
-                imagen.scalePercent(35);
-
-                LineSeparator ls = new LineSeparator();
-                BaseFont bf = BaseFont.createFont(fontPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-                Font titulo = new Font(bf, 24, Font.BOLD);
-                Font subtitulo = new Font(bf, 18, Font.BOLD);
-                Font seccion = new Font(bf, 14, Font.BOLD);
-                Font contenido = new Font(bf, 12);
-                Font contenidoPequeno = new Font(bf, 10);
-                BaseColor colorPrincipal = new BaseColor(33, 77, 72);
-                BaseColor colorSecundario = new BaseColor(63, 171, 160);
-                BaseColor colorAcento = new BaseColor(255, 140, 0);
-
-                titulo.setColor(colorPrincipal);
-                subtitulo.setColor(colorSecundario);
-                seccion.setColor(colorPrincipal);
-
-                ls.setLineWidth(2);
-                ls.setLineColor(colorSecundario);
 
                 document.open();
-                
-                // Página 1: Portada
-                document.add(imagen);
-                
-                document.add(new Paragraph(" ", new Font(bf, 20))); // Espacio
-                
-                Paragraph parrafoTitulo = new Paragraph(bundle.getString("informe.titulo"), titulo);
-                parrafoTitulo.setAlignment(Paragraph.ALIGN_CENTER);
-                document.add(parrafoTitulo);
-                
-                document.add(new Paragraph(" ", new Font(bf, 15))); // Espacio
-                
-                Paragraph parrafoSubtitulo = new Paragraph("SimAS - Simulador de Análisis Sintáctico", subtitulo);
-                parrafoSubtitulo.setAlignment(Paragraph.ALIGN_CENTER);
-                document.add(parrafoSubtitulo);
-                
-                document.add(new Paragraph(" ", new Font(bf, 20))); // Espacio
-                document.add(new Chunk(ls));
-                document.add(new Paragraph(" ", new Font(bf, 15))); // Espacio
-                
-                // Solo el nombre de la gramática centrado con fuente más grande
-                Font nombreGrande = new Font(bf, 20, Font.BOLD);
-                nombreGrande.setColor(colorPrincipal);
-                Paragraph parrafoNombre = new Paragraph(this.getNombre(), nombreGrande);
-                parrafoNombre.setAlignment(Paragraph.ALIGN_CENTER);
-                document.add(parrafoNombre);
-                
-                // Nueva página para el contenido detallado
+
+                // ========================================
+                // PÁGINA 1: PORTADA PROFESIONAL - IDÉNTICA
+                // ========================================
+                crearPortadaProfesional(document, bf, tituloPortada, subtituloPortada, separadorPrincipal, bundle, colorPrimario, colorSecundario);
+
+                // ========================================
+                // PÁGINA 2: CONTENIDO - SOLO GRAMÁTICA ORIGINAL
+                // ========================================
                 document.newPage();
-                
-                // Título de la página de contenido
-                Paragraph tituloContenido = new Paragraph(bundle.getString("informe.detalles"), subtitulo);
-                tituloContenido.setAlignment(Paragraph.ALIGN_CENTER);
-                document.add(tituloContenido);
-                document.add(new Chunk(ls));
-                document.add(new Paragraph(" ", new Font(bf, 10))); // Espacio
-                
-                // Descripción de la gramática
-                Paragraph parrafoDescripcion = new Paragraph(bundle.getString("informe.descripcion") + ":", seccion);
-                document.add(parrafoDescripcion);
-                Paragraph descripcion = new Paragraph("    " + this.getDescripcion(), contenido);
-                descripcion.setIndentationLeft(20);
-                document.add(descripcion);
-                document.add(new Paragraph(" ", new Font(bf, 8))); // Espacio
-                
-                // Símbolo inicial
-                Paragraph parrafoSimboloInicial = new Paragraph(bundle.getString("informe.simbolo.inicial") + ":", seccion);
-                document.add(parrafoSimboloInicial);
-                Paragraph simboloInicial = new Paragraph("    " + this.getSimbInicial(), contenido);
-                simboloInicial.setIndentationLeft(20);
-                document.add(simboloInicial);
-                document.add(new Paragraph(" ", new Font(bf, 8))); // Espacio
-                
-                // Símbolos no terminales
-                Paragraph parrafoNoTerminales = new Paragraph(bundle.getString("informe.simbolos.no.terminales") + ":", seccion);
-                document.add(parrafoNoTerminales);
-                ObservableList<String> noTermModel = this.getNoTerminalesModel();
-                for (String nt : noTermModel) {
-                    Paragraph noTerm = new Paragraph("    • " + nt, contenido);
-                    noTerm.setIndentationLeft(20);
-                    document.add(noTerm);
-                }
-                document.add(new Paragraph(" ", new Font(bf, 8))); // Espacio
-                
-                // Símbolos terminales
-                Paragraph parrafoTerminales = new Paragraph(bundle.getString("informe.simbolos.terminales") + ":", seccion);
-                document.add(parrafoTerminales);
-                ObservableList<String> termModel = this.getTerminalesModel();
-                for (String t : termModel) {
-                    Paragraph term = new Paragraph("    • " + t, contenido);
-                    term.setIndentationLeft(20);
-                    document.add(term);
-                }
-                document.add(new Paragraph(" ", new Font(bf, 8))); // Espacio
-                
-                // Producciones
-                Paragraph parrafoProducciones = new Paragraph(bundle.getString("informe.producciones") + ":", seccion);
-                document.add(parrafoProducciones);
-                
-                ObservableList<String> prodModel = this.getProduccionesModel();
-                int index = 1;
-                for (String prod : prodModel) {
-                    Paragraph produccion = new Paragraph("    " + index + ") " + prod, contenido);
-                    produccion.setIndentationLeft(20);
-                    document.add(produccion);
-                    index++;
-                }
-                
-                document.add(new Paragraph(" ", new Font(bf, 15))); // Espacio
-                
+
+                // ========================================
+                // SECCIÓN ÚNICA: GRAMÁTICA ORIGINAL
+                // ========================================
+                Paragraph tituloGramaticaOriginal = new Paragraph("GRAMÁTICA ORIGINAL", tituloSeccion);
+                document.add(tituloGramaticaOriginal);
+                document.add(new Chunk(separadorSecundario));
+                document.add(new Paragraph(" ", new Font(bf, 10)));
+
+                // Información básica de la gramática usando el método profesional
+                agregarInformacionGramatica(document, bf, subtituloSeccion, contenidoNormal, contenidoMono,
+                                          bundle, this, "original", colorPrimario, colorSecundario);
+
+                // ========================================
+                // INFORMACIÓN FINAL - IDÉNTICA AL INFORME DE SIMULACIÓN
+                // ========================================
+                document.add(new Paragraph(" ", new Font(bf, 25)));
+
                 // Información adicional
-                Paragraph parrafoInfo = new Paragraph(bundle.getString("informe.informacion.adicional") + ":", seccion);
-                document.add(parrafoInfo);
-                
-                Paragraph infoValidacion = new Paragraph("    • " + bundle.getString("informe.estado.validacion") + ": " + bundle.getString("informe.estado.validacion.valida"), contenido);
-                infoValidacion.setIndentationLeft(20);
-                document.add(infoValidacion);
-                
-                Paragraph infoProducciones = new Paragraph("    • " + bundle.getString("informe.numero.producciones") + ": " + prodModel.size(), contenido);
-                infoProducciones.setIndentationLeft(20);
-                document.add(infoProducciones);
-                
-                Paragraph infoNoTerminales = new Paragraph("    • " + bundle.getString("informe.numero.no.terminales") + ": " + noTermModel.size(), contenido);
-                infoNoTerminales.setIndentationLeft(20);
-                document.add(infoNoTerminales);
-                
-                Paragraph infoTerminales = new Paragraph("    • " + bundle.getString("informe.numero.terminales") + ": " + termModel.size(), contenido);
-                infoTerminales.setIndentationLeft(20);
-                document.add(infoTerminales);
-                
-                document.add(new Paragraph(" ", new Font(bf, 15))); // Espacio
-                
-                // Fecha de generación encima del pie de página
-                Paragraph parrafoFecha = new Paragraph(bundle.getString("informe.fecha.generacion") + ": " + 
-                    java.time.LocalDate.now().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")), 
-                    contenidoPequeno);
-                parrafoFecha.setAlignment(Paragraph.ALIGN_CENTER);
-                document.add(parrafoFecha);
-                
-                document.add(new Paragraph(" ", new Font(bf, 5))); // Espacio pequeño
-                
-                // Pie de página con información de la aplicación
-                Paragraph piePagina = new Paragraph(bundle.getString("informe.documento.generado"), contenidoPequeno);
-                piePagina.setAlignment(Paragraph.ALIGN_CENTER);
-                document.add(piePagina);
-                
+                Font infoFont = new Font(bf, 10);
+                infoFont.setColor(BaseColor.GRAY);
+                Paragraph infoAdicional = new Paragraph(bundle.getString("informe.profesional.conclusion.creditos"), infoFont);
+                infoAdicional.setAlignment(Paragraph.ALIGN_CENTER);
+                document.add(infoAdicional);
+
+                Paragraph fechaConclusion = new Paragraph(bundle.getString("informe.profesional.fecha") + " " +
+                    java.time.LocalDate.now().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")), infoFont);
+                fechaConclusion.setAlignment(Paragraph.ALIGN_CENTER);
+                document.add(fechaConclusion);
+
                 document.close();
-                
+
             } catch (BadElementException ex) {
-                Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Error de elemento en PDF", ex);
             } catch (IOException ex) {
-                Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Error de E/S en PDF", ex);
             } catch (Exception ex) { // Para capturar cualquier otra excepción
-                Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Error general en generación de PDF", ex);
             }
         } else {
             return false;
@@ -1108,17 +1049,21 @@ public class Gramatica {
             }
 
             // ========================================
-            // FECHA DE GENERACIÓN
+            // INFORMACIÓN FINAL - IDÉNTICA AL INFORME DE SIMULACIÓN
             // ========================================
-            document.add(new Paragraph(" ", new Font(bf, 20)));
+            document.add(new Paragraph(" ", new Font(bf, 25)));
 
-            // Fecha de generación
-            Font fechaFont = new Font(bf, 12);
-            fechaFont.setColor(colorNeutro);
-            Paragraph fecha = new Paragraph(bundle.getString("informe.profesional.generado") + " " +
-                java.time.LocalDate.now().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")), fechaFont);
-            fecha.setAlignment(Paragraph.ALIGN_CENTER);
-            document.add(fecha);
+            // Información adicional
+            Font infoFont = new Font(bf, 10);
+            infoFont.setColor(BaseColor.GRAY);
+            Paragraph infoAdicional = new Paragraph(bundle.getString("informe.profesional.conclusion.creditos"), infoFont);
+            infoAdicional.setAlignment(Paragraph.ALIGN_CENTER);
+            document.add(infoAdicional);
+
+            Paragraph fechaConclusion = new Paragraph(bundle.getString("informe.profesional.fecha") + " " +
+                java.time.LocalDate.now().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")), infoFont);
+            fechaConclusion.setAlignment(Paragraph.ALIGN_CENTER);
+            document.add(fechaConclusion);
             
             document.close();
             
