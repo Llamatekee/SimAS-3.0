@@ -127,7 +127,7 @@ public class PanelNuevaSimDescPaso2 implements PanelNuevaSimDescPaso, Actualizab
 
     @FXML
     private void handleUltimo() {
-        panelPadre.cambiarPaso(3);
+        panelPadre.cambiarPaso(4);
     }
 
     public Parent getRoot() {
