@@ -99,20 +99,48 @@ public class Gramatica {
 
 
     /**
-     * Genera el nombre del archivo PDF según el tipo de informe
+     * Genera el nombre del archivo PDF según el tipo de informe y el idioma actual
      * @param tipoInforme Tipo de informe: "editor", "simulador", "simulacion"
+     * @param bundle ResourceBundle para internacionalización
      * @return Nombre del archivo PDF
      */
-    public String generarNombreArchivoPDF(String tipoInforme) {
+    public String generarNombreArchivoPDF(String tipoInforme, ResourceBundle bundle) {
         String baseNombre = getArchivoFuente();
+
+        // Si no hay bundle, usar valores por defecto en español
+        if (bundle == null) {
+            bundle = new ResourceBundle() {
+                @Override
+                protected Object handleGetObject(String key) {
+                    switch (key) {
+                        case "archivo.nombre.untitled": return "untitled";
+                        case "archivo.nombre.simulador": return "simulador";
+                        case "archivo.nombre.simulacion": return "simulacion";
+                        default: return key;
+                    }
+                }
+
+                @Override
+                public Enumeration<String> getKeys() {
+                    return Collections.enumeration(Arrays.asList(
+                        "archivo.nombre.untitled", "archivo.nombre.simulador", "archivo.nombre.simulacion"
+                    ));
+                }
+            };
+        }
+
+        // Si el nombre base es "untitled", traducirlo según el idioma
+        if ("untitled".equals(baseNombre)) {
+            baseNombre = bundle.getString("archivo.nombre.untitled");
+        }
 
         switch (tipoInforme.toLowerCase()) {
             case "editor":
                 return baseNombre + ".pdf";
             case "simulador":
-                return baseNombre + "_sim.pdf";
+                return baseNombre + "_" + bundle.getString("archivo.nombre.simulador") + ".pdf";
             case "simulacion":
-                return baseNombre + "_sim_final.pdf";
+                return baseNombre + "_" + bundle.getString("archivo.nombre.simulacion") + ".pdf";
             default:
                 return baseNombre + ".pdf";
         }

@@ -1584,7 +1584,7 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         );
         
         // Sugerir nombre de archivo basado en el nombre del archivo fuente
-        String nombreArchivo = this.gramatica.generarNombreArchivoPDF("simulacion");
+        String nombreArchivo = this.gramatica.generarNombreArchivoPDF("simulacion", this.bundle);
         fileChooser.setInitialFileName(nombreArchivo);
 
         // Mostrar diálogo de guardado

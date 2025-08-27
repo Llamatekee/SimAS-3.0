@@ -491,7 +491,7 @@ public class Editor extends VBox implements ActualizableTextos {
         );
         
         // Sugerir nombre de archivo basado en el nombre del archivo fuente
-        String nombreArchivo = this.gramatica.generarNombreArchivoPDF("editor");
+        String nombreArchivo = this.gramatica.generarNombreArchivoPDF("editor", this.bundle);
         fileChooser.setInitialFileName(nombreArchivo);
 
         // Mostrar diálogo de guardado

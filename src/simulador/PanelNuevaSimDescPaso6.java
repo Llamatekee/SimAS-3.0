@@ -358,7 +358,7 @@ public class PanelNuevaSimDescPaso6 extends BorderPane implements PanelNuevaSimD
         );
         
         // Sugerir nombre de archivo basado en el nombre del archivo fuente
-        String nombreArchivo = this.gramatica.generarNombreArchivoPDF("simulador");
+        String nombreArchivo = this.gramatica.generarNombreArchivoPDF("simulador", this.bundle);
         fileChooser.setInitialFileName(nombreArchivo);
 
         // Mostrar diálogo de guardado
