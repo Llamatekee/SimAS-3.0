@@ -466,27 +466,33 @@ public class TabManager {
     public static int calcularPosicionInsercion(TabPane tabPane, Class<?> tabType, String parentId, String childId) {
         // Si es una pestaña hija, usar la lógica existente
         if (parentId != null && childId != null) {
+            // IMPORTANTE: Si es un SIMULADOR, NO usar la lógica de hija normal
+            if (childId.startsWith("simulador_")) {
+                // Para simuladores hijos de editor, usar la lógica especial
+                return calcularPosicionSimuladorInteligente(tabPane, parentId);
+            }
+
             // Si es una simulación, usar la lógica específica
             if (childId.startsWith("simulacion_")) {
                 return calcularPosicionSimulacion(tabPane, parentId);
             }
-            
+
             Tab parentTab = findTabByUserData(tabPane, parentId);
             if (parentTab != null) {
                 return calcularPosicionHija(tabPane, parentTab, childId, parentId);
             }
         }
-        
+
         // Si es un Editor, colocarlo después del menú principal
         if (isEditorType(tabType)) {
             return calcularPosicionEditor(tabPane);
         }
-        
-        // Si es un Simulador independiente (no hijo), posicionarlo después del menú principal
-        if (isSimuladorType(tabType) && parentId != null && childId == null) {
+
+        // Si es un Simulador (independiente o hijo de editor), posicionarlo correctamente
+        if (isSimuladorType(tabType) && parentId != null) {
             return calcularPosicionSimuladorInteligente(tabPane, parentId);
         }
-        
+
         // Para otros tipos, al final
         return tabPane.getTabs().size();
     }
@@ -567,25 +573,66 @@ public class TabManager {
         if (elementos == null) {
             return calcularPosicionSeguaDespuesDelMenu(tabPane);
         }
-        
-        // Encontrar todas las pestañas que pertenecen a este grupo
-        int ultimaPosicionDelGrupo = -1;
-        
-        
+
+        // Buscar si hay un asistente de editor en este grupo
+        int posicionEditor = -1;
+        String editorId = null;
+
         for (int i = 0; i < tabPane.getTabs().size(); i++) {
             Tab tab = tabPane.getTabs().get(i);
             String userData = (tab.getUserData() != null) ? tab.getUserData().toString() : null;
-            
+
+            if (userData != null) {
+                // Verificar si es un elemento raíz del grupo
+                String grupoDeUsuario = elementos.get(userData);
+                if (grupoId.equals(grupoDeUsuario) && userData.startsWith("editor_")) {
+                    posicionEditor = i;
+                    editorId = userData;
+                    break;
+                }
+            }
+        }
+
+        // Si hay un asistente de editor en el grupo, colocar nuevas pestañas AL FINAL del grupo
+        if (posicionEditor != -1 && editorId != null) {
+            // Encontrar la última posición de todas las pestañas relacionadas con el editor
+            int ultimaPosicionEditorGroup = posicionEditor;
+
+            for (int i = posicionEditor + 1; i < tabPane.getTabs().size(); i++) {
+                Tab tab = tabPane.getTabs().get(i);
+                String userData = (tab.getUserData() != null) ? tab.getUserData().toString() : null;
+
+                if (userData != null) {
+                    String grupoDeUsuario = elementos.get(userData);
+                    boolean perteneceAlGrupo = grupoId.equals(grupoDeUsuario);
+                    boolean esHijaDelEditor = isPestañaHijaDeElemento(userData, editorId);
+
+                    if (perteneceAlGrupo || esHijaDelEditor) {
+                        ultimaPosicionEditorGroup = i;
+                    }
+                }
+            }
+
+            return ultimaPosicionEditorGroup + 1;
+        }
+
+        // Si no hay editor en el grupo, usar la lógica normal (al final del grupo)
+        int ultimaPosicionDelGrupo = -1;
+
+        for (int i = 0; i < tabPane.getTabs().size(); i++) {
+            Tab tab = tabPane.getTabs().get(i);
+            String userData = (tab.getUserData() != null) ? tab.getUserData().toString() : null;
+
             if (userData != null) {
                 // Verificar si esta pestaña pertenece al grupo
                 boolean perteneceAlGrupo = false;
-                
+
                 // Verificar si es un elemento raíz del grupo
                 String grupoDeUsuario = elementos.get(userData);
                 if (grupoId.equals(grupoDeUsuario)) {
                     perteneceAlGrupo = true;
                 }
-                
+
                 // Verificar si es una pestaña hija de algún elemento del grupo
                 if (!perteneceAlGrupo) {
                     for (Map.Entry<String, String> entry : elementos.entrySet()) {
@@ -598,22 +645,21 @@ public class TabManager {
                         }
                     }
                 }
-                
+
                 if (perteneceAlGrupo) {
                     ultimaPosicionDelGrupo = i;
                 }
             }
         }
-        
+
         if (ultimaPosicionDelGrupo == -1) {
             // No se encontraron elementos del grupo en el TabPane
             // Esto puede pasar cuando es el primer elemento del grupo
             // Usar una posición segura después del menú
             return calcularPosicionSeguaDespuesDelMenu(tabPane);
         }
-        
+
         int nuevaPosicion = ultimaPosicionDelGrupo + 1;
-        
         return nuevaPosicion;
     }
     
