@@ -3702,3 +3702,146 @@ GridPane {
     -fx-background-color: rgba(255, 255, 255, 0.08);
     -fx-border-color: rgba(255, 255, 255, 0.15);
 }
+
+/* ===== ESTILOS PARA MENÚ CONTEXTUAL ===== */
+
+/* Menú contextual principal */
+.context-menu {
+    -fx-background-color: linear-gradient(to bottom, rgba(30, 60, 114, 0.98), rgba(42, 82, 152, 0.98));
+    -fx-background-radius: 15px;
+    -fx-border-color: rgba(79, 172, 254, 0.6);
+    -fx-border-width: 2px;
+    -fx-border-radius: 15px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.7), 15, 0.4, 0, 8);
+    -fx-padding: 8px;
+    -fx-min-width: 250px;
+    -fx-max-width: 350px;
+}
+
+/* Items del menú */
+.context-menu .menu-item {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-font-weight: 500;
+    -fx-font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    -fx-padding: 10px 15px;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-cursor: hand;
+    -fx-min-height: 20px;
+    -fx-pref-height: 20px;
+    -fx-alignment: center-left;
+    -fx-effect: none;
+}
+
+/* Hover en items del menú */
+.context-menu .menu-item:hover {
+    -fx-background-color: rgba(79, 172, 254, 0.3);
+    -fx-text-fill: white;
+    -fx-font-weight: 600;
+    -fx-effect: dropshadow(gaussian, rgba(79, 172, 254, 0.4), 3, 0.3, 0, 2);
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+}
+
+/* Item seleccionado/focused */
+.context-menu .menu-item:focused,
+.context-menu .menu-item:selected {
+    -fx-background-color: rgba(79, 172, 254, 0.5);
+    -fx-text-fill: white;
+    -fx-font-weight: 600;
+    -fx-effect: dropshadow(gaussian, rgba(79, 172, 254, 0.5), 5, 0.4, 0, 3);
+}
+
+/* Separadores del menú - Eliminados para flujo continuo */
+
+/* Estilos específicos para diferentes tipos de items */
+.context-menu .open-new-window-item {
+    -fx-graphic: url("/resources/icons/abrir.png");
+    -fx-graphic-text-gap: 12px;
+}
+
+.context-menu .close-tab-item {
+    -fx-graphic: url("/resources/icons/eliminar.png");
+    -fx-graphic-text-gap: 12px;
+}
+
+.context-menu .close-all-tabs-item {
+    -fx-graphic: url("/resources/icons/salir.png");
+    -fx-graphic-text-gap: 12px;
+}
+
+/* Submenús - Igual que items normales pero con funcionalidad de expansión */
+.context-menu .menu {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-font-weight: 500;
+    -fx-font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    -fx-padding: 10px 15px;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-cursor: hand;
+    -fx-min-height: 20px;
+    -fx-pref-height: 20px;
+    -fx-alignment: center-left;
+    -fx-effect: none;
+}
+
+/* Hover en submenús - Igual que items normales */
+.context-menu .menu:hover {
+    -fx-background-color: rgba(79, 172, 254, 0.3);
+    -fx-text-fill: white;
+    -fx-font-weight: 600;
+    -fx-effect: dropshadow(gaussian, rgba(79, 172, 254, 0.4), 3, 0.3, 0, 2);
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+}
+
+/* Flecha del submenú - OCULTA */
+.context-menu .menu .arrow {
+    -fx-opacity: 0;
+    -fx-background-color: transparent;
+    -fx-shape: "";
+    -fx-effect: none;
+    visibility: hidden;
+}
+
+/* Estilos para íconos en el menú */
+.context-menu .menu-item .graphic {
+    -fx-opacity: 0.8;
+    -fx-effect: none;
+}
+
+.context-menu .menu-item:hover .graphic {
+    -fx-opacity: 1.0;
+    -fx-effect: dropshadow(gaussian, rgba(79, 172, 254, 0.4), 2, 0.2, 0, 1);
+}
+
+/* Animaciones suaves */
+.context-menu .menu-item {
+    -fx-transition: all 0.2s ease-in-out;
+}
+
+.context-menu .menu-item:hover {
+    -fx-transition: all 0.15s ease-in-out;
+}
+
+/* Estilo especial para items deshabilitados */
+.context-menu .menu-item:disabled {
+    -fx-opacity: 0.4;
+    -fx-text-fill: rgba(255, 255, 255, 0.4);
+    -fx-cursor: default;
+}
+
+.context-menu .menu-item:disabled:hover {
+    -fx-background-color: transparent;
+    -fx-scale-x: 1.0;
+    -fx-scale-y: 1.0;
+    -fx-effect: none;
+}

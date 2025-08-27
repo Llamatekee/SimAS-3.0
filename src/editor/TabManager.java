@@ -1491,7 +1491,6 @@ public class TabManager {
         contextMenu.getItems().addAll(
             openInNewWindowMenuItem,
             openInExistingWindowMenu,
-            new javafx.scene.control.SeparatorMenuItem(),
             closeMenuItem,
             closeAllMenuItem
         );
