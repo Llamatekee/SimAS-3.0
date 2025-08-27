@@ -76,17 +76,6 @@
                     </Tab>
                 </tabs>
             </TabPane>
-            
-            <!-- Botón de cierre flotante -->
-            <Button fx:id="btnCerrarTabs" text="✖" onAction="#onBtnCerrarTabsAction" 
-                    styleClass="close-all-button" 
-                    StackPane.alignment="TOP_RIGHT"
-                    maxWidth="30" maxHeight="30"
-                    minWidth="30" minHeight="30">
-                <tooltip>
-                    <Tooltip text="Cerrar todas las pestañas menos la principal"/>
-                </tooltip>
-            </Button>
         </StackPane>
     </center>
 </BorderPane>
