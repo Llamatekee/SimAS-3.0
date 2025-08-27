@@ -4,7 +4,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
@@ -14,7 +13,6 @@ import java.util.ResourceBundle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import javafx.application.Platform;
 import java.util.Set;
@@ -24,7 +22,6 @@ import java.util.Comparator;
 public class SecondaryWindow extends EditorWindow {
     
     private static final Map<String, SecondaryWindow> activeWindows = new ConcurrentHashMap<>();
-    private static int nextWindowNumber = 1;
     private final String windowId;
     private final TabPane localTabPane;
     private final Stage stage;

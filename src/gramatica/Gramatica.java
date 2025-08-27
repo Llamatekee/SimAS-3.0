@@ -842,10 +842,7 @@ public class Gramatica {
                 BaseColor colorPrimario = new BaseColor(41, 128, 185);     // Azul profesional
                 BaseColor colorSecundario = new BaseColor(52, 152, 219);   // Azul claro
                 BaseColor colorAcento = new BaseColor(230, 126, 34);       // Naranja
-                BaseColor colorExito = new BaseColor(46, 204, 113);        // Verde éxito
-                BaseColor colorError = new BaseColor(231, 76, 60);         // Rojo error
                 BaseColor colorNeutro = new BaseColor(149, 165, 166);      // Gris neutro
-                BaseColor colorFondoCabecera = new BaseColor(236, 240, 241); // Gris muy claro
 
                 // Fuentes tipográficas profesionales - IDÉNTICAS
                 BaseFont bf = BaseFont.createFont(fontPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
@@ -879,7 +876,6 @@ public class Gramatica {
                 final ResourceBundle finalBundle = bundle;
                 final BaseFont finalBf = bf;
                 final BaseColor finalColorNeutro = colorNeutro;
-                final BaseColor finalColorPrimario = colorPrimario;
 
                 writer.setPageEvent(new PdfPageEventHelper() {
                     @Override
@@ -980,8 +976,6 @@ public class Gramatica {
             BaseColor colorPrimario = new BaseColor(41, 128, 185);     // Azul profesional
             BaseColor colorSecundario = new BaseColor(52, 152, 219);   // Azul claro
             BaseColor colorAcento = new BaseColor(230, 126, 34);       // Naranja
-            BaseColor colorExito = new BaseColor(46, 204, 113);        // Verde éxito
-            BaseColor colorError = new BaseColor(231, 76, 60);         // Rojo error
             BaseColor colorNeutro = new BaseColor(149, 165, 166);      // Gris neutro
             BaseColor colorFondoCabecera = new BaseColor(236, 240, 241); // Gris muy claro
 
@@ -1017,7 +1011,6 @@ public class Gramatica {
             final ResourceBundle finalBundle = bundle;
             final BaseFont finalBf = bf;
             final BaseColor finalColorNeutro = colorNeutro;
-            final BaseColor finalColorPrimario = colorPrimario;
 
             writer.setPageEvent(new PdfPageEventHelper() {
                 @Override
@@ -1370,7 +1363,6 @@ public class Gramatica {
             final ResourceBundle finalBundle = bundle;
             final BaseFont finalBf = bf;
             final BaseColor finalColorNeutro = colorNeutro;
-            final BaseColor finalColorPrimario = colorPrimario;
 
             writer.setPageEvent(new PdfPageEventHelper() {
                 @Override
@@ -1979,7 +1971,6 @@ public class Gramatica {
         // Fuentes para la tabla
         Font headerFont = new Font(bf, 9, Font.BOLD);
         headerFont.setColor(BaseColor.WHITE);
-        Font dataFont = new Font(bf, 8);
 
         // Encabezado de símbolo
         PdfPCell cellSimbolo = new PdfPCell(new Phrase(bundle.getString("informe.profesional.tabla.simbolo"), headerFont));
@@ -2747,113 +2738,6 @@ public class Gramatica {
             }
         }
         return Collections.emptySet(); // Devuelve un conjunto vacío si no se encuentra el no terminal
-    }
-    
-    /**
-     * Agrega la tabla predictiva del Paso 5 al PDF.
-     */
-    private void agregarTablaPredictivaAlPDF(Document document, TablaPredictiva tablaPredictiva, ResourceBundle bundle, BaseFont bf, Font contenido) {
-        try {
-            // Obtener los datos de la tabla predictiva (Paso 5)
-            List<FilaTablaPredictiva> filas = tablaPredictiva.getFilas();
-            if (filas == null || filas.isEmpty()) {
-                return;
-            }
-            
-            // Obtener los terminales de la gramática para las columnas
-            List<Terminal> terminales = this.getTerminales();
-            if (terminales.isEmpty()) {
-                return;
-            }
-            
-            // Crear tabla PDF con columnas: Símbolo + Terminales
-            int numColumnas = terminales.size() + 1; // +1 para la columna del símbolo
-            PdfPTable tabla = new PdfPTable(numColumnas);
-            tabla.setWidthPercentage(100);
-            
-            // Configurar fuentes para encabezados
-            Font encabezado = new Font(bf, 8, Font.BOLD);
-            encabezado.setColor(new BaseColor(33, 77, 72));
-            
-            // Agregar encabezado de la columna de Símbolos
-            PdfPCell celdaSimbolo = new PdfPCell(new Phrase(bundle.getString("informe.profesional.tabla.simbolo"), encabezado));
-            celdaSimbolo.setBackgroundColor(new BaseColor(240, 240, 240));
-            celdaSimbolo.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
-            celdaSimbolo.setVerticalAlignment(PdfPCell.ALIGN_MIDDLE);
-            celdaSimbolo.setPadding(3);
-            celdaSimbolo.setMinimumHeight(20);
-            tabla.addCell(celdaSimbolo);
-            
-            // Agregar encabezados de terminales
-            for (Terminal terminal : terminales) {
-                PdfPCell celdaTerminal = new PdfPCell(new Phrase(terminal.getNombre(), encabezado));
-                celdaTerminal.setBackgroundColor(new BaseColor(240, 240, 240));
-                celdaTerminal.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
-                celdaTerminal.setVerticalAlignment(PdfPCell.ALIGN_MIDDLE);
-                celdaTerminal.setPadding(3);
-                celdaTerminal.setMinimumHeight(20);
-                tabla.addCell(celdaTerminal);
-            }
-            
-            // Agregar TODAS las filas de datos (no terminales Y terminales)
-            for (FilaTablaPredictiva fila : filas) {
-                // Celda del símbolo (no terminal o terminal)
-                String simbolo = fila.getSimbolo();
-                PdfPCell celdaSim = new PdfPCell(new Phrase(simbolo, contenido));
-                celdaSim.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
-                celdaSim.setVerticalAlignment(PdfPCell.ALIGN_MIDDLE);
-                celdaSim.setPadding(3);
-                celdaSim.setMinimumHeight(20);
-                
-                // Color de fondo según el tipo de símbolo
-                if (fila.getEsTerminal()) {
-                    celdaSim.setBackgroundColor(new BaseColor(255, 240, 240)); // Rojo muy claro para terminales
-                } else {
-                    celdaSim.setBackgroundColor(new BaseColor(240, 255, 240)); // Verde muy claro para no terminales
-                }
-                tabla.addCell(celdaSim);
-                
-                // Celdas de las producciones/funciones de error para cada terminal
-                for (Terminal terminal : terminales) {
-                    String valor = fila.getValor(terminal.getNombre()).get();
-                    String textoCelda = (valor != null && !valor.isEmpty()) ? valor : "";
-                    // Convertir flechas Unicode a ASCII para mostrar en el PDF
-                    textoCelda = textoCelda.replace("→", " -> ");
-
-                    PdfPCell celdaDato = new PdfPCell(new Phrase(textoCelda, contenido));
-                    celdaDato.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
-                    celdaDato.setVerticalAlignment(PdfPCell.ALIGN_MIDDLE);
-                    celdaDato.setPadding(3);
-                    celdaDato.setMinimumHeight(20);
-                    
-                    // Colores según el tipo de contenido
-                    if (textoCelda.contains(" -> ")) {
-                        celdaDato.setBackgroundColor(new BaseColor(220, 255, 220)); // Verde claro para producciones
-                    } else if (textoCelda.startsWith("ε_")) {
-                        celdaDato.setBackgroundColor(new BaseColor(255, 255, 200)); // Amarillo claro para épsilon
-                    } else if (textoCelda.matches("\\d+")) {
-                        celdaDato.setBackgroundColor(new BaseColor(255, 220, 220)); // Rojo claro para funciones de error
-                    } else if (!textoCelda.isEmpty()) {
-                        celdaDato.setBackgroundColor(new BaseColor(255, 240, 255)); // Magenta claro para otros valores
-                    }
-                    
-                    tabla.addCell(celdaDato);
-                }
-            }
-            
-            // Agregar la tabla al documento
-            document.add(tabla);
-            
-        } catch (Exception e) {
-            // Si hay error, agregar un mensaje simple
-            try {
-                Paragraph errorTabla = new Paragraph("    • Error al generar tabla predictiva detallada", contenido);
-                errorTabla.setIndentationLeft(20);
-                document.add(errorTabla);
-            } catch (DocumentException ex) {
-                // Ignorar error al agregar mensaje de error
-            }
-        }
     }
     
     /**

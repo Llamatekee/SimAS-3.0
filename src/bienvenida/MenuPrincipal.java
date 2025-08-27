@@ -15,7 +15,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
-import editor.ActualizableTextos;
 import editor.TabManager;
 import gramatica.Gramatica;
 import simulador.PanelSimuladorDesc;

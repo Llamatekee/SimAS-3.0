@@ -1,6 +1,5 @@
 package simulador;
 
-import com.itextpdf.text.DocumentException;
 import gramatica.*;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -472,14 +471,6 @@ public class PanelNuevaSimDescPaso6 extends BorderPane implements PanelNuevaSimD
             cadena.append(terminal.getNombre()).append(" ");
         }
         return cadena.toString();
-    }
-
-    private void mostrarAlerta(String titulo, String mensaje) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(titulo);
-        alert.setHeaderText(null);
-        alert.setContentText(mensaje);
-        alert.showAndWait();
     }
 
     @Override

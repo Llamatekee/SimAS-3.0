@@ -7,13 +7,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.scene.Node;
 import java.util.ResourceBundle;
-import java.util.List;
-import java.util.ArrayList;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
-import java.util.Map;
-import java.util.HashMap;
 
 public class EditorWindow {
     private Stage stage;

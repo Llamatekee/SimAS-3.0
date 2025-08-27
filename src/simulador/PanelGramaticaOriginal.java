@@ -24,11 +24,9 @@ public class PanelGramaticaOriginal extends VBox implements ActualizableTextos {
     @FXML private ListView<String> listView;
     
     private final Gramatica gramaticaOriginal;
-    private ResourceBundle bundle;
 
     public PanelGramaticaOriginal(Gramatica gramaticaOriginal, ResourceBundle bundle) {
         this.gramaticaOriginal = gramaticaOriginal;
-        this.bundle = bundle;
         
         // Configurar el panel
         setPadding(new Insets(40));
@@ -74,7 +72,6 @@ public class PanelGramaticaOriginal extends VBox implements ActualizableTextos {
 
     @Override
     public void actualizarTextos(ResourceBundle bundle) {
-        this.bundle = bundle;
         
         // Actualizar el título
         if (titulo != null) {

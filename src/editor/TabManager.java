@@ -1070,17 +1070,6 @@ public class TabManager {
         
         // 6. ACTUALIZAR TÍTULOS DE TODAS LAS PESTAÑAS
         actualizarTitulosPestañas(tabPane);
-        
-        // 7. DEBUG: MOSTRAR ESTADO FINAL
-        debugEstadoFinalGrupos(tabPane, nuevosNumeros);
-    }
-    
-    /**
-     * Muestra el estado final de los grupos después de la reasignación para debugging
-     */
-    private static void debugEstadoFinalGrupos(TabPane tabPane, Map<String, Integer> nuevosNumeros) {
-        Window window = tabPane.getScene().getWindow();
-        String windowTitle = (window instanceof Stage) ? ((Stage) window).getTitle() : "Ventana sin título";
     }
     
     /**
@@ -1313,24 +1302,6 @@ public class TabManager {
         
         return 0;
     }
-
-    /**
-     * Obtiene el título correcto de una pestaña de creación basado en su paso actual.
-     */
-    private static String obtenerTituloCreacionActual(TabPane tabPane, Tab tab) {
-        try {
-            java.util.ResourceBundle bundle = resourceBundles.get(tabPane);
-            if (bundle != null) {
-                // Usar la nueva clave específica para asistente de editor
-                return bundle.getString("editor.asistente");
-            }
-        } catch (Exception e) {
-
-        }
-        
-        // Fallback: usar título genérico en español
-        return "Asistente Editor";
-    }
     
     /**
      * Elimina un elemento de un grupo.
@@ -1387,21 +1358,6 @@ public class TabManager {
         
         // Reiniciar el contador de grupos
         contadorGrupos = 0;
-    }
-
-    /**
-     * Extrae el timestamp de un grupoId (formato: grupo_TIMESTAMP_CONTADOR).
-     */
-    private static long extraerTimestampDeGrupoId(String grupoId) {
-        try {
-            // Formato esperado: "grupo_1748704312294_1"
-            String[] parts = grupoId.split("_");
-            if (parts.length >= 2) {
-                return Long.parseLong(parts[1]);
-            }
-        } catch (NumberFormatException e) {
-        }
-        return 0; // Fallback timestamp
     }
 
     /**
@@ -1482,93 +1438,6 @@ public class TabManager {
             // Si no se puede obtener del bundle, usar valor por defecto
         }
         return "Producciones";
-    }
-
-    /**
-     * Verifica si una pestaña está relacionada con un simulador específico.
-     */
-    private static boolean isPestañaRelacionadaConSimulador(Tab tab, String simuladorId) {
-        if (tab == null || tab.getUserData() == null || simuladorId == null) {
-            return false;
-        }
-        
-        String userData = tab.getUserData().toString();
-        
-        // Es una simulación del simulador
-        if (tab.getContent() instanceof simulador.SimulacionFinal) {
-            simulador.SimulacionFinal sim = (simulador.SimulacionFinal) tab.getContent();
-            if (sim.getSimuladorPadreId() != null && sim.getSimuladorPadreId().equals(simuladorId)) {
-                return true;
-            }
-        }
-        
-        // Es una derivación o árbol de una simulación del simulador
-        if ((userData.startsWith("derivacion_") || userData.startsWith("arbol_"))) {
-            // Buscar la simulación padre
-            for (Tab otherTab : tab.getTabPane().getTabs()) {
-                if (otherTab.getContent() instanceof simulador.SimulacionFinal) {
-                    simulador.SimulacionFinal sim = (simulador.SimulacionFinal) otherTab.getContent();
-                    if (sim.getSimuladorPadreId() != null && 
-                        sim.getSimuladorPadreId().equals(simuladorId) &&
-                        userData.endsWith(sim.simulacionId)) {
-                        return true;
-                    }
-                }
-            }
-        }
-        
-        return false;
-    }
-
-    /**
-     * Recolecta todas las pestañas relacionadas con un simulador.
-     */
-    private static List<Tab> recolectarPestañasRelacionadas(TabPane tabPane, String simuladorId) {
-        List<Tab> pestañasRelacionadas = new ArrayList<>();
-        
-        // Primero recolectar pestañas hijas directas del simulador (gramática y funciones de error)
-        for (Tab tab : new ArrayList<>(tabPane.getTabs())) {
-            if (tab.getUserData() != null) {
-                String childId = tab.getUserData().toString();
-                if (isPestañaHijaDeElemento(childId, simuladorId)) {
-                    pestañasRelacionadas.add(tab);
-                    
-                    // Si es una simulación, recolectar también sus hijas (derivaciones y árboles)
-                    if (childId.startsWith("simulacion_")) {
-                        for (Tab childTab : new ArrayList<>(tabPane.getTabs())) {
-                            if (childTab.getUserData() != null) {
-                                String grandChildId = childTab.getUserData().toString();
-                                if (isPestañaHijaDeElemento(grandChildId, childId)) {
-                                    pestañasRelacionadas.add(childTab);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        
-        return pestañasRelacionadas;
-    }
-
-    /**
-     * Recolecta todas las pestañas relacionadas con una simulación.
-     */
-    private static List<Tab> recolectarPestañasDeSimulacion(TabPane tabPane, simulador.SimulacionFinal simulacion) {
-        List<Tab> pestañasRelacionadas = new ArrayList<>();
-        
-        // Buscar derivaciones y árboles de la simulación
-        for (Tab tab : new ArrayList<>(tabPane.getTabs())) {
-            if (tab.getUserData() != null) {
-                String userData = tab.getUserData().toString();
-                if ((userData.startsWith("derivacion_") || userData.startsWith("arbol_")) &&
-                    userData.endsWith(simulacion.simulacionId)) {
-                    pestañasRelacionadas.add(tab);
-                }
-            }
-        }
-        
-        return pestañasRelacionadas;
     }
 
     /**
@@ -1727,7 +1596,6 @@ public class TabManager {
                 // Obtener la ventana actual
                 Window currentWindow = tabPane.getScene().getWindow();
                 Stage currentStage = (Stage) currentWindow;
-                String currentTitle = currentStage.getTitle();
                 
                 // Contador de ventanas disponibles
                 int availableWindows = 0;
@@ -2054,45 +1922,6 @@ public class TabManager {
     }
 
     /**
-     * Verifica si un childId pertenece a un simulador específico basado en los patrones de ID.
-     */
-    private static boolean isPestañaHijaDeSimulador(String childId, String simuladorId) {
-        if (childId == null || simuladorId == null) {
-            return false;
-        }
-        
-        // Funciones de error del paso 4
-        if (childId.equals("funciones_error_" + simuladorId)) {
-            return true;
-        }
-        
-        // Gramática original del simulador
-        if (childId.equals("gramatica_" + simuladorId)) {
-            return true;
-        }
-        
-        // Simulaciones generadas por el simulador
-        if (childId.startsWith("simulacion_" + simuladorId)) {
-            return true;
-        }
-        
-        return false;
-    }
-    
-    /**
-     * Verifica si un childId pertenece a una simulación específica.
-     */
-    private static boolean isPestañaHijaDeSimulacion(String childId, String simulacionId) {
-        if (childId == null || simulacionId == null) {
-            return false;
-        }
-        
-        // Derivaciones y árboles de la simulación
-        return (childId.startsWith("derivacion_") || childId.startsWith("arbol_")) &&
-               childId.endsWith(simulacionId);
-    }
-
-    /**
      * Actualiza los IDs de las pestañas relacionadas cuando se mueve un simulador a un nuevo grupo.
      */
     public static void actualizarIdsRelacionados(TabPane tabPane, String simuladorId, String nuevoGrupoId) {
@@ -2185,20 +2014,13 @@ public class TabManager {
                             int instancia = contadorActualPorGrupo.merge(grupoId, 1, Integer::sum);
                             boolean mostrarInstancia = contadorSimulacionesPorGrupo.get(grupoId) > 1;
                             
-                            // Debug: mostrar información de la simulación
-                            String tituloAnterior = tab.getText();
-                            
                             // Actualizar simulación con ambos números
                             sim.setGrupoId(grupoId);
                             sim.setNumeroGrupo(numero);
                             sim.setNumeroInstancia(instancia);
                             sim.actualizarTitulosPestañas(numero, hayMultiplesGrupos, instancia, mostrarInstancia);
-                            
-                        } else {
                         }
-                    } else {
                     }
-                } else {
                 }
             }
         }
@@ -2388,22 +2210,15 @@ public class TabManager {
             }
         }
 
-        boolean hayPestañasSinGrupo = false;
         for (Tab tab : tabPane.getTabs()) {
             if (tab.getUserData() != null) {
                 String tabId = tab.getUserData().toString();
-                boolean tieneGrupo = false;
                 
                 // Verificar si la pestaña pertenece a algún grupo
                 for (String elementId : elementos.keySet()) {
                     if (tabId.equals(elementId) || isPestañaHijaDeElemento(tabId, elementId)) {
-                        tieneGrupo = true;
                         break;
                     }
-                }
-                
-                if (!tieneGrupo) {
-                    hayPestañasSinGrupo = true;
                 }
             }
         }

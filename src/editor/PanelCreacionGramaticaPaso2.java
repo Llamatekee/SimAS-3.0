@@ -10,7 +10,6 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
-import javafx.scene.Scene;
 
 import java.io.IOException;
 

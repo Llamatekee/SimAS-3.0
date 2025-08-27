@@ -3,7 +3,6 @@ package simulador;
 import gramatica.Gramatica;
 import gramatica.TablaPredictivaPaso5;
 import gramatica.FuncionError;
-import simulador.PanelSimuladorDesc;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -18,6 +17,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import java.io.IOException;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -33,18 +33,9 @@ import editor.ActualizableTextos;
 import editor.TabManager;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
-import java.awt.image.BufferedImage;
-import javafx.embed.swing.SwingFXUtils;
 import java.util.Map;
 import java.util.HashMap;
-import java.util.Locale;
-import javafx.scene.control.TreeView;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TreeCell;
 import javafx.scene.control.Label;
-import javafx.scene.layout.Priority;
-import javafx.scene.control.Slider;
 
 public class SimulacionFinal extends BorderPane implements ActualizableTextos {
     @FXML private TextField campoEntrada;
@@ -86,7 +77,6 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
     private List<EstadoSimulacion> estadosAnteriores = new ArrayList<>();
 
     private String simuladorPadreId;
-    private int numeroSimulacion;
     private String grupoId;
     private int numeroGrupo;
     private int numeroInstancia = 1;
@@ -100,13 +90,11 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
     private static class EstadoSimulacion {
         Stack<String> pila;
         List<String> entrada;
-        String accion;
         
         public EstadoSimulacion(Stack<String> pila, List<String> entrada, String accion) {
             this.pila = new Stack<>();
             this.pila.addAll(pila);
             this.entrada = new ArrayList<>(entrada);
-            this.accion = accion;
         }
     }
 
@@ -148,9 +136,6 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
                 }
             }
         }
-        
-        // Asignar número de simulación
-        this.numeroSimulacion = simulacionesEnGrupo + 1;
         
         // Añadir listener para cambios en las pestañas
         tabPane.getTabs().addListener((javafx.collections.ListChangeListener.Change<? extends Tab> c) -> {
@@ -559,12 +544,19 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         if (derivacionTab != null && tabPane.getTabs().contains(derivacionTab)) {
             VBox mainContainer = (VBox) derivacionTab.getContent();
             VBox contentContainer = (VBox) mainContainer.getChildren().get(1); // El segundo elemento es el contentContainer
-            ListView<String> listaDerivacion = (ListView<String>) contentContainer.getChildren().get(1); // El segundo elemento es el ListView
-            
-            // Resetear la lista con solo el símbolo inicial
-            ObservableList<String> itemsDerivacion = FXCollections.observableArrayList();
-            itemsDerivacion.add("Inicia la simulación para ver la derivación...");
-            listaDerivacion.setItems(itemsDerivacion);
+            ListView<String> listaDerivacion = null;
+            if (contentContainer.getChildren().get(1) instanceof ListView) {
+                @SuppressWarnings("unchecked")
+                ListView<String> tempList = (ListView<String>) contentContainer.getChildren().get(1);
+                listaDerivacion = tempList;
+            }
+
+            if (listaDerivacion != null) {
+                // Resetear la lista con solo el símbolo inicial
+                ObservableList<String> itemsDerivacion = FXCollections.observableArrayList();
+                itemsDerivacion.add("Inicia la simulación para ver la derivación...");
+                listaDerivacion.setItems(itemsDerivacion);
+            }
         }
 
         if (arbolTab != null && tabPane.getTabs().contains(arbolTab)) {
@@ -1060,19 +1052,26 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
             // Si ya existe, actualizar su contenido
             VBox mainContainer = (VBox) derivacionTab.getContent();
             VBox contentContainer = (VBox) mainContainer.getChildren().get(1); // El segundo elemento es el contentContainer
-            ListView<String> listaDerivacion = (ListView<String>) contentContainer.getChildren().get(1); // El segundo elemento es el ListView
-            
-            // Generar la derivación como lista
-            ObservableList<String> itemsDerivacion = FXCollections.observableArrayList();
-            if (historialObservable.isEmpty()) {
-                itemsDerivacion.add("Inicia la simulación para ver la derivación...");
-            } else {
-                for (int i = 0; i < historialObservable.size(); i++) {
-                    HistorialPaso paso = historialObservable.get(i);
-                    itemsDerivacion.add("Paso " + (i + 1) + ": " + paso.getAccion());
-                }
+            ListView<String> listaDerivacion = null;
+            if (contentContainer.getChildren().get(1) instanceof ListView) {
+                @SuppressWarnings("unchecked")
+                ListView<String> tempList = (ListView<String>) contentContainer.getChildren().get(1);
+                listaDerivacion = tempList;
             }
-            listaDerivacion.setItems(itemsDerivacion);
+
+            if (listaDerivacion != null) {
+                // Generar la derivación como lista
+                ObservableList<String> itemsDerivacion = FXCollections.observableArrayList();
+                if (historialObservable.isEmpty()) {
+                    itemsDerivacion.add("Inicia la simulación para ver la derivación...");
+                } else {
+                    for (int i = 0; i < historialObservable.size(); i++) {
+                        HistorialPaso paso = historialObservable.get(i);
+                        itemsDerivacion.add("Paso " + (i + 1) + ": " + paso.getAccion());
+                    }
+                }
+                listaDerivacion.setItems(itemsDerivacion);
+            }
         }
         
         // Seleccionar la pestaña
@@ -1311,6 +1310,7 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
                 
                 // Actualizar lista de derivación
                 if (contentContainer.getChildren().size() > 1 && contentContainer.getChildren().get(1) instanceof ListView) {
+                    @SuppressWarnings("unchecked")
                     ListView<String> listaDerivacion = (ListView<String>) contentContainer.getChildren().get(1);
                     actualizarListaDerivacion(listaDerivacion);
                 }
@@ -1542,19 +1542,26 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
                 if (userData.equals("derivacion_" + simulacionId)) {
                     VBox mainContainer = (VBox) tab.getContent();
                     VBox contentContainer = (VBox) mainContainer.getChildren().get(1); // El segundo elemento es el contentContainer
-                    ListView<String> listaDerivacion = (ListView<String>) contentContainer.getChildren().get(1); // El segundo elemento es el ListView
-                    
-                    // Generar la derivación como lista
-                    ObservableList<String> itemsDerivacion = FXCollections.observableArrayList();
-                    if (historialObservable.isEmpty()) {
-                        itemsDerivacion.add("Inicia la simulación para ver la derivación...");
-                    } else {
-                        for (int i = 0; i < historialObservable.size(); i++) {
-                            HistorialPaso paso = historialObservable.get(i);
-                            itemsDerivacion.add("Paso " + (i + 1) + ": " + paso.getAccion());
-                        }
+                    ListView<String> listaDerivacion = null;
+                    if (contentContainer.getChildren().get(1) instanceof ListView) {
+                        @SuppressWarnings("unchecked")
+                        ListView<String> tempList = (ListView<String>) contentContainer.getChildren().get(1);
+                        listaDerivacion = tempList;
                     }
-                    listaDerivacion.setItems(itemsDerivacion);
+
+                    if (listaDerivacion != null) {
+                        // Generar la derivación como lista
+                        ObservableList<String> itemsDerivacion = FXCollections.observableArrayList();
+                        if (historialObservable.isEmpty()) {
+                            itemsDerivacion.add("Inicia la simulación para ver la derivación...");
+                        } else {
+                            for (int i = 0; i < historialObservable.size(); i++) {
+                                HistorialPaso paso = historialObservable.get(i);
+                                itemsDerivacion.add("Paso " + (i + 1) + ": " + paso.getAccion());
+                            }
+                        }
+                        listaDerivacion.setItems(itemsDerivacion);
+                    }
                 }
                 
                 // Actualizar pestaña de árbol si está activa

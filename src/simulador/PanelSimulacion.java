@@ -12,9 +12,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import java.io.IOException;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.scene.Scene;
 import editor.SecondaryWindow;
 import java.util.ResourceBundle;
 
@@ -338,13 +336,16 @@ public class PanelSimulacion extends VBox {
             // Crear y configurar la ventana secundaria
             SecondaryWindow secondaryWindow = new SecondaryWindow(bundle, "Editor de Cadena de Entrada");
             secondaryWindow.getTabPane().getTabs().add(new Tab("Editor", root));
-            secondaryWindow.setSize(600, 400);
-            
+            // Configurar el tamaño de la ventana
+            secondaryWindow.getStage().setWidth(600);
+            secondaryWindow.getStage().setHeight(400);
+
             // Centrar la ventana en la pantalla
             Stage parentStage = (Stage) getScene().getWindow();
             double centerX = parentStage.getX() + (parentStage.getWidth() - 600) / 2;
             double centerY = parentStage.getY() + (parentStage.getHeight() - 400) / 2;
-            secondaryWindow.setPosition(centerX, centerY);
+            secondaryWindow.getStage().setX(centerX);
+            secondaryWindow.getStage().setY(centerY);
             
             // Configurar el controlador
             controller.setStage(secondaryWindow.getStage());
