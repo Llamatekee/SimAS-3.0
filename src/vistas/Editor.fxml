@@ -65,7 +65,7 @@
                         </ImageView>
                     </graphic>
                 </Button>
-                <Button fx:id="btnInforme" text="Informe" onAction="#onBtnInformeAction" styleClass="toolbar-button">
+                <Button fx:id="btnInforme" text="%simulacionfinal.btn.informe.pdf" onAction="#onBtnInformeAction" styleClass="toolbar-button">
                     <graphic>
                         <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
                             <Image url="@../resources/informeGr.png"/>

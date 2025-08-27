@@ -64,11 +64,11 @@
                 </ImageView>
             </graphic>
         </Button>
-        <Button fx:id="btnGenerarInforme" text="%simulador.paso6.btn.informe" styleClass="button-grammar" 
+        <Button fx:id="btnGenerarInforme" text="%simulacionfinal.btn.informe.pdf" styleClass="button-grammar"
                 onAction="#generarInforme">
             <graphic>
                 <ImageView fitWidth="16" fitHeight="16">
-                    <Image url="@../resources/icons/document_new.png"/>
+                    <Image url="@../resources/informeGr.png"/>
                 </ImageView>
             </graphic>
         </Button>

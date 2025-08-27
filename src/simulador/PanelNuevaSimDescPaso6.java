@@ -501,7 +501,7 @@ public class PanelNuevaSimDescPaso6 extends BorderPane implements PanelNuevaSimD
             // Actualizar textos de los botones
             if (btnSimular != null) btnSimular.setText(bundle.getString("simulador.paso6.btn.simular"));
             if (btnModificarErrores != null) btnModificarErrores.setText(bundle.getString("simulador.paso6.btn.editar"));
-            if (btnGenerarInforme != null) btnGenerarInforme.setText(bundle.getString("simulador.paso6.btn.informe"));
+            if (btnGenerarInforme != null) btnGenerarInforme.setText(bundle.getString("simulacionfinal.btn.informe.pdf"));
             // Actualizar columna de símbolos si existe
             if (tablePredictiva != null && !tablePredictiva.getColumns().isEmpty()) {
                 TableColumn<?, ?> colSimbolo = tablePredictiva.getColumns().get(0);
