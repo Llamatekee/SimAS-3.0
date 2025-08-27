@@ -1277,6 +1277,9 @@ public class TabManager {
      */
     public static void setResourceBundle(TabPane tabPane, java.util.ResourceBundle bundle) {
         resourceBundles.put(tabPane, bundle);
+
+        // Actualizar el menú contextual con el nuevo idioma
+        actualizarMenuContextual(tabPane, bundle);
     }
     
     /**
@@ -1769,43 +1772,17 @@ public class TabManager {
      * @param tabPane El TabPane cuyo menú contextual se actualizará
      * @param bundle El nuevo ResourceBundle con las traducciones
      */
+    /**
+     * Actualiza el menú contextual de un TabPane con el nuevo ResourceBundle.
+     * Recrear completamente el menú asegura que todas las acciones funcionen correctamente.
+     *
+     * @param tabPane El TabPane cuyo menú contextual se actualizará
+     * @param bundle El nuevo ResourceBundle con las traducciones
+     */
     public static void actualizarMenuContextual(TabPane tabPane, ResourceBundle bundle) {
-        javafx.scene.control.ContextMenu contextMenu = tabPane.getContextMenu();
-        if (contextMenu == null) {
-            configurarMenuContextual(tabPane, bundle);
-            return;
-        }
-
-        // Actualizar los textos de los items existentes usando las clases de estilo
-        for (javafx.scene.control.MenuItem item : contextMenu.getItems()) {
-            if (item instanceof javafx.scene.control.Menu && item.getStyleClass().contains("open-existing-window-menu")) {
-                // Actualizar el menú de ventanas existentes
-                javafx.scene.control.Menu menu = (javafx.scene.control.Menu) item;
-                menu.setText(bundle.getString("tab.context.open.existing.window"));
-                
-                // Actualizar los items dinámicos del submenú
-                menu.getItems().clear();
-                if (SecondaryWindow.getActiveWindows().isEmpty()) {
-                    javafx.scene.control.MenuItem noWindowsItem = new javafx.scene.control.MenuItem(
-                        bundle.getString("tab.context.no.windows")
-                    );
-                    noWindowsItem.setDisable(true);
-                    menu.getItems().add(noWindowsItem);
-                }
-                
-            } else if (item instanceof javafx.scene.control.MenuItem && !(item instanceof javafx.scene.control.SeparatorMenuItem)) {
-                javafx.scene.control.MenuItem menuItem = (javafx.scene.control.MenuItem) item;
-                
-                // Actualizar según la clase de estilo
-                if (menuItem.getStyleClass().contains("open-new-window-item")) {
-                    menuItem.setText(bundle.getString("tab.context.open.new.window"));
-                } else if (menuItem.getStyleClass().contains("close-tab-item")) {
-                    menuItem.setText(bundle.getString("tab.context.close"));
-                } else if (menuItem.getStyleClass().contains("close-all-tabs-item")) {
-                    menuItem.setText(bundle.getString("tab.context.close.all"));
-                }
-            }
-        }
+        // La forma más segura es recrear completamente el menú contextual
+        // Esto asegura que todas las acciones funcionen correctamente con el nuevo idioma
+        configurarMenuContextual(tabPane, bundle);
     }
 
     /**
