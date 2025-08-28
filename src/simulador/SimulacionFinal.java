@@ -75,6 +75,10 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
     private ObservableList<HistorialPaso> historialObservable = FXCollections.observableArrayList();
     // Lista para almacenar los estados anteriores
     private List<EstadoSimulacion> estadosAnteriores = new ArrayList<>();
+    // Flag para saber si ya se ha realizado al menos un paso
+    private boolean seHaRealizadoAlMenosUnPaso = false;
+    // Flag para saber si estamos en un estado final (aceptación o error)
+    private boolean estadoFinalAlcanzado = false;
 
     private String simuladorPadreId;
     private String grupoId;
@@ -366,7 +370,37 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         btnFinal.setDisable(true);
         btnRetroceso.setDisable(true);
         btnInicio.setDisable(true);
-        btnGenerarInforme.setDisable(true); // Deshabilitar botón de informe inicialmente
+        btnGenerarInforme.setDisable(true);
+
+        // Configurar lógica de habilitación de botones de navegación
+        configurarLogicaBotones();
+    }
+
+    /**
+     * Configura la lógica de habilitación/deshabilitación de los botones según el estado de la simulación
+     */
+    private void configurarLogicaBotones() {
+        // Los botones de retroceso deben estar deshabilitados inicialmente
+        // Se habilitarán cuando haya estados anteriores para retroceder
+        actualizarEstadoBotonesNavegacion();
+        actualizarEstadoBotonInforme();
+    }
+
+    /**
+     * Actualiza el estado de habilitación de los botones de navegación según el estado actual
+     */
+    private void actualizarEstadoBotonesNavegacion() {
+        // Los botones de retroceso deben estar habilitados solo si se ha realizado al menos un paso
+        btnRetroceso.setDisable(!seHaRealizadoAlMenosUnPaso);
+        btnInicio.setDisable(!seHaRealizadoAlMenosUnPaso);
+    }
+
+    /**
+     * Actualiza el estado del botón de generar informe según si estamos en un estado final
+     */
+    private void actualizarEstadoBotonInforme() {
+        // El botón de informe solo debe estar habilitado si estamos en un estado final
+        btnGenerarInforme.setDisable(!estadoFinalAlcanzado);
     }
 
     private void mostrarDialogoEditarCadena() {
@@ -504,6 +538,8 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         historialObservable.clear();
         estadosAnteriores.clear();
         pasoActual = 0;
+        seHaRealizadoAlMenosUnPaso = false;
+        estadoFinalAlcanzado = false;
 
         // Limpiar el historial (las áreas de texto individuales se han eliminado)
 
@@ -525,17 +561,22 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         entradaConFin.add("$");
         entradaSimulacion = entradaConFin;
 
+        // Guardar el estado inicial antes de comenzar la simulación
+        estadosAnteriores.add(new EstadoSimulacion(pilaSimulacion, entradaSimulacion, "Inicio"));
+
         // Iniciar la simulación
         simulacionEnCurso = true;
         // El botón Iniciar siempre debe estar activo
         btnIniciar.setDisable(false);
         btnPaso.setDisable(false);
         btnFinal.setDisable(false);
-        btnRetroceso.setDisable(true);
-        btnInicio.setDisable(true);
         campoEntrada.setDisable(true);
         btnEditarCadena.setDisable(false);
         btnGenerarInforme.setDisable(true); // Deshabilitar botón al iniciar nueva simulación
+
+        // Actualizar estado de botones de navegación e informe (deben estar deshabilitados al inicio)
+        actualizarEstadoBotonesNavegacion();
+        actualizarEstadoBotonInforme();
 
         // Actualizar la vista
         actualizarVista();
@@ -623,6 +664,12 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         // Guardar estado actual antes de modificarlo
         estadosAnteriores.add(new EstadoSimulacion(pilaSimulacion, entradaSimulacion, ""));
 
+        // Marcar que se ha realizado al menos un paso
+        seHaRealizadoAlMenosUnPaso = true;
+
+        // Actualizar estado de botones de navegación después de guardar el estado
+        actualizarEstadoBotonesNavegacion();
+
         String cimaPila = pilaSimulacion.peek();
         String simboloEntrada = entradaSimulacion.get(0);
         String accionRealizada = "";
@@ -631,9 +678,10 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         if (cimaPila.equals("$") && simboloEntrada.equals("$")) {
             accionRealizada = "Aceptar";
             simulacionEnCurso = false;
+            estadoFinalAlcanzado = true;
             btnPaso.setDisable(true);
             btnFinal.setDisable(true);
-            btnGenerarInforme.setDisable(false); // Habilitar botón cuando la simulación termine
+            actualizarEstadoBotonInforme(); // Actualizar botón de informe
             pasoActual++;
             agregarPasoHistorial(accionRealizada);
             actualizarVista();
@@ -650,9 +698,10 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
             // Error: terminal en pila distinto de entrada
             accionRealizada = "Error";
             simulacionEnCurso = false;
+            estadoFinalAlcanzado = true;
             btnPaso.setDisable(true);
             btnFinal.setDisable(true);
-            btnGenerarInforme.setDisable(false); // Habilitar botón cuando la simulación termine
+            actualizarEstadoBotonInforme(); // Actualizar botón de informe
             pasoActual++;
             agregarPasoHistorial(accionRealizada);
             actualizarVista();
@@ -664,9 +713,10 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
             if (accion == null || accion.isEmpty()) {
                 accionRealizada = "Error";
                 simulacionEnCurso = false;
+                estadoFinalAlcanzado = true;
                 btnPaso.setDisable(true);
                 btnFinal.setDisable(true);
-                btnGenerarInforme.setDisable(false); // Habilitar botón cuando la simulación termine
+                actualizarEstadoBotonInforme(); // Actualizar botón de informe
                 pasoActual++;
                 agregarPasoHistorial(accionRealizada);
                 actualizarVista();
@@ -713,7 +763,7 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
     }
 
     private void retrocederAlInicio() {
-        if (estadosAnteriores.size() <= 1) {
+        if (!seHaRealizadoAlMenosUnPaso || estadosAnteriores.size() < 1) {
             // Ya estamos en el inicio
             return;
         }
@@ -726,24 +776,38 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         // Restaurar el estado inicial
         pilaSimulacion.clear();
         pilaSimulacion.addAll(estadoInicial.pila);
-        
+
         entradaSimulacion.clear();
         entradaSimulacion.addAll(estadoInicial.entrada);
-        
+
         // Actualizar la vista (solo la tabla de historial)
         actualizarVista();
-        
+
         // Limpiar el historial
         historialObservable.clear();
         pasoActual = 0;
-        
-        // Deshabilitar el botón de retroceso
-        btnRetroceso.setDisable(true);
+
+        // Marcar que ya no se ha realizado ningún paso
+        seHaRealizadoAlMenosUnPaso = false;
+
+        // Al retroceder al inicio, ya no estamos en un estado final
+        estadoFinalAlcanzado = false;
+
+        // Reactivar completamente la simulación
+        simulacionEnCurso = true;
+
+        // Rehabilitar TODOS los botones de navegación de avance
+        btnPaso.setDisable(false);
+        btnFinal.setDisable(false);
+
+        // Actualizar estado de botones de navegación y de informe
+        actualizarEstadoBotonesNavegacion();
+        actualizarEstadoBotonInforme();
         actualizarPestañasHijas();
     }
 
     private void retrocederPaso() {
-        if (estadosAnteriores.size() <= 1) {
+        if (!seHaRealizadoAlMenosUnPaso || estadosAnteriores.size() < 1) {
             // No hay pasos anteriores para retroceder
             return;
         }
@@ -767,11 +831,25 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         // Actualizar el historial
         historialObservable.remove(historialObservable.size() - 1);
         pasoActual--;
-        
-        // Si volvemos al inicio, deshabilitar el botón de retroceso
+
+        // Al retroceder, ya no estamos en un estado final
+        estadoFinalAlcanzado = false;
+
+        // Reactivar la simulación ya que estamos retrocediendo
+        simulacionEnCurso = true;
+
+        // Rehabilitar los botones de navegación AVANCE (paso y final)
+        btnPaso.setDisable(false);
+        btnFinal.setDisable(false);
+
+        // Si después de retroceder solo queda el estado inicial, marcar que no se ha realizado ningún paso
         if (estadosAnteriores.size() == 1) {
-            btnRetroceso.setDisable(true);
+            seHaRealizadoAlMenosUnPaso = false;
         }
+
+        // Actualizar estado de botones de navegación y de informe
+        actualizarEstadoBotonesNavegacion();
+        actualizarEstadoBotonInforme();
         actualizarPestañasHijas();
     }
 
