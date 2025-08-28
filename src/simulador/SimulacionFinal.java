@@ -626,16 +626,29 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
                 imageView.setPreserveRatio(true);
                 imageView.setFitWidth(800);
                 
-                // Obtener el contenedor VBox existente y el ScrollPane
-                VBox contenedor = (VBox) arbolTab.getContent();
-                ScrollPane scrollPane = (ScrollPane) contenedor.getChildren().get(0);
-                
-                // Actualizar el contenido del ScrollPane
-                scrollPane.setContent(imageView);
-                
-                // Limpiar archivos temporales
-                java.nio.file.Files.deleteIfExists(dotFile);
-                java.nio.file.Files.deleteIfExists(imgFile);
+                // Obtener el contenedor VBox existente y navegar a través de la jerarquía
+                VBox mainContainer = (VBox) arbolTab.getContent();
+
+                // La estructura es: mainContainer -> [headerLabel, contentContainer]
+                // contentContainer -> [descriptionLabel, scrollPane, controlsContainer]
+                if (mainContainer.getChildren().size() > 1) {
+                    VBox contentContainer = (VBox) mainContainer.getChildren().get(1); // contentContainer
+
+                    if (contentContainer.getChildren().size() > 1) {
+                        ScrollPane scrollPane = (ScrollPane) contentContainer.getChildren().get(1); // scrollPane
+
+                        // Actualizar el contenido del ScrollPane
+                        scrollPane.setContent(imageView);
+
+                        // Limpiar archivos temporales
+                        java.nio.file.Files.deleteIfExists(dotFile);
+                        java.nio.file.Files.deleteIfExists(imgFile);
+                    } else {
+                        System.err.println("Error: No se encontró el ScrollPane en la estructura esperada");
+                    }
+                } else {
+                    System.err.println("Error: Estructura del contenedor no es la esperada");
+                }
                 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -1231,16 +1244,29 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
             imageView.setPreserveRatio(true);
             imageView.setFitWidth(800);
             
-            // Obtener el contenedor VBox existente y el ScrollPane
-            VBox contenedor = (VBox) arbolTab.getContent();
-            ScrollPane scrollPane = (ScrollPane) contenedor.getChildren().get(0);
-            
-            // Actualizar el contenido del ScrollPane
-            scrollPane.setContent(imageView);
-            
-            // Limpiar archivos temporales
-            java.nio.file.Files.deleteIfExists(dotFile);
-            java.nio.file.Files.deleteIfExists(imgFile);
+            // Obtener el contenedor VBox existente y navegar a través de la jerarquía
+            VBox mainContainer = (VBox) arbolTab.getContent();
+
+            // La estructura es: mainContainer -> [headerLabel, contentContainer]
+            // contentContainer -> [descriptionLabel, scrollPane, controlsContainer]
+            if (mainContainer.getChildren().size() > 1) {
+                VBox contentContainer = (VBox) mainContainer.getChildren().get(1); // contentContainer
+
+                if (contentContainer.getChildren().size() > 1) {
+                    ScrollPane scrollPane = (ScrollPane) contentContainer.getChildren().get(1); // scrollPane
+
+                    // Actualizar el contenido del ScrollPane
+                    scrollPane.setContent(imageView);
+
+                    // Limpiar archivos temporales
+                    java.nio.file.Files.deleteIfExists(dotFile);
+                    java.nio.file.Files.deleteIfExists(imgFile);
+                } else {
+                    System.err.println("Error: No se encontró el ScrollPane en la estructura esperada");
+                }
+            } else {
+                System.err.println("Error: Estructura del contenedor no es la esperada");
+            }
             
         } catch (Exception e) {
             e.printStackTrace();
