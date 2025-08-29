@@ -613,8 +613,11 @@ public class MenuPrincipal extends Application {
             // Esto asegura que la numeración y posicionamiento sean correctos
             TabManager.asignarElementoANuevoGrupo(tabPane, simuladorId);
             
-            // Crear el simulador descendente
-            PanelSimuladorDesc simulador = new PanelSimuladorDesc(gramatica, tabPane, bundle, simuladorId);
+            // Crear una copia de la gramática para el simulador (para no modificar la original)
+            Gramatica gramaticaParaSimulador = new Gramatica(gramatica);
+
+            // Crear el simulador descendente con la copia de la gramática
+            PanelSimuladorDesc simulador = new PanelSimuladorDesc(gramaticaParaSimulador, tabPane, bundle, simuladorId);
             
             // Crear la pestaña del simulador con el título correcto
             // Como vamos directamente al paso 6, usamos el título de simulador

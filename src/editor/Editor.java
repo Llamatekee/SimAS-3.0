@@ -320,8 +320,11 @@ public class Editor extends VBox implements ActualizableTextos {
             }
         }
         
-        // Crear un nuevo simulador como hijo del editor
-        PanelSimuladorDesc simulador = new PanelSimuladorDesc(this.gramatica, this.tabPane, this.menuPane, simuladorId, bundle);
+        // Crear una copia de la gramática para el simulador (para no modificar la original del editor)
+        Gramatica gramaticaParaSimulador = new Gramatica(this.gramatica);
+
+        // Crear un nuevo simulador como hijo del editor con la copia de la gramática
+        PanelSimuladorDesc simulador = new PanelSimuladorDesc(gramaticaParaSimulador, this.tabPane, this.menuPane, simuladorId, bundle);
         
         // Asignar el simulador al mismo grupo que el editor
         TabManager.asignarSimuladorAGrupoDeEditor(tabPane, simuladorId, editorId);

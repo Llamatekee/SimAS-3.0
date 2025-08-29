@@ -44,10 +44,11 @@ public class PanelSimuladorDesc {
     public PanelSimuladorDesc(Gramatica gramatica, TabPane tabPane, ResourceBundle bundle) {
         this(gramatica, tabPane, bundle, null);
     }
-    
+
     public PanelSimuladorDesc(Gramatica gramatica, TabPane tabPane, ResourceBundle bundle, String simuladorIdPersonalizado) {
         this.gramatica = gramatica;
-        this.gramaticaOriginal = gramatica;
+        // Crear una copia independiente de la gramática original
+        this.gramaticaOriginal = new Gramatica(gramatica);
         this.tabPane = tabPane;
         this.bundle = bundle;
         this.pasoActual = 0;
@@ -90,7 +91,8 @@ public class PanelSimuladorDesc {
 
     public PanelSimuladorDesc(Gramatica gramatica, TabPane tabPane, bienvenida.MenuPrincipal menuPane, String simuladorId, ResourceBundle bundle) {
         this.gramatica = gramatica;
-        this.gramaticaOriginal = gramatica;
+        // Crear una copia independiente de la gramática original
+        this.gramaticaOriginal = new Gramatica(gramatica);
         this.tabPane = tabPane;
         this.menuPane = menuPane;
         this.bundle = bundle;

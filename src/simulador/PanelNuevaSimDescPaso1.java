@@ -79,14 +79,19 @@ public class PanelNuevaSimDescPaso1 implements PanelNuevaSimDescPaso, Actualizab
     }
 
     private void verificarEstadoGramatica() {
+        // Primero verificar si la gramática necesita transformaciones (sin aplicarlas aún)
+        boolean necesitaRecursividad = gramatica.verificarRecursividadSinModificar();
+        boolean necesitaFactorizacion = gramatica.verificarFactorizacionSinModificar();
+
+        // Aplicar las transformaciones
         boolean esRecursiva = gramatica.eliminarRecursividad();
-        boolean necesitaFactorizacion = gramatica.factorizar();
+        boolean seFactorizo = gramatica.factorizar();
 
         // Verificar que los labels existan antes de usarlos
         if (lblRecursividad != null) {
             // Limpiar estilos previos
             lblRecursividad.getStyleClass().removeAll("error-label", "wizard-label");
-            
+
             if (esRecursiva) {
                 lblRecursividad.setText(bundle.getString("simulador.gramatica.recursiva"));
                 lblRecursividad.getStyleClass().add("error-label");
@@ -94,28 +99,36 @@ public class PanelNuevaSimDescPaso1 implements PanelNuevaSimDescPaso, Actualizab
                 lblRecursividad.setText("");
             }
         }
-        
+
         if (lblFactorizacion != null) {
             // Limpiar estilos previos
             lblFactorizacion.getStyleClass().removeAll("error-label", "wizard-label");
-            
-            if (necesitaFactorizacion) {
+
+            if (seFactorizo) {
                 lblFactorizacion.setText(bundle.getString("simulador.gramatica.no.factorizada"));
                 lblFactorizacion.getStyleClass().add("error-label");
             } else {
                 lblFactorizacion.setText("");
             }
         }
-        
+
         if (lblEstadoGramatica != null) {
             // Limpiar estilos previos
             lblEstadoGramatica.getStyleClass().removeAll("error-label", "wizard-label");
-            
-            if (!esRecursiva && !necesitaFactorizacion) {
+
+            // Mostrar el estado basado en si se aplicaron transformaciones
+            if (!esRecursiva && !seFactorizo) {
                 lblEstadoGramatica.setText(bundle.getString("simulador.gramatica.correcta"));
                 lblEstadoGramatica.getStyleClass().add("wizard-label");
-            } else {
-                lblEstadoGramatica.setText("");
+            } else if (esRecursiva && seFactorizo) {
+                lblEstadoGramatica.setText(bundle.getString("simulador.gramatica.transformada.completa"));
+                lblEstadoGramatica.getStyleClass().add("wizard-label");
+            } else if (esRecursiva) {
+                lblEstadoGramatica.setText(bundle.getString("simulador.gramatica.transformada.recursividad"));
+                lblEstadoGramatica.getStyleClass().add("wizard-label");
+            } else if (seFactorizo) {
+                lblEstadoGramatica.setText(bundle.getString("simulador.gramatica.transformada.factorizacion"));
+                lblEstadoGramatica.getStyleClass().add("wizard-label");
             }
         }
         

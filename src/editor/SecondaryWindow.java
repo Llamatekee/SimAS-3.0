@@ -584,8 +584,11 @@ public class SecondaryWindow extends EditorWindow {
             // ASIGNAR A NUEVO GRUPO ANTES de crear la pestaña: Simulador independiente desde ventana secundaria
             TabManager.asignarElementoANuevoGrupo(localTabPane, simuladorId);
 
-            // Crear el simulador descendente
-            PanelSimuladorDesc simulador = new PanelSimuladorDesc(gramatica, localTabPane, bundle, simuladorId);
+            // Crear una copia de la gramática para el simulador (para no modificar la original)
+            Gramatica gramaticaParaSimulador = new Gramatica(gramatica);
+
+            // Crear el simulador descendente con la copia de la gramática
+            PanelSimuladorDesc simulador = new PanelSimuladorDesc(gramaticaParaSimulador, localTabPane, bundle, simuladorId);
 
             // Crear la pestaña del simulador con el título correcto
             String tituloBase = bundle.getString("simulador.tab.paso6");

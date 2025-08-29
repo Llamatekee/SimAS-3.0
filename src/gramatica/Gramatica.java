@@ -2501,6 +2501,55 @@ public class Gramatica {
         return necesitaFactorizacion;
     }
 
+    /**
+     * Verifica si la gramática tiene recursividad por la izquierda sin modificarla
+     * @return true si tiene recursividad por la izquierda
+     */
+    public boolean verificarRecursividadSinModificar() {
+        for (Produccion produccion : this.pr) {
+            String antecedente = produccion.getAntec().getSimboloNT().getValor();
+            ObservableList<Simbolo> consecuente = produccion.getConsec();
+
+            if (!consecuente.isEmpty()) {
+                String primerSimbolo = consecuente.get(0).getValor();
+                if (antecedente.equals(primerSimbolo)) {
+                    return true; // Encontró recursividad por la izquierda
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Verifica si la gramática necesita factorización sin modificarla
+     * @return true si necesita factorización
+     */
+    public boolean verificarFactorizacionSinModificar() {
+        Map<String, List<String>> produccionesPorPrefijo = new HashMap<>();
+
+        for (Produccion produccion : this.pr) {
+            String antecedente = produccion.getAntec().getSimboloNT().getValor();
+            ObservableList<Simbolo> consecuente = produccion.getConsec();
+
+            if (!consecuente.isEmpty()) {
+                String primerSimbolo = consecuente.get(0).getValor();
+
+                // Agrupar producciones por antecedente y primer símbolo
+                String clave = antecedente + "->" + primerSimbolo;
+                produccionesPorPrefijo.computeIfAbsent(clave, k -> new ArrayList<>()).add(primerSimbolo);
+            }
+        }
+
+        // Verificar si algún prefijo tiene más de una producción
+        for (List<String> prefijos : produccionesPorPrefijo.values()) {
+            if (prefijos.size() > 1) {
+                return true; // Necesita factorización
+            }
+        }
+
+        return false;
+    }
+
 
     public void generarConjPrim() {
         Map<String, Set<String>> primeros = new HashMap<>();
