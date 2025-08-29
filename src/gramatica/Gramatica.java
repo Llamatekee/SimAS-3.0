@@ -2389,18 +2389,27 @@ public class Gramatica {
      * @return true si la gramática tenía recursividad y fue modificada, false si ya estaba correcta.
      */
     public boolean eliminarRecursividad() {
-
         boolean esRecursiva = false;
         ObservableList<String> produccionesOriginales = getProduccionesModel();
         ObservableList<String> produccionesModificadas = FXCollections.observableArrayList();
         ObservableList<String> noTerminalesModificados = getNoTerminalesModel();
 
-        for (String produccion : produccionesOriginales) {
-            String[] partes = produccion.split(" ");
-            String antecedente = partes[0];
+        for (String produccionStr : produccionesOriginales) {
+            // Dividir por la flecha "→"
+            String[] partesFlecha = produccionStr.split(" → ");
+            if (partesFlecha.length != 2) {
+                produccionesModificadas.add(produccionStr);
+                continue;
+            }
+
+            String antecedente = partesFlecha[0].trim();
+            String consecuente = partesFlecha[1].trim();
+
+            // Dividir el consecuente por espacios para obtener los símbolos
+            String[] simbolos = consecuente.split("\\s+");
 
             // Verificar recursividad por la izquierda
-            if (partes.length > 2 && antecedente.equals(partes[2])) {
+            if (simbolos.length > 0 && antecedente.equals(simbolos[0])) {
                 esRecursiva = true;
                 String nuevoNoTerminal = antecedente + "'";
 
@@ -2410,20 +2419,23 @@ public class Gramatica {
 
                 // Nueva producción sin recursividad
                 StringBuilder nuevaProduccion = new StringBuilder(antecedente + " →");
-                for (int i = 3; i < partes.length; i++) {
-                    nuevaProduccion.append(" ").append(partes[i]);
+
+                // Agregar todos los símbolos después del primero
+                for (int i = 1; i < simbolos.length; i++) {
+                    nuevaProduccion.append(" ").append(simbolos[i]);
                 }
+
+                // Agregar el nuevo no terminal
                 nuevaProduccion.append(" ").append(nuevoNoTerminal);
                 produccionesModificadas.add(nuevaProduccion.toString());
 
                 // Agregar la nueva producción con ε
                 produccionesModificadas.add(nuevoNoTerminal + " → ε");
             } else {
-                produccionesModificadas.add(produccion);
+                produccionesModificadas.add(produccionStr);
             }
         }
 
-        // **🔴 Se actualiza la copia de las producciones en lugar de las originales**
         if (esRecursiva) {
             this.setNoTerminalesModel(noTerminalesModificados);
             this.setProduccionesModel(produccionesModificadas);
@@ -2439,7 +2451,6 @@ public class Gramatica {
      * @return true si la gramática fue factorizada, false si ya estaba correcta.
      */
     public boolean factorizar() {
-
         boolean necesitaFactorizacion = false;
         ObservableList<String> produccionesOriginales = getProduccionesModel();
         ObservableList<String> produccionesModificadas = FXCollections.observableArrayList();
@@ -2447,23 +2458,40 @@ public class Gramatica {
 
         Map<String, List<String>> gruposProducciones = new HashMap<>();
 
-        // Agrupar producciones por antecedente
-        for (String produccion : produccionesOriginales) {
-            String[] partes = produccion.split(" ");
-            String antecedente = partes[0];
-            String clave = antecedente + " → " + partes[2]; // Agrupar por el primer símbolo después de la flecha
+        // Agrupar producciones por antecedente y primer símbolo
+        for (String produccionStr : produccionesOriginales) {
+            String[] partesFlecha = produccionStr.split(" → ");
+            if (partesFlecha.length != 2) {
+                continue;
+            }
 
-            gruposProducciones.putIfAbsent(clave, new ArrayList<>());
-            gruposProducciones.get(clave).add(produccion);
+            String antecedente = partesFlecha[0].trim();
+            String consecuente = partesFlecha[1].trim();
+            String[] simbolos = consecuente.split("\\s+");
+
+            if (simbolos.length > 0) {
+                String primerSimbolo = simbolos[0];
+                String clave = antecedente + " → " + primerSimbolo;
+
+                gruposProducciones.putIfAbsent(clave, new ArrayList<>());
+                gruposProducciones.get(clave).add(produccionStr);
+            }
         }
 
-        // Revisar si hay producción con prefijo común
+        // Procesar cada grupo
         for (Map.Entry<String, List<String>> grupo : gruposProducciones.entrySet()) {
             List<String> listaProducciones = grupo.getValue();
-            String antecedente = listaProducciones.get(0).split(" ")[0];
 
             if (listaProducciones.size() > 1) { // Hay factor común
                 necesitaFactorizacion = true;
+
+                // Extraer antecedente del primer grupo
+                String[] partesPrimera = listaProducciones.get(0).split(" → ");
+                String antecedente = partesPrimera[0].trim();
+                String consecuentePrimera = partesPrimera[1].trim();
+                String[] simbolosPrimera = consecuentePrimera.split("\\s+");
+                String primerSimbolo = simbolosPrimera[0];
+
                 String nuevoNoTerminal = antecedente + "'";
 
                 if (!noTerminales.contains(nuevoNoTerminal)) {
@@ -2471,15 +2499,20 @@ public class Gramatica {
                 }
 
                 // Nueva producción con factor común extraído
-                produccionesModificadas.add(antecedente + " → " + listaProducciones.get(0).split(" ")[2] + " " + nuevoNoTerminal);
+                produccionesModificadas.add(antecedente + " → " + primerSimbolo + " " + nuevoNoTerminal);
 
-                for (String produccion : listaProducciones) {
-                    String[] partes = produccion.split(" ");
+                // Crear producciones para el nuevo no terminal
+                for (String produccionStr : listaProducciones) {
+                    String[] partesFlecha = produccionStr.split(" → ");
+                    String consecuente = partesFlecha[1].trim();
+                    String[] simbolos = consecuente.split("\\s+");
+
                     StringBuilder nuevaProduccion = new StringBuilder(nuevoNoTerminal + " →");
 
-                    if (partes.length > 3) {
-                        for (int i = 3; i < partes.length; i++) {
-                            nuevaProduccion.append(" ").append(partes[i]);
+                    // Agregar todos los símbolos después del primer símbolo (el factor común)
+                    if (simbolos.length > 1) {
+                        for (int i = 1; i < simbolos.length; i++) {
+                            nuevaProduccion.append(" ").append(simbolos[i]);
                         }
                     } else {
                         nuevaProduccion.append(" ε");
@@ -2488,11 +2521,11 @@ public class Gramatica {
                     produccionesModificadas.add(nuevaProduccion.toString());
                 }
             } else {
+                // Si no hay factorización, agregar la producción original
                 produccionesModificadas.addAll(listaProducciones);
             }
         }
 
-        // **🔴 Se actualiza la copia de las producciones en lugar de las originales**
         if (necesitaFactorizacion) {
             this.setNoTerminalesModel(noTerminales);
             this.setProduccionesModel(produccionesModificadas);
@@ -2506,15 +2539,20 @@ public class Gramatica {
      * @return true si tiene recursividad por la izquierda
      */
     public boolean verificarRecursividadSinModificar() {
-        for (Produccion produccion : this.pr) {
-            String antecedente = produccion.getAntec().getSimboloNT().getValor();
-            ObservableList<Simbolo> consecuente = produccion.getConsec();
+        ObservableList<String> producciones = getProduccionesModel();
 
-            if (!consecuente.isEmpty()) {
-                String primerSimbolo = consecuente.get(0).getValor();
-                if (antecedente.equals(primerSimbolo)) {
-                    return true; // Encontró recursividad por la izquierda
-                }
+        for (String produccionStr : producciones) {
+            String[] partesFlecha = produccionStr.split(" → ");
+            if (partesFlecha.length != 2) {
+                continue;
+            }
+
+            String antecedente = partesFlecha[0].trim();
+            String consecuente = partesFlecha[1].trim();
+            String[] simbolos = consecuente.split("\\s+");
+
+            if (simbolos.length > 0 && antecedente.equals(simbolos[0])) {
+                return true; // Encontró recursividad por la izquierda
             }
         }
         return false;
@@ -2526,23 +2564,30 @@ public class Gramatica {
      */
     public boolean verificarFactorizacionSinModificar() {
         Map<String, List<String>> produccionesPorPrefijo = new HashMap<>();
+        ObservableList<String> producciones = getProduccionesModel();
 
-        for (Produccion produccion : this.pr) {
-            String antecedente = produccion.getAntec().getSimboloNT().getValor();
-            ObservableList<Simbolo> consecuente = produccion.getConsec();
+        for (String produccionStr : producciones) {
+            String[] partesFlecha = produccionStr.split(" → ");
+            if (partesFlecha.length != 2) {
+                continue;
+            }
 
-            if (!consecuente.isEmpty()) {
-                String primerSimbolo = consecuente.get(0).getValor();
+            String antecedente = partesFlecha[0].trim();
+            String consecuente = partesFlecha[1].trim();
+            String[] simbolos = consecuente.split("\\s+");
+
+            if (simbolos.length > 0) {
+                String primerSimbolo = simbolos[0];
 
                 // Agrupar producciones por antecedente y primer símbolo
                 String clave = antecedente + "->" + primerSimbolo;
-                produccionesPorPrefijo.computeIfAbsent(clave, k -> new ArrayList<>()).add(primerSimbolo);
+                produccionesPorPrefijo.computeIfAbsent(clave, k -> new ArrayList<>()).add(produccionStr);
             }
         }
 
         // Verificar si algún prefijo tiene más de una producción
-        for (List<String> prefijos : produccionesPorPrefijo.values()) {
-            if (prefijos.size() > 1) {
+        for (List<String> produccionesGrupo : produccionesPorPrefijo.values()) {
+            if (produccionesGrupo.size() > 1) {
                 return true; // Necesita factorización
             }
         }
@@ -2550,6 +2595,66 @@ public class Gramatica {
         return false;
     }
 
+
+    /**
+     * Método para probar y demostrar el proceso completo de transformación de gramáticas
+     * para análisis descendente predictivo
+     */
+    public void demostrarTransformaciones() {
+        System.out.println("=== DEMOSTRACIÓN DE TRANSFORMACIONES PARA ANÁLISIS DESCENDENTE ===");
+        System.out.println("Gramática original:");
+        for (String prod : getProduccionesModel()) {
+            System.out.println("  " + prod);
+        }
+
+        // Verificar estado inicial
+        boolean tieneRecursividadInicial = verificarRecursividadSinModificar();
+        boolean necesitaFactorizacionInicial = verificarFactorizacionSinModificar();
+
+        System.out.println("\nEstado inicial:");
+        System.out.println("  - Tiene recursividad por la izquierda: " + tieneRecursividadInicial);
+        System.out.println("  - Necesita factorización: " + necesitaFactorizacionInicial);
+
+        // Paso 1: Eliminar recursividad por la izquierda
+        boolean seEliminoRecursividad = eliminarRecursividad();
+        System.out.println("\nDespués de eliminar recursividad:");
+        if (seEliminoRecursividad) {
+            System.out.println("  ✅ Recursividad eliminada");
+            for (String prod : getProduccionesModel()) {
+                System.out.println("  " + prod);
+            }
+        } else {
+            System.out.println("  ℹ️  No había recursividad que eliminar");
+        }
+
+        // Paso 2: Factorizar si es necesario
+        boolean seFactorizo = factorizar();
+        System.out.println("\nDespués de factorización:");
+        if (seFactorizo) {
+            System.out.println("  ✅ Factorización aplicada");
+            for (String prod : getProduccionesModel()) {
+                System.out.println("  " + prod);
+            }
+        } else {
+            System.out.println("  ℹ️  No era necesaria la factorización");
+        }
+
+        // Verificar estado final
+        boolean tieneRecursividadFinal = verificarRecursividadSinModificar();
+        boolean necesitaFactorizacionFinal = verificarFactorizacionSinModificar();
+
+        System.out.println("\nEstado final:");
+        System.out.println("  - Tiene recursividad por la izquierda: " + tieneRecursividadFinal);
+        System.out.println("  - Necesita factorización: " + necesitaFactorizacionFinal);
+
+        if (!tieneRecursividadFinal && !necesitaFactorizacionFinal) {
+            System.out.println("\n🎉 ¡GRAMÁTICA LISTA PARA ANÁLISIS DESCENDENTE PREDICTIVO!");
+        } else {
+            System.out.println("\n⚠️  La gramática aún necesita transformaciones adicionales");
+        }
+
+        System.out.println("=================================================================\n");
+    }
 
     public void generarConjPrim() {
         Map<String, Set<String>> primeros = new HashMap<>();
