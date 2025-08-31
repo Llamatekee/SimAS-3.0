@@ -7,6 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import javafx.beans.binding.BooleanBinding;
 import java.io.IOException;
 import java.util.ResourceBundle;
 
@@ -22,6 +23,7 @@ public class PanelCreacionGramaticaPaso4 extends VBox implements ActualizableTex
     @FXML private Button btnPrimero;
     @FXML private Label labelHeader;
     @FXML private Label labelSimboloInicial;
+    @FXML private Label labelErrorSimboloInicial;
 
     private final PanelCreacionGramatica panelPadre;
     private final TabPane tabPane;
@@ -79,6 +81,9 @@ public class PanelCreacionGramaticaPaso4 extends VBox implements ActualizableTex
             }
         });
 
+        // Configurar validación del símbolo inicial
+        configurarValidacionSimboloInicial();
+
         actualizarTextos(bundle);
     }
 
@@ -91,8 +96,48 @@ public class PanelCreacionGramaticaPaso4 extends VBox implements ActualizableTex
             panelPadre.getPanelPadre().setGramatica(panelPadre.getGramatica());
             panelPadre.getPanelPadre().actualizarVisualizacion();
             cerrarAsistente();
-        } else {
-            mostrarAlerta();
+        }
+        // No es necesario mostrar alerta ya que el botón estará deshabilitado si no hay selección
+    }
+
+    /**
+     * Configura la validación del símbolo inicial para habilitar/deshabilitar botones y mostrar mensajes de error.
+     */
+    private void configurarValidacionSimboloInicial() {
+        // Crear binding para verificar si hay un símbolo inicial seleccionado
+        BooleanBinding simboloInicialValido = new BooleanBinding() {
+            {
+                bind(comboBoxSimboloInicial.valueProperty());
+            }
+            
+            @Override
+            protected boolean computeValue() {
+                return comboBoxSimboloInicial.getValue() != null;
+            }
+        };
+        
+        // Deshabilitar botón finalizar si no hay símbolo inicial válido
+        btnFinalizar.disableProperty().bind(simboloInicialValido.not());
+        
+        // Mostrar/ocultar mensaje de error
+        labelErrorSimboloInicial.visibleProperty().bind(simboloInicialValido.not());
+        labelErrorSimboloInicial.managedProperty().bind(simboloInicialValido.not());
+        
+        // Configurar el texto del mensaje de error
+        actualizarMensajeError();
+    }
+    
+    /**
+     * Actualiza el mensaje de error con el texto del bundle actual.
+     */
+    private void actualizarMensajeError() {
+        if (labelErrorSimboloInicial != null && bundle != null) {
+            try {
+                labelErrorSimboloInicial.setText(bundle.getString("creacion4.error.simbolo.inicial"));
+            } catch (Exception e) {
+                // Si no se encuentra la clave, usar un mensaje por defecto
+                labelErrorSimboloInicial.setText("Debe seleccionar un símbolo inicial");
+            }
         }
     }
 
@@ -128,13 +173,7 @@ public class PanelCreacionGramaticaPaso4 extends VBox implements ActualizableTex
                 .ifPresent(tabActual -> tabPane.getTabs().remove(tabActual));
     }
 
-    private void mostrarAlerta() {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle(bundle.getString("editor.dialog.error.titulo"));
-        alert.setHeaderText(null);
-        alert.setContentText(bundle.getString("creacion4.error.simbolo.inicial"));
-        alert.showAndWait();
-    }
+
 
     @Override
     public void actualizarTextos(ResourceBundle bundle) {
@@ -145,5 +184,8 @@ public class PanelCreacionGramaticaPaso4 extends VBox implements ActualizableTex
         if (btnCancelar != null) btnCancelar.setText(bundle.getString("wizard.cancel"));
         if (btnAnterior != null) btnAnterior.setText(bundle.getString("wizard.previous"));
         if (btnPrimero != null) btnPrimero.setText(bundle.getString("wizard.first"));
+        
+        // Actualizar el mensaje de error
+        actualizarMensajeError();
     }
 }

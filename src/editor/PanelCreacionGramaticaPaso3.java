@@ -9,6 +9,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import javafx.beans.binding.BooleanBinding;
 import java.io.IOException;
 import java.util.ResourceBundle;
 
@@ -23,6 +24,7 @@ public class PanelCreacionGramaticaPaso3 extends VBox implements ActualizableTex
     @FXML private Button btnUltimo;
     @FXML private Label labelHeader;
     @FXML private Label labelLista;
+    @FXML private Label labelErrorProducciones;
 
     public final PanelCreacionGramatica panelPadre;
     public final TabPane tabPane;
@@ -65,12 +67,57 @@ public class PanelCreacionGramaticaPaso3 extends VBox implements ActualizableTex
                 }
             }
         });
+        
+        // Configurar validación de producciones
+        configurarValidacionProducciones();
     }
 
     public void asignarProducciones(ObservableList<Produccion> nuevasProducciones) {
         if (nuevasProducciones != null) {
             producciones.setAll(nuevasProducciones);
             listProducciones.refresh();  // Refrescar la ListView para mostrar los datos actualizados
+        }
+    }
+
+    /**
+     * Configura la validación de producciones para habilitar/deshabilitar botones y mostrar mensajes de error.
+     */
+    private void configurarValidacionProducciones() {
+        // Crear binding para verificar si hay al menos una producción
+        BooleanBinding produccionesValidas = new BooleanBinding() {
+            {
+                bind(producciones);
+            }
+            
+            @Override
+            protected boolean computeValue() {
+                return !producciones.isEmpty();
+            }
+        };
+        
+        // Deshabilitar botones siguiente y último si no hay producciones válidas
+        btnSiguiente.disableProperty().bind(produccionesValidas.not());
+        btnUltimo.disableProperty().bind(produccionesValidas.not());
+        
+        // Mostrar/ocultar mensaje de error
+        labelErrorProducciones.visibleProperty().bind(produccionesValidas.not());
+        labelErrorProducciones.managedProperty().bind(produccionesValidas.not());
+        
+        // Configurar el texto del mensaje de error
+        actualizarMensajeError();
+    }
+    
+    /**
+     * Actualiza el mensaje de error con el texto del bundle actual.
+     */
+    private void actualizarMensajeError() {
+        if (labelErrorProducciones != null && panelPadre.getBundle() != null) {
+            try {
+                labelErrorProducciones.setText(panelPadre.getBundle().getString("creacion3.error.producciones.vacias"));
+            } catch (Exception e) {
+                // Si no se encuentra la clave, usar un mensaje por defecto
+                labelErrorProducciones.setText("Se necesita al menos una producción para poder avanzar");
+            }
         }
     }
 
@@ -150,5 +197,8 @@ public class PanelCreacionGramaticaPaso3 extends VBox implements ActualizableTex
         if (btnAnterior != null) btnAnterior.setText(bundle.getString("button.anterior"));
         if (btnSiguiente != null) btnSiguiente.setText(bundle.getString("button.siguiente"));
         if (btnUltimo != null) btnUltimo.setText(bundle.getString("button.ultimo"));
+        
+        // Actualizar el mensaje de error
+        actualizarMensajeError();
     }
 }

@@ -38,6 +38,11 @@
             <ComboBox fx:id="comboBoxSimboloInicial" styleClass="wizard-combo-box" 
                       prefWidth="300" maxWidth="400"/>
             
+            <!-- Error Message -->
+            <Label fx:id="labelErrorSimboloInicial" styleClass="wizard-error-message" 
+                   visible="false" managed="false" maxWidth="500" wrapText="true" 
+                   alignment="CENTER"/>
+            
         </VBox>
     </VBox>
 

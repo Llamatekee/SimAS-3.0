@@ -10,6 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
+import javafx.beans.binding.BooleanBinding;
 
 import java.io.IOException;
 
@@ -31,6 +32,7 @@ public class PanelCreacionGramaticaPaso2 extends VBox implements ActualizableTex
     @FXML private Label labelHeader;
     @FXML private Label labelNoTerminalesSeccion;
     @FXML private Label labelTerminalesSeccion;
+    @FXML private Label labelErrorSimbolos;
 
     private final ObservableList<String> simbolosNoTerminales = FXCollections.observableArrayList();
     private final ObservableList<String> simbolosTerminales = FXCollections.observableArrayList();
@@ -77,6 +79,9 @@ public class PanelCreacionGramaticaPaso2 extends VBox implements ActualizableTex
         });
 
         cargarDatosDesdeGramatica();
+        
+        // Configurar validación de símbolos
+        configurarValidacionSimbolos();
         
         // Aplicar estilos responsivos basados en el tamaño de la pantalla
         aplicarEstilosResponsivos();
@@ -174,6 +179,48 @@ public class PanelCreacionGramaticaPaso2 extends VBox implements ActualizableTex
         }
     }
 
+    /**
+     * Configura la validación de símbolos para habilitar/deshabilitar botones y mostrar mensajes de error.
+     */
+    private void configurarValidacionSimbolos() {
+        // Crear binding para verificar si ambos conjuntos tienen al menos un elemento
+        BooleanBinding simbolosValidos = new BooleanBinding() {
+            {
+                bind(simbolosNoTerminales, simbolosTerminales);
+            }
+            
+            @Override
+            protected boolean computeValue() {
+                return !simbolosNoTerminales.isEmpty() && !simbolosTerminales.isEmpty();
+            }
+        };
+        
+        // Deshabilitar botones siguiente y último si no hay símbolos válidos
+        btnSiguiente.disableProperty().bind(simbolosValidos.not());
+        btnUltimo.disableProperty().bind(simbolosValidos.not());
+        
+        // Mostrar/ocultar mensaje de error
+        labelErrorSimbolos.visibleProperty().bind(simbolosValidos.not());
+        labelErrorSimbolos.managedProperty().bind(simbolosValidos.not());
+        
+        // Configurar el texto del mensaje de error
+        actualizarMensajeError();
+    }
+    
+    /**
+     * Actualiza el mensaje de error con el texto del bundle actual.
+     */
+    private void actualizarMensajeError() {
+        if (labelErrorSimbolos != null && panelPadre.getBundle() != null) {
+            try {
+                labelErrorSimbolos.setText(panelPadre.getBundle().getString("creacion2.error.simbolos.vacios"));
+            } catch (Exception e) {
+                // Si no se encuentra la clave, usar un mensaje por defecto
+                labelErrorSimbolos.setText("Se necesita al menos un símbolo en cada conjunto para poder avanzar");
+            }
+        }
+    }
+
     @FXML
     private void onBtnSiguienteAction() {
         panelPadre.cambiarPaso(3);
@@ -266,5 +313,8 @@ public class PanelCreacionGramaticaPaso2 extends VBox implements ActualizableTex
         if (btnAnterior != null) btnAnterior.setText(bundle.getString("button.anterior"));
         if (btnSiguiente != null) btnSiguiente.setText(bundle.getString("button.siguiente"));
         if (btnUltimo != null) btnUltimo.setText(bundle.getString("button.ultimo"));
+        
+        // Actualizar el mensaje de error
+        actualizarMensajeError();
     }
 }

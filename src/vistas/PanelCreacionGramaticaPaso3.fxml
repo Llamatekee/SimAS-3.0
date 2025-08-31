@@ -46,6 +46,11 @@
                 </graphic>
             </Button>
             
+            <!-- Error Message -->
+            <Label fx:id="labelErrorProducciones" styleClass="wizard-error-message" 
+                   visible="false" managed="false" maxWidth="750" wrapText="true" 
+                   alignment="CENTER"/>
+            
         </VBox>
     </VBox>
 

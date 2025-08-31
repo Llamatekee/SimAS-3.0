@@ -61,6 +61,11 @@
                 </graphic>
             </Button>
         </VBox>
+        
+        <!-- Error Message -->
+        <Label fx:id="labelErrorSimbolos" styleClass="wizard-error-message" 
+               visible="false" managed="false" maxWidth="500" wrapText="true" 
+               alignment="CENTER"/>
     </VBox>
 
     <!-- Navigation -->
