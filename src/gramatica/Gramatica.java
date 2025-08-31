@@ -916,7 +916,7 @@ public class Gramatica {
                 // ========================================
                 // SECCIÓN ÚNICA: GRAMÁTICA ORIGINAL
                 // ========================================
-                Paragraph tituloGramaticaOriginal = new Paragraph("GRAMÁTICA ORIGINAL", tituloSeccion);
+                Paragraph tituloGramaticaOriginal = new Paragraph(bundle.getString("informe.editor.gramatica.original"), tituloSeccion);
                 document.add(tituloGramaticaOriginal);
                 document.add(new Chunk(separadorSecundario));
                 document.add(new Paragraph(" ", new Font(bf, 10)));
