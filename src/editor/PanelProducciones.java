@@ -11,6 +11,7 @@ import javafx.scene.layout.VBox;
 import java.io.IOException;
 import java.util.stream.Collectors;
 import java.util.ResourceBundle;
+import utils.ActualizableTextos;
 
 /**
  * Panel para modificar las producciones de la gramática.

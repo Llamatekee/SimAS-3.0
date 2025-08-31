@@ -13,9 +13,9 @@ import java.util.List;
 import java.io.File;
 import java.io.IOException;
 import javafx.scene.Parent;
-import editor.ActualizableTextos;
+import utils.ActualizableTextos;
 import java.util.ResourceBundle;
-import editor.TabManager;
+import utils.TabManager;
 import java.util.MissingResourceException;
 
 /**
@@ -74,7 +74,7 @@ public class PanelNuevaSimDescPaso6 extends BorderPane implements PanelNuevaSimD
     public PanelNuevaSimDescPaso6(Gramatica gramatica) {
         this.gramatica = gramatica;
         this.panelSimuladorDesc = null;
-        this.bundle = ResourceBundle.getBundle("messages");
+        this.bundle = ResourceBundle.getBundle("utils.messages");
         
         // Usar la tabla predictiva de la gramática
         this.tablaPredictiva = gramatica.getTPredictiva();
@@ -98,7 +98,7 @@ public class PanelNuevaSimDescPaso6 extends BorderPane implements PanelNuevaSimD
         try {
             if (bundle == null) {
                 // Si no hay bundle, usar el bundle por defecto
-                bundle = ResourceBundle.getBundle("messages");
+                bundle = ResourceBundle.getBundle("utils.messages");
             }
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/PanelNuevaSimDescPaso6.fxml"));
             loader.setController(this);

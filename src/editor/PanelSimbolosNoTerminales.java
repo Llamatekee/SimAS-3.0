@@ -8,7 +8,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
-
+import utils.ActualizableTextos;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.ResourceBundle;

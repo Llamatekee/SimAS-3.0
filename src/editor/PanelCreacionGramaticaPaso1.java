@@ -6,6 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.beans.binding.BooleanBinding;
+import utils.ActualizableTextos;
 
 import java.io.IOException;
 import java.util.ResourceBundle;

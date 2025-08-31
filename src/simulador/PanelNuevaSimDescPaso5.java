@@ -24,7 +24,7 @@ import gramatica.FuncionError;
 import gramatica.Gramatica;
 import gramatica.TablaPredictivaPaso5;
 import gramatica.Terminal;
-import editor.ActualizableTextos;
+import utils.ActualizableTextos;
 
 public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso, ActualizableTextos {
 

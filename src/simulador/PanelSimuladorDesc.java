@@ -10,7 +10,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.Parent;
-import editor.TabManager;
+import utils.TabManager;
+import utils.ActualizableTextos;
 
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -121,8 +122,8 @@ public class PanelSimuladorDesc {
             // Inicializar el contenido del primer paso sin crear una nueva pestaña
             if (pasos.size() > 0) {
                 PanelNuevaSimDescPaso primerPaso = pasos.get(0);
-                if (primerPaso instanceof editor.ActualizableTextos) {
-                    ((editor.ActualizableTextos) primerPaso).actualizarTextos(bundle);
+                        if (primerPaso instanceof ActualizableTextos) {
+            ((ActualizableTextos) primerPaso).actualizarTextos(bundle);
                 }
             }
             
@@ -281,8 +282,8 @@ public class PanelSimuladorDesc {
         
         // Actualizar el paso actual con el bundle actual
         PanelNuevaSimDescPaso pasoActual = pasos.get(paso);
-        if (pasoActual instanceof editor.ActualizableTextos) {
-            ((editor.ActualizableTextos) pasoActual).actualizarTextos(bundle);
+        if (pasoActual instanceof ActualizableTextos) {
+            ((ActualizableTextos) pasoActual).actualizarTextos(bundle);
         }
         
         // Buscar la pestaña existente por el simuladorId
@@ -373,8 +374,8 @@ public class PanelSimuladorDesc {
         // Recargar el FXML del paso actual con el nuevo bundle
         if (pasoActual >= 0 && pasoActual < pasos.size()) {
             PanelNuevaSimDescPaso pasoActual = pasos.get(this.pasoActual);
-            if (pasoActual instanceof editor.ActualizableTextos) {
-                ((editor.ActualizableTextos) pasoActual).actualizarTextos(bundle);
+            if (pasoActual instanceof ActualizableTextos) {
+                ((ActualizableTextos) pasoActual).actualizarTextos(bundle);
             }
         }
         
@@ -415,8 +416,8 @@ public class PanelSimuladorDesc {
                     }
                     
                     // Actualizar contenido de la pestaña de gramática
-                    if (tab.getContent() instanceof editor.ActualizableTextos) {
-                        ((editor.ActualizableTextos) tab.getContent()).actualizarTextos(bundle);
+                    if (tab.getContent() instanceof ActualizableTextos) {
+                        ((ActualizableTextos) tab.getContent()).actualizarTextos(bundle);
                     }
                 }
                 

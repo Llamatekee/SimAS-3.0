@@ -778,7 +778,7 @@ public class Gramatica {
     public Boolean generarInforme(String fichero) throws DocumentException {
         // Método original para compatibilidad - usa español por defecto
         try {
-            ResourceBundle bundle = ResourceBundle.getBundle("messages", new java.util.Locale("es"));
+            ResourceBundle bundle = ResourceBundle.getBundle("utils.messages", new java.util.Locale("es"));
             return generarInforme(fichero, bundle);
         } catch (Exception e) {
             // Si no se puede cargar el bundle, usar valores por defecto

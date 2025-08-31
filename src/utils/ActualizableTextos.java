@@ -1,4 +1,4 @@
-package editor;
+package utils;
 import java.util.ResourceBundle;
 
 public interface ActualizableTextos {

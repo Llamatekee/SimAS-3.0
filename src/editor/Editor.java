@@ -25,6 +25,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import utils.TabManager;
+import utils.ActualizableTextos;
 
 public class Editor extends VBox implements ActualizableTextos {
 

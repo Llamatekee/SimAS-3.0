@@ -1,4 +1,4 @@
-package editor;
+package utils;
 
 import javafx.scene.Scene;
 import javafx.scene.control.Tab;
@@ -26,6 +26,8 @@ import java.io.IOException;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextArea;
+import editor.EditorWindow;
+import editor.Editor;
 
 public class SecondaryWindow extends EditorWindow {
     
@@ -458,8 +460,8 @@ public class SecondaryWindow extends EditorWindow {
         
         // Actualizar todos los textos de las pestañas
         for (Tab tab : localTabPane.getTabs()) {
-            if (tab.getContent() instanceof editor.ActualizableTextos) {
-                ((editor.ActualizableTextos) tab.getContent()).actualizarTextos(nuevoBundle);
+                    if (tab.getContent() instanceof ActualizableTextos) {
+            ((ActualizableTextos) tab.getContent()).actualizarTextos(nuevoBundle);
             }
         }
         

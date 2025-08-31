@@ -1,4 +1,4 @@
-package editor;
+package utils;
 
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -1556,7 +1556,7 @@ public class TabManager {
             ResourceBundle savedBundle = resourceBundles.get(tabPane);
             if (savedBundle == null) {
                 // Si aún no hay bundle, usar uno por defecto en español
-                bundle = ResourceBundle.getBundle("messages", new Locale("es"));
+                bundle = ResourceBundle.getBundle("utils.messages", new Locale("es"));
             } else {
                 bundle = savedBundle;
             }

@@ -9,7 +9,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableView;
 import javafx.scene.control.Label;
-import editor.ActualizableTextos;
+import utils.ActualizableTextos;
 
 import java.io.IOException;
 import java.util.ResourceBundle;

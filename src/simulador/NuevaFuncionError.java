@@ -9,7 +9,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
-import editor.ActualizableTextos;
+import utils.ActualizableTextos;
 
 import java.io.IOException;
 import java.util.ArrayList;

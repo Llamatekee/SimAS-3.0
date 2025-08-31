@@ -18,6 +18,9 @@ import java.io.IOException;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextArea;
+import utils.TabPaneMonitor;
+import utils.TabManager;
+import utils.SecondaryWindow;
 
 public class EditorWindow {
     private Stage stage;

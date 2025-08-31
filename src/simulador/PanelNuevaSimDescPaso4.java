@@ -9,8 +9,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
-import editor.ActualizableTextos;
-import editor.TabManager;
+import utils.ActualizableTextos;
+import utils.TabManager;
 
 import java.io.IOException;
 import java.util.List;

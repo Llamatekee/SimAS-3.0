@@ -1,6 +1,6 @@
 package simulador;
 
-import editor.ActualizableTextos;
+import utils.ActualizableTextos;
 import gramatica.Gramatica;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;

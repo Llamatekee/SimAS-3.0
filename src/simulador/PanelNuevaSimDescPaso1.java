@@ -7,7 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Button;
-import editor.ActualizableTextos;
+import utils.ActualizableTextos;
 
 import java.io.IOException;
 import java.util.ResourceBundle;
@@ -79,10 +79,6 @@ public class PanelNuevaSimDescPaso1 implements PanelNuevaSimDescPaso, Actualizab
     }
 
     private void verificarEstadoGramatica() {
-        // Primero verificar si la gramática necesita transformaciones (sin aplicarlas aún)
-        boolean necesitaRecursividad = gramatica.verificarRecursividadSinModificar();
-        boolean necesitaFactorizacion = gramatica.verificarFactorizacionSinModificar();
-
         // Aplicar las transformaciones
         boolean esRecursiva = gramatica.eliminarRecursividad();
         boolean seFactorizo = gramatica.factorizar();

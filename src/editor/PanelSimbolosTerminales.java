@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.ResourceBundle;
 import java.util.Set;
+import utils.ActualizableTextos;
 
 public class PanelSimbolosTerminales extends VBox implements ActualizableTextos {
 

@@ -13,6 +13,8 @@ import javafx.stage.Screen;
 import javafx.beans.binding.BooleanBinding;
 
 import java.io.IOException;
+import utils.TabManager;
+import utils.ActualizableTextos;
 
 public class PanelCreacionGramaticaPaso2 extends VBox implements ActualizableTextos {
 

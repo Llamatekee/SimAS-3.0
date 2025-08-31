@@ -13,7 +13,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import java.io.IOException;
 import javafx.stage.Stage;
-import editor.SecondaryWindow;
+import utils.SecondaryWindow;
 import java.util.ResourceBundle;
 
 public class PanelSimulacion extends VBox {

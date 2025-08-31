@@ -2,7 +2,7 @@ package bienvenida;
 
 import editor.Editor;
 import editor.EditorWindow;
-import editor.SecondaryWindow;
+import utils.SecondaryWindow;
 import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,7 +15,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
-import editor.TabManager;
+import utils.TabManager;
+import utils.LanguageItem;
+import utils.LanguageListCell;
+import utils.ActualizableTextos;
 import gramatica.Gramatica;
 import simulador.PanelSimuladorDesc;
 import javafx.scene.input.KeyCode;
@@ -405,7 +408,7 @@ public class MenuPrincipal extends Application {
     }
 
     private void cargarBundle(Locale locale) {
-        bundle = ResourceBundle.getBundle("messages", locale);
+        bundle = ResourceBundle.getBundle("utils.messages", locale);
     }
 
     private void actualizarTextos() {
@@ -440,8 +443,8 @@ public class MenuPrincipal extends Application {
             
             // Actualizar textos de las pestañas y contenido
             for (Tab tab : tabPane.getTabs()) {
-                if (tab.getContent() instanceof editor.ActualizableTextos) {
-                    ((editor.ActualizableTextos) tab.getContent()).actualizarTextos(bundle);
+                            if (tab.getContent() instanceof ActualizableTextos) {
+                ((ActualizableTextos) tab.getContent()).actualizarTextos(bundle);
                 }
             }
             

@@ -12,6 +12,8 @@ import javafx.scene.layout.VBox;
 import javafx.beans.binding.BooleanBinding;
 import java.io.IOException;
 import java.util.ResourceBundle;
+import utils.TabManager;
+import utils.ActualizableTextos;
 
 public class PanelCreacionGramaticaPaso3 extends VBox implements ActualizableTextos {
 
