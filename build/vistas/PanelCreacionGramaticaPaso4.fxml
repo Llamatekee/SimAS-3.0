@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+
+<GridPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
+         styleClass="wizard-step,wizard-step-full-width" vgap="0" VBox.vgrow="ALWAYS">
+    
+    <columnConstraints>
+        <ColumnConstraints hgrow="ALWAYS"/>
+    </columnConstraints>
+    
+    <rowConstraints>
+        <RowConstraints valignment="TOP" minHeight="80" maxHeight="80" fillHeight="false"/> <!-- Header -->
+        <RowConstraints vgrow="ALWAYS" valignment="TOP" fillHeight="true"/> <!-- Content -->
+        <RowConstraints valignment="BOTTOM" minHeight="45" maxHeight="45" fillHeight="false"/> <!-- Navigation -->
+    </rowConstraints>
+
+    <padding>
+        <Insets top="30" right="40" bottom="30" left="40"/>
+    </padding>
+
+    <!-- Header -->
+    <Label fx:id="labelHeader" styleClass="wizard-header"
+           GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.halignment="CENTER"/>
+
+    <!-- Content -->
+    <VBox spacing="25" GridPane.columnIndex="0" GridPane.rowIndex="1" 
+          styleClass="wizard-content" GridPane.halignment="CENTER" alignment="CENTER">
+        
+        <!-- Container principal para el símbolo inicial -->
+        <VBox spacing="20" styleClass="initial-symbol-container" maxWidth="500" minWidth="400" alignment="CENTER">
+            
+            <Label fx:id="labelSimboloInicial" styleClass="wizard-section-header"/>
+            
+            <ComboBox fx:id="comboBoxSimboloInicial" styleClass="wizard-combo-box" 
+                      prefWidth="300" maxWidth="400"/>
+            
+            <!-- Error Message -->
+            <Label fx:id="labelErrorSimboloInicial" styleClass="wizard-error-message" 
+                   visible="false" managed="false" maxWidth="500" wrapText="true" 
+                   alignment="CENTER"/>
+            
+        </VBox>
+    </VBox>
+
+    <!-- Navigation -->
+    <HBox styleClass="wizard-navigation" GridPane.columnIndex="0" GridPane.rowIndex="2" 
+          GridPane.valignment="BOTTOM" spacing="8">
+        <Button fx:id="btnCancelar" text="Cancelar" styleClass="button-cancel" 
+                onAction="#onBtnCancelarAction">
+            <graphic>
+                <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
+                    <Image url="@../resources/cancelar.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button fx:id="btnPrimero" text="Primero" styleClass="button-next" 
+                onAction="#onBtnPrimeroAction">
+            <graphic>
+                <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
+                    <Image url="@../resources/primero.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
+        <Button fx:id="btnAnterior" text="Anterior" styleClass="button-next" 
+                onAction="#onBtnAnteriorAction">
+            <graphic>
+                <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
+                    <Image url="@../resources/anterior.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
+        <Button fx:id="btnSiguiente" text="Siguiente" styleClass="button-next" 
+                disable="true">
+            <graphic>
+                <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
+                    <Image url="@../resources/siguiente.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
+        <Button fx:id="btnFinalizar" text="Finalizar" styleClass="button-finish" 
+                onAction="#onBtnFinalizarAction">
+            <graphic>
+                <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
+                    <Image url="@../resources/icons/check.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
+    </HBox>
+
+</GridPane>

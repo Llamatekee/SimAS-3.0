@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+
+<?import java.net.URL?>
+<BorderPane fx:id="rootPane" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" stylesheets="/vistas/styles2.css">
+    <!-- Barra de herramientas superior -->
+    <top>
+        <VBox spacing="0">
+            <!-- Título del editor -->
+            <HBox styleClass="editor-header" alignment="CENTER">
+                <padding>
+                    <Insets top="10" right="10" bottom="10" left="10"/>
+                </padding>
+                <Label fx:id="labelTitulo" text="%editor.title" styleClass="editor-title"/>
+            </HBox>
+            
+            <!-- Barra de herramientas -->
+            <HBox styleClass="toolbar" spacing="4">
+                <padding>
+                    <Insets top="6" right="6" bottom="6" left="6"/>
+                </padding>
+                <Button fx:id="btnAnadir" text="Nueva" onAction="#onBtnAnadirAction" styleClass="toolbar-button">
+                    <graphic>
+                        <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
+                            <Image url="@../resources/nueva.png"/>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button fx:id="btnAbrir" text="Abrir" onAction="#onBtnAbrirAction" styleClass="toolbar-button">
+                    <graphic>
+                        <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
+                            <Image url="@../resources/abrir.png"/>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button fx:id="btnGuardar" text="Guardar" onAction="#onBtnGuardarAction" styleClass="toolbar-button">
+                    <graphic>
+                        <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
+                            <Image url="@../resources/guardar.png"/>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button fx:id="btnEditar" text="Editar" onAction="#onBtnEditarAction" styleClass="toolbar-button">
+                    <graphic>
+                        <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
+                            <Image url="@../resources/editar.png"/>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button fx:id="btnEliminar" text="Eliminar" onAction="#onBtnEliminarAction" styleClass="toolbar-button">
+                    <graphic>
+                        <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
+                            <Image url="@../resources/eliminar.png"/>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button fx:id="btnValidar" text="Validar" onAction="#onBtnValidarAction" styleClass="toolbar-button">
+                    <graphic>
+                        <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
+                            <Image url="@../resources/validar.png"/>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button fx:id="btnInforme" text="%simulacionfinal.btn.informe.pdf" onAction="#onBtnInformeAction" styleClass="toolbar-button">
+                    <graphic>
+                        <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
+                            <Image url="@../resources/informeGr.png"/>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button fx:id="btnSimular" text="Simular" onAction="#onBtnSimularAction" styleClass="toolbar-button">
+                    <graphic>
+                        <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
+                            <Image url="@../resources/simular.png"/>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button fx:id="btnSalir" text="Salir" onAction="#onBtnSalirAction" styleClass="toolbar-button">
+                    <graphic>
+                        <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
+                            <Image url="@../resources/salir.png"/>
+                        </ImageView>
+                    </graphic>
+                </Button>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- Contenido central -->
+    <center>
+        <VBox spacing="8" styleClass="editor-content" VBox.vgrow="ALWAYS">
+            <!-- Información básica de la gramática -->
+            <VBox spacing="5" styleClass="info-section" VBox.vgrow="NEVER">
+                <padding>
+                    <Insets top="8" right="8" bottom="8" left="8"/>
+                </padding>
+                <Label fx:id="labelPanelTitulo" text="%editor.label.titulo" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+                
+                <GridPane hgap="10" vgap="10">
+                    <padding>
+                        <Insets top="10" right="0" bottom="0" left="0"/>
+                    </padding>
+                    <columnConstraints>
+                        <ColumnConstraints minWidth="100"/>
+                        <ColumnConstraints hgrow="ALWAYS"/>
+                        <ColumnConstraints minWidth="100"/>
+                        <ColumnConstraints minWidth="100"/>
+                    </columnConstraints>
+
+                    <Label fx:id="labelNombre" text="%editor.label.nombre" styleClass="label" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                    <TextField fx:id="txtNombre" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                    
+                    <Label fx:id="labelSimboloInicial" text="%editor.label.simb.inicial" styleClass="label" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+                    <TextField fx:id="txtSimInicial" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="0"/>
+
+                    <Label fx:id="labelDescripcion" text="%editor.label.descripcion" styleClass="label" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                    <TextField fx:id="txtAreaDesc" editable="false" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="1"/>
+                </GridPane>
+            </VBox>
+            
+            <!-- Símbolos y producciones -->
+            <VBox spacing="10" VBox.vgrow="ALWAYS">
+                <padding>
+                    <Insets top="0" right="8" bottom="8" left="8"/>
+                </padding>
+                
+                <!-- Símbolos -->
+                <HBox spacing="15" VBox.vgrow="NEVER">
+                    <VBox spacing="10" HBox.hgrow="ALWAYS">
+                        <Label fx:id="labelNoTerminales" text="%editor.label.no.terminales" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+                        <ListView fx:id="listNoTerminales" styleClass="list-view" VBox.vgrow="ALWAYS"/>
+                    </VBox>
+                    
+                    <VBox spacing="10" HBox.hgrow="ALWAYS">
+                        <Label fx:id="labelTerminales" text="%editor.label.terminales" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+                        <ListView fx:id="listTerminales" styleClass="list-view" VBox.vgrow="ALWAYS"/>
+                    </VBox>
+                </HBox>
+
+                <!-- Producciones -->
+                <VBox spacing="5" VBox.vgrow="ALWAYS">
+                    <Label fx:id="labelProducciones" text="%editor.label.producciones" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+                    <ListView fx:id="listProducciones" styleClass="list-view" VBox.vgrow="ALWAYS"/>
+                </VBox>
+            </VBox>
+        </VBox>
+    </center>
+</BorderPane>

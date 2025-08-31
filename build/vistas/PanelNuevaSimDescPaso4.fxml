@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+
+<?import java.net.URL?>
+<GridPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
+         styleClass="wizard-step" vgap="0">
+    
+    <columnConstraints>
+        <ColumnConstraints hgrow="ALWAYS" minWidth="600" prefWidth="800"/>
+    </columnConstraints>
+    
+    <rowConstraints>
+        <RowConstraints valignment="TOP" minHeight="80" maxHeight="80" fillHeight="false"/> <!-- Header -->
+        <RowConstraints vgrow="ALWAYS" valignment="TOP" fillHeight="true"/> <!-- Content -->
+        <RowConstraints valignment="BOTTOM" minHeight="60" maxHeight="60" fillHeight="false"/> <!-- Navigation -->
+    </rowConstraints>
+
+    <padding>
+        <Insets top="30" right="40" bottom="30" left="40"/>
+    </padding>
+
+    <!-- Header -->
+    <Label fx:id="labelTitulo" text="Funciones de Error" styleClass="wizard-header"
+           GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.halignment="CENTER"/>
+
+    <!-- Content -->
+    <VBox spacing="20" GridPane.columnIndex="0" GridPane.rowIndex="1" 
+          styleClass="wizard-content" VBox.vgrow="ALWAYS">
+        
+        <!-- Lista de Funciones Section -->
+        <VBox spacing="10" VBox.vgrow="ALWAYS">
+            <Label fx:id="labelSubtitulo" text="Funciones de Error Definidas" styleClass="wizard-section-header"/>
+            <ListView fx:id="listViewFuncionesError" styleClass="wizard-list" VBox.vgrow="ALWAYS"/>
+        </VBox>
+
+        <!-- Opciones Section -->
+        <VBox spacing="15" VBox.vgrow="NEVER">
+            <CheckBox fx:id="checkBoxNoFuncionesError" text="No utilizar Funciones de error" 
+                     styleClass="wizard-checkbox" onAction="#handleNoFuncionesError"/>
+            
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Button fx:id="buttonNueva" text="%simulador.paso4.btn.nueva.corta" styleClass="button-grammar" 
+                        onAction="#handleNueva">
+                    <graphic>
+                        <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
+                            <Image url="@../resources/scroll_add.png"/>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button fx:id="buttonEliminar" text="%simulador.paso4.btn.eliminar.corta" styleClass="button-cancel" 
+                        onAction="#handleEliminar">
+                    <graphic>
+                        <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
+                            <Image url="@../resources/scroll_delete.png"/>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button fx:id="buttonFinalizar" text="%button.finalizar" styleClass="button-finish" 
+                        onAction="#handleFinalizar" visible="false">
+                    <graphic>
+                        <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
+                            <Image url="@../resources/icons/check.png"/>
+                        </ImageView>
+                    </graphic>
+                </Button>
+            </HBox>
+        </VBox>
+    </VBox>
+
+    <!-- Navigation -->
+    <HBox styleClass="wizard-navigation" GridPane.columnIndex="0" GridPane.rowIndex="2" 
+          GridPane.valignment="BOTTOM" GridPane.halignment="CENTER">
+        <Button fx:id="buttonCancelar" text="%button.cancelar" styleClass="button-cancel" 
+                onAction="#handleCancelar">
+            <graphic>
+                <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
+                    <Image url="@../resources/cancelar.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
+        <Button fx:id="btnVisualizarGramatica" text="Gramática" styleClass="button-grammar" 
+                onAction="#handleVisualizarGramatica">
+            <graphic>
+                <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
+                    <Image url="@../resources/icons/book_blue_view.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
+        <Region HBox.hgrow="ALWAYS"/>
+                <Button fx:id="buttonPrimero" text="%button.primero" styleClass="button-next"
+                onAction="#handlePrimero">
+            <graphic>
+                <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
+                    <Image url="@../resources/primero.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
+                <Button fx:id="buttonAnterior" text="%button.anterior" styleClass="button-next"
+                onAction="#handleAnterior">
+            <graphic>
+                <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
+                    <Image url="@../resources/anterior.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
+                <Button fx:id="buttonSiguiente" text="%button.siguiente" styleClass="button-next"
+                onAction="#handleSiguiente">
+            <graphic>
+                <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
+                    <Image url="@../resources/siguiente.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
+                <Button fx:id="buttonUltimo" text="%button.ultimo" styleClass="button-next"
+                onAction="#handleUltimo">
+            <graphic>
+                <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
+                    <Image url="@../resources/ultimo.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
+    </HBox>
+
+</GridPane>

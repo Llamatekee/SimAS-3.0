@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1"
+            stylesheets="@styles2.css">
+
+    <top>
+        <HBox alignment="CENTER_RIGHT" spacing="10" style="-fx-padding: 10 20 0 0;">
+            <Label text="Idioma:" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
+            <ComboBox fx:id="comboIdioma" prefWidth="150" />
+        </HBox>
+    </top>
+
+    <center>
+        <StackPane>
+            <TabPane fx:id="tabPane" tabClosingPolicy="SELECTED_TAB" styleClass="tab-pane">
+                <tabs>
+                    <Tab fx:id="mainTab" text="Menú Principal" closable="false">
+                        <content>
+                            <VBox fx:id="menuPanel" spacing="25" alignment="CENTER" styleClass="menu-panel">
+                                <!-- Título de la aplicación -->
+                                <Label fx:id="labelTitulo" text="SimAS 3.0" style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: white; -fx-padding: 0 0 20 0;"/>
+                                
+                                <!-- Subtítulo -->
+                                <Label fx:id="labelSubtitulo" text="Simulador de Análisis Sintáctico" style="-fx-font-size: 18px; -fx-text-fill: #bdc3c7; -fx-padding: 0 0 30 0;"/>
+                                
+                                <!-- Botones del menú -->
+                                <Button fx:id="btnEditor" text="Editor de Gramáticas" onAction="#onBtnEditorAction" styleClass="menu-button">
+                                    <graphic>
+                                        <ImageView fitHeight="24" fitWidth="24">
+                                            <Image url="@images/editor-icon.png"/>
+                                        </ImageView>
+                                    </graphic>
+                                </Button>
+                                
+                                <Button fx:id="btnSimulador" text="Simulador Descendente" onAction="#onBtnSimuladorAction" styleClass="menu-button">
+                                    <graphic>
+                                        <ImageView fitHeight="24" fitWidth="24">
+                                            <Image url="@images/simulator-icon.png"/>
+                                        </ImageView>
+                                    </graphic>
+                                </Button>
+                                
+                                <Button fx:id="btnAyuda" text="Manual de Usuario" onAction="#onBtnAyudaAction" styleClass="menu-button">
+                                    <graphic>
+                                        <ImageView fitHeight="24" fitWidth="24">
+                                            <Image url="@images/help-icon.png"/>
+                                        </ImageView>
+                                    </graphic>
+                                </Button>
+                                
+                                <Button fx:id="btnTutorial" text="Tutorial Interactivo" onAction="#onBtnTutorialAction" styleClass="menu-button">
+                                    <graphic>
+                                        <ImageView fitHeight="24" fitWidth="24">
+                                            <Image url="@images/tutorial-icon.png"/>
+                                        </ImageView>
+                                    </graphic>
+                                </Button>
+                                
+                                <Button fx:id="btnSalir" text="Salir" onAction="#onBtnSalirAction" styleClass="menu-button-exit">
+                                    <graphic>
+                                        <ImageView fitHeight="24" fitWidth="24">
+                                            <Image url="@images/exit-icon.png"/>
+                                        </ImageView>
+                                    </graphic>
+                                </Button>
+                                
+                                <!-- Pie de página -->
+                                <Label fx:id="labelDesarrollado" text="Desarrollado por Antonio" style="-fx-font-size: 14px; -fx-text-fill: #95a5a6; -fx-padding: 30 0 0 0;"/>
+                            </VBox>
+                        </content>
+                    </Tab>
+                </tabs>
+            </TabPane>
+        </StackPane>
+    </center>
+</BorderPane>

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+
+<GridPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
+         styleClass="wizard-step, paso5-simulador" vgap="0" VBox.vgrow="ALWAYS">
+    
+    <columnConstraints>
+        <ColumnConstraints hgrow="ALWAYS"/>
+    </columnConstraints>
+    
+    <rowConstraints>
+        <RowConstraints valignment="TOP" minHeight="80" maxHeight="80" fillHeight="false"/> <!-- Header -->
+        <RowConstraints vgrow="ALWAYS" valignment="TOP" fillHeight="true"/> <!-- Content -->
+        <RowConstraints valignment="BOTTOM" minHeight="60" maxHeight="60" fillHeight="false"/> <!-- Navigation -->
+    </rowConstraints>
+
+    <padding>
+        <Insets top="30" right="40" bottom="30" left="40"/>
+    </padding>
+
+    <!-- Header -->
+    <Label fx:id="labelTitulo" text="%simulador.paso5.titulo" styleClass="wizard-header"
+           GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.halignment="CENTER"/>
+
+    <!-- Content -->
+    <VBox spacing="20" GridPane.columnIndex="0" GridPane.rowIndex="1" 
+          styleClass="wizard-content">
+        
+        <!-- Funciones de Error Section -->
+        <VBox spacing="10" VBox.vgrow="ALWAYS">
+            <Label fx:id="labelSeleccioneFuncion" text="%simulador.paso5.seleccione.funcion" styleClass="wizard-section-header"/>
+            <ComboBox fx:id="comboBoxFuncionesError" styleClass="wizard-combo-box" prefWidth="400"/>
+            <TableView fx:id="tablaPredictiva" VBox.vgrow="ALWAYS" styleClass="wizard-table"/>
+        </VBox>
+
+        <!-- Acciones Section -->
+        <HBox spacing="10">
+            <Button fx:id="buttonEliminar" text="%simulador.paso5.btn.eliminar" styleClass="button-cancel" 
+                    onAction="#handleEliminar">
+                <graphic>
+                    <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
+                        <Image url="@../resources/scroll_delete.png"/>
+                    </ImageView>
+                </graphic>
+            </Button>
+            <Button fx:id="buttonRellenarEpsilon" text="%simulador.paso5.btn.rellenar.epsilon" styleClass="button-grammar" 
+                    onAction="#handleRellenarEpsilon">
+                <graphic>
+                    <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
+                        <Image url="@../resources/icons/scroll_preferences.png"/>
+                    </ImageView>
+                </graphic>
+            </Button>
+            <Button fx:id="buttonResetearTabla" text="%simulador.paso5.btn.resetear" styleClass="button-cancel" 
+                    onAction="#handleResetearTabla">
+                <graphic>
+                    <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
+                        <Image url="@../resources/icons/scroll_replace.png"/>
+                    </ImageView>
+                </graphic>
+            </Button>
+        </HBox>
+    </VBox>
+
+    <!-- Navigation -->
+    <HBox styleClass="wizard-navigation" GridPane.columnIndex="0" GridPane.rowIndex="2" 
+          GridPane.valignment="BOTTOM">
+        <Button fx:id="buttonCancelar" text="%simulador.paso5.btn.cancelar" styleClass="button-cancel" 
+                onAction="#handleCancelar">
+            <graphic>
+                <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
+                    <Image url="@../resources/cancelar.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
+        <Button fx:id="buttonGramatica" text="Gramática" styleClass="button-grammar" 
+                onAction="#handleGramatica">
+            <graphic>
+                <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
+                    <Image url="@../resources/icons/book_blue_view.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button fx:id="buttonPrimero" text="%simulador.paso5.btn.primero" styleClass="button-next" 
+                onAction="#handlePrimero">
+            <graphic>
+                <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
+                    <Image url="@../resources/primero.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
+        <Button fx:id="buttonAnterior" text="%simulador.paso5.btn.anterior" styleClass="button-next" 
+                onAction="#handleAnterior">
+            <graphic>
+                <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
+                    <Image url="@../resources/anterior.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
+        <Button fx:id="buttonSiguiente" text="%simulador.paso5.btn.siguiente" styleClass="button-next" 
+                onAction="#handleSiguiente">
+            <graphic>
+                <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
+                    <Image url="@../resources/siguiente.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
+        <Button fx:id="buttonSimulacion" text="%simulador.paso5.btn.simulacion" styleClass="button-grammar">
+            <graphic>
+                <ImageView fitHeight="14" fitWidth="14" preserveRatio="true">
+                    <Image url="@../resources/icons/telescope.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
+    </HBox>
+
+</GridPane>
