@@ -562,7 +562,7 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         entradaSimulacion = entradaConFin;
 
         // Guardar el estado inicial antes de comenzar la simulación
-        estadosAnteriores.add(new EstadoSimulacion(pilaSimulacion, entradaSimulacion, "Inicio"));
+        estadosAnteriores.add(new EstadoSimulacion(pilaSimulacion, entradaSimulacion, bundle.getString("simulacionfinal.accion.inicio")));
 
         // Iniciar la simulación
         simulacionEnCurso = true;
@@ -595,7 +595,7 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
             if (listaDerivacion != null) {
                 // Resetear la lista con solo el símbolo inicial
                 ObservableList<String> itemsDerivacion = FXCollections.observableArrayList();
-                itemsDerivacion.add("Inicia la simulación para ver la derivación...");
+                itemsDerivacion.add(bundle.getString("simulacionfinal.derivacion.iniciar"));
                 listaDerivacion.setItems(itemsDerivacion);
             }
         }
@@ -689,7 +689,7 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
 
         // Caso de aceptación
         if (cimaPila.equals("$") && simboloEntrada.equals("$")) {
-            accionRealizada = "Aceptar";
+            accionRealizada = bundle.getString("simulacionfinal.accion.aceptar");
             simulacionEnCurso = false;
             estadoFinalAlcanzado = true;
             btnPaso.setDisable(true);
@@ -706,10 +706,10 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         if (cimaPila.equals(simboloEntrada)) {
             pilaSimulacion.pop();
             entradaSimulacion.remove(0);
-            accionRealizada = "Emparejar";
+            accionRealizada = bundle.getString("simulacionfinal.accion.emparejar");
         } else if (esTerminal(cimaPila)) {
             // Error: terminal en pila distinto de entrada
-            accionRealizada = "Error";
+            accionRealizada = bundle.getString("simulacionfinal.accion.error");
             simulacionEnCurso = false;
             estadoFinalAlcanzado = true;
             btnPaso.setDisable(true);
@@ -724,7 +724,7 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
             // Buscar producción o función de error en la tabla predictiva
             String accion = buscarAccionTabla(cimaPila, simboloEntrada);
             if (accion == null || accion.isEmpty()) {
-                accionRealizada = "Error";
+                accionRealizada = bundle.getString("simulacionfinal.accion.error");
                 simulacionEnCurso = false;
                 estadoFinalAlcanzado = true;
                 btnPaso.setDisable(true);
@@ -758,7 +758,7 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
                     }
                     accionRealizada = produccion.trim();
                 } else {
-                    accionRealizada = "Error";
+                    accionRealizada = bundle.getString("simulacionfinal.accion.error");
                 }
             }
         }
@@ -1153,13 +1153,13 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
             if (listaDerivacion != null) {
                 // Generar la derivación como lista
                 ObservableList<String> itemsDerivacion = FXCollections.observableArrayList();
-                if (historialObservable.isEmpty()) {
-                    itemsDerivacion.add("Inicia la simulación para ver la derivación...");
-                } else {
-                    for (int i = 0; i < historialObservable.size(); i++) {
-                        HistorialPaso paso = historialObservable.get(i);
-                        itemsDerivacion.add("Paso " + (i + 1) + ": " + paso.getAccion());
-                    }
+                                        if (historialObservable.isEmpty()) {
+                            itemsDerivacion.add(bundle.getString("simulacionfinal.derivacion.iniciar"));
+                        } else {
+                                                for (int i = 0; i < historialObservable.size(); i++) {
+                                HistorialPaso paso = historialObservable.get(i);
+                                itemsDerivacion.add(bundle.getString("simulacionfinal.derivacion.paso") + " " + (i + 1) + ": " + paso.getAccion());
+                            }
                 }
                 listaDerivacion.setItems(itemsDerivacion);
             }
@@ -1362,11 +1362,28 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
             btnGenerarInforme.setText(bundle.getString("simulacionfinal.btn.informe.pdf"));
         }
         
+        // Actualizar encabezados de las columnas de la tabla
+        if (colPaso != null) {
+            colPaso.setText(bundle.getString("simulacionfinal.col.paso"));
+        }
+        if (colPila != null) {
+            colPila.setText(bundle.getString("simulacionfinal.col.pila"));
+        }
+        if (colEntrada != null) {
+            colEntrada.setText(bundle.getString("simulacionfinal.col.entrada"));
+        }
+        if (colAccion != null) {
+            colAccion.setText(bundle.getString("simulacionfinal.col.accion"));
+        }
+        
         // Actualizar títulos de las pestañas
         actualizarTitulosPestañas();
         
         // Actualizar contenido de las pestañas de derivación y árbol sintáctico
         actualizarContenidoPestañasHijas();
+        
+        // Actualizar la tabla de historial principal
+        actualizarTablaHistorial();
     }
 
     /**
@@ -1391,6 +1408,68 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         }
     }
     
+    /**
+     * Actualiza la tabla de historial principal con los textos del idioma actual.
+     */
+    private void actualizarTablaHistorial() {
+        if (tablaHistorial == null || bundle == null) return;
+        
+        // Guardar una copia de los datos originales
+        List<HistorialPaso> datosOriginales = new ArrayList<>(historialObservable);
+        
+        // Limpiar la lista observable
+        historialObservable.clear();
+        
+        // Recrear los pasos con las acciones traducidas
+        for (HistorialPaso pasoOriginal : datosOriginales) {
+            HistorialPaso pasoActualizado = new HistorialPaso(
+                pasoOriginal.getPaso(),
+                pasoOriginal.getPila(),
+                pasoOriginal.getEntrada(),
+                traducirAccion(pasoOriginal.getAccion())
+            );
+            historialObservable.add(pasoActualizado);
+        }
+    }
+    
+    /**
+     * Traduce una acción del historial al idioma actual.
+     */
+    private String traducirAccion(String accion) {
+        if (bundle == null) return accion;
+        
+        // Traducir las acciones conocidas - verificar en todos los idiomas posibles
+        String[] accionesEspanol = {"Aceptar", "Emparejar", "Error", "Inicio"};
+        String[] accionesIngles = {"Accept", "Match", "Error", "Start"};
+        String[] accionesFrances = {"Accepter", "Associer", "Erreur", "Début"};
+        String[] accionesAleman = {"Akzeptieren", "Abgleichen", "Fehler", "Start"};
+        String[] accionesPortugues = {"Aceitar", "Emparelhar", "Erro", "Início"};
+        String[] accionesJapones = {"受理", "一致", "エラー", "開始"};
+        
+        String[][] todasLasAcciones = {
+            accionesEspanol, accionesIngles, accionesFrances, 
+            accionesAleman, accionesPortugues, accionesJapones
+        };
+        
+        // Buscar la acción en todos los idiomas
+        for (String[] acciones : todasLasAcciones) {
+            for (int i = 0; i < acciones.length; i++) {
+                if (accion.equals(acciones[i])) {
+                    // Encontrar la clave correspondiente
+                    switch (i) {
+                        case 0: return bundle.getString("simulacionfinal.accion.aceptar");
+                        case 1: return bundle.getString("simulacionfinal.accion.emparejar");
+                        case 2: return bundle.getString("simulacionfinal.accion.error");
+                        case 3: return bundle.getString("simulacionfinal.accion.inicio");
+                    }
+                }
+            }
+        }
+        
+        // Si no es una acción conocida, devolver la original
+        return accion;
+    }
+
     /**
      * Actualiza el contenido de la pestaña de derivación.
      */
@@ -1657,11 +1736,11 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
                         // Generar la derivación como lista
                         ObservableList<String> itemsDerivacion = FXCollections.observableArrayList();
                         if (historialObservable.isEmpty()) {
-                            itemsDerivacion.add("Inicia la simulación para ver la derivación...");
+                            itemsDerivacion.add(bundle.getString("simulacionfinal.derivacion.iniciar"));
                         } else {
                             for (int i = 0; i < historialObservable.size(); i++) {
                                 HistorialPaso paso = historialObservable.get(i);
-                                itemsDerivacion.add("Paso " + (i + 1) + ": " + paso.getAccion());
+                                itemsDerivacion.add(bundle.getString("simulacionfinal.derivacion.paso") + " " + (i + 1) + ": " + paso.getAccion());
                             }
                         }
                         listaDerivacion.setItems(itemsDerivacion);
@@ -1712,9 +1791,9 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
             String estadoSimulacion = bundle.getString("informe.simulador.no.especificado");
             if (historialObservable.size() > 0) {
                 HistorialPaso ultimoPaso = historialObservable.get(historialObservable.size() - 1);
-                if (ultimoPaso.getAccion().equals("Aceptar")) {
+                if (ultimoPaso.getAccion().equals(bundle.getString("simulacionfinal.accion.aceptar"))) {
                     estadoSimulacion = bundle.getString("informe.simulador.estado.aceptada");
-                } else if (ultimoPaso.getAccion().equals("Error")) {
+                } else if (ultimoPaso.getAccion().equals(bundle.getString("simulacionfinal.accion.error"))) {
                     estadoSimulacion = bundle.getString("informe.simulador.estado.rechazada");
                 }
             }
