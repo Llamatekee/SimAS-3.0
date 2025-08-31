@@ -286,7 +286,28 @@ public class PanelCreacionGramaticaPaso2 extends VBox implements ActualizableTex
 
     @FXML
     private void onBtnUltimoAction() {
-        panelPadre.cambiarPaso(4);
+        // Determinar el paso más lejano posible
+        int pasoDestino = determinarPasoUltimo();
+        panelPadre.cambiarPaso(pasoDestino);
+    }
+    
+    /**
+     * Determina el paso más lejano al que se puede ir desde el paso 2.
+     * Verifica si los pasos siguientes tienen datos válidos.
+     */
+    private int determinarPasoUltimo() {
+        // Verificar paso 3 (producciones)
+        if (panelPadre.getGramatica().getProducciones().isEmpty()) {
+            return 3; // Solo puede ir al paso 3
+        }
+        
+        // Verificar paso 4 (símbolo inicial)
+        if (panelPadre.getGramatica().getSimbInicial() == null || 
+            panelPadre.getGramatica().getSimbInicial().isEmpty()) {
+            return 4; // Puede ir al paso 4
+        }
+        
+        return 4; // Puede ir al paso final
     }
 
     @FXML

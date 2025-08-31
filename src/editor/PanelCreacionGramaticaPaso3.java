@@ -179,7 +179,23 @@ public class PanelCreacionGramaticaPaso3 extends VBox implements ActualizableTex
 
     @FXML
     private void onBtnUltimoAction() {
-        panelPadre.cambiarPaso(4);
+        // Determinar el paso más lejano posible
+        int pasoDestino = determinarPasoUltimo();
+        panelPadre.cambiarPaso(pasoDestino);
+    }
+    
+    /**
+     * Determina el paso más lejano al que se puede ir desde el paso 3.
+     * Verifica si los pasos siguientes tienen datos válidos.
+     */
+    private int determinarPasoUltimo() {
+        // Verificar paso 4 (símbolo inicial)
+        if (panelPadre.getGramatica().getSimbInicial() == null || 
+            panelPadre.getGramatica().getSimbInicial().isEmpty()) {
+            return 4; // Puede ir al paso 4
+        }
+        
+        return 4; // Puede ir al paso final
     }
 
     @FXML

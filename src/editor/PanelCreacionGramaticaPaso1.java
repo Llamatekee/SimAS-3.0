@@ -106,6 +106,7 @@ public class PanelCreacionGramaticaPaso1 extends VBox implements ActualizableTex
                 .or(lblDescripcionError.visibleProperty());
         
         btnSiguiente.disableProperty().bind(camposValidos);
+        btnUltimo.disableProperty().bind(camposValidos);
     }
 
     private void mostrarErrorCampo(Label label, String mensaje) {
@@ -151,8 +152,36 @@ public class PanelCreacionGramaticaPaso1 extends VBox implements ActualizableTex
             // Guardar los datos antes de ir al último paso
             panelPadre.getGramatica().setNombre(txtNombre.getText().trim());
             panelPadre.getGramatica().setDescripcion(txtDescripcion.getText().trim());
-            panelPadre.cambiarPaso(4);
+            
+            // Determinar el paso más lejano posible
+            int pasoDestino = determinarPasoUltimo();
+            panelPadre.cambiarPaso(pasoDestino);
         }
+    }
+    
+    /**
+     * Determina el paso más lejano al que se puede ir desde el paso 1.
+     * Verifica si los pasos siguientes tienen datos válidos.
+     */
+    private int determinarPasoUltimo() {
+        // Verificar paso 2 (símbolos)
+        if (panelPadre.getGramatica().getNoTerminales().isEmpty() || 
+            panelPadre.getGramatica().getTerminales().isEmpty()) {
+            return 2; // Solo puede ir al paso 2
+        }
+        
+        // Verificar paso 3 (producciones)
+        if (panelPadre.getGramatica().getProducciones().isEmpty()) {
+            return 3; // Puede ir al paso 3
+        }
+        
+        // Verificar paso 4 (símbolo inicial)
+        if (panelPadre.getGramatica().getSimbInicial() == null || 
+            panelPadre.getGramatica().getSimbInicial().isEmpty()) {
+            return 4; // Puede ir al paso 4
+        }
+        
+        return 4; // Puede ir al paso final
     }
 
     private boolean datosValidos() {
