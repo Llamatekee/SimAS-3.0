@@ -149,7 +149,7 @@ public class PanelProducciones extends VBox implements ActualizableTextos {
         produccionSeleccionada = produccion;
         comboBoxAntecedente.setValue(produccion.getAntec().getSimboloNT());
         txtConsecuente.setText(produccion.getConsec().stream().map(Simbolo::getNombre).collect(Collectors.joining(" ")));
-        btnInsertar.setText("Guardar Cambios");
+        btnInsertar.setText(bundle.getString("producciones.btn.guardar.cambios"));
     }
 
     private void agregarSimboloAlConsecuente(Simbolo simbolo) {
@@ -177,7 +177,7 @@ public class PanelProducciones extends VBox implements ActualizableTextos {
             }
         }
 
-        if (btnInsertar.getText().equals("Guardar Cambios") && produccionSeleccionada != null) {
+        if (btnInsertar.getText().equals(bundle.getString("producciones.btn.guardar.cambios")) && produccionSeleccionada != null) {
             // Modificar producción existente
             produccionSeleccionada.setAntec(new Antecedente());
             produccionSeleccionada.getAntec().setSimboloNT(comboBoxAntecedente.getValue());
@@ -194,7 +194,7 @@ public class PanelProducciones extends VBox implements ActualizableTextos {
 
         // Limpiar campos
         txtConsecuente.clear();
-        btnInsertar.setText("Insertar Producción");
+        btnInsertar.setText(bundle.getString("producciones.btn.insertar"));
         listProducciones.refresh();
     }
 

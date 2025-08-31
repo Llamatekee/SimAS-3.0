@@ -111,18 +111,10 @@ public class PanelSimbolosNoTerminales extends VBox implements ActualizableTexto
 
     @FXML
     private void onAceptarAction() {
-        ButtonType btnSi = new ButtonType(bundle.getString("button.si"), ButtonBar.ButtonData.YES);
-        ButtonType btnNo = new ButtonType(bundle.getString("button.no"), ButtonBar.ButtonData.NO);
-        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION, bundle.getString("simbolos.dialog.guardar.mensaje"), btnSi, btnNo);
-        confirm.setTitle(bundle.getString("simbolos.dialog.guardar.titulo"));
-        confirm.setHeaderText(bundle.getString("simbolos.dialog.guardar.titulo"));
-        confirm.showAndWait().ifPresent(response -> {
-            if (response == btnSi) {
-                simbolosNoTerminales.setAll(simbolosTemporales); // Guardamos cambios en la lista original
-                panelPadre.panelPadre.getGramatica().setNoTerminalesModel(simbolosNoTerminales);
-                cerrarPestanaActual();
-            }
-        });
+        // Guardar cambios directamente sin mostrar diálogo de confirmación
+        simbolosNoTerminales.setAll(simbolosTemporales);
+        panelPadre.panelPadre.getGramatica().setNoTerminalesModel(simbolosNoTerminales);
+        cerrarPestanaActual();
     }
 
     @FXML
