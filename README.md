@@ -1,32 +1,22 @@
 # SimAS 3.0 - Generador de Ejecutables
 
-Este proyecto contiene scripts para crear ejecutables multiplataforma de la aplicación SimAS 3.0.
+Este proyecto contiene scripts para crear ejecutables de la aplicación SimAS 3.0.
 
-## 🎯 Solución Final
+## 🎯 Solución Actual
 
 La aplicación ejecutable se encuentra en: **`./dist-standalone/SimAS.app`**
 
 ### ✅ Cómo Usar
 
-1. **Ejecutar la aplicación:**
-   ```bash
-   # Hacer doble clic en:
-   ./dist-standalone/SimAS.app
-   ```
-
-2. **Instalar en Applications (opcional):**
-   ```bash
-   cp -r ./dist-standalone/SimAS.app /Applications/
-   ```
-
-3. **Distribuir a otros usuarios:**
-   - Copiar la carpeta `./dist-standalone/SimAS.app`
-   - Los usuarios pueden hacer doble clic para ejecutar
+```bash
+# Hacer doble clic en:
+./dist-standalone/SimAS.app
+```
 
 ## 🛠️ Scripts Disponibles
 
 ### Script Principal
-- **`create-standalone-app.sh`** - Crea la aplicación independiente ejecutable
+- **`create-standalone-app.sh`** - Crea la aplicación independiente para macOS
 
 ### Scripts de Compilación (para desarrolladores)
 - **`build.sh`** - Compila y empaqueta para macOS/Linux
@@ -40,11 +30,12 @@ La aplicación ejecutable se encuentra en: **`./dist-standalone/SimAS.app`**
 - jpackage (incluido en JDK 14+)
 
 ### Para Usuarios Finales
-- **Ninguno** - La aplicación es completamente independiente
+- **Java Runtime Environment (JRE) 17+** - Requerido
+- **Ninguna otra dependencia** - La aplicación incluye JavaFX
 
 ## 🚀 Crear Ejecutable
 
-### Opción 1: Aplicación Independiente (Recomendada)
+### Opción 1: Aplicación Independiente (macOS)
 ```bash
 # 1. Compilar el proyecto
 ./build.sh
@@ -89,18 +80,33 @@ SimAS-3.0/
 ✅ **Funciona al hacer doble clic** - Verificado en macOS  
 ✅ **Incluye todas las dependencias** - JavaFX, iText PDF, librerías nativas  
 ✅ **Fácil distribución** - Solo copiar la carpeta SimAS.app  
-✅ **Multiplataforma** - Se puede adaptar para Windows y Linux  
+
+## ⚠️ Dependencias
+
+### Para Usuarios Finales
+**La aplicación requiere Java Runtime Environment (JRE) 17 o superior**
+
+#### Instalar Java en macOS:
+```bash
+# Con Homebrew
+brew install openjdk@17
+
+# O descargar desde Oracle
+# https://www.oracle.com/java/technologies/downloads/
+```
 
 ## 🐛 Solución de Problemas
 
 ### La aplicación no se abre al hacer doble clic
-1. Verifica que estás usando `./dist-standalone/SimAS.app` (no `./dist/SimAS.app`)
+1. Verifica que tienes Java 17+ instalado
 2. Ejecuta `./create-standalone-app.sh` para recrear la aplicación
 3. Asegúrate de que tienes permisos de ejecución
 
-### Error de librerías nativas
-- La aplicación independiente incluye todas las librerías necesarias
-- No se requiere configuración adicional
+### Error: "Java no encontrado"
+- Instalar Java 17+ desde https://adoptium.net/
+
+### Error: "JavaFX no encontrado"
+- Los ejecutables incluyen JavaFX, pero requieren Java base
 
 ## 📝 Notas Técnicas
 
@@ -111,4 +117,14 @@ SimAS-3.0/
 
 ## 🎉 ¡Listo!
 
-Tu aplicación SimAS 3.0 ahora tiene un ejecutable completamente funcional que se abre al hacer doble clic. ¡Puedes distribuir `./dist-standalone/SimAS.app` a otros usuarios!
+Tu aplicación SimAS 3.0 tiene un ejecutable completamente funcional que se abre al hacer doble clic. ¡Puedes distribuir `./dist-standalone/SimAS.app` a otros usuarios de macOS!
+
+## 🌍 Próximos Pasos: Multiplataforma
+
+Para crear instaladores para Linux y Windows, necesitarás:
+
+1. **Linux**: Ejecutar el proyecto en una máquina Linux
+2. **Windows**: Ejecutar el proyecto en una máquina Windows
+3. **Usar jpackage** para crear instaladores nativos (.deb, .exe)
+
+¡El código está listo para ser compilado en cualquier plataforma! 🚀
