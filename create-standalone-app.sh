@@ -9,7 +9,7 @@ OUTPUT_DIR="./dist-standalone"
 BUILD_DIR="./build"
 
 if [ ! -d "$BUILD_DIR" ]; then
-    echo "❌ Error: No se encontró el directorio de build"
+    echo "ERROR: No se encontró el directorio de build"
     echo "Ejecuta primero: ./build-with-natives.sh"
     exit 1
 fi
@@ -17,7 +17,7 @@ fi
 # Crear directorio de salida
 mkdir -p "$OUTPUT_DIR"
 
-echo "✅ Directorio de salida creado"
+echo "SUCCESS: Directorio de salida creado"
 
 # Crear estructura de la aplicación
 APP_PATH="$OUTPUT_DIR/$APP_NAME.app"
@@ -25,18 +25,18 @@ mkdir -p "$APP_PATH/Contents/MacOS"
 mkdir -p "$APP_PATH/Contents/Java"
 mkdir -p "$APP_PATH/Contents/Resources"
 
-echo "✅ Estructura de aplicación creada"
+echo "SUCCESS: Estructura de aplicación creada"
 
 # Copiar JAR principal
 cp "$BUILD_DIR/SimAS.jar" "$APP_PATH/Contents/Java/"
 
 # Copiar todas las librerías de JavaFX
-echo "📦 Copiando librerías de JavaFX..."
+echo "Copiando librerías de JavaFX..."
 cp lib/javafx-sdk-17.0.12/lib/*.jar "$APP_PATH/Contents/Java/"
 cp lib/javafx-sdk-17.0.12/lib/*.dylib "$APP_PATH/Contents/Java/"
 
 # Crear script de lanzamiento
-echo "🔧 Creando script de lanzamiento..."
+echo "Creando script de lanzamiento..."
 cat > "$APP_PATH/Contents/MacOS/$APP_NAME" << 'EOF'
 #!/bin/bash
 
@@ -69,7 +69,7 @@ EOF
 chmod +x "$APP_PATH/Contents/MacOS/$APP_NAME"
 
 # Crear Info.plist
-echo "🔧 Creando Info.plist..."
+echo "Creando Info.plist..."
 cat > "$APP_PATH/Contents/Info.plist" << EOF
 <?xml version="1.0" ?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "https://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -109,22 +109,22 @@ cat > "$APP_PATH/Contents/Info.plist" << EOF
 </plist>
 EOF
 
-echo "✅ Aplicación independiente creada en $APP_PATH"
+echo "SUCCESS: Aplicación independiente creada en $APP_PATH"
 
 # Probar la aplicación
-echo "🧪 Probando la aplicación..."
+echo "Probando la aplicación..."
 "$APP_PATH/Contents/MacOS/$APP_NAME" &
 APP_PID=$!
 
 sleep 5
 
 if kill -0 $APP_PID 2>/dev/null; then
-    echo "✅ ¡La aplicación se está ejecutando correctamente!"
+    echo "SUCCESS: ¡La aplicación se está ejecutando correctamente!"
     kill $APP_PID
 else
-    echo "❌ La aplicación no se pudo ejecutar"
+    echo "ERROR: La aplicación no se pudo ejecutar"
 fi
 
 echo "=== Aplicación independiente creada ==="
-echo "🚀 Ubicación: $APP_PATH"
-echo "💡 Puedes hacer doble clic en $APP_PATH para ejecutar la aplicación"
+echo "Ubicación: $APP_PATH"
+echo "Puedes hacer doble clic en $APP_PATH para ejecutar la aplicación"

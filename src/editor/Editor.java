@@ -75,8 +75,8 @@ public class Editor extends VBox implements ActualizableTextos {
     // ==========================
 
     /**
-     * 🔹 Constructor vacío (requerido por JavaFX para cargar FXML).
-     * ⚠ Se deben asignar `tabPane` y `menuPane` después de la carga.
+     * Constructor vacio (requerido por JavaFX para cargar FXML).
+     * ATENCION: Se deben asignar `tabPane` y `menuPane` despues de la carga.
      */
     public Editor() {
         this.gramatica = new Gramatica();
@@ -86,7 +86,7 @@ public class Editor extends VBox implements ActualizableTextos {
     }
 
     /**
-     * 🔹 Constructor con TabPane y MenuPrincipal para uso manual.
+     * Constructor con TabPane y MenuPrincipal para uso manual.
      */
     public Editor(TabPane tabPane, MenuPrincipal menuPane) {
         this.tabPane = tabPane;
@@ -98,7 +98,7 @@ public class Editor extends VBox implements ActualizableTextos {
     }
 
     /**
-     * 🔹 Constructor con gramática preexistente.
+     * Constructor con gramatica preexistente.
      */
     public Editor(TabPane tabPane, Gramatica gramatica, MenuPrincipal menuPane) {
         this.tabPane = tabPane;
@@ -110,7 +110,7 @@ public class Editor extends VBox implements ActualizableTextos {
     }
 
     /**
-     * 🔹 Constructor con TabPane, MenuPrincipal y ResourceBundle.
+     * Constructor con TabPane, MenuPrincipal y ResourceBundle.
      */
     public Editor(TabPane tabPane, MenuPrincipal menuPane, ResourceBundle bundle) {
         this.tabPane = tabPane;
@@ -127,7 +127,7 @@ public class Editor extends VBox implements ActualizableTextos {
     // ==========================
     
     /**
-     * 🔹 Configura las relaciones padre-hijo para cerrar pestañas hijas cuando se cierre el editor.
+     * Configura las relaciones padre-hijo para cerrar pestanas hijas cuando se cierre el editor.
      */
     public void configurarRelacionesPadreHijo() {
         if (tabPane != null && !listenerConfigured) {
@@ -166,7 +166,7 @@ public class Editor extends VBox implements ActualizableTextos {
     }
 
     /**
-     * 🔹 Carga la interfaz desde el archivo FXML.
+     * Carga la interfaz desde el archivo FXML.
      */
     private void cargarFXML() {
         try {
@@ -181,7 +181,7 @@ public class Editor extends VBox implements ActualizableTextos {
     }
     
     /**
-     * 🔹 Obtiene el ID único de este editor.
+     * Obtiene el ID unico de este editor.
      */
     public String getEditorId() {
         return editorId;
@@ -370,7 +370,7 @@ public class Editor extends VBox implements ActualizableTextos {
 
     public void cargarGramatica() {
         if (this.gramatica == null) {
-            this.gramatica = new Gramatica();  // 🔹 Crear una nueva instancia si era null
+            this.gramatica = new Gramatica();  // Crear una nueva instancia si era null
         }
 
         Gramatica gr = this.gramatica.cargarGramatica(null);
@@ -423,7 +423,7 @@ public class Editor extends VBox implements ActualizableTextos {
             txtSimInicial.clear();
         }
 
-        actualizarEstadoBotones(); // 🔹 Llamamos para activar/desactivar los botones según corresponda
+        actualizarEstadoBotones(); // Llamamos para activar/desactivar los botones segun corresponda
     }
 
     public void validarGramatica(Gramatica gramatica) {
