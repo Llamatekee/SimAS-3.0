@@ -671,6 +671,283 @@ Las dependencias internas del paquete gramática se muestran en la Figura \ref{f
     \item \textbf{MVC (Model-View-Controller)}: el paquete completo sigue el patrón MVC donde las clases del paquete gramática representan el Modelo, las clases de vistas manejan la presentación, y los controladores coordinan la interacción \cite{burbeck1992applications}.
 \end{itemize}
 
+\subsection{Paquete utils}
+
+El paquete \textbf{utils} contiene las clases de utilidad transversales que proporcionan funcionalidades comunes y servicios compartidos utilizados por todos los demás paquetes de SimAS 3.0. Este paquete implementa servicios transversales como gestión de pestañas, internacionalización, monitoreo de componentes y gestión de ventanas secundarias.
+
+Las clases de este paquete permiten:
+\begin{itemize}
+    \item Gestión avanzada de pestañas y navegación entre ventanas
+    \item Sistema completo de internacionalización con soporte multiidioma
+    \item Monitoreo y supervisión automática de componentes de la interfaz
+    \item Gestión de ventanas secundarias y comunicación entre ellas
+    \item Utilidades comunes para todas las capas de la aplicación
+\end{itemize}
+
+\subsubsection{Clases del paquete utils}
+
+Este paquete contiene 8 clases principales que proporcionan servicios transversales a toda la aplicación SimAS 3.0, organizadas por funcionalidad: gestión de pestañas, internacionalización, monitoreo y ventanas.
+
+\subsubsection{Clase ActualizableTextos}
+
+La clase \textbf{ActualizableTextos} es una interfaz que define el contrato para la actualización dinámica de textos en la interfaz de usuario cuando cambia el idioma de la aplicación.
+
+\begin{longtable}[H]{|>{\columncolor[rgb]{0.63,0.79,0.95}}m{6cm} | m{8.5cm} |}
+\caption{Clase ActualizableTextos - Interfaz de internacionalización}
+\endfirsthead
+\multicolumn{2}{c}{{\tablename\ \thetable{} -- continúa de la página anterior}} \\
+\endhead
+\hline \multicolumn{2}{|r|}{{Continúa en la página siguiente}} \\ \hline
+\endfoot
+\hline
+\endlastfoot
+\hline
+\textbf{Nombre} & \textbf{ActualizableTextos} \\ \hline
+\textbf{Descripción} & Interfaz que define el contrato para actualizar textos de la interfaz cuando cambia el idioma, implementada por todas las clases de UI que requieren internacionalización. \\ \hline
+\textbf{Métodos} &
+\begin{enumerate}
+    \item \textbf{actualizarTextos(ResourceBundle)}: método que debe implementar cada clase para actualizar sus textos según el ResourceBundle proporcionado.
+\end{enumerate}
+\label{tabla_actualizable_textos}
+\end{longtable}
+
+\subsubsection{Clase LanguageItem}
+
+La clase \textbf{LanguageItem} representa un elemento de idioma en el sistema de internacionalización, conteniendo información sobre el nombre del idioma, código de localización y bandera correspondiente.
+
+\begin{longtable}[H]{|>{\columncolor[rgb]{0.63,0.79,0.95}}m{6cm} | m{8.5cm} |}
+\caption{Clase LanguageItem - Elemento de idioma}
+\endfirsthead
+\multicolumn{2}{c}{{\tablename\ \thetable{} -- continúa de la página anterior}} \\
+\endhead
+\hline \multicolumn{2}{|r|}{{Continúa en la página siguiente}} \\ \hline
+\endfoot
+\hline
+\endlastfoot
+\hline
+\textbf{Nombre} & \textbf{LanguageItem} \\ \hline
+\textbf{Descripción} & Representa un idioma disponible en la aplicación, incluyendo su nombre, código de localización y bandera visual para el selector de idiomas. \\ \hline
+\textbf{Atributos} &
+\begin{enumerate}
+    \item \textbf{name}: String con el nombre del idioma (ej: "Español", "English").
+    \item \textbf{locale}: String con el código de localización (ej: "es", "en").
+    \item \textbf{flagPath}: String con la ruta de la imagen de la bandera.
+    \item \textbf{flagImageView}: ImageView que contiene la bandera visual del idioma.
+\end{enumerate} \\ \hline
+\textbf{Métodos} &
+\begin{enumerate}
+    \item \textbf{LanguageItem(String, String, String)}: constructor que inicializa el idioma con nombre, localización y ruta de bandera.
+    \item \textbf{getName()}: obtiene el nombre del idioma.
+    \item \textbf{getLocale()}: obtiene el código de localización.
+    \item \textbf{getFlagPath()}: obtiene la ruta de la bandera.
+    \item \textbf{getFlagImageView()}: obtiene el ImageView de la bandera.
+    \item \textbf{toString()}: devuelve el nombre del idioma como representación textual.
+    \item \textbf{equals(Object)}: compara dos LanguageItem por su código de localización.
+    \item \textbf{hashCode()}: devuelve el hashCode basado en el código de localización.
+\end{enumerate}
+\label{tabla_language_item}
+\end{longtable}
+
+\subsubsection{Clase LanguageListCell}
+
+La clase \textbf{LanguageListCell} es una celda personalizada para listas de selección de idiomas, que muestra la bandera y nombre del idioma de forma visual.
+
+\begin{longtable}[H]{|>{\columncolor[rgb]{0.63,0.79,0.95}}m{6cm} | m{8.5cm} |}
+\caption{Clase LanguageListCell - Celda de lista de idiomas}
+\endfirsthead
+\multicolumn{2}{c}{{\tablename\ \thetable{} -- continúa de la página anterior}} \\
+\endhead
+\hline \multicolumn{2}{|r|}{{Continúa en la página siguiente}} \\ \hline
+\endfoot
+\hline
+\endlastfoot
+\hline
+\textbf{Nombre} & \textbf{LanguageListCell} \\ \hline
+\textbf{Descripción} & Celda personalizada para ComboBox y ListView que muestra elementos de idioma con su bandera y nombre de forma visual. \\ \hline
+\textbf{Atributos} &
+\begin{enumerate}
+    \item \textbf{Componentes FXML}: elementos de la interfaz para mostrar bandera y texto.
+\end{enumerate} \\ \hline
+\textbf{Métodos} &
+\begin{enumerate}
+    \item \textbf{LanguageListCell()}: constructor que inicializa la celda personalizada.
+    \item \textbf{updateItem(LanguageItem, boolean)}: actualiza el contenido visual de la celda con el idioma correspondiente.
+    \item \textbf{inicializarComponentes()}: configura los componentes visuales de la celda.
+\end{enumerate}
+\label{tabla_language_list_cell}
+\end{longtable}
+
+\subsubsection{Clase TabManager}
+
+La clase \textbf{TabManager} es el gestor central de pestañas de la aplicación, responsable de crear, gestionar y coordinar todas las pestañas en múltiples ventanas.
+
+\begin{longtable}[H]{|>{\columncolor[rgb]{0.63,0.79,0.95}}m{6cm} | m{8.5cm} |}
+\caption{Clase TabManager - Gestor central de pestañas}
+\endfirsthead
+\multicolumn{2}{c}{{\tablename\ \thetable{} -- continúa de la página anterior}} \\
+\endhead
+\hline \multicolumn{2}{|r|}{{Continúa en la página siguiente}} \\ \hline
+\endfoot
+\hline
+\endlastfoot
+\hline
+\textbf{Nombre} & \textbf{TabManager} \\ \hline
+\textbf{Descripción} & Gestor central que maneja la creación, gestión y coordinación de todas las pestañas en la aplicación, incluyendo relaciones padre-hijo y grupos de gramáticas. \\ \hline
+\textbf{Atributos} &
+\begin{enumerate}
+    \item \textbf{tabInstances}: Map que almacena instancias de pestañas por TabPane y tipo.
+    \item \textbf{parentChildRelations}: Map que mantiene las relaciones padre-hijo entre pestañas.
+    \item \textbf{elementoToGrupo}: Map que asocia elementos con sus grupos de gramática.
+    \item \textbf{gruposGramatica}: Map que contiene los números de grupo para cada grupo.
+    \item \textbf{resourceBundles}: Map que almacena ResourceBundles por TabPane.
+    \item \textbf{contadorGrupos}: contador global para generar IDs únicos de grupo.
+\end{enumerate} \\ \hline
+\textbf{Métodos} &
+\begin{enumerate}
+    \item \textbf{getOrCreateTab(TabPane, Class, String, Object)}: obtiene o crea una pestaña del tipo especificado.
+    \item \textbf{getOrCreateTab(TabPane, Class, String, Object, String, String)}: versión completa con IDs padre-hijo.
+    \item \textbf{configurarMenuContextual(TabPane, ResourceBundle)}: configura el menú contextual de las pestañas.
+    \item \textbf{reasignarNumerosGrupos(TabPane)}: reasigna números de grupo después de cambios.
+    \item \textbf{crearGrupoGramatica(TabPane, String)}: crea un nuevo grupo de gramática.
+    \item \textbf{setResourceBundle(TabPane, ResourceBundle)}: establece el ResourceBundle para un TabPane.
+    \item \textbf{renumerarGrupos(TabPane)}: renumera todos los grupos de un TabPane.
+    \item \textbf{limpiarRelacionesHuérfanas(TabPane)}: limpia relaciones padre-hijo huérfanas.
+    \item \textbf{obtenerGruposActivos(TabPane)}: obtiene todos los grupos activos en un TabPane.
+    \item \textbf{imprimirEstadoTabPane(TabPane)}: imprime el estado actual de un TabPane para debugging.
+\end{enumerate}
+\label{tabla_tab_manager}
+\end{longtable}
+
+\subsubsection{Clase TabPaneMonitor}
+
+La clase \textbf{TabPaneMonitor} es un monitor singleton que supervisa continuamente el estado de todos los TabPane activos en la aplicación, validando consistencia y reparando automáticamente inconsistencias.
+
+\begin{longtable}[H]{|>{\columncolor[rgb]{0.63,0.79,0.95}}m{6cm} | m{8.5cm} |}
+\caption{Clase TabPaneMonitor - Monitor de pestañas}
+\endfirsthead
+\multicolumn{2}{c}{{\tablename\ \thetable{} -- continúa de la página anterior}} \\
+\endhead
+\hline \multicolumn{2}{|r|}{{Continúa en la página siguiente}} \\ \hline
+\endfoot
+\hline
+\endlastfoot
+\hline
+\textbf{Nombre} & \textbf{TabPaneMonitor} \\ \hline
+\textbf{Descripción} & Monitor singleton que supervisa continuamente todos los TabPanes activos, validando la consistencia de grupos y relaciones padre-hijo, y reparando automáticamente las inconsistencias detectadas. \\ \hline
+\textbf{Atributos} &
+\begin{enumerate}
+    \item \textbf{instance}: instancia singleton del monitor.
+    \item \textbf{monitoredTabPanes}: Map que contiene los TabPanes monitoreados.
+    \item \textbf{scheduler}: ScheduledExecutorService para monitoreo periódico.
+    \item \textbf{debugMode}: boolean que indica si está en modo debug.
+    \item \textbf{movimientoEnProgreso}: boolean que indica si hay un movimiento en progreso.
+    \item \textbf{contadorReparaciones}: Map que cuenta las reparaciones por TabPane.
+\end{enumerate} \\ \hline
+\textbf{Métodos} &
+\begin{enumerate}
+    \item \textbf{getInstance()}: obtiene la instancia singleton del monitor.
+    \item \textbf{registrarTabPane(TabPane, String)}: registra un TabPane para monitoreo.
+    \item \textbf{desregistrarTabPane(TabPane)}: desregistra un TabPane del monitoreo.
+    \item \textbf{validarConsistenciaGlobal()}: valida la consistencia de todos los TabPanes monitoreados.
+    \item \textbf{repararInconsistencias(TabPane, TabPaneInfo)}: repara inconsistencias detectadas.
+    \item \textbf{obtenerEstadisticas()}: obtiene estadísticas del monitoreo.
+    \item \textbf{setDebugMode(boolean)}: activa o desactiva el modo debug.
+    \item \textbf{imprimirEstadoTabPane(TabPane)}: imprime el estado de un TabPane.
+    \item \textbf{reiniciarContadores()}: reinicia los contadores de reparaciones.
+\end{enumerate} \\ \hline
+\textbf{Clase Interna TabPaneInfo} &
+\begin{enumerate}
+    \item \textbf{TabPaneInfo(TabPane, String)}: constructor de la información de TabPane.
+    \item \textbf{tabPane}: referencia al TabPane monitoreado.
+    \item \textbf{tabChangeListener}: listener para cambios en pestañas.
+    \item \textbf{identifier}: identificador único del TabPane.
+    \item \textbf{lastValidation}: timestamp de la última validación.
+    \item \textbf{lastKnownGroups}: último estado conocido de grupos.
+    \item \textbf{lastKnownRelations}: último estado conocido de relaciones.
+\end{enumerate}
+\label{tabla_tab_pane_monitor}
+\end{longtable}
+
+\subsubsection{Clase SecondaryWindow}
+
+La clase \textbf{SecondaryWindow} extiende EditorWindow para crear ventanas secundarias que permiten trabajar con pestañas de forma independiente de la ventana principal.
+
+\begin{longtable}[H]{|>{\columncolor[rgb]{0.63,0.79,0.95}}m{6cm} | m{8.5cm} |}
+\caption{Clase SecondaryWindow - Ventanas secundarias}
+\endfirsthead
+\multicolumn{2}{c}{{\tablename\ \thetable{} -- continúa de la página anterior}} \\
+\endhead
+\hline \multicolumn{2}{|r|}{{Continúa en la página siguiente}} \\ \hline
+\endfoot
+\hline
+\endlastfoot
+\hline
+\textbf{Nombre} & \textbf{SecondaryWindow} \\ \hline
+\textbf{Descripción} & Extiende EditorWindow para crear ventanas secundarias que permiten trabajar con pestañas de forma independiente, facilitando la organización del espacio de trabajo. \\ \hline
+\textbf{Atributos} &
+\begin{enumerate}
+    \item \textbf{activeWindows}: Map estático que mantiene todas las ventanas secundarias activas.
+    \item \textbf{windowId}: identificador único de la ventana secundaria.
+    \item \textbf{localTabPane}: TabPane específico de esta ventana secundaria.
+    \item \textbf{stage}: Stage de la ventana secundaria.
+    \item \textbf{bundle}: ResourceBundle para internacionalización.
+    \item \textbf{windowNumber}: número secuencial de la ventana.
+\end{enumerate} \\ \hline
+\textbf{Métodos} &
+\begin{enumerate}
+    \item \textbf{SecondaryWindow(ResourceBundle, String)}: constructor que inicializa la ventana secundaria.
+    \item \textbf{getActiveWindows()}: obtiene un mapa con todas las ventanas secundarias activas.
+    \item \textbf{initialize()}: inicializa la ventana secundaria con sus componentes.
+    \item \textbf{addTabFromDrag(Tab, String)}: añade una pestaña desde un arrastre.
+    \item \textbf{setupDragAndDrop()}: configura las funcionalidades de arrastrar y soltar.
+    \item \textbf{handleTabClose()}: maneja el cierre de pestañas en la ventana secundaria.
+    \item \textbf{updateWindowTitle()}: actualiza el título de la ventana según su contenido.
+    \item \textbf{closeWindow()}: cierra la ventana secundaria correctamente.
+    \item \textbf{getWindowId()}: obtiene el identificador único de la ventana.
+    \item \textbf{getStage()}: obtiene el Stage de la ventana secundaria.
+    \item \textbf{getTabPane()}: obtiene el TabPane de la ventana secundaria.
+\end{enumerate} \\ \hline
+\textbf{Métodos Estáticos} &
+\begin{enumerate}
+    \item \textbf{getActiveWindows()}: obtiene todas las ventanas secundarias activas.
+    \item \textbf{findWindowById(String)}: busca una ventana por su ID.
+    \item \textbf{cleanupClosedWindows()}: limpia ventanas cerradas del registro.
+\end{enumerate}
+\label{tabla_secondary_window}
+\end{longtable}
+
+\subsubsection{Dependencias internas del paquete utils}
+
+Las dependencias internas del paquete utils se ilustran en la Figura \ref{fig:diagrama_utils}, donde se puede apreciar la estructura organizada de servicios transversales que proporciona este paquete.
+
+\begin{itemize}
+    \item \textbf{TabManager $\leftrightarrow$ TabPaneMonitor}: TabManager utiliza TabPaneMonitor para supervisar los TabPane que gestiona.
+    \item \textbf{SecondaryWindow $\rightarrow$ EditorWindow}: SecondaryWindow extiende EditorWindow para crear ventanas independientes.
+    \item \textbf{SecondaryWindow $\rightarrow$ TabManager}: SecondaryWindow utiliza TabManager para gestionar sus pestañas.
+    \item \textbf{LanguageItem $\leftrightarrow$ LanguageListCell}: LanguageListCell utiliza LanguageItem para mostrar idiomas en listas.
+    \item \textbf{ActualizableTextos $\leftarrow$ (todas las clases de UI)}: interfaz implementada por todas las clases que requieren internacionalización.
+    \item \textbf{TabManager $\leftrightarrow$ SecondaryWindow}: comunicación bidireccional para gestión de pestañas entre ventanas.
+    \item \textbf{Archivos .properties}: todos los archivos de propiedades de idiomas son utilizados por el sistema de internacionalización.
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{figuras/Cap9/diagrama_utils.png}
+    \caption{Diagrama de dependencias del paquete utils - SimAS 3.0}
+    \label{fig:diagrama_utils}
+\end{figure}
+
+\subsubsection{Patrones de diseño en el paquete utils}
+
+\begin{itemize}
+    \item \textbf{Singleton}: implementado en TabPaneMonitor para asegurar una única instancia que supervise toda la aplicación \cite{gamma1995design}.
+    \item \textbf{Observer}: utilizado en TabPaneMonitor para observar cambios en los TabPane y reaccionar automáticamente \cite{gamma1995design}.
+    \item \textbf{Facade}: TabManager actúa como fachada que simplifica la gestión compleja de pestañas y relaciones \cite{gamma1995design}.
+    \item \textbf{Factory Method}: implícito en los constructores de TabManager para crear diferentes tipos de pestañas \cite{gamma1995design}.
+    \item \textbf{Monitor Object}: TabPaneMonitor implementa el patrón Monitor Object para sincronización segura de acceso a recursos compartidos.
+    \item \textbf{Registry}: SecondaryWindow utiliza un registro estático para mantener todas las ventanas secundarias activas.
+\end{itemize}
+
 \subsection{Paquete editor}
 
 El paquete \textbf{editor} contiene las clases responsables de la interfaz de usuario para la creación y edición de gramáticas de contexto libre en SimAS 3.0. Este paquete implementa el patrón de diseño MVC donde las clases del editor actúan como controladores que coordinan la interacción entre la vista (componentes JavaFX) y el modelo (paquete gramática).

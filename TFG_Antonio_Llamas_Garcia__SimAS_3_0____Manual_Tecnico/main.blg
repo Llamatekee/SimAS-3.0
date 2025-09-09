@@ -1,24 +1,24 @@
 [0] Config.pm:308> INFO - This is Biber 2.20
 [0] Config.pm:311> INFO - Logfile is 'main.blg'
-[95] biber-darwin:340> INFO - === Wed Sep 10, 2025, 01:10:15
-[117] Biber.pm:420> INFO - Reading 'main.bcf'
-[230] Biber.pm:994> INFO - Found 38 citekeys in bib section 0
-[249] Biber.pm:4463> INFO - Processing section 0
-[263] Biber.pm:4654> INFO - Looking for bibtex file 'references.bib' for section 0
-[266] bibtex.pm:1713> INFO - LaTeX decoding ...
-[298] bibtex.pm:1519> INFO - Found BibTeX data source 'references.bib'
-[494] UCollate.pm:68> INFO - Overriding locale 'es-ES' defaults 'variable = shifted' with 'variable = non-ignorable'
-[494] UCollate.pm:68> INFO - Overriding locale 'es-ES' defaults 'normalization = NFD' with 'normalization = prenormalized'
-[494] Biber.pm:4283> INFO - Sorting list 'nty/global//global/global/global' of type 'entry' with template 'nty' and locale 'es-ES'
-[522] bbl.pm:676> INFO - Writing 'main.bbl' with encoding 'UTF-8'
-[536] bbl.pm:779> INFO - Output to main.bbl
-[536] Biber.pm:131> WARN - ISBN '978-0321127420' in entry 'observer-pattern' is invalid - run biber with '--validate_datamodel' for details.
-[537] Biber.pm:131> WARN - I didn't find a database entry for 'pressman' (section 0)
-[537] Biber.pm:131> WARN - I didn't find a database entry for 'scrum' (section 0)
-[537] Biber.pm:131> WARN - I didn't find a database entry for 'rad' (section 0)
-[537] Biber.pm:131> WARN - I didn't find a database entry for 'uml' (section 0)
-[537] Biber.pm:131> WARN - I didn't find a database entry for 'macos' (section 0)
-[537] Biber.pm:131> WARN - I didn't find a database entry for 'html' (section 0)
-[537] Biber.pm:131> WARN - I didn't find a database entry for 'gamma1995design' (section 0)
-[537] Biber.pm:131> WARN - I didn't find a database entry for 'burbeck1992applications' (section 0)
-[538] Biber.pm:133> INFO - WARNINGS: 9
+[106] biber-darwin:340> INFO - === Wed Sep 10, 2025, 01:24:19
+[127] Biber.pm:420> INFO - Reading 'main.bcf'
+[249] Biber.pm:994> INFO - Found 38 citekeys in bib section 0
+[272] Biber.pm:4463> INFO - Processing section 0
+[286] Biber.pm:4654> INFO - Looking for bibtex file 'references.bib' for section 0
+[288] bibtex.pm:1713> INFO - LaTeX decoding ...
+[321] bibtex.pm:1519> INFO - Found BibTeX data source 'references.bib'
+[641] UCollate.pm:68> INFO - Overriding locale 'es-ES' defaults 'variable = shifted' with 'variable = non-ignorable'
+[641] UCollate.pm:68> INFO - Overriding locale 'es-ES' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[641] Biber.pm:4283> INFO - Sorting list 'nty/global//global/global/global' of type 'entry' with template 'nty' and locale 'es-ES'
+[673] bbl.pm:676> INFO - Writing 'main.bbl' with encoding 'UTF-8'
+[701] bbl.pm:779> INFO - Output to main.bbl
+[729] Biber.pm:131> WARN - ISBN '978-0321127420' in entry 'observer-pattern' is invalid - run biber with '--validate_datamodel' for details.
+[730] Biber.pm:131> WARN - I didn't find a database entry for 'pressman' (section 0)
+[730] Biber.pm:131> WARN - I didn't find a database entry for 'scrum' (section 0)
+[751] Biber.pm:131> WARN - I didn't find a database entry for 'rad' (section 0)
+[760] Biber.pm:131> WARN - I didn't find a database entry for 'uml' (section 0)
+[779] Biber.pm:131> WARN - I didn't find a database entry for 'macos' (section 0)
+[780] Biber.pm:131> WARN - I didn't find a database entry for 'html' (section 0)
+[781] Biber.pm:131> WARN - I didn't find a database entry for 'gamma1995design' (section 0)
+[782] Biber.pm:131> WARN - I didn't find a database entry for 'burbeck1992applications' (section 0)
+[802] Biber.pm:133> INFO - WARNINGS: 9

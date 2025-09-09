@@ -49,15 +49,21 @@
 \contentsline {table}{\numberline {9.11}{\ignorespaces Clase FuncionError - Funciones de manejo de errores}}{160}{table.9.11}%
 \contentsline {table}{\numberline {9.12}{\ignorespaces Clase TablaPredictiva - Tabla de análisis sintáctico}}{162}{table.9.12}%
 \contentsline {table}{\numberline {9.13}{\ignorespaces Clase TablaPredictivaPaso5 - Tabla predictiva extendida}}{164}{table.9.13}%
-\contentsline {table}{\numberline {9.14}{\ignorespaces Clase EditorWindow - Ventana principal del editor}}{168}{table.9.14}%
-\contentsline {table}{\numberline {9.15}{\ignorespaces Clase Editor - Interfaz principal de edición}}{169}{table.9.15}%
-\contentsline {table}{\numberline {9.16}{\ignorespaces Clase PanelCreacionGramatica - Asistente de creación}}{172}{table.9.16}%
-\contentsline {table}{\numberline {9.17}{\ignorespaces Clase PanelCreacionGramaticaPaso1 - Paso 1: Metadatos}}{173}{table.9.17}%
-\contentsline {table}{\numberline {9.18}{\ignorespaces Clase PanelCreacionGramaticaPaso2 - Paso 2: Símbolos}}{175}{table.9.18}%
-\contentsline {table}{\numberline {9.19}{\ignorespaces Clase PanelCreacionGramaticaPaso3 - Paso 3: Producciones}}{176}{table.9.19}%
-\contentsline {table}{\numberline {9.20}{\ignorespaces Clase PanelCreacionGramaticaPaso4 - Paso 4: Validación}}{178}{table.9.20}%
-\contentsline {table}{\numberline {9.21}{\ignorespaces Clase PanelProducciones - Gestión de producciones}}{180}{table.9.21}%
-\contentsline {table}{\numberline {9.22}{\ignorespaces Clase PanelSimbolosTerminales - Gestión de terminales}}{182}{table.9.22}%
-\contentsline {table}{\numberline {9.23}{\ignorespaces Clase PanelSimbolosNoTerminales - Gestión de no terminales}}{184}{table.9.23}%
+\contentsline {table}{\numberline {9.14}{\ignorespaces Clase ActualizableTextos - Interfaz de internacionalización}}{168}{table.9.14}%
+\contentsline {table}{\numberline {9.15}{\ignorespaces Clase LanguageItem - Elemento de idioma}}{169}{table.9.15}%
+\contentsline {table}{\numberline {9.16}{\ignorespaces Clase LanguageListCell - Celda de lista de idiomas}}{170}{table.9.16}%
+\contentsline {table}{\numberline {9.17}{\ignorespaces Clase TabManager - Gestor central de pestañas}}{171}{table.9.17}%
+\contentsline {table}{\numberline {9.18}{\ignorespaces Clase TabPaneMonitor - Monitor de pestañas}}{172}{table.9.18}%
+\contentsline {table}{\numberline {9.19}{\ignorespaces Clase SecondaryWindow - Ventanas secundarias}}{175}{table.9.19}%
+\contentsline {table}{\numberline {9.20}{\ignorespaces Clase EditorWindow - Ventana principal del editor}}{179}{table.9.20}%
+\contentsline {table}{\numberline {9.21}{\ignorespaces Clase Editor - Interfaz principal de edición}}{179}{table.9.21}%
+\contentsline {table}{\numberline {9.22}{\ignorespaces Clase PanelCreacionGramatica - Asistente de creación}}{182}{table.9.22}%
+\contentsline {table}{\numberline {9.23}{\ignorespaces Clase PanelCreacionGramaticaPaso1 - Paso 1: Metadatos}}{183}{table.9.23}%
+\contentsline {table}{\numberline {9.24}{\ignorespaces Clase PanelCreacionGramaticaPaso2 - Paso 2: Símbolos}}{185}{table.9.24}%
+\contentsline {table}{\numberline {9.25}{\ignorespaces Clase PanelCreacionGramaticaPaso3 - Paso 3: Producciones}}{186}{table.9.25}%
+\contentsline {table}{\numberline {9.26}{\ignorespaces Clase PanelCreacionGramaticaPaso4 - Paso 4: Validación}}{188}{table.9.26}%
+\contentsline {table}{\numberline {9.27}{\ignorespaces Clase PanelProducciones - Gestión de producciones}}{190}{table.9.27}%
+\contentsline {table}{\numberline {9.28}{\ignorespaces Clase PanelSimbolosTerminales - Gestión de terminales}}{192}{table.9.28}%
+\contentsline {table}{\numberline {9.29}{\ignorespaces Clase PanelSimbolosNoTerminales - Gestión de no terminales}}{194}{table.9.29}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
