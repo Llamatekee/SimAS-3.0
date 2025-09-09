@@ -61,20 +61,112 @@ Esta clase representa la pantalla de bienvenida de la aplicación SimAS 3.0, her
  \textbf{Descripción} & Representa la pantalla de bienvenida de la aplicación.  \\ \hline
                        
  \textbf{Atributos} & \begin{enumerate}
- 		\item \textbf{stage}: Stage principal de la aplicación.
+ 		\item \textbf{stage}: Stage principal de la aplicación JavaFX.
  		\item \textbf{scene}: Scene que contiene la interfaz de bienvenida.
+ 		\item \textbf{root}: VBox principal que organiza el layout vertical.
+ 		\item \textbf{logo}: ImageView que muestra el logo de la aplicación.
+ 		\item \textbf{titulo}: Label con el título principal de SimAS 3.0.
+ 		\item \textbf{subtitulo}: Label con información adicional.
+ 		\item \textbf{selectorIdioma}: ComboBox para selección de idioma.
+ 		\item \textbf{botonContinuar}: Button para acceder al menú principal.
+ 		\item \textbf{bundle}: ResourceBundle para internacionalización.
+ 		\item \textbf{idiomaSeleccionado}: String con el código del idioma actual.
+ 		\item \textbf{preferencias}: Properties para guardar configuración.
+ 		\item \textbf{animacionFadeIn}: FadeTransition para animación de entrada.
+ 		\item \textbf{timeline}: Timeline para animaciones secuenciales.
+ 		\item \textbf{esPrimeraEjecucion}: boolean que indica si es la primera vez.
+ 		\item \textbf{versionAplicacion}: String con la versión actual.
+ 		\item \textbf{fechaCompilacion}: String con la fecha de compilación.
 \end{enumerate} \\ \hline
  
- \textbf{Métodos} & \begin{enumerate}
- 		\item \textbf{start(Stage)}: método principal que inicializa la aplicación.
- 		\item \textbf{main(String[])}: punto de entrada de la aplicación.
+\textbf{Métodos} & \begin{enumerate}
+ 		\item \textbf{start(Stage)}: método principal que inicializa la aplicación y configura la escena inicial.
+ 		\item \textbf{main(String[])}: punto de entrada estático de la aplicación JavaFX.
+ 		\item \textbf{inicializarInterfaz()}: configura todos los elementos visuales de la pantalla de bienvenida.
+ 		\item \textbf{configurarIdioma()}: detecta y configura el idioma por defecto del sistema.
+ 		\item \textbf{cargarRecursos()}: carga imágenes, estilos y recursos necesarios.
+ 		\item \textbf{crearLayoutPrincipal()}: crea el layout principal con VBox y elementos centrados.
+ 		\item \textbf{agregarLogo()}: añade el logo de la aplicación al centro.
+ 		\item \textbf{agregarTitulo()}: añade el título principal de la aplicación.
+ 		\item \textbf{agregarSelectorIdioma()}: crea el ComboBox para selección de idioma.
+ 		\item \textbf{agregarBotonContinuar()}: añade el botón para continuar al menú principal.
+ 		\item \textbf{configurarEstilos()}: aplica estilos CSS a todos los componentes.
+ 		\item \textbf{animarEntrada()}: ejecuta animaciones de entrada suaves.
+ 		\item \textbf{transitarAMenuPrincipal()}: realiza la transición suave al menú principal.
+ 		\item \textbf{guardarPreferenciasIdioma()}: guarda la selección de idioma del usuario.
+ 		\item \textbf{cargarPreferencias()}: carga preferencias guardadas anteriormente.
+\end{enumerate} \\ \hline
+
+\textbf{Métodos} & \begin{enumerate}
+ 		\item \textbf{verificarPrimeraEjecucion()}: determina si es la primera vez que se ejecuta.
+ 		\item \textbf{mostrarTutorialInicial()}: muestra tutorial básico para nuevos usuarios.
+ 		\item \textbf{centrarVentana()}: centra la ventana en la pantalla.
+ 		\item \textbf{establecerTamanoMinimo()}: establece el tamaño mínimo de la ventana.
+ 		\item \textbf{configurarEventosTeclado()}: configura atajos de teclado.
+ 		\item \textbf{limpiarRecursos()}: libera recursos antes de la transición.
 \end{enumerate}                                 
 
  \label{tabla99}
 
 \end{longtable}
 
-#Cambiar comentario por subsubsection clase MenuPrincipal
+\subsubsection{Clase MenuPrincipal}
+
+La clase \textbf{MenuPrincipal} gestiona la interfaz principal de navegación de la aplicación SimAS 3.0, proporcionando acceso a todas las funcionalidades principales del sistema.
+
+\begin{longtable}[H]{|>{\columncolor[rgb]{0.63,0.79,0.95}}m{6cm} | m{8.5cm} |}
+\caption{Clase MenuPrincipal - Interfaz principal de navegación}
+\endfirsthead
+\multicolumn{2}{c}{{\tablename\ \thetable{} -- continúa de la página anterior}} \\
+\endhead
+\hline \multicolumn{2}{|r|}{{Continúa en la página siguiente}} \\ \hline
+\endfoot
+\hline
+\endlastfoot
+\hline
+\textbf{Nombre} & \textbf{MenuPrincipal} \\ \hline
+\textbf{Descripción} & Gestiona el menú principal de navegación (extends Application) \\ \hline
+\textbf{Atributos} &
+\begin{enumerate}
+    \item \textbf{stage}: escena principal de la aplicación JavaFX.
+    \item \textbf{scene}: escena que contiene la interfaz del menú.
+    \item \textbf{root}: BorderPane que organiza el layout principal.
+    \item \textbf{menuBar}: MenuBar con las opciones principales.
+    \item \textbf{toolBar}: ToolBar con accesos rápidos.
+    \item \textbf{contentArea}: área central para contenido dinámico.
+    \item \textbf{statusBar}: barra de estado inferior.
+    \item \textbf{bundle}: ResourceBundle para internacionalización.
+    \item \textbf{currentModule}: módulo actualmente activo.
+\end{enumerate} \\ \hline
+\textbf{Métodos} &
+\begin{enumerate}
+    \item \textbf{start(Stage)}: método principal que inicializa la interfaz del menú.
+    \item \textbf{main(String[])}: punto de entrada alternativo de la aplicación.
+    \item \textbf{inicializarMenuBar()}: configura la barra de menú principal.
+    \item \textbf{inicializarToolBar()}: configura la barra de herramientas.
+    \item \textbf{inicializarStatusBar()}: configura la barra de estado.
+    \item \textbf{abrirEditor()}: abre la ventana del editor de gramáticas.
+    \item \textbf{abrirSimulador()}: abre la ventana del simulador.
+    \item \textbf{abrirAyuda()}: abre el sistema de ayuda integrado.
+    \item \textbf{abrirAcercaDe()}: muestra la ventana "Acerca de".
+    \item \textbf{cambiarIdioma(String)}: cambia el idioma de la aplicación.
+    \item \textbf{mostrarPreferencias()}: muestra el diálogo de preferencias.
+    \item \textbf{salirAplicacion()}: cierra la aplicación correctamente.
+    \item \textbf{actualizarTextos()}: actualiza todos los textos de la interfaz.
+    \item \textbf{guardarEstado()}: guarda el estado actual de la aplicación.
+    \item \textbf{cargarEstado()}: carga el estado guardado previamente.
+    \item \textbf{mostrarMensajeEstado(String)}: muestra mensajes en la barra de estado.
+    \item \textbf{configurarAtajosTeclado()}: configura los atajos de teclado globales.
+\end{enumerate} \\ \hline
+\textbf{Métodos} &
+\begin{enumerate}
+    \item \textbf{maximizarVentana()}: maximiza la ventana principal.
+    \item \textbf{minimizarVentana()}: minimiza la ventana principal.
+    \item \textbf{restaurarVentana()}: restaura el tamaño normal de la ventana.
+    \item \textbf{centrarVentana()}: centra la ventana en la pantalla.
+\end{enumerate}
+\label{tabla_menu_principal}
+\end{longtable}
 
 \subsubsection{Dependencias internas del paquete bienvenida}
 
