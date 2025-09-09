@@ -1,0 +1,140 @@
+\chapter{Restricciones} \label{cap:restricciones}
+
+\section{Introducción}
+
+Las restricciones técnicas y estratégicas son elementos fundamentales que limitan el diseño y la implementación del sistema. En este capítulo, se analizarán detalladamente los factores que restringen o condicionan el proyecto en diversas áreas. Se pueden identificar dos tipos principales de restricciones:
+
+\begin{itemize}
+    \item \textbf{Restricciones iniciales}: estas limitaciones son impuestas por la naturaleza misma del proyecto o por las condiciones ambientales en las que se desarrollará. Son estáticas y no pueden ser modificadas o eliminadas a lo largo del proceso de desarrollo. Por ejemplo, el tiempo del que se dispone para completar el proyecto podría considerarse una restricción inicial, ya que es un factor que no puede ser alterado una vez que se ha establecido un cronograma.
+    
+    \item \textbf{Restricciones estratégicas}: se refieren a variables de diseño que ofrecen varias alternativas. Durante el desarrollo del sistema, se elegirán aquellas opciones que se consideren más adecuadas en función de los objetivos y requisitos del proyecto. Por ejemplo, la elección entre diferentes tecnologías de base de datos podría ser una restricción estratégica.
+\end{itemize}
+
+\section{Factores iniciales} \label{sec:iniciales}
+
+\subsection{Límites temporales}
+
+Los límites temporales son un factor inicial crucial a considerar en el desarrollo del proyecto. Se establece como objetivo la presentación de la nueva versión de la aplicación en septiembre de 2024. Dado el tiempo disponible, se contempla priorizar el perfeccionamiento del análisis sintáctico descendente y la mejora general de la aplicación. 
+
+\subsection{Entorno de software}
+
+La nueva versión de la aplicación se basa en la infraestructura existente de SimAS 2.0 \cite{juan}, desarrollada previamente en Java \cite{java} y Java Swing \cite{javaswing} para la gestión de la interfaz gráfica. Se enfocará en corregir las funcionalidades defectuosas de la versión anterior y en agregar nuevas características para mejorar la experiencia del usuario y la eficiencia del programa.
+
+Se continuará utilizando XML como lenguaje para la importación y exportación de gramáticas. Sin embargo, se realizarán ajustes en las definiciones de los elementos y características implementadas en la versión 2.0 para garantizar una mayor coherencia y modularidad en el manejo de las gramáticas.
+
+
+% \subsection{Regulaciones y estándares de evaluación}
+% En el ámbito académico, los Trabajos de Fin de Grado están sujetos a regulaciones y estándares establecidos por las instituciones educativas y los consejos evaluadores. Estas regulaciones son fundamentales para garantizar la calidad y el rigor académico de los proyectos presentados.
+% Las regulaciones y estándares incluyen criterios de evaluación, formato y estructura del trabajo, normas académicas y éticas, plazos y fechas límite, así como requisitos adicionales. Cumplir con estas normativas es esencial para el éxito del presente Trabajo de Fin de Grado.
+
+
+\section{Factores estratégicos} \label{sec:estrategicos}
+
+\subsection{Metodología}
+
+En esta subsección se presentarán diversas metodologías de desarrollo de software, cada una con enfoques y características distintivas. La selección de la metodología adecuada para el desarrollo del presente proyecto es crucial para su éxito. A continuación, se describen algunas de las metodologías más comunes:
+
+\begin{enumerate}
+    \item \textbf{Ciclo de vida en cascada:} este enfoque sigue una secuencia lineal de fases, donde cada fase se completa antes de pasar a la siguiente \cite{pressman}. Aunque fue ampliamente utilizado en el pasado, actualmente está en desuso debido a su rigidez y dificultad para adaptarse a los cambios en los requisitos del proyecto.
+    
+    \item \textbf{Desarrollo iterativo y incremental:} esta metodología implica el desarrollo y la entrega de funcionalidades en ciclos cortos y repetitivos. Es una metodología ampliamente utilizada en la actualidad, ya que permite una mayor flexibilidad y adaptación a medida que avanza el proyecto \cite{scrum}.
+    
+    \item \textbf{Metodología RAD (\textit{Rapid Application Development}):} esta metodología se centra en la rápida construcción de prototipos funcionales del software, con un enfoque en la entrega temprana de funcionalidades y la participación activa del cliente. Aunque ha perdido popularidad en los últimos años, sigue siendo utilizada en algunos proyectos donde el tiempo de desarrollo es crítico y los requisitos del sistema pueden no estar completamente definidos desde el principio \cite{rad}.
+
+    \item \textbf{Metodología basada en UML (\textit{Unified Modeling Language}):} esta metodología se basa en el lenguaje de modelado unificado (UML) para el desarrollo de software. Aunque no es una metodología en sí misma, UML sigue siendo ampliamente utilizado en la industria del software como un marco estructurado y formal para el modelado y diseño de sistemas de software \cite{uml}.
+\end{enumerate}
+
+Dado que el presente proyecto implica el desarrollo de una aplicación de software, la metodología basada en UML \cite{uml}  se considera la más adecuada, porque proporciona un marco estructurado y formal para el modelado y diseño de software, lo que facilita la comprensión y el análisis de los requisitos del sistema. Además, UML es ampliamente utilizado en la industria del software y cuenta con un amplio conjunto de herramientas y recursos disponibles para su aplicación práctica.
+
+
+
+\subsection{Lenguaje de programación}\label{sec:bases-de-datos}
+
+La versión anterior de la aplicación SimAS 2.0 \cite{juan} utilizaba Java \cite{java} para el desarrollo de sus funcionalidades, así como Java Swing \cite{javaswing} para la interfaz gráfica. Además, para la carga y guardado de gramáticas, se empleaba XML \cite{xml}. 
+
+Para esta nueva versión, se seguirán utilizando los mismos lenguajes de programación que en las ediciones anteriores. Java continuará siendo el lenguaje principal para implementar las funcionalidades, mientras que Java Swing se utilizará nuevamente para la creación de la interfaz gráfica. Sin embargo, se introducirá una diferencia significativa en el desarrollo de la interfaz de usuario. 
+
+\subsection{Entorno de desarrollo}
+
+Para llevar a cabo el desarrollo del proyecto, se consideraron varios entornos de desarrollo, entre ellos NetBeans \cite{netbeans} y IntelliJ IDEA \cite{intellij}. Inicialmente se contempló el uso de NetBeans debido a su familiaridad y uso previo en asignaturas del grado. Sin embargo, tras evaluar las opciones disponibles, se tomó la decisión de utilizar IntelliJ IDEA como el entorno de desarrollo principal, complementado con Scene Builder \cite{scenebuilder} para el diseño de interfaces gráficas.
+
+\textbf{IntelliJ IDEA} ofrece numerosas ventajas que lo hacen especialmente adecuado para este proyecto. Entre ellas se incluyen:
+
+\begin{itemize}
+    \item \textbf{Interfaz intuitiva y potente}: IntelliJ IDEA cuenta con una interfaz de usuario intuitiva y altamente personalizable que facilita el desarrollo de aplicaciones Java.
+    
+    \item \textbf{Soporte integral para JavaFX y Scene Builder}: IntelliJ IDEA ofrece un soporte completo para el desarrollo de aplicaciones JavaFX, incluida la integración directa con Scene Builder para la creación de interfaces gráficas.
+    
+    \item \textbf{Funcionalidades avanzadas de refactorización y depuración}: El IDE proporciona potentes herramientas de refactorización de código y depuración, lo que permite mejorar la calidad del código y detectar y corregir errores de manera eficiente.
+    
+    \item \textbf{Amplia variedad de complementos y extensiones}: IntelliJ IDEA cuenta con una amplia gama de complementos y extensiones que permiten personalizar y ampliar sus funcionalidades según las necesidades del proyecto.
+    
+    \item \textbf{Integración con sistemas de control de versiones}: este IDE ofrece una integración perfecta con sistemas de control de versiones como Git, lo que facilita la colaboración en equipo y el seguimiento de cambios en el código.
+\end{itemize}
+
+La combinación de IntelliJ IDEA y Scene Builder proporciona un entorno de desarrollo completo y eficiente para la creación de la aplicación SimAS 3.0, permitiendo una experiencia de desarrollo fluida y productiva.
+
+
+\subsection{Interfaz gráfica de la aplicación}
+
+La interfaz gráfica de la aplicación SimAS 3.0 desempeña un papel fundamental en la experiencia del usuario, ya que proporciona una forma intuitiva y eficiente de interactuar con todas las funcionalidades del sistema. La interfaz ha sido diseñada con el objetivo de ser fácil de usar y estéticamente atractiva, manteniendo al mismo tiempo un alto nivel de funcionalidad y usabilidad.
+
+La principal herramienta utilizada para el diseño de la interfaz gráfica es Scene Builder, que permite crear y modificar las interfaces de usuario de manera visual, utilizando componentes gráficos predefinidos y arrastrándolos y soltándolos en la ventana de diseño. Esto facilita enormemente el proceso de diseño y permite una rápida iteración para ajustar y mejorar la apariencia y la disposición de los elementos de la interfaz.
+
+La interfaz gráfica de SimAS 3.0 se compone de varias secciones principales:
+
+\begin{itemize}
+    \item \textbf{Barra de menú}: proporciona acceso a todas las funcionalidades de la aplicación, incluyendo la creación y edición de gramáticas, la ejecución de análisis sintáctico, la importación y exportación de archivos, y la configuración de preferencias.
+    \item \textbf{Barra de herramientas}: ofrece acceso rápido a las funciones más utilizadas, como la creación de nuevas gramáticas, la apertura y guardado de archivos, y la ejecución de análisis sintáctico.
+    
+    \item \textbf{Editor de gramáticas}: permite al usuario crear, editar y guardar gramáticas de contexto libre de forma intuitiva, proporcionando un entorno de edición con resaltado de sintaxis y sugerencias de autocompletado para facilitar la escritura.
+    
+    \item \textbf{Área de visualización de resultados}: muestra los resultados del análisis sintáctico, incluyendo árboles de análisis sintáctico, conjuntos primero y siguiente, y otros datos relevantes para el usuario.
+    
+    \item \textbf{Panel de configuración}: Permite al usuario personalizar diferentes aspectos de la aplicación, como la apariencia de la interfaz, las preferencias de análisis sintáctico y las opciones de importación y exportación de archivos.
+\end{itemize}
+
+En resumen, la interfaz gráfica de SimAS 3.0 va a ser diseñada para proporcionar una experiencia de usuario intuitiva y eficiente, facilitando la realización de tareas relacionadas con el análisis sintáctico de gramáticas de contexto libre. Mediante el uso de herramientas como Scene Builder, se pretende crear una interfaz atractiva y funcional que satisfaga las necesidades y expectativas de los usuarios. Véase la sección \ref{sec:requisitos_interfaz} de Requisito de la Interfaz y el capítulo \ref{cap:diseño_interfaz} del Diseño de la Interfaz.
+
+\subsection{Sistema Operativo}
+
+El correcto funcionamiento de la aplicación SimAS 3.0 se asegura mediante su ejecución en una máquina virtual Java (JVM) \cite{java}, lo que garantiza su compatibilidad y portabilidad en una amplia variedad de sistemas operativos. Este enfoque permite que la aplicación sea ejecutable de manera consistente en plataformas como Windows, macOS y Linux, independientemente de las diferencias en el entorno de ejecución subyacente.
+
+Específicamente, en el caso de macOS Sonoma versión 14.0 \cite{macos}, se han llevado a cabo pruebas exhaustivas para asegurar que la aplicación se ejecute sin problemas en este sistema operativo. La JVM actúa como una capa de abstracción que permite que el código Java se ejecute de manera uniforme en diferentes sistemas, lo que garantiza una experiencia de usuario consistente y confiable.
+
+La utilización de una máquina virtual Java también facilita la gestión de recursos y la optimización del rendimiento de la aplicación en el entorno de macOS Sonoma versión 14.0. Se han implementado las mejores prácticas de desarrollo de software para aprovechar al máximo las características específicas de este sistema operativo y garantizar una ejecución eficiente de la aplicación.
+
+En resumen, SimAS 3.0 se ejecutará en una máquina virtual Java para garantizar su compatibilidad y portabilidad en macOS Sonoma versión 14.0, así como en otros sistemas operativos, asegurando que los usuarios puedan acceder a todas sus funcionalidades sin importar la plataforma que utilicen.
+
+\subsection{Representación de las gramáticas de contexto libre}
+
+Para almacenar la información de las gramáticas de contexto libre creadas por el usuario, se seguirá usando el formato XML \cite{xml} como en las versiones anteriores. Este formato proporciona una estructura definida que asegura la seguridad y la compatibilidad de los datos entre diferentes sistemas. Esta nueva versión SimAS 3.0 explorará la posibilidad de mejorar la organización de los archivos XML de las gramáticas para facilitar su comprensión y manipulación.
+
+\subsection{Generación de informes de gramáticas y de simulación}
+
+Cada gramática creada con la aplicación podrá ir acompañada de un informe detallado que contenga toda la información pertinente. Del mismo modo, tras realizar una simulación, se ofrecerá la opción de generar informes con los resultados obtenidos, incluyendo todos los diagramas relevantes.
+
+Se identificó un problema en la versión SimAS 2.0 relacionado con la generación inconsistente de informes en algunos sistemas operativos. Se investigará a fondo esta cuestión y se implementarán las correcciones necesarias para garantizar que los informes se generen correctamente en todas las plataformas compatibles. 
+
+Además, se planea continuar generando los informes en formato \textbf{PDF}, debido a su amplia aceptación y su resistencia a ser alterado, lo que facilitaría su distribución y aumentaría su accesibilidad. También se estudiará la viabilidad de generar los informes en otros formatos para adaptarse a las necesidades específicas de los usuarios.
+
+\subsection{Implementación de la ayuda}
+
+La implementación de la ayuda del programa es un aspecto crucial para proporcionar una experiencia de usuario satisfactoria. En este sentido, se están considerando dos enfoques distintos para llevar a cabo esta tarea:
+
+Por un lado, se contempla la posibilidad de mantener la misma metodología utilizada en la versión anterior del programa. Esta metodología consiste en emplear una página web para proporcionar la ayuda necesaria. Esta opción tiene la ventaja de ser familiar para los usuarios que hayan utilizado versiones anteriores de la aplicación. Además, la generación de la ayuda en formato HTML \cite{html} facilita su integración con la interfaz de usuario desarrollada en Java \cite{java}, lo que permite una navegación fluida y una experiencia coherente para el usuario.
+
+Por otro lado, se está evaluando la opción de implementar la ayuda como parte integral de la interfaz de usuario del programa. Esta alternativa implicaría integrar una sección de ayuda directamente dentro de la ventana principal de la aplicación. Esta sección podría presentarse mediante pestañas, paneles desplegables u otros elementos de navegación, proporcionando así un acceso rápido y sencillo a la información relevante. Este enfoque aprovecharía las capacidades de la interfaz gráfica de usuario para ofrecer una experiencia más intuitiva y cohesiva para el usuario.
+
+La elección entre estas dos opciones dependerá de diversos factores, como la complejidad de la ayuda requerida, las preferencias del usuario y las limitaciones de desarrollo. Ambos enfoques tienen sus ventajas y desventajas, por lo que se llevará a cabo un análisis detallado para determinar cuál de ellos se adapta mejor a las necesidades y objetivos del proyecto.
+
+\subsection{Implementación del tutorial}
+
+El tutorial se mantendrá en formato PDF y se incluirá junto con la aplicación para proporcionar a los usuarios una guía detallada sobre el funcionamiento del análisis sintáctico. 
+
+Este tutorial estará diseñado para abordar de manera clara y concisa los conceptos teóricos fundamentales del análisis sintáctico, así como para ofrecer ejercicios prácticos que permitan a los usuarios poner en práctica lo aprendido y afianzar su comprensión. De esta manera, se pretende facilitar el aprendizaje y la familiarización de los usuarios con el uso de la aplicación, brindándoles una herramienta efectiva para mejorar sus habilidades en el análisis sintáctico de gramáticas.
+
+\subsection{Representación de los árboles sintácticos}
+
+Como novedad introducida en SimAS 2.0 \cite{juan}, se implementó la generación de árboles sintácticos de manera iterativa y paralela al análisis sintáctico. En la versión actual, SimAS 3.0, se busca mejorar esta funcionalidad basándose en la experiencia previa con la herramienta Graphviz \cite{graphviz}. Se ha decidido continuar utilizando Graphviz debido a su facilidad de uso y su capacidad para generar árboles gráficos de manera efectiva. Esta decisión se toma con el objetivo de partir de una base sólida y mejorar los puntos en los que la versión anterior presentaba deficiencias en la representación de árboles sintácticos.
+

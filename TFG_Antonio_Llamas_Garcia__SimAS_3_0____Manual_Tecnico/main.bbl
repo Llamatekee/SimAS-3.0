@@ -1,0 +1,800 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nty/global//global/global/global}
+    \entry{aho2008}{book}{}{}
+      \name{author}{4}{}{%
+        {{hash=87e9142329f09390b038692270dc2168}{%
+           family={Aho},
+           familyi={A\bibinitperiod},
+           given={Alfred\bibnamedelima V.},
+           giveni={A\bibinitperiod\bibinitdelim V\bibinitperiod}}}%
+        {{hash=2935cefbbdea2e46ed9635bd5cf1db28}{%
+           family={Lam},
+           familyi={L\bibinitperiod},
+           given={Monica\bibnamedelima S.},
+           giveni={M\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+        {{hash=b0e677112f976b0ff780553fcb888351}{%
+           family={Sethi},
+           familyi={S\bibinitperiod},
+           given={Ravi},
+           giveni={R\bibinitperiod}}}%
+        {{hash=cafe1d770c56825ebccdb81e9f7c9b3b}{%
+           family={Ullman},
+           familyi={U\bibinitperiod},
+           given={Jeffrey\bibnamedelima D.},
+           giveni={J\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Addison-Wesley Professional}%
+      }
+      \strng{namehash}{e81f18fe5b19a688d5145730fb236624}
+      \strng{fullhash}{b955b20997f1b0d8317cbada66b20151}
+      \strng{fullhashraw}{b955b20997f1b0d8317cbada66b20151}
+      \strng{bibnamehash}{b955b20997f1b0d8317cbada66b20151}
+      \strng{authorbibnamehash}{b955b20997f1b0d8317cbada66b20151}
+      \strng{authornamehash}{e81f18fe5b19a688d5145730fb236624}
+      \strng{authorfullhash}{b955b20997f1b0d8317cbada66b20151}
+      \strng{authorfullhashraw}{b955b20997f1b0d8317cbada66b20151}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{edition}{2nd}
+      \field{isbn}{978-0321486813}
+      \field{title}{Compilers: Principles, Techniques, and Tools}
+      \field{year}{2008}
+    \endentry
+    \entry{netbeans}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=8b499b5be8914246b406785e1327dbb3}{%
+           family={{Apache Software Foundation}},
+           familyi={A\bibinitperiod}}}%
+      }
+      \strng{namehash}{8b499b5be8914246b406785e1327dbb3}
+      \strng{fullhash}{8b499b5be8914246b406785e1327dbb3}
+      \strng{fullhashraw}{8b499b5be8914246b406785e1327dbb3}
+      \strng{bibnamehash}{8b499b5be8914246b406785e1327dbb3}
+      \strng{authorbibnamehash}{8b499b5be8914246b406785e1327dbb3}
+      \strng{authornamehash}{8b499b5be8914246b406785e1327dbb3}
+      \strng{authorfullhash}{8b499b5be8914246b406785e1327dbb3}
+      \strng{authorfullhashraw}{8b499b5be8914246b406785e1327dbb3}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://netbeans.apache.org/}}
+      \field{note}{Versión 7.3.1}
+      \field{title}{NetBeans IDE}
+      \field{year}{2013}
+    \endentry
+    \entry{singleton-pattern}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=577c9b87d02f133dc6423f84705048f8}{%
+           family={Bloch},
+           familyi={B\bibinitperiod},
+           given={Joshua},
+           giveni={J\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Addison-Wesley Professional}%
+      }
+      \strng{namehash}{577c9b87d02f133dc6423f84705048f8}
+      \strng{fullhash}{577c9b87d02f133dc6423f84705048f8}
+      \strng{fullhashraw}{577c9b87d02f133dc6423f84705048f8}
+      \strng{bibnamehash}{577c9b87d02f133dc6423f84705048f8}
+      \strng{authorbibnamehash}{577c9b87d02f133dc6423f84705048f8}
+      \strng{authornamehash}{577c9b87d02f133dc6423f84705048f8}
+      \strng{authorfullhash}{577c9b87d02f133dc6423f84705048f8}
+      \strng{authorfullhashraw}{577c9b87d02f133dc6423f84705048f8}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{isbn}{978-0321356680}
+      \field{title}{Effective Java}
+      \field{year}{2008}
+    \endentry
+    \entry{ubuntu}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=aacfea8cb27c1b8d0dd136a1aca2f0a4}{%
+           family={{Canonical Ltd.}},
+           familyi={C\bibinitperiod}}}%
+      }
+      \strng{namehash}{aacfea8cb27c1b8d0dd136a1aca2f0a4}
+      \strng{fullhash}{aacfea8cb27c1b8d0dd136a1aca2f0a4}
+      \strng{fullhashraw}{aacfea8cb27c1b8d0dd136a1aca2f0a4}
+      \strng{bibnamehash}{aacfea8cb27c1b8d0dd136a1aca2f0a4}
+      \strng{authorbibnamehash}{aacfea8cb27c1b8d0dd136a1aca2f0a4}
+      \strng{authornamehash}{aacfea8cb27c1b8d0dd136a1aca2f0a4}
+      \strng{authorfullhash}{aacfea8cb27c1b8d0dd136a1aca2f0a4}
+      \strng{authorfullhashraw}{aacfea8cb27c1b8d0dd136a1aca2f0a4}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://ubuntu.com/}}
+      \field{note}{Versión 12.10}
+      \field{title}{Ubuntu Linux}
+      \field{year}{2012}
+    \endentry
+    \entry{juan}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=1b980cf85197172811327c4847a38ea7}{%
+           family={Díaz},
+           familyi={D\bibinitperiod},
+           given={Juan\bibnamedelimb Antonio\bibnamedelima Fernández},
+           giveni={J\bibinitperiod\bibinitdelim A\bibinitperiod\bibinitdelim F\bibinitperiod}}}%
+      }
+      \strng{namehash}{1b980cf85197172811327c4847a38ea7}
+      \strng{fullhash}{1b980cf85197172811327c4847a38ea7}
+      \strng{fullhashraw}{1b980cf85197172811327c4847a38ea7}
+      \strng{bibnamehash}{1b980cf85197172811327c4847a38ea7}
+      \strng{authorbibnamehash}{1b980cf85197172811327c4847a38ea7}
+      \strng{authornamehash}{1b980cf85197172811327c4847a38ea7}
+      \strng{authorfullhash}{1b980cf85197172811327c4847a38ea7}
+      \strng{authorfullhashraw}{1b980cf85197172811327c4847a38ea7}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{note}{Trabajo de Fin de Grado, Universidad de Córdoba}
+      \field{title}{SimAS 2.0: Simulador de Análisis Sintáctico}
+      \field{year}{2023}
+    \endentry
+    \entry{observer-pattern}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=312ac886938a9b2be4f8eb607567fe4c}{%
+           family={Fowler},
+           familyi={F\bibinitperiod},
+           given={Martin},
+           giveni={M\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Addison-Wesley Professional}%
+      }
+      \strng{namehash}{312ac886938a9b2be4f8eb607567fe4c}
+      \strng{fullhash}{312ac886938a9b2be4f8eb607567fe4c}
+      \strng{fullhashraw}{312ac886938a9b2be4f8eb607567fe4c}
+      \strng{bibnamehash}{312ac886938a9b2be4f8eb607567fe4c}
+      \strng{authorbibnamehash}{312ac886938a9b2be4f8eb607567fe4c}
+      \strng{authornamehash}{312ac886938a9b2be4f8eb607567fe4c}
+      \strng{authorfullhash}{312ac886938a9b2be4f8eb607567fe4c}
+      \strng{authorfullhashraw}{312ac886938a9b2be4f8eb607567fe4c}
+      \field{sortinit}{F}
+      \field{sortinithash}{2638baaa20439f1b5a8f80c6c08a13b4}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{isbn}{978-0321127420}
+      \field{title}{Patterns of Enterprise Application Architecture}
+      \field{year}{2002}
+    \endentry
+    \entry{strategy-pattern}{book}{}{}
+      \name{author}{2}{}{%
+        {{hash=9bb9c48289834328b03fe2167f2eb3cc}{%
+           family={Freeman},
+           familyi={F\bibinitperiod},
+           given={Eric},
+           giveni={E\bibinitperiod}}}%
+        {{hash=8454bd3eef9df58a64496c059b05d188}{%
+           family={Robson},
+           familyi={R\bibinitperiod},
+           given={Elisabeth},
+           giveni={E\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {O'Reilly Media}%
+      }
+      \strng{namehash}{8f497887cd3dea7d83e0a1cbd2c46f94}
+      \strng{fullhash}{8f497887cd3dea7d83e0a1cbd2c46f94}
+      \strng{fullhashraw}{8f497887cd3dea7d83e0a1cbd2c46f94}
+      \strng{bibnamehash}{8f497887cd3dea7d83e0a1cbd2c46f94}
+      \strng{authorbibnamehash}{8f497887cd3dea7d83e0a1cbd2c46f94}
+      \strng{authornamehash}{8f497887cd3dea7d83e0a1cbd2c46f94}
+      \strng{authorfullhash}{8f497887cd3dea7d83e0a1cbd2c46f94}
+      \strng{authorfullhashraw}{8f497887cd3dea7d83e0a1cbd2c46f94}
+      \field{sortinit}{F}
+      \field{sortinithash}{2638baaa20439f1b5a8f80c6c08a13b4}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{isbn}{978-0596007126}
+      \field{title}{Head First Design Patterns}
+      \field{year}{2004}
+    \endentry
+    \entry{mvc-pattern}{book}{}{}
+      \name{author}{4}{}{%
+        {{hash=abd927bf30d6566be0ac66a66e893fdd}{%
+           family={Gamma},
+           familyi={G\bibinitperiod},
+           given={Erich},
+           giveni={E\bibinitperiod}}}%
+        {{hash=233f891813bda0f3920985f97a4a7554}{%
+           family={Helm},
+           familyi={H\bibinitperiod},
+           given={Richard},
+           giveni={R\bibinitperiod}}}%
+        {{hash=fd79e5e249b219ff553fc2d811104d78}{%
+           family={Johnson},
+           familyi={J\bibinitperiod},
+           given={Ralph},
+           giveni={R\bibinitperiod}}}%
+        {{hash=e032589f0b9a38804483ab7cf5ccad7f}{%
+           family={Vlissides},
+           familyi={V\bibinitperiod},
+           given={John},
+           giveni={J\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Addison-Wesley Professional}%
+      }
+      \strng{namehash}{4d2492409a24d4ed208ae6670cb91945}
+      \strng{fullhash}{5cb4a6d7baf30d11bae6682eca698b4f}
+      \strng{fullhashraw}{5cb4a6d7baf30d11bae6682eca698b4f}
+      \strng{bibnamehash}{5cb4a6d7baf30d11bae6682eca698b4f}
+      \strng{authorbibnamehash}{5cb4a6d7baf30d11bae6682eca698b4f}
+      \strng{authornamehash}{4d2492409a24d4ed208ae6670cb91945}
+      \strng{authorfullhash}{5cb4a6d7baf30d11bae6682eca698b4f}
+      \strng{authorfullhashraw}{5cb4a6d7baf30d11bae6682eca698b4f}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{isbn}{978-0201633610}
+      \field{title}{Design Patterns: Elements of Reusable Object-Oriented Software}
+      \field{year}{1994}
+    \endentry
+    \entry{github}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=9b127eb47f59d27ace73783046da8889}{%
+           family={{GitHub, Inc.}},
+           familyi={G\bibinitperiod}}}%
+      }
+      \strng{namehash}{9b127eb47f59d27ace73783046da8889}
+      \strng{fullhash}{9b127eb47f59d27ace73783046da8889}
+      \strng{fullhashraw}{9b127eb47f59d27ace73783046da8889}
+      \strng{bibnamehash}{9b127eb47f59d27ace73783046da8889}
+      \strng{authorbibnamehash}{9b127eb47f59d27ace73783046da8889}
+      \strng{authornamehash}{9b127eb47f59d27ace73783046da8889}
+      \strng{authorfullhash}{9b127eb47f59d27ace73783046da8889}
+      \strng{authorfullhashraw}{9b127eb47f59d27ace73783046da8889}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://github.com/}}
+      \field{note}{Accedido: 2024}
+      \field{title}{GitHub}
+      \field{year}{2024}
+    \endentry
+    \entry{scenebuilder}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=e4e9bb16d8970a3d4689ae990f6c27a7}{%
+           family={{Gluon}},
+           familyi={G\bibinitperiod}}}%
+      }
+      \strng{namehash}{e4e9bb16d8970a3d4689ae990f6c27a7}
+      \strng{fullhash}{e4e9bb16d8970a3d4689ae990f6c27a7}
+      \strng{fullhashraw}{e4e9bb16d8970a3d4689ae990f6c27a7}
+      \strng{bibnamehash}{e4e9bb16d8970a3d4689ae990f6c27a7}
+      \strng{authorbibnamehash}{e4e9bb16d8970a3d4689ae990f6c27a7}
+      \strng{authornamehash}{e4e9bb16d8970a3d4689ae990f6c27a7}
+      \strng{authorfullhash}{e4e9bb16d8970a3d4689ae990f6c27a7}
+      \strng{authorfullhashraw}{e4e9bb16d8970a3d4689ae990f6c27a7}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://gluonhq.com/products/scene-builder/}}
+      \field{note}{Accedido: 2024}
+      \field{title}{JavaFX Scene Builder}
+      \field{year}{2024}
+    \endentry
+    \entry{graphviz}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=7195e4b74216e688c3cac67dcd1ab5f0}{%
+           family={{Graphviz Team}},
+           familyi={G\bibinitperiod}}}%
+      }
+      \strng{namehash}{7195e4b74216e688c3cac67dcd1ab5f0}
+      \strng{fullhash}{7195e4b74216e688c3cac67dcd1ab5f0}
+      \strng{fullhashraw}{7195e4b74216e688c3cac67dcd1ab5f0}
+      \strng{bibnamehash}{7195e4b74216e688c3cac67dcd1ab5f0}
+      \strng{authorbibnamehash}{7195e4b74216e688c3cac67dcd1ab5f0}
+      \strng{authornamehash}{7195e4b74216e688c3cac67dcd1ab5f0}
+      \strng{authorfullhash}{7195e4b74216e688c3cac67dcd1ab5f0}
+      \strng{authorfullhashraw}{7195e4b74216e688c3cac67dcd1ab5f0}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://graphviz.org/}}
+      \field{note}{Accedido: 2024}
+      \field{title}{Graphviz: Graph Visualization Software}
+      \field{year}{2024}
+    \endentry
+    \entry{itextpdf}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=05f2767d8f3451e6bcad0222e32d1c69}{%
+           family={{iText Group}},
+           familyi={i\bibinitperiod}}}%
+      }
+      \strng{namehash}{05f2767d8f3451e6bcad0222e32d1c69}
+      \strng{fullhash}{05f2767d8f3451e6bcad0222e32d1c69}
+      \strng{fullhashraw}{05f2767d8f3451e6bcad0222e32d1c69}
+      \strng{bibnamehash}{05f2767d8f3451e6bcad0222e32d1c69}
+      \strng{authorbibnamehash}{05f2767d8f3451e6bcad0222e32d1c69}
+      \strng{authornamehash}{05f2767d8f3451e6bcad0222e32d1c69}
+      \strng{authorfullhash}{05f2767d8f3451e6bcad0222e32d1c69}
+      \strng{authorfullhashraw}{05f2767d8f3451e6bcad0222e32d1c69}
+      \field{sortinit}{i}
+      \field{sortinithash}{8d291c51ee89b6cd86bf5379f0b151d8}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://itextpdf.com/}}
+      \field{note}{Versión 5.5.0}
+      \field{title}{iText PDF Library}
+      \field{year}{2015}
+    \endentry
+    \entry{intellij}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=b6a77f3f5bead76a495a90d63703e1f9}{%
+           family={{JetBrains}},
+           familyi={J\bibinitperiod}}}%
+      }
+      \strng{namehash}{b6a77f3f5bead76a495a90d63703e1f9}
+      \strng{fullhash}{b6a77f3f5bead76a495a90d63703e1f9}
+      \strng{fullhashraw}{b6a77f3f5bead76a495a90d63703e1f9}
+      \strng{bibnamehash}{b6a77f3f5bead76a495a90d63703e1f9}
+      \strng{authorbibnamehash}{b6a77f3f5bead76a495a90d63703e1f9}
+      \strng{authornamehash}{b6a77f3f5bead76a495a90d63703e1f9}
+      \strng{authorfullhash}{b6a77f3f5bead76a495a90d63703e1f9}
+      \strng{authorfullhashraw}{b6a77f3f5bead76a495a90d63703e1f9}
+      \field{sortinit}{J}
+      \field{sortinithash}{b2f54a9081ace9966a7cb9413811edb4}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://www.jetbrains.com/idea/}}
+      \field{note}{Accedido: 2024}
+      \field{title}{IntelliJ IDEA}
+      \field{year}{2024}
+    \endentry
+    \entry{drawio}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=708bcd83719a3396b762d54cff1f119d}{%
+           family={{JGraph Ltd.}},
+           familyi={J\bibinitperiod}}}%
+      }
+      \strng{namehash}{708bcd83719a3396b762d54cff1f119d}
+      \strng{fullhash}{708bcd83719a3396b762d54cff1f119d}
+      \strng{fullhashraw}{708bcd83719a3396b762d54cff1f119d}
+      \strng{bibnamehash}{708bcd83719a3396b762d54cff1f119d}
+      \strng{authorbibnamehash}{708bcd83719a3396b762d54cff1f119d}
+      \strng{authornamehash}{708bcd83719a3396b762d54cff1f119d}
+      \strng{authorfullhash}{708bcd83719a3396b762d54cff1f119d}
+      \strng{authorfullhashraw}{708bcd83719a3396b762d54cff1f119d}
+      \field{sortinit}{J}
+      \field{sortinithash}{b2f54a9081ace9966a7cb9413811edb4}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://www.diagrams.net/}}
+      \field{note}{Accedido: 2024}
+      \field{title}{Draw.io (Diagrams.net)}
+      \field{year}{2024}
+    \endentry
+    \entry{latex}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=5d77435450d10a850a5b58577b9a456b}{%
+           family={Lamport},
+           familyi={L\bibinitperiod},
+           given={Leslie},
+           giveni={L\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Addison-Wesley Professional}%
+      }
+      \strng{namehash}{5d77435450d10a850a5b58577b9a456b}
+      \strng{fullhash}{5d77435450d10a850a5b58577b9a456b}
+      \strng{fullhashraw}{5d77435450d10a850a5b58577b9a456b}
+      \strng{bibnamehash}{5d77435450d10a850a5b58577b9a456b}
+      \strng{authorbibnamehash}{5d77435450d10a850a5b58577b9a456b}
+      \strng{authornamehash}{5d77435450d10a850a5b58577b9a456b}
+      \strng{authorfullhash}{5d77435450d10a850a5b58577b9a456b}
+      \strng{authorfullhashraw}{5d77435450d10a850a5b58577b9a456b}
+      \field{sortinit}{L}
+      \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{edition}{2nd}
+      \field{isbn}{978-0201529838}
+      \field{title}{LaTeX: A Document Preparation System}
+      \field{year}{1994}
+    \endentry
+    \entry{architecture-patterns}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=140864078aeca1c7c35b4beb33c53c34}{%
+           family={Microsoft},
+           familyi={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{140864078aeca1c7c35b4beb33c53c34}
+      \strng{fullhash}{140864078aeca1c7c35b4beb33c53c34}
+      \strng{fullhashraw}{140864078aeca1c7c35b4beb33c53c34}
+      \strng{bibnamehash}{140864078aeca1c7c35b4beb33c53c34}
+      \strng{authorbibnamehash}{140864078aeca1c7c35b4beb33c53c34}
+      \strng{authornamehash}{140864078aeca1c7c35b4beb33c53c34}
+      \strng{authorfullhash}{140864078aeca1c7c35b4beb33c53c34}
+      \strng{authorfullhashraw}{140864078aeca1c7c35b4beb33c53c34}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://docs.microsoft.com/en-us/azure/architecture/guide/architecture-styles/layered-architecture}}
+      \field{note}{Accedido: 2024}
+      \field{title}{Layered Architecture}
+      \field{year}{2023}
+    \endentry
+    \entry{windows}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=b9a8b868588ad4bc6b36c29936e26423}{%
+           family={{Microsoft Corporation}},
+           familyi={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{b9a8b868588ad4bc6b36c29936e26423}
+      \strng{fullhash}{b9a8b868588ad4bc6b36c29936e26423}
+      \strng{fullhashraw}{b9a8b868588ad4bc6b36c29936e26423}
+      \strng{bibnamehash}{b9a8b868588ad4bc6b36c29936e26423}
+      \strng{authorbibnamehash}{b9a8b868588ad4bc6b36c29936e26423}
+      \strng{authornamehash}{b9a8b868588ad4bc6b36c29936e26423}
+      \strng{authorfullhash}{b9a8b868588ad4bc6b36c29936e26423}
+      \strng{authorfullhashraw}{b9a8b868588ad4bc6b36c29936e26423}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://www.microsoft.com/windows/}}
+      \field{title}{Microsoft Windows 7}
+      \field{year}{2009}
+    \endentry
+    \entry{factory-web}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=d51288dc67d9f5e0330d927a009e208b}{%
+           family={{Oracle Corporation}},
+           familyi={O\bibinitperiod}}}%
+      }
+      \strng{namehash}{d51288dc67d9f5e0330d927a009e208b}
+      \strng{fullhash}{d51288dc67d9f5e0330d927a009e208b}
+      \strng{fullhashraw}{d51288dc67d9f5e0330d927a009e208b}
+      \strng{bibnamehash}{d51288dc67d9f5e0330d927a009e208b}
+      \strng{authorbibnamehash}{d51288dc67d9f5e0330d927a009e208b}
+      \strng{authornamehash}{d51288dc67d9f5e0330d927a009e208b}
+      \strng{authorfullhash}{d51288dc67d9f5e0330d927a009e208b}
+      \strng{authorfullhashraw}{d51288dc67d9f5e0330d927a009e208b}
+      \field{extraname}{1}
+      \field{sortinit}{O}
+      \field{sortinithash}{2cd7140a07aea5341f9e2771efe90aae}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://www.oracle.com/technetwork/java/factory-method-139282.html}}
+      \field{note}{Accedido: 2024}
+      \field{title}{Factory Method Pattern}
+      \field{year}{2024}
+    \endentry
+    \entry{java}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=d51288dc67d9f5e0330d927a009e208b}{%
+           family={{Oracle Corporation}},
+           familyi={O\bibinitperiod}}}%
+      }
+      \strng{namehash}{d51288dc67d9f5e0330d927a009e208b}
+      \strng{fullhash}{d51288dc67d9f5e0330d927a009e208b}
+      \strng{fullhashraw}{d51288dc67d9f5e0330d927a009e208b}
+      \strng{bibnamehash}{d51288dc67d9f5e0330d927a009e208b}
+      \strng{authorbibnamehash}{d51288dc67d9f5e0330d927a009e208b}
+      \strng{authornamehash}{d51288dc67d9f5e0330d927a009e208b}
+      \strng{authorfullhash}{d51288dc67d9f5e0330d927a009e208b}
+      \strng{authorfullhashraw}{d51288dc67d9f5e0330d927a009e208b}
+      \field{extraname}{2}
+      \field{sortinit}{O}
+      \field{sortinithash}{2cd7140a07aea5341f9e2771efe90aae}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://www.oracle.com/java/}}
+      \field{note}{Accedido: 2024}
+      \field{title}{Java Platform, Standard Edition}
+      \field{year}{2024}
+    \endentry
+    \entry{javaswing}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=d51288dc67d9f5e0330d927a009e208b}{%
+           family={{Oracle Corporation}},
+           familyi={O\bibinitperiod}}}%
+      }
+      \strng{namehash}{d51288dc67d9f5e0330d927a009e208b}
+      \strng{fullhash}{d51288dc67d9f5e0330d927a009e208b}
+      \strng{fullhashraw}{d51288dc67d9f5e0330d927a009e208b}
+      \strng{bibnamehash}{d51288dc67d9f5e0330d927a009e208b}
+      \strng{authorbibnamehash}{d51288dc67d9f5e0330d927a009e208b}
+      \strng{authornamehash}{d51288dc67d9f5e0330d927a009e208b}
+      \strng{authorfullhash}{d51288dc67d9f5e0330d927a009e208b}
+      \strng{authorfullhashraw}{d51288dc67d9f5e0330d927a009e208b}
+      \field{extraname}{3}
+      \field{sortinit}{O}
+      \field{sortinithash}{2cd7140a07aea5341f9e2771efe90aae}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://docs.oracle.com/javase/tutorial/uiswing/}}
+      \field{note}{Accedido: 2024}
+      \field{title}{Java Swing}
+      \field{year}{2024}
+    \endentry
+    \entry{javafx}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=d51288dc67d9f5e0330d927a009e208b}{%
+           family={{Oracle Corporation}},
+           familyi={O\bibinitperiod}}}%
+      }
+      \strng{namehash}{d51288dc67d9f5e0330d927a009e208b}
+      \strng{fullhash}{d51288dc67d9f5e0330d927a009e208b}
+      \strng{fullhashraw}{d51288dc67d9f5e0330d927a009e208b}
+      \strng{bibnamehash}{d51288dc67d9f5e0330d927a009e208b}
+      \strng{authorbibnamehash}{d51288dc67d9f5e0330d927a009e208b}
+      \strng{authornamehash}{d51288dc67d9f5e0330d927a009e208b}
+      \strng{authorfullhash}{d51288dc67d9f5e0330d927a009e208b}
+      \strng{authorfullhashraw}{d51288dc67d9f5e0330d927a009e208b}
+      \field{extraname}{4}
+      \field{sortinit}{O}
+      \field{sortinithash}{2cd7140a07aea5341f9e2771efe90aae}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://openjfx.io/}}
+      \field{note}{Accedido: 2024}
+      \field{title}{JavaFX}
+      \field{year}{2024}
+    \endentry
+    \entry{mvc-web}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=d51288dc67d9f5e0330d927a009e208b}{%
+           family={{Oracle Corporation}},
+           familyi={O\bibinitperiod}}}%
+      }
+      \strng{namehash}{d51288dc67d9f5e0330d927a009e208b}
+      \strng{fullhash}{d51288dc67d9f5e0330d927a009e208b}
+      \strng{fullhashraw}{d51288dc67d9f5e0330d927a009e208b}
+      \strng{bibnamehash}{d51288dc67d9f5e0330d927a009e208b}
+      \strng{authorbibnamehash}{d51288dc67d9f5e0330d927a009e208b}
+      \strng{authornamehash}{d51288dc67d9f5e0330d927a009e208b}
+      \strng{authorfullhash}{d51288dc67d9f5e0330d927a009e208b}
+      \strng{authorfullhashraw}{d51288dc67d9f5e0330d927a009e208b}
+      \field{extraname}{5}
+      \field{sortinit}{O}
+      \field{sortinithash}{2cd7140a07aea5341f9e2771efe90aae}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://www.oracle.com/technetwork/java/mvc-140477.html}}
+      \field{note}{Accedido: 2024}
+      \field{title}{Model-View-Controller Pattern}
+      \field{year}{2024}
+    \endentry
+    \entry{observer-web}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=d51288dc67d9f5e0330d927a009e208b}{%
+           family={{Oracle Corporation}},
+           familyi={O\bibinitperiod}}}%
+      }
+      \strng{namehash}{d51288dc67d9f5e0330d927a009e208b}
+      \strng{fullhash}{d51288dc67d9f5e0330d927a009e208b}
+      \strng{fullhashraw}{d51288dc67d9f5e0330d927a009e208b}
+      \strng{bibnamehash}{d51288dc67d9f5e0330d927a009e208b}
+      \strng{authorbibnamehash}{d51288dc67d9f5e0330d927a009e208b}
+      \strng{authornamehash}{d51288dc67d9f5e0330d927a009e208b}
+      \strng{authorfullhash}{d51288dc67d9f5e0330d927a009e208b}
+      \strng{authorfullhashraw}{d51288dc67d9f5e0330d927a009e208b}
+      \field{extraname}{6}
+      \field{sortinit}{O}
+      \field{sortinithash}{2cd7140a07aea5341f9e2771efe90aae}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://www.oracle.com/technetwork/java/observer-137868.html}}
+      \field{note}{Accedido: 2024}
+      \field{title}{Observer Pattern}
+      \field{year}{2024}
+    \endentry
+    \entry{singleton-web}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=d51288dc67d9f5e0330d927a009e208b}{%
+           family={{Oracle Corporation}},
+           familyi={O\bibinitperiod}}}%
+      }
+      \strng{namehash}{d51288dc67d9f5e0330d927a009e208b}
+      \strng{fullhash}{d51288dc67d9f5e0330d927a009e208b}
+      \strng{fullhashraw}{d51288dc67d9f5e0330d927a009e208b}
+      \strng{bibnamehash}{d51288dc67d9f5e0330d927a009e208b}
+      \strng{authorbibnamehash}{d51288dc67d9f5e0330d927a009e208b}
+      \strng{authornamehash}{d51288dc67d9f5e0330d927a009e208b}
+      \strng{authorfullhash}{d51288dc67d9f5e0330d927a009e208b}
+      \strng{authorfullhashraw}{d51288dc67d9f5e0330d927a009e208b}
+      \field{extraname}{7}
+      \field{sortinit}{O}
+      \field{sortinithash}{2cd7140a07aea5341f9e2771efe90aae}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://www.oracle.com/technetwork/java/singleton-137897.html}}
+      \field{note}{Accedido: 2024}
+      \field{title}{Singleton Pattern}
+      \field{year}{2024}
+    \endentry
+    \entry{strategy-web}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=d51288dc67d9f5e0330d927a009e208b}{%
+           family={{Oracle Corporation}},
+           familyi={O\bibinitperiod}}}%
+      }
+      \strng{namehash}{d51288dc67d9f5e0330d927a009e208b}
+      \strng{fullhash}{d51288dc67d9f5e0330d927a009e208b}
+      \strng{fullhashraw}{d51288dc67d9f5e0330d927a009e208b}
+      \strng{bibnamehash}{d51288dc67d9f5e0330d927a009e208b}
+      \strng{authorbibnamehash}{d51288dc67d9f5e0330d927a009e208b}
+      \strng{authornamehash}{d51288dc67d9f5e0330d927a009e208b}
+      \strng{authorfullhash}{d51288dc67d9f5e0330d927a009e208b}
+      \strng{authorfullhashraw}{d51288dc67d9f5e0330d927a009e208b}
+      \field{extraname}{8}
+      \field{sortinit}{O}
+      \field{sortinithash}{2cd7140a07aea5341f9e2771efe90aae}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://www.oracle.com/technetwork/java/strategy-137857.html}}
+      \field{note}{Accedido: 2024}
+      \field{title}{Strategy Pattern}
+      \field{year}{2024}
+    \endentry
+    \entry{overleaf}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=c40f2d20f1f346432b3a94177ccf6abe}{%
+           family={{Overleaf Ltd.}},
+           familyi={O\bibinitperiod}}}%
+      }
+      \strng{namehash}{c40f2d20f1f346432b3a94177ccf6abe}
+      \strng{fullhash}{c40f2d20f1f346432b3a94177ccf6abe}
+      \strng{fullhashraw}{c40f2d20f1f346432b3a94177ccf6abe}
+      \strng{bibnamehash}{c40f2d20f1f346432b3a94177ccf6abe}
+      \strng{authorbibnamehash}{c40f2d20f1f346432b3a94177ccf6abe}
+      \strng{authornamehash}{c40f2d20f1f346432b3a94177ccf6abe}
+      \strng{authorfullhash}{c40f2d20f1f346432b3a94177ccf6abe}
+      \strng{authorfullhashraw}{c40f2d20f1f346432b3a94177ccf6abe}
+      \field{sortinit}{O}
+      \field{sortinithash}{2cd7140a07aea5341f9e2771efe90aae}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://www.overleaf.com/}}
+      \field{note}{Accedido: 2024}
+      \field{title}{Overleaf: LaTeX Editor}
+      \field{year}{2024}
+    \endentry
+    \entry{vanesa}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=c685ec93489eaf550f575785413b79b0}{%
+           family={Pérez},
+           familyi={P\bibinitperiod},
+           given={Vanesa\bibnamedelima González},
+           giveni={V\bibinitperiod\bibinitdelim G\bibinitperiod}}}%
+      }
+      \strng{namehash}{c685ec93489eaf550f575785413b79b0}
+      \strng{fullhash}{c685ec93489eaf550f575785413b79b0}
+      \strng{fullhashraw}{c685ec93489eaf550f575785413b79b0}
+      \strng{bibnamehash}{c685ec93489eaf550f575785413b79b0}
+      \strng{authorbibnamehash}{c685ec93489eaf550f575785413b79b0}
+      \strng{authornamehash}{c685ec93489eaf550f575785413b79b0}
+      \strng{authorfullhash}{c685ec93489eaf550f575785413b79b0}
+      \strng{authorfullhashraw}{c685ec93489eaf550f575785413b79b0}
+      \field{sortinit}{P}
+      \field{sortinithash}{ff3bcf24f47321b42cb156c2cc8a8422}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{note}{Proyecto de Fin de Carrera, Universidad de Córdoba}
+      \field{title}{SimAS 1.0: Simulador de Análisis Sintáctico}
+      \field{year}{2015}
+    \endentry
+    \entry{factory-pattern}{book}{}{}
+      \name{author}{2}{}{%
+        {{hash=11e02e1cf8dbcd6bf6e5ef11c55e3e96}{%
+           family={Shalloway},
+           familyi={S\bibinitperiod},
+           given={Alan},
+           giveni={A\bibinitperiod}}}%
+        {{hash=dfa627f92d8442738f8d8317cbdbb15c}{%
+           family={Trott},
+           familyi={T\bibinitperiod},
+           given={James\bibnamedelima R.},
+           giveni={J\bibinitperiod\bibinitdelim R\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Addison-Wesley Professional}%
+      }
+      \strng{namehash}{afe1ebecd47e464b9dc285812daad08f}
+      \strng{fullhash}{afe1ebecd47e464b9dc285812daad08f}
+      \strng{fullhashraw}{afe1ebecd47e464b9dc285812daad08f}
+      \strng{bibnamehash}{afe1ebecd47e464b9dc285812daad08f}
+      \strng{authorbibnamehash}{afe1ebecd47e464b9dc285812daad08f}
+      \strng{authornamehash}{afe1ebecd47e464b9dc285812daad08f}
+      \strng{authorfullhash}{afe1ebecd47e464b9dc285812daad08f}
+      \strng{authorfullhashraw}{afe1ebecd47e464b9dc285812daad08f}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{isbn}{978-0201715941}
+      \field{title}{Design Patterns Explained: A New Perspective on Object-Oriented Design}
+      \field{year}{2001}
+    \endentry
+    \entry{git}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=76ef278445dc6cdc6822d4a06d53d819}{%
+           family={{The Git Project}},
+           familyi={T\bibinitperiod}}}%
+      }
+      \strng{namehash}{76ef278445dc6cdc6822d4a06d53d819}
+      \strng{fullhash}{76ef278445dc6cdc6822d4a06d53d819}
+      \strng{fullhashraw}{76ef278445dc6cdc6822d4a06d53d819}
+      \strng{bibnamehash}{76ef278445dc6cdc6822d4a06d53d819}
+      \strng{authorbibnamehash}{76ef278445dc6cdc6822d4a06d53d819}
+      \strng{authornamehash}{76ef278445dc6cdc6822d4a06d53d819}
+      \strng{authorfullhash}{76ef278445dc6cdc6822d4a06d53d819}
+      \strng{authorfullhashraw}{76ef278445dc6cdc6822d4a06d53d819}
+      \field{sortinit}{T}
+      \field{sortinithash}{9af77f0292593c26bde9a56e688eaee9}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://git-scm.com/}}
+      \field{note}{Accedido: 2024}
+      \field{title}{Git: Distributed Version Control System}
+      \field{year}{2024}
+    \endentry
+    \entry{xml}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=bdea812935506778c291249971f80655}{%
+           family={{World Wide Web Consortium}},
+           familyi={W\bibinitperiod}}}%
+      }
+      \strng{namehash}{bdea812935506778c291249971f80655}
+      \strng{fullhash}{bdea812935506778c291249971f80655}
+      \strng{fullhashraw}{bdea812935506778c291249971f80655}
+      \strng{bibnamehash}{bdea812935506778c291249971f80655}
+      \strng{authorbibnamehash}{bdea812935506778c291249971f80655}
+      \strng{authornamehash}{bdea812935506778c291249971f80655}
+      \strng{authorfullhash}{bdea812935506778c291249971f80655}
+      \strng{authorfullhashraw}{bdea812935506778c291249971f80655}
+      \field{sortinit}{W}
+      \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://www.w3.org/TR/xml/}}
+      \field{note}{Accedido: 2024}
+      \field{title}{Extensible Markup Language (XML) 1.0}
+      \field{year}{2008}
+    \endentry
+  \enddatalist
+  \missing{html}
+  \missing{macos}
+  \missing{pressman}
+  \missing{rad}
+  \missing{scrum}
+  \missing{uml}
+\endrefsection
+\endinput
+

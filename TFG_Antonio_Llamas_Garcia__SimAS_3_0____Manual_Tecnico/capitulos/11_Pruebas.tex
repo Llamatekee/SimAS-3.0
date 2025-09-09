@@ -1,0 +1,209 @@
+\chapter{Pruebas}\label{cap:pruebas}
+
+\section{Introducción}
+
+% En este capítulo se van a describir las pruebas realizadas a la aplicación desarrollada, para asegurar que su funcionamiento es el correcto, amigable y robusto, es decir, puede recuperarse de los errores que puedan ocurrir durante su utilización.
+
+% Debido a que esta es una versión actualizada de una anterior, las pruebas irán principalmente enfocadas a aquellas funcionalidades que contenían algún error o aquellas que sean nuevas. Además, gracias a la división del programa en módulos, se podrán clasificar las pruebas de forma más sencilla.
+
+% Dada la división modular de la aplicación, las pruebas se han agrupado por los módulos que la componen:
+
+% \begin{itemize}
+%  \item \textbf{Módulo Editor}.
+%  \item \textbf{Módulo Simulador}.
+% \end{itemize}
+
+% Finalmente, para cada prueba realizada, se detallará el objetivo de la prueba, el proceso llevado a cabo, el resultado de la misma y la acción tomada (en caso de haber detectado e\-rrores en el software).
+
+\section{Pruebas del módulo Editor}
+
+% En esta sección se recopilan todas las pruebas efectuadas al módulo de Edición de gramáticas.
+
+
+\subsection{Almacenamiento y recuperación de gramáticas}
+
+% \textbf{Objetivo}: modificar la manera de grabar y cargar gramáticas de forma que sea mucho más modular en el fichero XML. Además, aunque se grabe y se permite cargar con la versión 2.0, aquellas gramáticas creadas en la versión 1.0 también se podrán cargar en la aplicación. 
+% \medskip
+
+% \textbf{Proceso}: en su versión anterior las gramáticas eran grabadas en XML de una forma muy poco modular. Las producciones era guardadas directamente como reglas con un único valor, sin poder separar precedente de consecuente de la regla. En esta nueva versión se ha tenido en cuenta el precedente y el consecuente de cada regla, de tal forma de que cada una este separada por dichas partes, cada una con sus respectivos valores.
+% \medskip
+
+% \textbf{Resultado}: al finalizar esta prueba, no se detectó ningún e\-rror o anomalía
+% en el comportamiento de la aplicación. además, el comportamiento de SimAS frente a los e\-rrores
+% provocados fue el correcto, controlando y notificando al usuario los e\-rrores producidos
+% en todo momento.
+% \medskip
+
+% \textbf{Solución adoptada}: no hubo necesidad de tomar ninguna acción correctora de esta prueba.
+
+% %
+% %Prueba Validacion
+% %
+
+\subsection{Validación de gramáticas}
+
+% \textbf{Objetivo}: cargar una gramática de cualquier versión y validarla automáticamente sin necesidad de pulsar ningún botón.
+% \medskip
+
+% \textbf{Proceso}: se cargaron varias gramáticas, algunas con errores y otras correctas y, al cargarlas, el programa mostraba al usuario un mensaje describiendo el estado de las gramáticas. Se comprobaba si la gramática tenía algún tipo de error o anomalía o si la gramática estaba correctamente validada.
+% \medskip
+
+% \textbf{Resultado}:  los errores de la validación se detectaban
+% y notificaban correctamente. 
+% \medskip
+
+% \textbf{Solución adoptada}: no hubo necesidad de tomar ninguna acción correctora
+% de esta prueba.
+
+% %
+% %Pruebas Simulador
+% %
+
+\section{Pruebas del módulo Simulador}
+
+% En esta sección se recopilan todas las pruebas efectuadas al módulo de 
+% \textbf{Simulación de gramáticas}.
+
+% %
+% %Prueba Conj Prim y Sig con recursividad
+% %
+
+%\subsection{Generación correcta de conjunto primero y siguiente en simulación ascendente si existe recursividad o reglas épsilon}
+
+% \textbf{Objetivo}: comprobar que se generan correctamente los conjuntos \textit{primero}  y \textit{siguiente} cuando se desea realizar un análisis ascendente con una gramática que posea recursividad  por la izquierda y reglas épsilon.
+% \medskip
+
+% \textbf{Proceso}: para conseguir una generación correcta de los conjuntos \textit{primero}  y \textit{siguiente}, se han cargado diferentes gramáticas con recursividad por la izquierda y reglas épsilon para proceder con su análisis ascendente. 
+% \medskip
+
+% \textbf{Resultado}: \textit{primero}  y \textit{siguiente} se generaban correctamente. 
+% \medskip
+
+% \textbf{Solución adoptada}: no hubo necesidad de tomar ninguna acción correctora
+% de esta prueba.
+
+% %
+% %Prueba Visualizar gramática
+% %
+
+%\subsection{Visualización de la gramática durante la generación de los conjuntos primero, siguiente, tablas y funciones de error}
+
+% \textbf{Objetivo}: mostrar la gramática original durante todo el proceso:  generación de  los conjuntos\textit{primero} y \textit{siguiente}, creación de las tablas de análisis sintáctico, uso de las funciones de error, etc.. En la versión anterior, esto suponía un problema pues, a veces, la gramática original se transformaba y no era posible visualizarla.
+% \medskip
+
+% \textbf{Proceso}: se han añadido una serie de botones a todos los pasos de manera que se abra la gramática a partir de la cual se esta generando todo y que el usuario la pueda ver en todo momento. 
+% \medskip
+
+% \textbf{Resultado}: la gramática orignal se abría en una nueva ventana de forma correcta. 
+% \medskip
+
+% \textbf{Solución adoptada}: no hubo necesidad de tomar ninguna acción correctora
+% de esta prueba.
+
+% %
+% %Prueba Errores por defecto
+% %
+
+%\subsection{Funciones de Error de insertar por defecto}
+
+% \textbf{Objetivo}: comprobar si las funciones de inserción de elementos en la entrada se añadían de forma automática en cualquier simulación.
+% \medskip
+
+% \textbf{Proceso}: se han usado diferentes gramáticas para comprobar que las funciones de error se definían y se podían usar correctamente.
+% \medskip
+
+% \textbf{Resultado}: al iniciar la funcionalidad de funciones de error, el simulador cargaba directamente como funciones de error todas aquellas inserciones disponibles para la entrada. Además su funcionamiento en el simulador era el correcto
+
+% \medskip
+
+% \textbf{Solución adoptada}: no hubo necesidad de tomar ninguna acción correctora de esta prueba.
+
+% %
+% %Prueba Errores asterisco
+% %
+
+%\subsection{Funciones de Error del modo pánico}
+
+% \textbf{Objetivo}: permitir que el programa leyese de la tabla de análisis sintáctico las celdas con reglas con asteriscos o funciones de error con asteriscos tales, como 2*) T -> int o r4*. Esto se utiliza principalmente en el modo de pánico de la recuperación de errores.
+% \medskip
+
+% \textbf{Proceso}: se han cargado diferentes gramáticas y se les han añadido las reglas y funciones de error con asteriscos de tal manera que, al simular el análisis de una cadena, se tuviese que usar una de dichas reglas o funciones con asterisco y así poder comprobar la simulación era correcta.
+% \medskip
+
+% \textbf{Resultado}: durante la simulación se encontraba con un error debido a la imposibilidad de distinguir el asterisco. Esto suponía el acceso a una celda incorrecta pues no encontraba ninguna regla que coincidiese. Aun con el asterisco, la regla a usar debe ser la especificada y, por tanto, debe de acceder a la celda correcta.
+
+% \medskip
+
+% \textbf{Solución adoptada}: ha sido necesario alterar el código de manera que el programa sea capaz de distinguir los asteriscos y pueda ejecutar la regla correcta.
+
+% %
+% %Prueba Árbol descendente
+% %
+
+
+%\subsection{Generación del árbol descendente}
+
+% \textbf{Objetivo}: obtener una generación iterativa o instantánea del árbol descendente.
+% \medskip
+
+% \textbf{Proceso}: se han cargado diferentes gramática y se ha simulado un análisis descendente de una cadena de entrada de tal manera que se pudiera ver el árbol al continuar con el análisis.
+% \medskip
+
+% \textbf{Resultado}: el árbol se ha generado correctamente sin ningún problema.
+% \medskip
+
+% \textbf{Solución adoptada}: no hubo necesidad de tomar ninguna acción correctora
+% de esta prueba.
+
+% %
+% %Prueba Árbol Ascendente
+% %
+
+%\subsection{Generación del árbol ascendente}
+
+% \textbf{Objetivo}:  obtener una generación iterativa o instantánea del árbol ascendente.
+% \medskip
+
+% \textbf{Proceso}: se han cargado diferentes gramática y se ha simulado un análisis de una cadena de entrada de tal manera que se pudiera ver el árbol al continuar con el análisis
+% \medskip
+
+% \textbf{Resultado}: el árbol se generaba de forma incorrecta. Los nodos se posicionaban en lugares inesperados y no se conseguía el árbol correcto.
+% \medskip
+
+% \textbf{Solución adoptada}: se ha utilizado un nuevo enfoque para este árbol, haciendo uso de dos pilas adicionales, una para guardar la pila de la derivación y otra para guardar la entrada, de esta manera el árbol obtenido es siempre el correcto. Para arreglar el posicionamiento de los nodos, se ha optado por una generación nueva de la imagen, usando la opción -Kfdp y el atributo pos. 
+
+% %
+% %Prueba Derivación generada
+% %
+
+%\subsection{Generación de la derivación}
+
+% \textbf{Objetivo}:  obtener la derivación, ascendente o descendente, iterativa o instantánea al simular una cadena de entrada. 
+% \medskip
+
+% \textbf{Proceso}: se han añadido nuevos botones para  comprobar la generación de la derivación en la ventana de la simulación actual.
+% \medskip
+
+% \textbf{Resultado}: la derivación se generaba correctamente.
+% \medskip
+
+% \textbf{Solución adoptada}: no hubo necesidad de tomar ninguna acción correctora
+% de esta prueba.
+
+% %
+% %Prueba Derivación generada
+% %
+
+%\subsection{Generación de un informe de simulación}
+
+% \textbf{Objetivo}:  comprobar que se obtenía correctamente el informe de simulación, con los nuevos campos de árbol sintáctico y derivación.
+% \medskip
+
+% \textbf{Proceso}: se cargaron diferentes gramáticas y se procedió a simular de forma tanto ascendente como descendente algunas cadenas de entrada. Una vez finalizada la simulación, se generaba el informe.
+% \medskip
+
+% \textbf{Resultado}: el informe de simulación se obtuvo de forma satisfactoria. 
+
+% \textbf{Solución adoptada}: no hubo necesidad de tomar ninguna acción correctora.
+% de esta prueba.
+

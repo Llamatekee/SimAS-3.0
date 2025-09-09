@@ -1,0 +1,50 @@
+\babel@toc {spanish}{}\relax 
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {1.1}{\ignorespaces Fases Principales en el Proceso de Traducción}}{5}{figure.caption.4}%
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Ejemplo de árbol sintáctico asociado a una derivación de una gramática de contexto libre.}}{21}{figure.caption.5}%
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Árbol sintáctico: paso inicial del análisis sintáctico descendente predictivo}}{23}{figure.caption.6}%
+\contentsline {figure}{\numberline {3.3}{\ignorespaces Árbol sintáctico: paso final del análisis sintáctico descendente predictivo}}{23}{figure.caption.7}%
+\contentsline {figure}{\numberline {3.4}{\ignorespaces Árbol sintáctico: pasos (a) inicial y (b) final del análisis sintáctico ascendente SLR}}{27}{figure.caption.12}%
+\contentsline {figure}{\numberline {3.5}{\ignorespaces Interfaz del editor de SimAS 1.0.}}{29}{figure.caption.13}%
+\contentsline {figure}{\numberline {3.6}{\ignorespaces Panel del editor de SimAS 1.0 }}{30}{figure.caption.14}%
+\contentsline {figure}{\numberline {3.7}{\ignorespaces Ventana del simulador de SimAS 1.0.}}{30}{figure.caption.15}%
+\contentsline {figure}{\numberline {3.8}{\ignorespaces Interfaz del editor de SimAS 2.0.}}{33}{figure.caption.16}%
+\contentsline {figure}{\numberline {3.9}{\ignorespaces Corrección de gramáticas de SimAS 2.0.}}{34}{figure.caption.17}%
+\contentsline {figure}{\numberline {3.10}{\ignorespaces Conjunto Primero y Siguiente de SimAS 2.0.}}{34}{figure.caption.18}%
+\contentsline {figure}{\numberline {3.11}{\ignorespaces Tabla predictiva de SimAS 2.0.}}{35}{figure.caption.19}%
+\contentsline {figure}{\numberline {3.12}{\ignorespaces Tabla predictiva de SimAS 2.0.}}{36}{figure.caption.20}%
+\contentsline {figure}{\numberline {3.13}{\ignorespaces Tabla predictiva con funciones de errores de SimAS 2.0.}}{37}{figure.caption.21}%
+\contentsline {figure}{\numberline {3.14}{\ignorespaces Tabla predictiva con funciones de errores de SimAS 2.0.}}{38}{figure.caption.22}%
+\contentsline {figure}{\numberline {3.15}{\ignorespaces Generación repititiva de la visualización de la gramática}}{42}{figure.caption.23}%
+\contentsline {figure}{\numberline {3.16}{\ignorespaces Creación de una nueva función de error}}{42}{figure.caption.24}%
+\contentsline {figure}{\numberline {3.17}{\ignorespaces Abrir gramática en MacOS.}}{43}{figure.caption.25}%
+\contentsline {figure}{\numberline {3.18}{\ignorespaces Duplicación símbolos no terminales MacOS}}{44}{figure.caption.26}%
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {6.1}{\ignorespaces Descomposición modular del sistema}}{60}{figure.caption.28}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {7.1}{\ignorespaces Diagrama de contexto del Sistema}}{74}{figure.caption.29}%
+\contentsline {figure}{\numberline {7.2}{\ignorespaces CU-1: Editar Gramáticas}}{77}{figure.caption.30}%
+\contentsline {figure}{\numberline {7.3}{\ignorespaces CU-1.1: Crear gramática}}{81}{figure.caption.31}%
+\contentsline {figure}{\numberline {7.4}{\ignorespaces CU-1.2: Editar vocabulario de la gramática}}{82}{figure.caption.32}%
+\contentsline {figure}{\numberline {7.5}{\ignorespaces CU-1.3: Editar producción}}{84}{figure.caption.33}%
+\contentsline {figure}{\numberline {7.6}{\ignorespaces CU-1.4: Seleccionar el símbolo inicial}}{86}{figure.caption.34}%
+\contentsline {figure}{\numberline {7.7}{\ignorespaces CU-1.6: Recuperar gramática}}{89}{figure.caption.35}%
+\contentsline {figure}{\numberline {7.8}{\ignorespaces CU-1.7: Guardar gramática}}{91}{figure.caption.36}%
+\contentsline {figure}{\numberline {7.9}{\ignorespaces CU-1.8: Validar gramática}}{93}{figure.caption.37}%
+\contentsline {figure}{\numberline {7.10}{\ignorespaces CU-1.9: Generar informe de gramática}}{95}{figure.caption.38}%
+\contentsline {figure}{\numberline {7.11}{\ignorespaces CU-1.10: Transferir al simulador}}{97}{figure.caption.39}%
+\contentsline {figure}{\numberline {7.12}{\ignorespaces CU-1.12: Actualizar visualización de la gramática}}{99}{figure.caption.40}%
+\contentsline {figure}{\numberline {7.13}{\ignorespaces CU-2 Simular análisis sintáctico predictivo}}{101}{figure.caption.41}%
+\contentsline {figure}{\numberline {7.14}{\ignorespaces CU-2.1 Simular Análisis descendente}}{103}{figure.caption.42}%
+\contentsline {figure}{\numberline {7.15}{\ignorespaces CU-3: Consultar Tutorial}}{108}{figure.caption.43}%
+\contentsline {figure}{\numberline {7.16}{\ignorespaces CU-4: Consultar Ayuda}}{109}{figure.caption.44}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {8.1}{\ignorespaces Diagrama UML de arquitectura de paquetes de SimAS 3.0}}{139}{figure.caption.73}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {9.1}{\ignorespaces Diagrama de clases de SimAS 3.0}}{212}{figure.caption.77}%
+\addvspace {10\p@ }
+\addvspace {10\p@ }
