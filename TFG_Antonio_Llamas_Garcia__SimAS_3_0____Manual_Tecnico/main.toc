@@ -245,131 +245,115 @@
 \contentsline {subsection}{\numberline {9.2.2}Clase Bienvenida}{144}{subsection.9.2.2}%
 \contentsline {subsubsection}{\numberline {9.2.2.1}Dependencias internas del paquete bienvenida}{144}{subsubsection.9.2.2.1}%
 \contentsline {subsubsection}{\numberline {9.2.2.2}Patrones de diseño en el paquete bienvenida}{145}{subsubsection.9.2.2.2}%
-\contentsline {subsection}{\numberline {9.2.3}Paquete editor}{145}{subsection.9.2.3}%
-\contentsline {subsubsection}{\numberline {9.2.3.1}Clases del paquete editor}{145}{subsubsection.9.2.3.1}%
-\contentsline {subsubsection}{\numberline {9.2.3.2}Clase Editor}{145}{subsubsection.9.2.3.2}%
-\contentsline {subsubsection}{\numberline {9.2.3.3}Clase EditorWindow}{146}{subsubsection.9.2.3.3}%
-\contentsline {subsubsection}{\numberline {9.2.3.4}Clase PanelCreacionGramatica}{146}{subsubsection.9.2.3.4}%
-\contentsline {subsubsection}{\numberline {9.2.3.5}Paneles del asistente de creación}{147}{subsubsection.9.2.3.5}%
-\contentsline {subsubsection}{\numberline {9.2.3.6}Clase PanelProducciones}{148}{subsubsection.9.2.3.6}%
-\contentsline {subsubsection}{\numberline {9.2.3.7}Clase PanelSimbolosNoTerminales}{148}{subsubsection.9.2.3.7}%
-\contentsline {subsubsection}{\numberline {9.2.3.8}Clase PanelSimbolosTerminales}{149}{subsubsection.9.2.3.8}%
-\contentsline {subsubsection}{\numberline {9.2.3.9}Dependencias internas del paquete editor}{149}{subsubsection.9.2.3.9}%
-\contentsline {subsubsection}{\numberline {9.2.3.10}Patrones de diseño en el paquete editor}{150}{subsubsection.9.2.3.10}%
-\contentsline {subsection}{\numberline {9.2.4}Paquete gramatica}{150}{subsection.9.2.4}%
-\contentsline {subsubsection}{\numberline {9.2.4.1}Clases del paquete gramatica}{150}{subsubsection.9.2.4.1}%
-\contentsline {subsubsection}{\numberline {9.2.4.2}Clase Simbolo}{150}{subsubsection.9.2.4.2}%
-\contentsline {subsubsection}{\numberline {9.2.4.3}Clase Terminal}{151}{subsubsection.9.2.4.3}%
-\contentsline {subsubsection}{\numberline {9.2.4.4}Clase NoTerminal}{151}{subsubsection.9.2.4.4}%
-\contentsline {subsubsection}{\numberline {9.2.4.5}Clase Produccion}{152}{subsubsection.9.2.4.5}%
-\contentsline {subsubsection}{\numberline {9.2.4.6}Clase Antecedente}{153}{subsubsection.9.2.4.6}%
-\contentsline {subsubsection}{\numberline {9.2.4.7}Clase Consecuente}{153}{subsubsection.9.2.4.7}%
-\contentsline {subsubsection}{\numberline {9.2.4.8}Clase TablaPredictiva}{153}{subsubsection.9.2.4.8}%
-\contentsline {subsubsection}{\numberline {9.2.4.9}Clase FuncionError}{154}{subsubsection.9.2.4.9}%
-\contentsline {subsubsection}{\numberline {9.2.4.10}Dependencias internas del paquete gramatica}{155}{subsubsection.9.2.4.10}%
-\contentsline {subsubsection}{\numberline {9.2.4.11}Patrones de diseño en el paquete gramatica}{155}{subsubsection.9.2.4.11}%
+\contentsline {subsection}{\numberline {9.2.3}Paquete gramatica}{145}{subsection.9.2.3}%
+\contentsline {subsubsection}{\numberline {9.2.3.1}Clases del paquete gramatica}{145}{subsubsection.9.2.3.1}%
+\contentsline {subsubsection}{\numberline {9.2.3.2}Clase Simbolo}{145}{subsubsection.9.2.3.2}%
+\contentsline {subsubsection}{\numberline {9.2.3.3}Clase Terminal}{146}{subsubsection.9.2.3.3}%
+\contentsline {subsubsection}{\numberline {9.2.3.4}Clase NoTerminal}{146}{subsubsection.9.2.3.4}%
+\contentsline {subsubsection}{\numberline {9.2.3.5}Clase Produccion}{147}{subsubsection.9.2.3.5}%
+\contentsline {subsubsection}{\numberline {9.2.3.6}Clase Antecedente}{147}{subsubsection.9.2.3.6}%
+\contentsline {subsubsection}{\numberline {9.2.3.7}Clase Consecuente}{148}{subsubsection.9.2.3.7}%
+\contentsline {subsubsection}{\numberline {9.2.3.8}Clase TablaPredictiva}{148}{subsubsection.9.2.3.8}%
+\contentsline {subsubsection}{\numberline {9.2.3.9}Clase FuncionError}{149}{subsubsection.9.2.3.9}%
+\contentsline {subsubsection}{\numberline {9.2.3.10}Dependencias internas del paquete gramatica}{149}{subsubsection.9.2.3.10}%
+\contentsline {subsubsection}{\numberline {9.2.3.11}Patrones de diseño en el paquete gramatica}{150}{subsubsection.9.2.3.11}%
+\contentsline {subsection}{\numberline {9.2.4}Paquete editor}{150}{subsection.9.2.4}%
+\contentsline {subsubsection}{\numberline {9.2.4.1}Clases del paquete editor}{150}{subsubsection.9.2.4.1}%
+\contentsline {subsubsection}{\numberline {9.2.4.2}Clase Editor}{150}{subsubsection.9.2.4.2}%
+\contentsline {subsubsection}{\numberline {9.2.4.3}Clase EditorWindow}{151}{subsubsection.9.2.4.3}%
+\contentsline {subsubsection}{\numberline {9.2.4.4}Clase PanelCreacionGramatica}{151}{subsubsection.9.2.4.4}%
+\contentsline {subsubsection}{\numberline {9.2.4.5}Paneles del asistente de creación}{152}{subsubsection.9.2.4.5}%
+\contentsline {subsubsection}{\numberline {9.2.4.6}Clase PanelProducciones}{153}{subsubsection.9.2.4.6}%
+\contentsline {subsubsection}{\numberline {9.2.4.7}Clase PanelSimbolosNoTerminales}{153}{subsubsection.9.2.4.7}%
+\contentsline {subsubsection}{\numberline {9.2.4.8}Clase PanelSimbolosTerminales}{154}{subsubsection.9.2.4.8}%
+\contentsline {subsubsection}{\numberline {9.2.4.9}Dependencias internas del paquete editor}{155}{subsubsection.9.2.4.9}%
+\contentsline {subsubsection}{\numberline {9.2.4.10}Patrones de diseño en el paquete editor}{155}{subsubsection.9.2.4.10}%
 \contentsline {subsection}{\numberline {9.2.5}Paquete simulador}{155}{subsection.9.2.5}%
 \contentsline {subsubsection}{\numberline {9.2.5.1}Clases del paquete simulador}{155}{subsubsection.9.2.5.1}%
-\contentsline {subsubsection}{\numberline {9.2.5.2}Clase Gramatica}{155}{subsubsection.9.2.5.2}%
-\contentsline {subsection}{\numberline {9.2.6}Clase Simbolo}{157}{subsection.9.2.6}%
-\contentsline {subsection}{\numberline {9.2.7}Clase Terminal}{158}{subsection.9.2.7}%
-\contentsline {subsection}{\numberline {9.2.8}Clase NoTerminal}{159}{subsection.9.2.8}%
-\contentsline {subsection}{\numberline {9.2.9}Clase Produccion}{159}{subsection.9.2.9}%
-\contentsline {subsection}{\numberline {9.2.10}Clase Antecedente}{160}{subsection.9.2.10}%
-\contentsline {subsection}{\numberline {9.2.11}Clase Consecuente}{161}{subsection.9.2.11}%
-\contentsline {subsection}{\numberline {9.2.12}Clase TablaPredictiva}{161}{subsection.9.2.12}%
-\contentsline {subsection}{\numberline {9.2.13}Clase TablaPredictivaPaso5}{162}{subsection.9.2.13}%
-\contentsline {subsection}{\numberline {9.2.14}Clase FilaTablaPredictiva}{163}{subsection.9.2.14}%
-\contentsline {subsection}{\numberline {9.2.15}Clase FuncionError}{165}{subsection.9.2.15}%
-\contentsline {subsection}{\numberline {9.2.16}Clase Editor}{167}{subsection.9.2.16}%
-\contentsline {subsection}{\numberline {9.2.17}Clase EditorWindow}{168}{subsection.9.2.17}%
-\contentsline {subsection}{\numberline {9.2.18}Clase PanelCreacionGramatica}{169}{subsection.9.2.18}%
-\contentsline {subsection}{\numberline {9.2.19}Clase PanelCreacionGramaticaPaso1}{171}{subsection.9.2.19}%
-\contentsline {subsection}{\numberline {9.2.20}Clase PanelProducciones}{173}{subsection.9.2.20}%
-\contentsline {subsection}{\numberline {9.2.21}Clase PanelSimbolosNoTerminales}{175}{subsection.9.2.21}%
-\contentsline {subsection}{\numberline {9.2.22}Clase PanelSimbolosTerminales}{177}{subsection.9.2.22}%
-\contentsline {subsection}{\numberline {9.2.23}Clase PanelCreacionGramaticaPaso2}{178}{subsection.9.2.23}%
-\contentsline {subsection}{\numberline {9.2.24}Clase PanelCreacionGramaticaPaso3}{180}{subsection.9.2.24}%
-\contentsline {subsection}{\numberline {9.2.25}Clase PanelCreacionGramaticaPaso4}{182}{subsection.9.2.25}%
-\contentsline {subsection}{\numberline {9.2.26}Clase EditorCadenaEntradaController}{183}{subsection.9.2.26}%
-\contentsline {subsection}{\numberline {9.2.27}Clase NuevaFuncionError}{184}{subsection.9.2.27}%
-\contentsline {subsection}{\numberline {9.2.28}Clase PanelGramaticaOriginal}{185}{subsection.9.2.28}%
-\contentsline {subsection}{\numberline {9.2.29}Interfaz PanelNuevaSimDescPaso}{186}{subsection.9.2.29}%
-\contentsline {subsection}{\numberline {9.2.30}Clase PanelNuevaSimDescPaso1}{186}{subsection.9.2.30}%
-\contentsline {subsection}{\numberline {9.2.31}Clase PanelNuevaSimDescPaso2}{188}{subsection.9.2.31}%
-\contentsline {subsection}{\numberline {9.2.32}Clase PanelNuevaSimDescPaso3}{190}{subsection.9.2.32}%
-\contentsline {subsection}{\numberline {9.2.33}Clase PanelNuevaSimDescPaso4}{192}{subsection.9.2.33}%
-\contentsline {subsection}{\numberline {9.2.34}Clase PanelNuevaSimDescPaso5}{194}{subsection.9.2.34}%
-\contentsline {subsection}{\numberline {9.2.35}Clase PanelNuevaSimDescPaso6}{197}{subsection.9.2.35}%
-\contentsline {subsection}{\numberline {9.2.36}Clase PanelSimulacion}{199}{subsection.9.2.36}%
-\contentsline {subsection}{\numberline {9.2.37}Clase PanelSimuladorDesc}{201}{subsection.9.2.37}%
-\contentsline {subsection}{\numberline {9.2.38}Clase SimulacionFinal}{204}{subsection.9.2.38}%
-\contentsline {subsection}{\numberline {9.2.39}Clase ActualizableTextos}{207}{subsection.9.2.39}%
-\contentsline {subsection}{\numberline {9.2.40}Clase LanguageItem}{207}{subsection.9.2.40}%
-\contentsline {subsection}{\numberline {9.2.41}Clase LanguageListCell}{208}{subsection.9.2.41}%
-\contentsline {subsection}{\numberline {9.2.42}Clase SecondaryWindow}{209}{subsection.9.2.42}%
-\contentsline {subsection}{\numberline {9.2.43}Clase TabManager}{210}{subsection.9.2.43}%
-\contentsline {subsection}{\numberline {9.2.44}Clase TabPaneMonitor}{212}{subsection.9.2.44}%
-\contentsline {subsection}{\numberline {9.2.45}Estructura del paquete vistas}{214}{subsection.9.2.45}%
-\contentsline {section}{\numberline {9.3}Relaciones entre las clases}{214}{section.9.3}%
-\contentsline {subsection}{\numberline {9.3.1}Relación de herencia: Simbolo - Terminal y NoTerminal}{214}{subsection.9.3.1}%
-\contentsline {subsection}{\numberline {9.3.2}Relación de composición: Gramatica - Produccion}{214}{subsection.9.3.2}%
-\contentsline {subsection}{\numberline {9.3.3}Relación de composición: Produccion - Antecedente y Consecuente}{214}{subsection.9.3.3}%
-\contentsline {subsection}{\numberline {9.3.4}Relación de composición: Antecedente - NoTerminal}{214}{subsection.9.3.4}%
-\contentsline {subsection}{\numberline {9.3.5}Relación de composición: Consecuente - Simbolo}{215}{subsection.9.3.5}%
-\contentsline {subsection}{\numberline {9.3.6}Relación de composición: Gramatica - Terminal y NoTerminal}{215}{subsection.9.3.6}%
-\contentsline {subsection}{\numberline {9.3.7}Relación de composición: Gramatica - TablaPredictiva}{215}{subsection.9.3.7}%
-\contentsline {subsection}{\numberline {9.3.8}Relación de uso: Editor - Gramatica}{215}{subsection.9.3.8}%
-\contentsline {subsection}{\numberline {9.3.9}Relación de uso: Simulador - Gramatica}{215}{subsection.9.3.9}%
-\contentsline {subsection}{\numberline {9.3.10}Relación de herencia: Application - Bienvenida y MenuPrincipal}{215}{subsection.9.3.10}%
-\contentsline {subsection}{\numberline {9.3.11}Relación de herencia: VBox - Clases de paneles}{215}{subsection.9.3.11}%
-\contentsline {subsection}{\numberline {9.3.12}Relación de implementación: ActualizableTextos}{216}{subsection.9.3.12}%
-\contentsline {subsection}{\numberline {9.3.13}Relación de herencia: EditorWindow - SecondaryWindow}{216}{subsection.9.3.13}%
-\contentsline {subsection}{\numberline {9.3.14}Relación de herencia: TablaPredictiva - TablaPredictivaPaso5}{216}{subsection.9.3.14}%
-\contentsline {subsection}{\numberline {9.3.15}Relación de composición: TablaPredictiva - FilaTablaPredictiva}{216}{subsection.9.3.15}%
-\contentsline {subsection}{\numberline {9.3.16}Relación de composición: TablaPredictiva - FuncionError}{216}{subsection.9.3.16}%
-\contentsline {subsection}{\numberline {9.3.17}Relación de asociación: FuncionError - Terminal}{216}{subsection.9.3.17}%
-\contentsline {subsection}{\numberline {9.3.18}Relación de herencia: VBox - Editor}{216}{subsection.9.3.18}%
-\contentsline {subsection}{\numberline {9.3.19}Relación de herencia: BorderPane - PanelCreacionGramatica}{217}{subsection.9.3.19}%
-\contentsline {subsection}{\numberline {9.3.20}Relación de herencia: VBox - Paneles del Editor}{217}{subsection.9.3.20}%
-\contentsline {subsection}{\numberline {9.3.21}Relación de composición: Editor - Gramatica}{217}{subsection.9.3.21}%
-\contentsline {subsection}{\numberline {9.3.22}Relación de composición: PanelCreacionGramatica - Paneles de Pasos}{217}{subsection.9.3.22}%
-\contentsline {subsection}{\numberline {9.3.23}Relación de composición: PanelCreacionGramatica - Gramatica}{217}{subsection.9.3.23}%
-\contentsline {subsection}{\numberline {9.3.24}Relación de uso: Editor - PanelCreacionGramatica}{217}{subsection.9.3.24}%
-\contentsline {subsection}{\numberline {9.3.25}Relación de uso: PanelCreacionGramaticaPaso2 - PanelSimbolosNoTerminales y PanelSimbolosTerminales}{217}{subsection.9.3.25}%
-\contentsline {subsection}{\numberline {9.3.26}Relación de uso: PanelCreacionGramaticaPaso3 - PanelProducciones}{218}{subsection.9.3.26}%
-\contentsline {subsection}{\numberline {9.3.27}Relación de implementación: Clases del Editor - ActualizableTextos}{218}{subsection.9.3.27}%
-\contentsline {subsection}{\numberline {9.3.28}Relaciones del paquete simulador}{218}{subsection.9.3.28}%
-\contentsline {subsubsection}{\numberline {9.3.28.1}Herencia}{218}{subsubsection.9.3.28.1}%
-\contentsline {subsubsection}{\numberline {9.3.28.2}Composición}{218}{subsubsection.9.3.28.2}%
-\contentsline {subsubsection}{\numberline {9.3.28.3}Asociación}{219}{subsubsection.9.3.28.3}%
-\contentsline {subsubsection}{\numberline {9.3.28.4}Implementación}{219}{subsubsection.9.3.28.4}%
-\contentsline {subsubsection}{\numberline {9.3.28.5}Uso}{219}{subsubsection.9.3.28.5}%
-\contentsline {subsection}{\numberline {9.3.29}Relaciones del paquete utils}{219}{subsection.9.3.29}%
-\contentsline {subsubsection}{\numberline {9.3.29.1}Herencia}{219}{subsubsection.9.3.29.1}%
-\contentsline {subsubsection}{\numberline {9.3.29.2}Composición}{220}{subsubsection.9.3.29.2}%
-\contentsline {subsubsection}{\numberline {9.3.29.3}Asociación}{220}{subsubsection.9.3.29.3}%
-\contentsline {subsubsection}{\numberline {9.3.29.4}Implementación}{220}{subsubsection.9.3.29.4}%
-\contentsline {subsubsection}{\numberline {9.3.29.5}Uso}{220}{subsubsection.9.3.29.5}%
-\contentsline {subsubsection}{\numberline {9.3.29.6}Dependencia}{221}{subsubsection.9.3.29.6}%
-\contentsline {section}{\numberline {9.4}Diagrama de clases del sistema}{221}{section.9.4}%
-\contentsline {chapter}{\numberline {10}Diseño de la interfaz}{223}{chapter.10}%
-\contentsline {section}{\numberline {10.1}Introducción}{223}{section.10.1}%
-\contentsline {section}{\numberline {10.2}Barras de menús}{223}{section.10.2}%
-\contentsline {section}{\numberline {10.3}Barras de herramientas}{223}{section.10.3}%
-\contentsline {section}{\numberline {10.4}Ventana del editor}{223}{section.10.4}%
-\contentsline {section}{\numberline {10.5}Ventana del simulador}{223}{section.10.5}%
-\contentsline {section}{\numberline {10.6}Ventana de simulación}{223}{section.10.6}%
-\contentsline {section}{\numberline {10.7}Ventana de Visualización del Árbol Sintáctico}{223}{section.10.7}%
-\contentsline {section}{\numberline {10.8}Ventana de Derivación Sintáctica}{223}{section.10.8}%
-\contentsline {section}{\numberline {10.9}Ventana de asistente}{223}{section.10.9}%
-\contentsline {section}{\numberline {10.10}Ventanas de edición}{223}{section.10.10}%
-\contentsline {part}{IV\hspace {1em}Pruebas}{225}{part.4}%
-\contentsline {chapter}{\numberline {11}Pruebas}{227}{chapter.11}%
-\contentsline {section}{\numberline {11.1}Introducción}{227}{section.11.1}%
-\contentsline {section}{\numberline {11.2}Pruebas del módulo Editor}{227}{section.11.2}%
-\contentsline {subsection}{\numberline {11.2.1}Almacenamiento y recuperación de gramáticas}{227}{subsection.11.2.1}%
-\contentsline {subsection}{\numberline {11.2.2}Validación de gramáticas}{227}{subsection.11.2.2}%
-\contentsline {section}{\numberline {11.3}Pruebas del módulo Simulador}{227}{section.11.3}%
-\contentsline {chapter}{Bibliografía}{229}{section.11.3}%
-\contentsline {chapter}{Bibliograf\'{\i }a}{229}{chapter*.78}%
+\contentsline {subsection}{\numberline {9.2.6}Clase FilaTablaPredictiva}{156}{subsection.9.2.6}%
+\contentsline {subsection}{\numberline {9.2.7}Clase PanelCreacionGramaticaPaso1}{157}{subsection.9.2.7}%
+\contentsline {subsection}{\numberline {9.2.8}Clase PanelCreacionGramaticaPaso2}{159}{subsection.9.2.8}%
+\contentsline {subsection}{\numberline {9.2.9}Clase PanelCreacionGramaticaPaso3}{161}{subsection.9.2.9}%
+\contentsline {subsection}{\numberline {9.2.10}Clase PanelCreacionGramaticaPaso4}{163}{subsection.9.2.10}%
+\contentsline {subsection}{\numberline {9.2.11}Clase EditorCadenaEntradaController}{164}{subsection.9.2.11}%
+\contentsline {subsection}{\numberline {9.2.12}Clase NuevaFuncionError}{165}{subsection.9.2.12}%
+\contentsline {subsection}{\numberline {9.2.13}Clase PanelGramaticaOriginal}{166}{subsection.9.2.13}%
+\contentsline {subsection}{\numberline {9.2.14}Interfaz PanelNuevaSimDescPaso}{167}{subsection.9.2.14}%
+\contentsline {subsection}{\numberline {9.2.15}Clase PanelNuevaSimDescPaso1}{167}{subsection.9.2.15}%
+\contentsline {subsection}{\numberline {9.2.16}Clase PanelNuevaSimDescPaso2}{169}{subsection.9.2.16}%
+\contentsline {subsection}{\numberline {9.2.17}Clase PanelNuevaSimDescPaso3}{171}{subsection.9.2.17}%
+\contentsline {subsection}{\numberline {9.2.18}Clase PanelNuevaSimDescPaso4}{173}{subsection.9.2.18}%
+\contentsline {subsection}{\numberline {9.2.19}Clase PanelNuevaSimDescPaso5}{175}{subsection.9.2.19}%
+\contentsline {subsection}{\numberline {9.2.20}Clase PanelNuevaSimDescPaso6}{178}{subsection.9.2.20}%
+\contentsline {subsection}{\numberline {9.2.21}Clase PanelSimulacion}{180}{subsection.9.2.21}%
+\contentsline {subsection}{\numberline {9.2.22}Clase PanelSimuladorDesc}{182}{subsection.9.2.22}%
+\contentsline {subsection}{\numberline {9.2.23}Clase SimulacionFinal}{185}{subsection.9.2.23}%
+\contentsline {subsection}{\numberline {9.2.24}Clase ActualizableTextos}{188}{subsection.9.2.24}%
+\contentsline {subsection}{\numberline {9.2.25}Clase LanguageItem}{188}{subsection.9.2.25}%
+\contentsline {subsection}{\numberline {9.2.26}Clase LanguageListCell}{189}{subsection.9.2.26}%
+\contentsline {subsection}{\numberline {9.2.27}Clase SecondaryWindow}{190}{subsection.9.2.27}%
+\contentsline {subsection}{\numberline {9.2.28}Clase TabManager}{191}{subsection.9.2.28}%
+\contentsline {subsection}{\numberline {9.2.29}Clase TabPaneMonitor}{193}{subsection.9.2.29}%
+\contentsline {subsection}{\numberline {9.2.30}Estructura del paquete vistas}{195}{subsection.9.2.30}%
+\contentsline {section}{\numberline {9.3}Relaciones entre las clases}{195}{section.9.3}%
+\contentsline {subsection}{\numberline {9.3.1}Relación de herencia: Simbolo - Terminal y NoTerminal}{195}{subsection.9.3.1}%
+\contentsline {subsection}{\numberline {9.3.2}Relación de composición: Gramatica - Produccion}{195}{subsection.9.3.2}%
+\contentsline {subsection}{\numberline {9.3.3}Relación de composición: Produccion - Antecedente y Consecuente}{195}{subsection.9.3.3}%
+\contentsline {subsection}{\numberline {9.3.4}Relación de composición: Antecedente - NoTerminal}{195}{subsection.9.3.4}%
+\contentsline {subsection}{\numberline {9.3.5}Relación de composición: Consecuente - Simbolo}{196}{subsection.9.3.5}%
+\contentsline {subsection}{\numberline {9.3.6}Relación de composición: Gramatica - Terminal y NoTerminal}{196}{subsection.9.3.6}%
+\contentsline {subsection}{\numberline {9.3.7}Relación de composición: Gramatica - TablaPredictiva}{196}{subsection.9.3.7}%
+\contentsline {subsection}{\numberline {9.3.8}Relación de uso: Editor - Gramatica}{196}{subsection.9.3.8}%
+\contentsline {subsection}{\numberline {9.3.9}Relación de uso: Simulador - Gramatica}{196}{subsection.9.3.9}%
+\contentsline {subsection}{\numberline {9.3.10}Relación de herencia: Application - Bienvenida y MenuPrincipal}{196}{subsection.9.3.10}%
+\contentsline {subsection}{\numberline {9.3.11}Relación de herencia: VBox - Clases de paneles}{196}{subsection.9.3.11}%
+\contentsline {subsection}{\numberline {9.3.12}Relación de implementación: ActualizableTextos}{197}{subsection.9.3.12}%
+\contentsline {subsection}{\numberline {9.3.13}Relación de herencia: EditorWindow - SecondaryWindow}{197}{subsection.9.3.13}%
+\contentsline {subsection}{\numberline {9.3.14}Relación de herencia: TablaPredictiva - TablaPredictivaPaso5}{197}{subsection.9.3.14}%
+\contentsline {subsection}{\numberline {9.3.15}Relación de composición: TablaPredictiva - FilaTablaPredictiva}{197}{subsection.9.3.15}%
+\contentsline {subsection}{\numberline {9.3.16}Relación de composición: TablaPredictiva - FuncionError}{197}{subsection.9.3.16}%
+\contentsline {subsection}{\numberline {9.3.17}Relación de asociación: FuncionError - Terminal}{197}{subsection.9.3.17}%
+\contentsline {subsection}{\numberline {9.3.18}Relación de herencia: VBox - Editor}{197}{subsection.9.3.18}%
+\contentsline {subsection}{\numberline {9.3.19}Relación de herencia: BorderPane - PanelCreacionGramatica}{198}{subsection.9.3.19}%
+\contentsline {subsection}{\numberline {9.3.20}Relación de herencia: VBox - Paneles del Editor}{198}{subsection.9.3.20}%
+\contentsline {subsection}{\numberline {9.3.21}Relación de composición: Editor - Gramatica}{198}{subsection.9.3.21}%
+\contentsline {subsection}{\numberline {9.3.22}Relación de composición: PanelCreacionGramatica - Paneles de Pasos}{198}{subsection.9.3.22}%
+\contentsline {subsection}{\numberline {9.3.23}Relación de composición: PanelCreacionGramatica - Gramatica}{198}{subsection.9.3.23}%
+\contentsline {subsection}{\numberline {9.3.24}Relación de uso: Editor - PanelCreacionGramatica}{198}{subsection.9.3.24}%
+\contentsline {subsection}{\numberline {9.3.25}Relación de uso: PanelCreacionGramaticaPaso2 - PanelSimbolosNoTerminales y PanelSimbolosTerminales}{198}{subsection.9.3.25}%
+\contentsline {subsection}{\numberline {9.3.26}Relación de uso: PanelCreacionGramaticaPaso3 - PanelProducciones}{199}{subsection.9.3.26}%
+\contentsline {subsection}{\numberline {9.3.27}Relación de implementación: Clases del Editor - ActualizableTextos}{199}{subsection.9.3.27}%
+\contentsline {subsection}{\numberline {9.3.28}Relaciones del paquete simulador}{199}{subsection.9.3.28}%
+\contentsline {subsubsection}{\numberline {9.3.28.1}Herencia}{199}{subsubsection.9.3.28.1}%
+\contentsline {subsubsection}{\numberline {9.3.28.2}Composición}{199}{subsubsection.9.3.28.2}%
+\contentsline {subsubsection}{\numberline {9.3.28.3}Asociación}{200}{subsubsection.9.3.28.3}%
+\contentsline {subsubsection}{\numberline {9.3.28.4}Implementación}{200}{subsubsection.9.3.28.4}%
+\contentsline {subsubsection}{\numberline {9.3.28.5}Uso}{200}{subsubsection.9.3.28.5}%
+\contentsline {subsection}{\numberline {9.3.29}Relaciones del paquete utils}{200}{subsection.9.3.29}%
+\contentsline {subsubsection}{\numberline {9.3.29.1}Herencia}{200}{subsubsection.9.3.29.1}%
+\contentsline {subsubsection}{\numberline {9.3.29.2}Composición}{201}{subsubsection.9.3.29.2}%
+\contentsline {subsubsection}{\numberline {9.3.29.3}Asociación}{201}{subsubsection.9.3.29.3}%
+\contentsline {subsubsection}{\numberline {9.3.29.4}Implementación}{201}{subsubsection.9.3.29.4}%
+\contentsline {subsubsection}{\numberline {9.3.29.5}Uso}{201}{subsubsection.9.3.29.5}%
+\contentsline {subsubsection}{\numberline {9.3.29.6}Dependencia}{202}{subsubsection.9.3.29.6}%
+\contentsline {section}{\numberline {9.4}Diagrama de clases del sistema}{202}{section.9.4}%
+\contentsline {chapter}{\numberline {10}Diseño de la interfaz}{205}{chapter.10}%
+\contentsline {section}{\numberline {10.1}Introducción}{205}{section.10.1}%
+\contentsline {section}{\numberline {10.2}Barras de menús}{205}{section.10.2}%
+\contentsline {section}{\numberline {10.3}Barras de herramientas}{205}{section.10.3}%
+\contentsline {section}{\numberline {10.4}Ventana del editor}{205}{section.10.4}%
+\contentsline {section}{\numberline {10.5}Ventana del simulador}{205}{section.10.5}%
+\contentsline {section}{\numberline {10.6}Ventana de simulación}{205}{section.10.6}%
+\contentsline {section}{\numberline {10.7}Ventana de Visualización del Árbol Sintáctico}{205}{section.10.7}%
+\contentsline {section}{\numberline {10.8}Ventana de Derivación Sintáctica}{205}{section.10.8}%
+\contentsline {section}{\numberline {10.9}Ventana de asistente}{205}{section.10.9}%
+\contentsline {section}{\numberline {10.10}Ventanas de edición}{205}{section.10.10}%
+\contentsline {part}{IV\hspace {1em}Pruebas}{207}{part.4}%
+\contentsline {chapter}{\numberline {11}Pruebas}{209}{chapter.11}%
+\contentsline {section}{\numberline {11.1}Introducción}{209}{section.11.1}%
+\contentsline {section}{\numberline {11.2}Pruebas del módulo Editor}{209}{section.11.2}%
+\contentsline {subsection}{\numberline {11.2.1}Almacenamiento y recuperación de gramáticas}{209}{subsection.11.2.1}%
+\contentsline {subsection}{\numberline {11.2.2}Validación de gramáticas}{209}{subsection.11.2.2}%
+\contentsline {section}{\numberline {11.3}Pruebas del módulo Simulador}{209}{section.11.3}%
+\contentsline {chapter}{Bibliografía}{211}{section.11.3}%
+\contentsline {chapter}{Bibliograf\'{\i }a}{211}{chapter*.78}%

@@ -36,7 +36,7 @@ El paquete \textbf{bienvenida} contiene las clases responsables de la inicializa
 
 Este paquete contiene 2 clases principales que gestionan el punto de entrada y la navegación inicial del sistema.
 
-\subsection{Clase Bienvenida}
+\subsubsection{Clase Bienvenida}
 
 Esta clase representa la pantalla de bienvenida de la aplicación SimAS 3.0, heredando de Application para ser el punto de entrada principal.
 
@@ -74,6 +74,8 @@ Esta clase representa la pantalla de bienvenida de la aplicación SimAS 3.0, her
 
 \end{longtable}
 
+#Cambiar comentario por subsubsection clase MenuPrincipal
+
 \subsubsection{Dependencias internas del paquete bienvenida}
 
 \begin{itemize}
@@ -86,256 +88,6 @@ Esta clase representa la pantalla de bienvenida de la aplicación SimAS 3.0, her
 \begin{itemize}
     \item \textbf{Singleton}: implementado en Bienvenida para garantizar una única instancia de pantalla de bienvenida.
     \item \textbf{Facade}: MenuPrincipal actúa como fachada simplificando el acceso a los módulos complejos del sistema.
-\end{itemize}
-
-\subsection{Paquete editor}
-
-El paquete \textbf{editor} es uno de los módulos más complejos del sistema, con 10 clases que implementan la funcionalidad completa de edición de gramáticas de contexto libre. Este paquete sigue el patrón MVC y utiliza State, Mediator y Command para gestionar la interfaz de usuario y la lógica de edición.
-
-\subsubsection{Clases del paquete editor}
-
-Este paquete contiene 10 clases que gestionan la edición completa de gramáticas, desde la creación inicial hasta la gestión detallada de componentes.
-
-\subsubsection{Clase Editor}
-
-La clase \textbf{Editor} es el controlador principal del módulo de edición, coordinando todas las operaciones de creación y modificación de gramáticas de contexto libre.
-
-\begin{longtable}[H]{|>{\columncolor[rgb]{0.63,0.79,0.95}}m{6cm} | m{8.5cm} |}
-\caption{Clase Editor - Controlador principal del editor}
-\endfirsthead
-\multicolumn{2}{c}{{\tablename\ \thetable{} -- continúa de la página anterior}} \\
-\endhead
-\hline \multicolumn{2}{|r|}{Continúa en la página siguiente} \\ \hline
-\endfoot
-\hline
-\endlastfoot
-\hline
-\textbf{Nombre} & \textbf{Editor} \\ \hline
-\textbf{Descripción} & Controlador principal del editor \\ \hline
-\textbf{Atributos} &
-\begin{enumerate}
-    \item \textbf{gramatica}: instancia de Gramatica activa.
-    \item \textbf{tabPane}: gestión de pestañas múltiples.
-    \item \textbf{menuPane}: referencia al menú principal.
-    \item \textbf{bundle}: recursos de internacionalización.
-\end{enumerate} \\ \hline
-\textbf{Métodos} &
-\begin{enumerate}
-    \item \textbf{inicializar()}: configuración inicial del editor.
-    \item \textbf{cargarGramatica(Gramatica)}: carga una gramática existente.
-    \item \textbf{guardarGramatica()}: persistencia de la gramática.
-    \item \textbf{actualizarTextos()}: actualización de idioma.
-\end{enumerate}
-\label{tabla_editor}
-\end{longtable}
-
-\subsubsection{Clase EditorWindow}
-
-La clase \textbf{EditorWindow} gestiona la ventana física del editor, manejando el ciclo de vida de la interfaz gráfica.
-
-\begin{longtable}[H]{|>{\columncolor[rgb]{0.63,0.79,0.95}}m{6cm} | m{8.5cm} |}
-\caption{Clase EditorWindow - Gestión de ventana}
-\endfirsthead
-\multicolumn{2}{c}{{\tablename\ \thetable{} -- continúa de la página anterior}} \\
-\endhead
-\hline \multicolumn{2}{|r|}{Continúa en la página siguiente} \\ \hline
-\endfoot
-\hline
-\endlastfoot
-\hline
-\textbf{Nombre} & \textbf{EditorWindow} \\ \hline
-\textbf{Descripción} & Gestor de la ventana física del editor \\ \hline
-\textbf{Atributos} &
-\begin{enumerate}
-    \item \textbf{stage}: ventana principal de JavaFX.
-    \item \textbf{scene}: escena que contiene la interfaz.
-    \item \textbf{editor}: instancia del editor principal.
-\end{enumerate} \\ \hline
-\textbf{Métodos} &
-\begin{enumerate}
-    \item \textbf{mostrar()}: muestra la ventana del editor.
-    \item \textbf{ocultar()}: oculta la ventana.
-    \item \textbf{cerrar()}: cierra la ventana y libera recursos.
-\end{enumerate}
-\label{tabla_editorwindow}
-\end{longtable}
-
-\subsubsection{Clase PanelCreacionGramatica}
-
-La clase \textbf{PanelCreacionGramatica} implementa el patrón State para gestionar el asistente de creación de gramáticas paso a paso.
-
-\begin{longtable}[H]{|>{\columncolor[rgb]{0.63,0.79,0.95}}m{6cm} | m{8.5cm} |}
-\caption{Clase PanelCreacionGramatica - Asistente de creación}
-\endfirsthead
-\multicolumn{2}{c}{{\tablename\ \thetable{} -- continúa de la página anterior}} \\
-\endhead
-\hline \multicolumn{2}{|r|}{Continúa en la página siguiente} \\ \hline
-\endfoot
-\hline
-\endlastfoot
-\hline
-\textbf{Nombre} & \textbf{PanelCreacionGramatica} \\ \hline
-\textbf{Descripción} & Orquestador del asistente de creación \\ \hline
-\textbf{Atributos} &
-\begin{enumerate}
-    \item \textbf{pasoActual}: estado actual del asistente.
-    \item \textbf{panelActual}: panel del paso actual.	
-    \item \textbf{gramaticaTemp}: gramática en construcción.
-\end{enumerate} \\ \hline
-\textbf{Métodos} &
-\begin{enumerate}
-    \item \textbf{siguientePaso()}: avanza al siguiente paso.
-    \item \textbf{pasoAnterior()}: retrocede al paso anterior.
-    \item \textbf{validarPasoActual()}: valida el paso actual.
-    \item \textbf{finalizar()}: completa la creación de la gramática.
-\end{enumerate}
-\label{tabla_panelcreacion}
-\end{longtable}
-
-\subsubsection{Paneles del asistente de creación}
-
-Las clases \textbf{PanelCreacionGramaticaPaso1} a \textbf{PanelCreacionGramaticaPaso4} representan los cuatro pasos del asistente de creación de gramáticas.
-
-\begin{longtable}[H]{|>{\columncolor[rgb]{0.63,0.79,0.95}}m{6cm} | m{8.5cm} |}
-\caption{Pasos del asistente de creación de gramáticas}
-\endfirsthead
-\multicolumn{2}{c}{{\tablename\ \thetable{} -- continúa de la página anterior}} \\
-\endhead
-\hline \multicolumn{2}{|r|}{Continúa en la página siguiente} \\ \hline
-\endfoot
-\hline
-\endlastfoot
-\hline
-\textbf{Nombre} & \textbf{PanelCreacionGramaticaPaso1-4} \\ \hline
-\textbf{Descripción} & Paneles del asistente paso a paso \\ \hline
-\textbf{Atributos} &
-\begin{enumerate}
-    \item \textbf{datos}: información específica del paso.
-    \item \textbf{validaciones}: reglas de validación del paso.
-    \item \textbf{bundle}: recursos de internacionalización.
-\end{enumerate} \\ \hline
-\textbf{Métodos} &
-\begin{enumerate}
-    \item \textbf{inicializar()}: configuración inicial del paso.
-    \item \textbf{validar()}: validación de datos del paso.
-    \item \textbf{guardar()}: guarda los datos del paso.
-    \item \textbf{actualizarTextos()}: actualización de idioma.
-\end{enumerate}
-\label{tabla_pasos_asistente}
-\end{longtable}
-
-\subsubsection{Clase PanelProducciones}
-
-La clase \textbf{PanelProducciones} gestiona la edición detallada de las reglas de producción de la gramática.
-
-\begin{longtable}[H]{|>{\columncolor[rgb]{0.63,0.79,0.95}}m{6cm} | m{8.5cm} |}
-\caption{Clase PanelProducciones - Gestión de producciones}
-\endfirsthead
-\multicolumn{2}{c}{{\tablename\ \thetable{} -- continúa de la página anterior}} \\
-\endhead
-\hline \multicolumn{2}{|r|}{Continúa en la página siguiente} \\ \hline
-\endfoot
-\hline
-\endlastfoot
-\hline
-\textbf{Nombre} & \textbf{PanelProducciones} \\ \hline
-\textbf{Descripción} & Panel de gestión detallada de producciones. \\ \hline
-\textbf{Atributos} &
-\begin{enumerate}
-    \item \textbf{listaProducciones}: lista observable de producciones.
-    \item \textbf{editorProduccion}: editor de producción individual.
-    \item \textbf{botonesAccion}: botones de agregar, editar, eliminar.
-\end{enumerate} \\ \hline
-\textbf{Métodos} &
-\begin{enumerate}
-    \item \textbf{agregarProduccion()}: agrega nueva producción.
-    \item \textbf{editarProduccion()}: edita producción existente.
-    \item \textbf{eliminarProduccion()}: elimina producción.
-    \item \textbf{validarProduccion()}: valida sintaxis de producción.
-\end{enumerate}
-\label{tabla_panelproducciones}
-\end{longtable}
-
-\subsubsection{Clase PanelSimbolosNoTerminales}
-
-La clase \textbf{PanelSimbolosNoTerminales} gestiona la definición y edición de símbolos no terminales.
-
-\begin{longtable}[H]{|>{\columncolor[rgb]{0.63,0.79,0.95}}m{6cm} | m{8.5cm} |}
-\caption{Clase PanelSimbolosNoTerminales - Gestión de no terminales}
-\endfirsthead
-\multicolumn{2}{c}{{\tablename\ \thetable{} -- continúa de la página anterior}} \\
-\endhead
-\hline \multicolumn{2}{|r|}{Continúa en la página siguiente} \\ \hline
-\endfoot
-\hline
-\endlastfoot
-\hline
-\textbf{Nombre} & \textbf{PanelSimbolosNoTerminales} \\ \hline
-\textbf{Descripción} & Panel de gestión de símbolos no terminales. \\ \hline
-\textbf{Atributos} &
-\begin{enumerate}
-    \item \textbf{listaNoTerminales}: conjunto de símbolos no terminales.
-    \item \textbf{simboloSeleccionado}: símbolo actualmente seleccionado.
-    \item \textbf{validador}: validador de nombres de símbolos.
-\end{enumerate} \\ \hline
-\textbf{Métodos} &
-\begin{enumerate}
-    \item \textbf{agregarNoTerminal()}: agrega nuevo no terminal.
-    \item \textbf{editarNoTerminal()}: edita no terminal existente.
-    \item \textbf{eliminarNoTerminal()}: elimina no terminal.
-    \item \textbf{validarNombre()}: valida nombre del símbolo.
-\end{enumerate}
-\label{tabla_panelnoterminales}
-\end{longtable}
-
-\subsubsection{Clase PanelSimbolosTerminales}
-
-La clase \textbf{PanelSimbolosTerminales} gestiona la definición y edición de símbolos terminales con soporte para expresiones regulares.
-
-\begin{longtable}[H]{|>{\columncolor[rgb]{0.63,0.79,0.95}}m{6cm} | m{8.5cm} |}
-\caption{Clase PanelSimbolosTerminales - Gestión de terminales}
-\endfirsthead
-\multicolumn{2}{c}{{\tablename\ \thetable{} -- continúa de la página anterior}} \\
-\endhead
-\hline \multicolumn{2}{|r|}{Continúa en la página siguiente} \\ \hline
-\endfoot
-\hline
-\endlastfoot
-\hline
-\textbf{Nombre} & \textbf{PanelSimbolosTerminales} \\ \hline
-\textbf{Descripción} & Panel de gestión de símbolos terminales. \\ \hline
-\textbf{Atributos} &
-\begin{enumerate}
-    \item \textbf{listaTerminales}: conjunto de símbolos terminales.
-    \item \textbf{expresionRegular}: patrón de validación.
-    \item \textbf{ejemplos}: lista de ejemplos de uso.
-\end{enumerate} \\ \hline
-\textbf{Métodos} &
-\begin{enumerate}
-    \item \textbf{agregarTerminal()}: agrega nuevo terminal.
-    \item \textbf{editarTerminal()}: edita terminal existente.
-    \item \textbf{eliminarTerminal()}: elimina terminal.
-    \item \textbf{validarExpresion()}: valida expresión regular.
-\end{enumerate}
-\label{tabla_panelterminales}
-\end{longtable}
-
-\subsubsection{Dependencias internas del paquete editor}
-
-\begin{itemize}
-    \item \textbf{Editor $\rightarrow$ PanelCreacionGramatica}: el editor principal utiliza el asistente de creación.
-    \item \textbf{PanelCreacionGramatica $\rightarrow$ PanelCreacionGramaticaPaso1-4}: el asistente está compuesto por los paneles de pasos.
-    \item \textbf{Editor $\rightarrow$ PanelProducciones, PanelSimbolosNoTerminales, PanelSimbolosTerminales}: el editor coordina todos los paneles especializados.
-    \item \textbf{Todos los paneles $\rightarrow$ Editor}: comunicación bidireccional para actualización de estado.
-\end{itemize}
-
-\subsubsection{Patrones de diseño en el paquete editor}
-
-\begin{itemize}
-    \item \textbf{Mediator}: Editor coordina la comunicación entre todos los paneles.
-    \item \textbf{State}: PanelCreacionGramatica gestiona el estado del asistente paso a paso.
-    \item \textbf{Command}: PanelProducciones implementa operaciones CRUD sobre producciones.
-    \item \textbf{Observer}: ActualizableTextos para notificación de cambios de idioma.
 \end{itemize}
 
 \subsection{Paquete gramatica}
@@ -611,6 +363,257 @@ La clase \textbf{FuncionError} representa funciones de recuperación de errores 
     \item \textbf{Observer}: notificación de cambios en la estructura de la gramática.
 \end{itemize}
 
+
+\subsection{Paquete editor}
+
+El paquete \textbf{editor} es uno de los módulos más complejos del sistema, con 10 clases que implementan la funcionalidad completa de edición de gramáticas de contexto libre. Este paquete sigue el patrón MVC y utiliza State, Mediator y Command para gestionar la interfaz de usuario y la lógica de edición.
+
+\subsubsection{Clases del paquete editor}
+
+Este paquete contiene 10 clases que gestionan la edición completa de gramáticas, desde la creación inicial hasta la gestión detallada de componentes.
+
+\subsubsection{Clase Editor}
+
+La clase \textbf{Editor} es el controlador principal del módulo de edición, coordinando todas las operaciones de creación y modificación de gramáticas de contexto libre.
+
+\begin{longtable}[H]{|>{\columncolor[rgb]{0.63,0.79,0.95}}m{6cm} | m{8.5cm} |}
+\caption{Clase Editor - Controlador principal del editor}
+\endfirsthead
+\multicolumn{2}{c}{{\tablename\ \thetable{} -- continúa de la página anterior}} \\
+\endhead
+\hline \multicolumn{2}{|r|}{Continúa en la página siguiente} \\ \hline
+\endfoot
+\hline
+\endlastfoot
+\hline
+\textbf{Nombre} & \textbf{Editor} \\ \hline
+\textbf{Descripción} & Controlador principal del editor. \\ \hline
+\textbf{Atributos} &
+\begin{enumerate}
+    \item \textbf{gramatica}: instancia de Gramatica activa.
+    \item \textbf{tabPane}: gestión de pestañas múltiples.
+    \item \textbf{menuPane}: referencia al menú principal.
+    \item \textbf{bundle}: recursos de internacionalización.
+\end{enumerate} \\ \hline
+\textbf{Métodos} &
+\begin{enumerate}
+    \item \textbf{inicializar()}: configuración inicial del editor.
+    \item \textbf{cargarGramatica(Gramatica)}: carga una gramática existente.
+    \item \textbf{guardarGramatica()}: persistencia de la gramática.
+    \item \textbf{actualizarTextos()}: actualización de idioma.
+\end{enumerate}
+\label{tabla_editor}
+\end{longtable}
+
+\subsubsection{Clase EditorWindow}
+
+La clase \textbf{EditorWindow} gestiona la ventana física del editor, manejando el ciclo de vida de la interfaz gráfica.
+
+\begin{longtable}[H]{|>{\columncolor[rgb]{0.63,0.79,0.95}}m{6cm} | m{8.5cm} |}
+\caption{Clase EditorWindow - Gestión de ventana}
+\endfirsthead
+\multicolumn{2}{c}{{\tablename\ \thetable{} -- continúa de la página anterior}} \\
+\endhead
+\hline \multicolumn{2}{|r|}{Continúa en la página siguiente} \\ \hline
+\endfoot
+\hline
+\endlastfoot
+\hline
+\textbf{Nombre} & \textbf{EditorWindow} \\ \hline
+\textbf{Descripción} & Gestor de la ventana física del editor. \\ \hline
+\textbf{Atributos} &
+\begin{enumerate}
+    \item \textbf{stage}: ventana principal de JavaFX.
+    \item \textbf{scene}: escena que contiene la interfaz.
+    \item \textbf{editor}: instancia del editor principal.
+\end{enumerate} \\ \hline
+\textbf{Métodos} &
+\begin{enumerate}
+    \item \textbf{mostrar()}: muestra la ventana del editor.
+    \item \textbf{ocultar()}: oculta la ventana.
+    \item \textbf{cerrar()}: cierra la ventana y libera recursos.
+\end{enumerate}
+\label{tabla_editorwindow}
+\end{longtable}
+
+\subsubsection{Clase PanelCreacionGramatica}
+
+La clase \textbf{PanelCreacionGramatica} implementa el patrón State para gestionar el asistente de creación de gramáticas paso a paso.
+
+\begin{longtable}[H]{|>{\columncolor[rgb]{0.63,0.79,0.95}}m{6cm} | m{8.5cm} |}
+\caption{Clase PanelCreacionGramatica - Asistente de creación}
+\endfirsthead
+\multicolumn{2}{c}{{\tablename\ \thetable{} -- continúa de la página anterior}} \\
+\endhead
+\hline \multicolumn{2}{|r|}{Continúa en la página siguiente} \\ \hline
+\endfoot
+\hline
+\endlastfoot
+\hline
+\textbf{Nombre} & \textbf{PanelCreacionGramatica} \\ \hline
+\textbf{Descripción} & Orquestador del asistente de creación. \\ \hline
+\textbf{Atributos} &
+\begin{enumerate}
+    \item \textbf{pasoActual}: estado actual del asistente.
+    \item \textbf{panelActual}: panel del paso actual.	
+    \item \textbf{gramaticaTemp}: gramática en construcción.
+\end{enumerate} \\ \hline
+\textbf{Métodos} &
+\begin{enumerate}
+    \item \textbf{siguientePaso()}: avanza al siguiente paso.
+    \item \textbf{pasoAnterior()}: retrocede al paso anterior.
+    \item \textbf{validarPasoActual()}: valida el paso actual.
+    \item \textbf{finalizar()}: completa la creación de la gramática.
+\end{enumerate}
+\label{tabla_panelcreacion}
+\end{longtable}
+
+\subsubsection{Paneles del asistente de creación}
+
+Las clases \textbf{PanelCreacionGramaticaPaso1} a \textbf{PanelCreacionGramaticaPaso4} representan los cuatro pasos del asistente de creación de gramáticas.
+
+\begin{longtable}[H]{|>{\columncolor[rgb]{0.63,0.79,0.95}}m{6cm} | m{8.5cm} |}
+\caption{Pasos del asistente de creación de gramáticas}
+\endfirsthead
+\multicolumn{2}{c}{{\tablename\ \thetable{} -- continúa de la página anterior}} \\
+\endhead
+\hline \multicolumn{2}{|r|}{Continúa en la página siguiente} \\ \hline
+\endfoot
+\hline
+\endlastfoot
+\hline
+\textbf{Nombre} & \textbf{PanelCreacionGramaticaPaso1-4} \\ \hline
+\textbf{Descripción} & Paneles del asistente paso a paso. \\ \hline
+\textbf{Atributos} &
+\begin{enumerate}
+    \item \textbf{datos}: información específica del paso.
+    \item \textbf{validaciones}: reglas de validación del paso.
+    \item \textbf{bundle}: recursos de internacionalización.
+\end{enumerate} \\ \hline
+\textbf{Métodos} &
+\begin{enumerate}
+    \item \textbf{inicializar()}: configuración inicial del paso.
+    \item \textbf{validar()}: validación de datos del paso.
+    \item \textbf{guardar()}: guarda los datos del paso.
+    \item \textbf{actualizarTextos()}: actualización de idioma.
+\end{enumerate}
+\label{tabla_pasos_asistente}
+\end{longtable}
+
+\subsubsection{Clase PanelProducciones}
+
+La clase \textbf{PanelProducciones} gestiona la edición detallada de las reglas de producción de la gramática.
+
+\begin{longtable}[H]{|>{\columncolor[rgb]{0.63,0.79,0.95}}m{6cm} | m{8.5cm} |}
+\caption{Clase PanelProducciones - Gestión de producciones.}
+\endfirsthead
+\multicolumn{2}{c}{{\tablename\ \thetable{} -- continúa de la página anterior}} \\
+\endhead
+\hline \multicolumn{2}{|r|}{Continúa en la página siguiente} \\ \hline
+\endfoot
+\hline
+\endlastfoot
+\hline
+\textbf{Nombre} & \textbf{PanelProducciones} \\ \hline
+\textbf{Descripción} & Panel de gestión detallada de producciones. \\ \hline
+\textbf{Atributos} &
+\begin{enumerate}
+    \item \textbf{listaProducciones}: lista observable de producciones.
+    \item \textbf{editorProduccion}: editor de producción individual.
+    \item \textbf{botonesAccion}: botones de agregar, editar, eliminar.
+\end{enumerate} \\ \hline
+\textbf{Métodos} &
+\begin{enumerate}
+    \item \textbf{agregarProduccion()}: agrega nueva producción.
+    \item \textbf{editarProduccion()}: edita producción existente.
+    \item \textbf{eliminarProduccion()}: elimina producción.
+    \item \textbf{validarProduccion()}: valida sintaxis de producción.
+\end{enumerate}
+\label{tabla_panelproducciones}
+\end{longtable}
+
+\subsubsection{Clase PanelSimbolosNoTerminales}
+
+La clase \textbf{PanelSimbolosNoTerminales} gestiona la definición y edición de símbolos no terminales.
+
+\begin{longtable}[H]{|>{\columncolor[rgb]{0.63,0.79,0.95}}m{6cm} | m{8.5cm} |}
+\caption{Clase PanelSimbolosNoTerminales - Gestión de no terminales.}
+\endfirsthead
+\multicolumn{2}{c}{{\tablename\ \thetable{} -- continúa de la página anterior}} \\
+\endhead
+\hline \multicolumn{2}{|r|}{Continúa en la página siguiente} \\ \hline
+\endfoot
+\hline
+\endlastfoot
+\hline
+\textbf{Nombre} & \textbf{PanelSimbolosNoTerminales} \\ \hline
+\textbf{Descripción} & Panel de gestión de símbolos no terminales. \\ \hline
+\textbf{Atributos} &
+\begin{enumerate}
+    \item \textbf{listaNoTerminales}: conjunto de símbolos no terminales.
+    \item \textbf{simboloSeleccionado}: símbolo actualmente seleccionado.
+    \item \textbf{validador}: validador de nombres de símbolos.
+\end{enumerate} \\ \hline
+\textbf{Métodos} &
+\begin{enumerate}
+    \item \textbf{agregarNoTerminal()}: agrega nuevo no terminal.
+    \item \textbf{editarNoTerminal()}: edita no terminal existente.
+    \item \textbf{eliminarNoTerminal()}: elimina no terminal.
+    \item \textbf{validarNombre()}: valida nombre del símbolo.
+\end{enumerate}
+\label{tabla_panelnoterminales}
+\end{longtable}
+
+\subsubsection{Clase PanelSimbolosTerminales}
+
+La clase \textbf{PanelSimbolosTerminales} gestiona la definición y edición de símbolos terminales con soporte para expresiones regulares.
+
+\begin{longtable}[H]{|>{\columncolor[rgb]{0.63,0.79,0.95}}m{6cm} | m{8.5cm} |}
+\caption{Clase PanelSimbolosTerminales - Gestión de terminales}
+\endfirsthead
+\multicolumn{2}{c}{{\tablename\ \thetable{} -- continúa de la página anterior}} \\
+\endhead
+\hline \multicolumn{2}{|r|}{Continúa en la página siguiente} \\ \hline
+\endfoot
+\hline
+\endlastfoot
+\hline
+\textbf{Nombre} & \textbf{PanelSimbolosTerminales} \\ \hline
+\textbf{Descripción} & Panel de gestión de símbolos terminales. \\ \hline
+\textbf{Atributos} &
+\begin{enumerate}
+    \item \textbf{listaTerminales}: conjunto de símbolos terminales.
+    \item \textbf{expresionRegular}: patrón de validación.
+    \item \textbf{ejemplos}: lista de ejemplos de uso.
+\end{enumerate} \\ \hline
+\textbf{Métodos} &
+\begin{enumerate}
+    \item \textbf{agregarTerminal()}: agrega nuevo terminal.
+    \item \textbf{editarTerminal()}: edita terminal existente.
+    \item \textbf{eliminarTerminal()}: elimina terminal.
+    \item \textbf{validarExpresion()}: valida expresión regular.
+\end{enumerate}
+\label{tabla_panelterminales}
+\end{longtable}
+
+\subsubsection{Dependencias internas del paquete editor}
+
+\begin{itemize}
+    \item \textbf{Editor $\rightarrow$ PanelCreacionGramatica}: el editor principal utiliza el asistente de creación.
+    \item \textbf{PanelCreacionGramatica $\rightarrow$ PanelCreacionGramaticaPaso1-4}: el asistente está compuesto por los paneles de pasos.
+    \item \textbf{Editor $\rightarrow$ PanelProducciones, PanelSimbolosNoTerminales, PanelSimbolosTerminales}: el editor coordina todos los paneles especializados.
+    \item \textbf{Todos los paneles $\rightarrow$ Editor}: comunicación bidireccional para actualización de estado.
+\end{itemize}
+
+\subsubsection{Patrones de diseño en el paquete editor}
+
+\begin{itemize}
+    \item \textbf{Mediator}: Editor coordina la comunicación entre todos los paneles.
+    \item \textbf{State}: PanelCreacionGramatica gestiona el estado del asistente paso a paso.
+    \item \textbf{Command}: PanelProducciones implementa operaciones CRUD sobre producciones.
+    \item \textbf{Observer}: ActualizableTextos para notificación de cambios de idioma.
+\end{itemize}
+
 \subsection{Paquete simulador}
 
 El paquete \textbf{simulador} contiene 13 clases que implementan la funcionalidad completa de simulación del análisis sintáctico descendente predictivo. Este paquete utiliza algoritmos complejos O(n³) y O(n²) para el cálculo de conjuntos y construcción de tablas.
@@ -618,390 +621,6 @@ El paquete \textbf{simulador} contiene 13 clases que implementan la funcionalida
 \subsubsection{Clases del paquete simulador}
 
 Este paquete contiene 13 clases que gestionan la simulación completa del análisis sintáctico, desde la transformación de gramáticas hasta la ejecución paso a paso del análisis.
-
-\subsubsection{Clase Gramatica}
-
-Esta clase representa el núcleo del modelo de datos de SimAS 3.0, conteniendo toda la información de una gramática de contexto libre. Es la clase más compleja del sistema y está diseñada para trabajar con JavaFX, utilizando propiedades observables para el binding con la interfaz de usuario.
-
-\begin{longtable}[H]{|>{\columncolor[rgb]{0.63,0.79,0.95}}m{6cm} | m{8.5cm} |}
- \caption{Clase Gramatica}
-
-\endfirsthead
-
-\multicolumn{2}{c}
-{{\tablename\ \thetable{} -- continúa de la página anterior}} \\
-\endhead
-
-\hline \multicolumn{2}{|r|}{{Continúa en la página siguiente}} \\ \hline
-\endfoot
-
-\hline
-\endlastfoot
-
-\hline
- \textbf{Nombre} & \textbf{Gramatica}  \\ \hline
- 
- \textbf{Descripción} & Representa una gramática de contexto libre completa con todas sus propiedades y funcionalidades.  \\ \hline
-                       
- \textbf{Atributos} & \begin{enumerate}
- 		\item \textbf{nombre}: StringProperty que representa el nombre de la gramática.
- 		\item \textbf{descripcion}: StringProperty que contiene la descripción de la gramática.
- 		\item \textbf{simbInicial}: StringProperty que representa el símbolo inicial.
- 		\item \textbf{archivoFuente}: StringProperty que contiene la ruta del archivo fuente.
- 		\item \textbf{estado}: IntegerProperty que indica el estado actual de la gramática.
- 		\item \textbf{terminales}: ObservableList\<Terminal\> que contiene los símbolos terminales.
- 		\item \textbf{noTerminales}: ObservableList\<NoTerminal\> que contiene los símbolos no terminales.
- 		\item \textbf{pr}: ObservableList\<Produccion\> que contiene las producciones.
- 		\item \textbf{tpredictiva}: TablaPredictiva que implementa la tabla predictiva.
-\end{enumerate} \\ \hline
- 
- \textbf{Métodos} & \begin{enumerate}
- 		\item \textbf{getNombre()}: obtiene el nombre de la gramática.
- 		\item \textbf{setNombre(String)}: establece el nombre de la gramática.
- 		\item \textbf{getDescripcion()}: obtiene la descripción de la gramática.
- 		\item \textbf{setDescripcion(String)}: establece la descripción de la gramática.
- 		\item \textbf{getSimbInicial()}: obtiene el símbolo inicial.
- 		\item \textbf{setSimbInicial(String)}: establece el símbolo inicial.
- 		\item \textbf{getTerminales()}: obtiene la lista de terminales.
- 		\item \textbf{getNoTerminales()}: obtiene la lista de no terminales.
- 		\item \textbf{getProducciones()}: obtiene la lista de producciones.
- 		\item \textbf{getTablaPredictiva()}: obtiene la tabla predictiva.
- 		\item \textbf{generarTablaPredictiva()}: genera la tabla predictiva.
- 		\item \textbf{validarGramatica()}: valida la gramática.
-\end{enumerate}
-                                 
- \label{tabla100}
-
-\end{longtable}
-
-\subsection{Clase Simbolo}
-
-Esta clase representa la clase base para todos los símbolos de la gramática, tanto terminales como no terminales.
-
-\begin{longtable}[H]{|>{\columncolor[rgb]{0.63,0.79,0.95}}m{6cm} | m{8.5cm} |}
- \caption{Clase Simbolo}
-
-\endfirsthead
-
-\multicolumn{2}{c}
-{{\tablename\ \thetable{} -- continúa de la página anterior}} \\
-\endhead
-
-\hline \multicolumn{2}{|r|}{{Continúa en la página siguiente}} \\ \hline
-\endfoot
-
-\hline
-\endlastfoot
-
-\hline
- \textbf{Nombre} & \textbf{Simbolo}  \\ \hline
- 
- \textbf{Descripción} & Clase base abstracta que representa un símbolo de la gramática.  \\ \hline
-                       
- \textbf{Atributos} & \begin{enumerate}
- 		\item \textbf{nombre}: StringProperty que representa el nombre del símbolo.
- 		\item \textbf{valor}: StringProperty que contiene el valor del símbolo.
-\end{enumerate} \\ \hline
- 
- \textbf{Métodos} & \begin{enumerate}
- 		\item \textbf{getNombre()}: obtiene el nombre del símbolo.
- 		\item \textbf{setNombre(String)}: establece el nombre del símbolo.
- 		\item \textbf{getValor()}: obtiene el valor del símbolo.
- 		\item \textbf{setValor(String)}: establece el valor del símbolo.
- 		\item \textbf{nombreProperty()}: obtiene la propiedad observable del nombre.
- 		\item \textbf{valorProperty()}: obtiene la propiedad observable del valor.
-\end{enumerate}
-                                 
- \label{tabla101}
-
-\end{longtable}
-
-\subsection{Clase Terminal}
-
-Esta clase representa los símbolos terminales de la gramática, heredando de la clase Simbolo.
-
-\begin{longtable}[H]{|>{\columncolor[rgb]{0.63,0.79,0.95}}m{6cm} | m{8.5cm} |}
- \caption{Clase Terminal}
-
-\endfirsthead
-
-\multicolumn{2}{c}
-{{\tablename\ \thetable{} -- continúa de la página anterior}} \\
-\endhead
-
-\hline \multicolumn{2}{|r|}{{Continúa en la página siguiente}} \\ \hline
-\endfoot
-
-\hline
-\endlastfoot
-
-\hline
- \textbf{Nombre} & \textbf{Terminal}  \\ \hline
- 
- \textbf{Descripción} & Representa un símbolo terminal de la gramática.  \\ \hline
-                       
- \textbf{Atributos} & Hereda todos los atributos de la clase Simbolo.  \\ \hline
- 
- \textbf{Métodos} & \begin{enumerate}
- 		\item \textbf{Terminal(String)}: constructor que inicializa el terminal con un nombre.
- 		\item \textbf{Terminal(String, String)}: constructor que inicializa el terminal con nombre y valor.
- 		\item Hereda todos los métodos de la clase Simbolo.
-\end{enumerate}
-                                 
- \label{tabla102}
-
-\end{longtable}
-
-\subsection{Clase NoTerminal}
-
-Esta clase representa los símbolos no terminales de la gramática, heredando de la clase Simbolo.
-
-\begin{longtable}[H]{|>{\columncolor[rgb]{0.63,0.79,0.95}}m{6cm} | m{8.5cm} |}
- \caption{Clase NoTerminal}
-
-\endfirsthead
-
-\multicolumn{2}{c}
-{{\tablename\ \thetable{} -- continúa de la página anterior}} \\
-\endhead
-
-\hline \multicolumn{2}{|r|}{{Continúa en la página siguiente}} \\ \hline
-\endfoot
-
-\hline
-\endlastfoot
-
-\hline
- \textbf{Nombre} & \textbf{NoTerminal}  \\ \hline
- 
- \textbf{Descripción} & Representa un símbolo no terminal de la gramática.  \\ \hline
-                       
- \textbf{Atributos} & Hereda todos los atributos de la clase Simbolo.  \\ \hline
- 
- \textbf{Métodos} & \begin{enumerate}
- 		\item \textbf{NoTerminal(String)}: constructor que inicializa el no terminal con un nombre.
- 		\item \textbf{NoTerminal(String, String)}: constructor que inicializa el no terminal con nombre y valor.
- 		\item Hereda todos los métodos de la clase Simbolo.
-\end{enumerate}
-                                 
- \label{tabla103}
-
-\end{longtable}
-
-\subsection{Clase Produccion}
-
-Esta clase representa una regla de producción de la gramática, conteniendo un antecedente y un consecuente.
-
-\begin{longtable}[H]{|>{\columncolor[rgb]{0.63,0.79,0.95}}m{6cm} | m{8.5cm} |}
- \caption{Clase Produccion}
-
-\endfirsthead
-
-\multicolumn{2}{c}
-{{\tablename\ \thetable{} -- continúa de la página anterior}} \\
-\endhead
-
-\hline \multicolumn{2}{|r|}{{Continúa en la página siguiente}} \\ \hline
-\endfoot
-
-\hline
-\endlastfoot
-
-\hline
- \textbf{Nombre} & \textbf{Produccion}  \\ \hline
- 
- \textbf{Descripción} & Representa una regla de producción de la gramática con antecedente y consecuente.  \\ \hline
-                       
- \textbf{Atributos} & \begin{enumerate}
- 		\item \textbf{antec}: Antecedente que representa la parte izquierda de la producción.
- 		\item \textbf{consec}: ObservableList\<Simbolo\> que representa la parte derecha de la producción.
- 		\item \textbf{numero}: entero que representa el número de la producción.
-\end{enumerate} \\ \hline
- 
- \textbf{Métodos} & \begin{enumerate}
- 		\item \textbf{getAntec()}: obtiene el antecedente de la producción.
- 		\item \textbf{setAntec(Antecedente)}: establece el antecedente de la producción.
- 		\item \textbf{getConsec()}: obtiene el consecuente de la producción.
- 		\item \textbf{setConsec(ObservableList\<Simbolo\>)}: establece el consecuente de la producción.
- 		\item \textbf{getNumero()}: obtiene el número de la producción.
- 		\item \textbf{setNumero(int)}: establece el número de la producción.
- 		\item \textbf{toString()}: devuelve la producción en formato de texto.
-\end{enumerate}
-                                 
- \label{tabla104}
-
-\end{longtable}
-
-\subsection{Clase Antecedente}
-
-Esta clase representa la parte izquierda de una producción, conteniendo un símbolo no terminal.
-
-\begin{longtable}[H]{|>{\columncolor[rgb]{0.63,0.79,0.95}}m{6cm} | m{8.5cm} |}
- \caption{Clase Antecedente}
-
-\endfirsthead
-
-\multicolumn{2}{c}
-{{\tablename\ \thetable{} -- continúa de la página anterior}} \\
-\endhead
-
-\hline \multicolumn{2}{|r|}{{Continúa en la página siguiente}} \\ \hline
-\endfoot
-
-\hline
-\endlastfoot
-
-\hline
- \textbf{Nombre} & \textbf{Antecedente}  \\ \hline
- 
- \textbf{Descripción} & Representa la parte izquierda de una producción (símbolo no terminal).  \\ \hline
-                       
- \textbf{Atributos} & \begin{enumerate}
- 		\item \textbf{noTerminal}: NoTerminal que representa el símbolo no terminal del antecedente.
-\end{enumerate} \\ \hline
- 
- \textbf{Métodos} & \begin{enumerate}
- 		\item \textbf{getNoTerminal()}: obtiene el símbolo no terminal del antecedente.
- 		\item \textbf{setNoTerminal(NoTerminal)}: establece el símbolo no terminal del antecedente.
- 		\item \textbf{toString()}: devuelve el antecedente en formato de texto.
-\end{enumerate}
-                                 
- \label{tabla105}
-
-\end{longtable}
-
-\subsection{Clase Consecuente}
-
-Esta clase representa la parte derecha de una producción, conteniendo una lista de símbolos.
-
-\begin{longtable}[H]{|>{\columncolor[rgb]{0.63,0.79,0.95}}m{6cm} | m{8.5cm} |}
- \caption{Clase Consecuente}
-
-\endfirsthead
-
-\multicolumn{2}{c}
-{{\tablename\ \thetable{} -- continúa de la página anterior}} \\
-\endhead
-
-\hline \multicolumn{2}{|r|}{{Continúa en la página siguiente}} \\ \hline
-\endfoot
-
-\hline
-\endlastfoot
-
-\hline
- \textbf{Nombre} & \textbf{Consecuente}  \\ \hline
- 
- \textbf{Descripción} & Representa la parte derecha de una producción (lista de símbolos).  \\ \hline
-                       
- \textbf{Atributos} & \begin{enumerate}
- 		\item \textbf{simbolos}: ObservableList\<Simbolo\> que contiene los símbolos del consecuente.
-\end{enumerate} \\ \hline
- 
- \textbf{Métodos} & \begin{enumerate}
- 		\item \textbf{getSimbolos()}: obtiene la lista de símbolos del consecuente.
- 		\item \textbf{setSimbolos(ObservableList\<Simbolo\>)}: establece la lista de símbolos del consecuente.
- 		\item \textbf{addSimbolo(Simbolo)}: añade un símbolo al consecuente.
- 		\item \textbf{removeSimbolo(Simbolo)}: elimina un símbolo del consecuente.
- 		\item \textbf{toString()}: devuelve el consecuente en formato de texto.
-\end{enumerate}
-                                 
- \label{tabla106}
-
-\end{longtable}
-
-\subsection{Clase TablaPredictiva}
-
-Esta clase representa la tabla predictiva utilizada en el análisis sintáctico descendente predictivo, implementando la estructura de datos necesaria para el algoritmo de parsing.
-
-\begin{longtable}[H]{|>{\columncolor[rgb]{0.63,0.79,0.95}}m{6cm} | m{8.5cm} |}
- \caption{Clase TablaPredictiva}
-
-\endfirsthead
-
-\multicolumn{2}{c}
-{{\tablename\ \thetable{} -- continúa de la página anterior}} \\
-\endhead
-
-\hline \multicolumn{2}{|r|}{{Continúa en la página siguiente}} \\ \hline
-\endfoot
-
-\hline
-\endlastfoot
-
-\hline
- \textbf{Nombre} & \textbf{TablaPredictiva}  \\ \hline
- 
- \textbf{Descripción} & Representa la tabla predictiva para análisis sintáctico descendente predictivo.  \\ \hline
-                       
- \textbf{Atributos} & \begin{enumerate}
- 		\item \textbf{tablaPredictiva}: TableView\<FilaTablaPredictiva\> que contiene la interfaz de la tabla.
- 		\item \textbf{gramatica}: Gramatica asociada a la tabla predictiva.
- 		\item \textbf{indiceColumnas}: Map\<String, Integer\> que mapea nombres de columnas a índices.
- 		\item \textbf{funcionesError}: List\<FuncionError\> que contiene las funciones de manejo de errores.
- 		\item \textbf{bundle}: ResourceBundle para internacionalización.
-\end{enumerate} \\ \hline
- 
- \textbf{Métodos} & \begin{enumerate}
- 		\item \textbf{construir(Gramatica)}: construye la tabla predictiva a partir de una gramática.
- 		\item \textbf{cargarDatos()}: carga los datos de la gramática en la tabla.
- 		\item \textbf{crearFunError(FuncionError)}: añade una función de error a la tabla.
- 		\item \textbf{getFuncionesError()}: obtiene la lista de funciones de error.
- 		\item \textbf{setFuncionesError(List\<FuncionError\>)}: establece las funciones de error.
- 		\item \textbf{getTablaPredictiva()}: obtiene la tabla de interfaz de usuario.
- 		\item \textbf{getFilas()}: obtiene las filas de la tabla.
- 		\item \textbf{getColumnas()}: obtiene el número de columnas.
-\end{enumerate}
-                                 
- \label{tabla107}
-
-\end{longtable}
-
-\subsection{Clase TablaPredictivaPaso5}
-
-Esta clase extiende TablaPredictiva para proporcionar funcionalidades específicas del paso 5 del simulador, incluyendo manejo de funciones de error y terminales.
-
-\begin{longtable}[H]{|>{\columncolor[rgb]{0.63,0.79,0.95}}m{6cm} | m{8.5cm} |}
- \caption{Clase TablaPredictivaPaso5}
-
-\endfirsthead
-
-\multicolumn{2}{c}
-{{\tablename\ \thetable{} -- continúa de la página anterior}} \\
-\endhead
-
-\hline \multicolumn{2}{|r|}{{Continúa en la página siguiente}} \\ \hline
-\endfoot
-
-\hline
-\endlastfoot
-
-\hline
- \textbf{Nombre} & \textbf{TablaPredictivaPaso5}  \\ \hline
- 
- \textbf{Descripción} & Extensión de TablaPredictiva para el paso 5 del simulador (extends TablaPredictiva).  \\ \hline
-                       
- \textbf{Atributos} & \begin{enumerate}
- 		\item \textbf{panelPaso5}: PanelNuevaSimDescPaso5 que contiene el panel asociado.
- 		\item \textbf{funcionesError}: List\<FuncionError\> específica para el paso 5.
- 		\item \textbf{columnsCreated}: boolean que indica si las columnas han sido creadas.
-\end{enumerate} \\ \hline
- 
- \textbf{Métodos} & \begin{enumerate}
- 		\item \textbf{setPanelPaso5(PanelNuevaSimDescPaso5)}: establece el panel asociado.
- 		\item \textbf{apareceSoloPrimeraPos(Terminal)}: verifica si un terminal aparece solo en primera posición.
- 		\item \textbf{rellenarProduccionesEpsilon()}: rellena las producciones épsilon en la tabla.
- 		\item \textbf{construir(Gramatica)}: construye la tabla con funcionalidades específicas del paso 5.
- 		\item \textbf{crearColumnas(Gramatica)}: crea las columnas de la tabla.
- 		\item \textbf{cargarDatos()}: carga datos incluyendo terminales.
- 		\item \textbf{configurarColumnas()}: configura el estilo de las columnas.
- 		\item \textbf{configurarSeleccion()}: configura la selección de celdas.
- 		\item \textbf{configurarManejadorClics()}: configura el manejo de clics en celdas.
-\end{enumerate}
-                                 
- \label{tabla108}
-
-\end{longtable}
 
 \subsection{Clase FilaTablaPredictiva}
 
@@ -1052,206 +671,9 @@ Esta clase representa una fila individual de la tabla predictiva, asociando un s
 
 \end{longtable}
 
-\subsection{Clase FuncionError}
 
-Esta clase representa una función de manejo de errores en la tabla predictiva, definiendo las acciones a realizar cuando se produce un error durante el análisis sintáctico.
 
-\begin{longtable}[H]{|>{\columncolor[rgb]{0.63,0.79,0.95}}m{6cm} | m{8.5cm} |}
- \caption{Clase FuncionError}
 
-\endfirsthead
-
-\multicolumn{2}{c}
-{{\tablename\ \thetable{} -- continúa de la página anterior}} \\
-\endhead
-
-\hline \multicolumn{2}{|r|}{{Continúa en la página siguiente}} \\ \hline
-\endfoot
-
-\hline
-\endlastfoot
-
-\hline
- \textbf{Nombre} & \textbf{FuncionError}  \\ \hline
- 
- \textbf{Descripción} & Representa una función de manejo de errores en la tabla predictiva.  \\ \hline
-                       
- \textbf{Atributos} & \begin{enumerate}
- 		\item \textbf{identificador}: int que identifica únicamente la función de error.
- 		\item \textbf{accion}: int que define el tipo de acción a realizar.
- 		\item \textbf{mensaje}: String que contiene el mensaje descriptivo de la función.
- 		\item \textbf{simbolo}: Terminal asociado a la función de error.
-\end{enumerate} \\ \hline
- 
- \textbf{Métodos} & \begin{enumerate}
- 		\item \textbf{getIdentificador()}: obtiene el identificador de la función.
- 		\item \textbf{setIdentificador(int)}: establece el identificador de la función.
- 		\item \textbf{getAccion()}: obtiene el tipo de acción.
- 		\item \textbf{setAccion(int)}: establece el tipo de acción.
- 		\item \textbf{getMensaje()}: obtiene el mensaje de la función.
- 		\item \textbf{setMensaje(String)}: establece el mensaje de la función.
- 		\item \textbf{getSimbolo()}: obtiene el símbolo asociado.
- 		\item \textbf{setSimbolo(Terminal)}: establece el símbolo asociado.
- 		\item \textbf{getNombreAccion()}: obtiene el nombre descriptivo de la acción.
- 		\item \textbf{equals(Object)}: compara dos funciones de error.
- 		\item \textbf{hashCode()}: calcula el hash de la función.
- 		\item \textbf{toString()}: representa la función como cadena.
-\end{enumerate}
-                                 
- \label{tabla110}
-
-\end{longtable}
-
-\subsection{Clase Editor}
-
-Esta clase representa el editor principal de gramáticas de contexto libre, proporcionando una interfaz completa para crear, editar, validar y gestionar gramáticas.
-
-\begin{longtable}[H]{|>{\columncolor[rgb]{0.63,0.79,0.95}}m{6cm} | m{8.5cm} |}
- \caption{Clase Editor}
-
-\endfirsthead
-
-\multicolumn{2}{c}
-{{\tablename\ \thetable{} -- continúa de la página anterior}} \\
-\endhead
-
-\hline \multicolumn{2}{|r|}{{Continúa en la página siguiente}} \\ \hline
-\endfoot
-
-\hline
-\endlastfoot
-
-\hline
- \textbf{Nombre} & \textbf{Editor}  \\ \hline
- 
- \textbf{Descripción} & Editor principal de gramáticas de contexto libre.  \\ \hline
-                       
- \textbf{Atributos} & \begin{enumerate}
- 		\item \textbf{gramatica}: Gramatica que representa la gramática actual del editor.
- 		\item \textbf{tabPane}: TabPane para gestión de pestañas.
- 		\item \textbf{menuPane}: MenuPrincipal para navegación.
- 		\item \textbf{bundle}: ResourceBundle para internacionalización.
- 		\item \textbf{editorId}: String que identifica únicamente este editor.
- 		\item \textbf{listenerConfigured}: boolean que indica si los listeners están configurados.
- 		\item \textbf{rootPane}: BorderPane que contiene la interfaz principal.
- 		\item \textbf{listNoTerminales}: ListView\<String\> para mostrar no terminales.
- 		\item \textbf{listTerminales}: ListView\<String\> para mostrar terminales.
- 		\item \textbf{listProducciones}: ListView\<String\> para mostrar producciones.
-\end{enumerate} \\ \hline
- 
- \textbf{Métodos} & \begin{enumerate}
- 		\item \textbf{getGramatica()}: obtiene la gramática actual.
- 		\item \textbf{setGramatica(Gramatica)}: establece la gramática.
- 		\item \textbf{getEditorId()}: obtiene el ID único del editor.
- 		\item \textbf{cargarGramatica()}: carga una gramática desde archivo.
- 		\item \textbf{grabarGramatica()}: guarda la gramática en archivo.
- 		\item \textbf{validarGramatica(Gramatica)}: valida la gramática.
- 		\item \textbf{actualizarVisualizacion()}: actualiza la interfaz con los datos de la gramática.
- 		\item \textbf{generarInformePDF()}: genera un informe PDF de la gramática.
- 		\item \textbf{actualizarTextos(ResourceBundle)}: actualiza los textos de la interfaz.
- 		\item \textbf{configurarRelacionesPadreHijo()}: configura las relaciones entre pestañas.
-\end{enumerate}
-                                 
- \label{tabla111}
-
-\end{longtable}
-
-\subsection{Clase EditorWindow}
-
-Esta clase representa una ventana de editor que puede contener múltiples pestañas con editores y simuladores, proporcionando funcionalidades avanzadas de gestión de ventanas.
-
-\begin{longtable}[H]{|>{\columncolor[rgb]{0.63,0.79,0.95}}m{6cm} | m{8.5cm} |}
- \caption{Clase EditorWindow}
-
-\endfirsthead
-
-\multicolumn{2}{c}
-{{\tablename\ \thetable{} -- continúa de la página anterior}} \\
-\endhead
-
-\hline \multicolumn{2}{|r|}{{Continúa en la página siguiente}} \\ \hline
-\endfoot
-
-\hline
-\endlastfoot
-
-\hline
- \textbf{Nombre} & \textbf{EditorWindow}  \\ \hline
- 
- \textbf{Descripción} & Ventana de editor que gestiona múltiples pestañas con editores y simuladores.  \\ \hline
-                       
- \textbf{Atributos} & \begin{enumerate}
- 		\item \textbf{stage}: Stage que representa la ventana principal.
- 		\item \textbf{tabPane}: TabPane que gestiona las pestañas de la ventana.
- 		\item \textbf{bundle}: ResourceBundle para internacionalización.
-\end{enumerate} \\ \hline
- 
- \textbf{Métodos} & \begin{enumerate}
- 		\item \textbf{show()}: muestra la ventana.
- 		\item \textbf{addTab(Tab)}: añade una pestaña a la ventana.
- 		\item \textbf{addEditor(Editor)}: añade un editor a la ventana.
- 		\item \textbf{getTabPane()}: obtiene el TabPane de la ventana.
- 		\item \textbf{moveGroupToWindow(TabPane, String, Tab)}: mueve un grupo de pestañas a esta ventana.
- 		\item \textbf{configurarAtajosTeclado(Scene)}: configura los atajos de teclado.
- 		\item \textbf{abrirEditorEnEditorWindow()}: abre un nuevo editor en esta ventana.
- 		\item \textbf{abrirSimuladorEnEditorWindow()}: abre un simulador en esta ventana.
-\end{enumerate}
-                                 
-\label{tabla112}
-
-\end{longtable}
-
-\subsection{Clase PanelCreacionGramatica}
-
-Esta clase representa el asistente principal para la creación y edición de gramáticas, coordinando los diferentes pasos del proceso.
-
-\begin{longtable}[H]{|>{\columncolor[rgb]{0.63,0.79,0.95}}m{6cm} | m{8.5cm} |}
- \caption{Clase PanelCreacionGramatica}
-
-\endfirsthead
-
-\multicolumn{2}{c}
-{{\tablename\ \thetable{} -- continúa de la página anterior}} \\
-\endhead
-
-\hline \multicolumn{2}{|r|}{{Continúa en la página siguiente}} \\ \hline
-\endfoot
-
-\hline
-\endlastfoot
-
-\hline
- \textbf{Nombre} & \textbf{PanelCreacionGramatica}  \\ \hline
- 
- \textbf{Descripción} & Asistente principal para creación y edición de gramáticas (extends BorderPane, implements ActualizableTextos).  \\ \hline
-                       
- \textbf{Atributos} & \begin{enumerate}
- 		\item \textbf{tabPane}: TabPane para gestión de pestañas.
- 		\item \textbf{paso1}: PanelCreacionGramaticaPaso1 para el primer paso.
- 		\item \textbf{paso2}: PanelCreacionGramaticaPaso2 para el segundo paso.
- 		\item \textbf{paso3}: PanelCreacionGramaticaPaso3 para el tercer paso.
- 		\item \textbf{paso4}: PanelCreacionGramaticaPaso4 para el cuarto paso.
- 		\item \textbf{panelPadre}: Editor que contiene este asistente.
- 		\item \textbf{menuPane}: MenuPrincipal para navegación.
- 		\item \textbf{gramaticaTemporal}: Gramatica temporal para la edición.
- 		\item \textbf{bundle}: ResourceBundle para internacionalización.
- 		\item \textbf{creacionId}: String que identifica únicamente esta creación.
-\end{enumerate} \\ \hline
- 
- \textbf{Métodos} & \begin{enumerate}
- 		\item \textbf{getGramatica()}: obtiene la gramática temporal.
- 		\item \textbf{setGramatica(Gramatica)}: establece la gramática temporal.
- 		\item \textbf{cambiarPaso(int)}: cambia al paso especificado del asistente.
- 		\item \textbf{getCreacionId()}: obtiene el ID único de la creación.
- 		\item \textbf{cancelarEdicion()}: cancela la edición actual.
- 		\item \textbf{mostrarAlerta(String, String)}: muestra una alerta al usuario.
- 		\item \textbf{actualizarTextos(ResourceBundle)}: actualiza los textos de la interfaz.
- 		\item \textbf{configurarRelacionesPadreHijo()}: configura las relaciones entre pestañas.
-\end{enumerate}
-                                 
- \label{tabla113}
-
-\end{longtable}
 
 \subsection{Clase PanelCreacionGramaticaPaso1}
 
@@ -1302,157 +724,6 @@ Esta clase representa el primer paso del asistente de creación de gramáticas, 
 \end{enumerate}
                                  
  \label{tabla114}
-
-\end{longtable}
-
-\subsection{Clase PanelProducciones}
-
-Esta clase representa un panel especializado para la gestión de producciones de la gramática, permitiendo crear, modificar y eliminar reglas de producción.
-
-\begin{longtable}[H]{|>{\columncolor[rgb]{0.63,0.79,0.95}}m{6cm} | m{8.5cm} |}
- \caption{Clase PanelProducciones}
-
-\endfirsthead
-
-\multicolumn{2}{c}
-{{\tablename\ \thetable{} -- continúa de la página anterior}} \\
-\endhead
-
-\hline \multicolumn{2}{|r|}{{Continúa en la página siguiente}} \\ \hline
-\endfoot
-
-\hline
-\endlastfoot
-
-\hline
- \textbf{Nombre} & \textbf{PanelProducciones}  \\ \hline
- 
- \textbf{Descripción} & Panel especializado para gestión de producciones de la gramática.  \\ \hline
-                       
- \textbf{Atributos} & \begin{enumerate}
- 		\item \textbf{comboBoxAntecedente}: ComboBox\<NoTerminal\> para seleccionar el antecedente.
- 		\item \textbf{txtConsecuente}: TextField para mostrar el consecuente.
- 		\item \textbf{listProducciones}: ListView\<Produccion\> para mostrar las producciones.
- 		\item \textbf{listTerminales}: ListView\<Simbolo\> para mostrar terminales disponibles.
- 		\item \textbf{listNoTerminales}: ListView\<Simbolo\> para mostrar no terminales disponibles.
- 		\item \textbf{btnInsertar}: Button para insertar nuevas producciones.
- 		\item \textbf{btnModificar}: Button para modificar producciones existentes.
- 		\item \textbf{btnEliminar}: Button para eliminar producciones.
- 		\item \textbf{btnEpsilon}: Button para añadir símbolo épsilon.
- 		\item \textbf{panelPadre}: PanelCreacionGramaticaPaso3 que contiene este panel.
- 		\item \textbf{producciones}: ObservableList\<Produccion\> con las producciones.
- 		\item \textbf{produccionSeleccionada}: Produccion actualmente seleccionada.
-\end{enumerate} \\ \hline
- 
- \textbf{Métodos} & \begin{enumerate}
- 		\item \textbf{cargarProduccionParaModificar(Produccion)}: carga una producción para modificación.
- 		\item \textbf{agregarSimboloAlConsecuente(Simbolo)}: añade un símbolo al consecuente.
- 		\item \textbf{cerrarPestanaActual()}: cierra la pestaña actual.
- 		\item \textbf{mostrarAlerta(String)}: muestra una alerta al usuario.
- 		\item \textbf{actualizarTextos(ResourceBundle)}: actualiza los textos de la interfaz.
-\end{enumerate}
-                                 
- \label{tabla115}
-
-\end{longtable}
-
-\subsection{Clase PanelSimbolosNoTerminales}
-
-Esta clase representa un panel especializado para la gestión de símbolos no terminales de la gramática.
-
-\begin{longtable}[H]{|>{\columncolor[rgb]{0.63,0.79,0.95}}m{6cm} | m{8.5cm} |}
- \caption{Clase PanelSimbolosNoTerminales}
-
-\endfirsthead
-
-\multicolumn{2}{c}
-{{\tablename\ \thetable{} -- continúa de la página anterior}} \\
-\endhead
-
-\hline \multicolumn{2}{|r|}{{Continúa en la página siguiente}} \\ \hline
-\endfoot
-
-\hline
-\endlastfoot
-
-\hline
- \textbf{Nombre} & \textbf{PanelSimbolosNoTerminales}  \\ \hline
- 
- \textbf{Descripción} & Panel especializado para gestión de símbolos no terminales.  \\ \hline
-                       
- \textbf{Atributos} & \begin{enumerate}
- 		\item \textbf{symbolButtonsPane}: FlowPane que contiene botones de símbolos predefinidos.
- 		\item \textbf{txtSimboloNoTerminal}: TextField para introducir nuevos símbolos.
- 		\item \textbf{listSimbolosNoTerminales}: ListView\<String\> para mostrar los símbolos.
- 		\item \textbf{btnInsertar}: Button para insertar nuevos símbolos.
- 		\item \textbf{btnModificar}: Button para modificar símbolos existentes.
- 		\item \textbf{btnEliminar}: Button para eliminar símbolos.
- 		\item \textbf{simbolosNoTerminales}: ObservableList\<String\> con los símbolos.
- 		\item \textbf{simbolosTemporales}: ObservableList\<String\> temporal para cambios.
- 		\item \textbf{simbolosSet}: Set\<String\> para verificar duplicados.
- 		\item \textbf{simbolosPredefinidos}: String[] con símbolos predefinidos.
- 		\item \textbf{panelPadre}: PanelCreacionGramaticaPaso2 que contiene este panel.
-\end{enumerate} \\ \hline
- 
- \textbf{Métodos} & \begin{enumerate}
- 		\item \textbf{generarBotonesPredefinidos()}: genera botones para símbolos predefinidos.
- 		\item \textbf{agregarSimbolo(String)}: añade un símbolo a la lista.
- 		\item \textbf{mostrarDialogoModificarSimbolo(String)}: muestra diálogo para modificar símbolo.
- 		\item \textbf{cerrarPestanaActual()}: cierra la pestaña actual.
- 		\item \textbf{actualizarTextos(ResourceBundle)}: actualiza los textos de la interfaz.
-\end{enumerate}
-                                 
- \label{tabla116}
-
-\end{longtable}
-
-\subsection{Clase PanelSimbolosTerminales}
-
-Esta clase representa un panel especializado para la gestión de símbolos terminales de la gramática.
-
-\begin{longtable}[H]{|>{\columncolor[rgb]{0.63,0.79,0.95}}m{6cm} | m{8.5cm} |}
- \caption{Clase PanelSimbolosTerminales}
-
-\endfirsthead
-
-\multicolumn{2}{c}
-{{\tablename\ \thetable{} -- continúa de la página anterior}} \\
-\endhead
-
-\hline \multicolumn{2}{|r|}{{Continúa en la página siguiente}} \\ \hline
-\endfoot
-
-\hline
-\endlastfoot
-
-\hline
- \textbf{Nombre} & \textbf{PanelSimbolosTerminales}  \\ \hline
- 
- \textbf{Descripción} & Panel especializado para gestión de símbolos terminales.  \\ \hline
-                       
- \textbf{Atributos} & \begin{enumerate}
- 		\item \textbf{symbolButtonsPane}: FlowPane que contiene botones de símbolos predefinidos.
- 		\item \textbf{txtSimboloTerminal}: TextField para introducir nuevos símbolos.
- 		\item \textbf{listSimbolosTerminales}: ListView\<String\> para mostrar los símbolos.
- 		\item \textbf{btnInsertar}: Button para insertar nuevos símbolos.
- 		\item \textbf{btnModificar}: Button para modificar símbolos existentes.
- 		\item \textbf{btnEliminar}: Button para eliminar símbolos.
- 		\item \textbf{simbolosTerminales}: ObservableList\<String\> con los símbolos.
- 		\item \textbf{simbolosTemporales}: ObservableList\<String\> temporal para cambios.
- 		\item \textbf{simbolosSet}: Set\<String\> para verificar duplicados.
- 		\item \textbf{simbolosPredefinidos}: String[] con símbolos predefinidos.
- 		\item \textbf{panelPadre}: PanelCreacionGramaticaPaso2 que contiene este panel.
-\end{enumerate} \\ \hline
- 
- \textbf{Métodos} & \begin{enumerate}
- 		\item \textbf{generarBotonesPredefinidos()}: genera botones para símbolos predefinidos.
- 		\item \textbf{agregarSimbolo(String)}: añade un símbolo a la lista.
- 		\item \textbf{mostrarDialogoModificarSimbolo(String)}: muestra diálogo para modificar símbolo.
- 		\item \textbf{cerrarPestanaActual()}: cierra la pestaña actual.
- 		\item \textbf{actualizarTextos(ResourceBundle)}: actualiza los textos de la interfaz.
-\end{enumerate}
-                                 
- \label{tabla117}
 
 \end{longtable}
 
