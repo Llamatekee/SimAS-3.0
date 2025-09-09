@@ -1,22 +1,22 @@
 [0] Config.pm:308> INFO - This is Biber 2.20
 [0] Config.pm:311> INFO - Logfile is 'main.blg'
-[105] biber-darwin:340> INFO - === Tue Sep  9, 2025, 13:36:27
-[132] Biber.pm:420> INFO - Reading 'main.bcf'
-[255] Biber.pm:994> INFO - Found 36 citekeys in bib section 0
-[279] Biber.pm:4463> INFO - Processing section 0
-[292] Biber.pm:4654> INFO - Looking for bibtex file 'references.bib' for section 0
-[293] bibtex.pm:1713> INFO - LaTeX decoding ...
-[332] bibtex.pm:1519> INFO - Found BibTeX data source 'references.bib'
-[550] UCollate.pm:68> INFO - Overriding locale 'es-ES' defaults 'normalization = NFD' with 'normalization = prenormalized'
-[551] UCollate.pm:68> INFO - Overriding locale 'es-ES' defaults 'variable = shifted' with 'variable = non-ignorable'
-[551] Biber.pm:4283> INFO - Sorting list 'nty/global//global/global/global' of type 'entry' with template 'nty' and locale 'es-ES'
-[584] bbl.pm:676> INFO - Writing 'main.bbl' with encoding 'UTF-8'
-[599] bbl.pm:779> INFO - Output to main.bbl
-[600] Biber.pm:131> WARN - ISBN '978-0321127420' in entry 'observer-pattern' is invalid - run biber with '--validate_datamodel' for details.
-[600] Biber.pm:131> WARN - I didn't find a database entry for 'pressman' (section 0)
-[600] Biber.pm:131> WARN - I didn't find a database entry for 'scrum' (section 0)
-[600] Biber.pm:131> WARN - I didn't find a database entry for 'rad' (section 0)
-[600] Biber.pm:131> WARN - I didn't find a database entry for 'uml' (section 0)
-[601] Biber.pm:131> WARN - I didn't find a database entry for 'macos' (section 0)
-[601] Biber.pm:131> WARN - I didn't find a database entry for 'html' (section 0)
-[601] Biber.pm:133> INFO - WARNINGS: 7
+[104] biber-darwin:340> INFO - === Tue Sep  9, 2025, 14:13:06
+[143] Biber.pm:420> INFO - Reading 'main.bcf'
+[271] Biber.pm:994> INFO - Found 36 citekeys in bib section 0
+[295] Biber.pm:4463> INFO - Processing section 0
+[308] Biber.pm:4654> INFO - Looking for bibtex file 'references.bib' for section 0
+[310] bibtex.pm:1713> INFO - LaTeX decoding ...
+[350] bibtex.pm:1519> INFO - Found BibTeX data source 'references.bib'
+[564] UCollate.pm:68> INFO - Overriding locale 'es-ES' defaults 'variable = shifted' with 'variable = non-ignorable'
+[564] UCollate.pm:68> INFO - Overriding locale 'es-ES' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[564] Biber.pm:4283> INFO - Sorting list 'nty/global//global/global/global' of type 'entry' with template 'nty' and locale 'es-ES'
+[598] bbl.pm:676> INFO - Writing 'main.bbl' with encoding 'UTF-8'
+[612] bbl.pm:779> INFO - Output to main.bbl
+[613] Biber.pm:131> WARN - ISBN '978-0321127420' in entry 'observer-pattern' is invalid - run biber with '--validate_datamodel' for details.
+[613] Biber.pm:131> WARN - I didn't find a database entry for 'pressman' (section 0)
+[613] Biber.pm:131> WARN - I didn't find a database entry for 'scrum' (section 0)
+[613] Biber.pm:131> WARN - I didn't find a database entry for 'rad' (section 0)
+[613] Biber.pm:131> WARN - I didn't find a database entry for 'uml' (section 0)
+[613] Biber.pm:131> WARN - I didn't find a database entry for 'macos' (section 0)
+[613] Biber.pm:131> WARN - I didn't find a database entry for 'html' (section 0)
+[614] Biber.pm:133> INFO - WARNINGS: 7
