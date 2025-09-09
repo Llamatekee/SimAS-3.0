@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.9.1)  10 SEP 2025 00:34
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.9.1)  10 SEP 2025 01:10
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1694,22 +1694,22 @@ Package: ltcaption 2021/01/08 v1.4c longtable captions (AR)
 Package caption Info: rotating package is loaded.
 Package caption Info: threeparttable package is loaded.
 Package caption Info: End \AtBeginDocument code.
-<img/topRightCorner.pdf, id=1043, 372.71536pt x 177.29297pt>
+<img/topRightCorner.pdf, id=1099, 372.71536pt x 177.29297pt>
 File: img/topRightCorner.pdf Graphic file (type pdf)
 <use img/topRightCorner.pdf>
 Package pdftex.def Info: img/topRightCorner.pdf  used on input line 183.
 (pdftex.def)             Requested size: 358.91168pt x 170.71652pt.
-<img/bottomLeftCorner.pdf, id=1044, 373.7158pt x 179.53836pt>
+<img/bottomLeftCorner.pdf, id=1100, 373.7158pt x 179.53836pt>
 File: img/bottomLeftCorner.pdf Graphic file (type pdf)
 <use img/bottomLeftCorner.pdf>
 Package pdftex.def Info: img/bottomLeftCorner.pdf  used on input line 186.
 (pdftex.def)             Requested size: 355.36444pt x 170.71652pt.
-<img/uco_debajo.pdf, id=1045, 112.27277pt x 64.74771pt>
+<img/uco_debajo.pdf, id=1101, 112.27277pt x 64.74771pt>
 File: img/uco_debajo.pdf Graphic file (type pdf)
 <use img/uco_debajo.pdf>
 Package pdftex.def Info: img/uco_debajo.pdf  used on input line 188.
 (pdftex.def)             Requested size: 98.67528pt x 56.9055pt.
-<img/emblema-ing-informatica.pdf, id=1046, 75.72227pt x 63.87949pt>
+<img/emblema-ing-informatica.pdf, id=1102, 75.72227pt x 63.87949pt>
 File: img/emblema-ing-informatica.pdf Graphic file (type pdf)
 <use img/emblema-ing-informatica.pdf>
 Package pdftex.def Info: img/emblema-ing-informatica.pdf  used on input line 19
@@ -1723,7 +1723,7 @@ File: t1fvs.fd 2004/09/07 scalable font definitions for T1/fvs.
 )
 LaTeX Font Info:    Font shape `T1/fvs/m/n' will be
 (Font)              scaled to size 10.79993pt on input line 199.
-<img/LogotipoEPSC.pdf, id=1047, 634.5805pt x 190.81488pt>
+<img/LogotipoEPSC.pdf, id=1103, 634.5805pt x 190.81488pt>
 File: img/LogotipoEPSC.pdf Graphic file (type pdf)
 <use img/LogotipoEPSC.pdf>
 Package pdftex.def Info: img/LogotipoEPSC.pdf  used on input line 204.
@@ -1872,19 +1872,24 @@ LaTeX Info: Redefining \sptext on input line 235.
 LaTeX Info: Redefining \. on input line 235.
 LaTeX Info: Redefining \% on input line 235.
 [7]
-Underfull \vbox (badness 10000) has occurred while \output is active []
 
-
-
-LaTeX Info: Redefining \sptext on input line 264.
-LaTeX Info: Redefining \. on input line 264.
-LaTeX Info: Redefining \% on input line 264.
+LaTeX Info: Redefining \sptext on input line 266.
+LaTeX Info: Redefining \. on input line 266.
+LaTeX Info: Redefining \% on input line 266.
 [8]
-Overfull \hbox (3.00198pt too wide) detected at line 274
+Overfull \hbox (3.00198pt too wide) detected at line 288
 \T1/cmr/m/n/12 10.10. 
  []
 
-)
+
+Underfull \vbox (badness 1117) has occurred while \output is active []
+
+
+
+LaTeX Info: Redefining \sptext on input line 295.
+LaTeX Info: Redefining \. on input line 295.
+LaTeX Info: Redefining \% on input line 295.
+[9])
 \tf@toc=\write7
 \openout7 = `main.toc'.
 
@@ -1892,17 +1897,15 @@ Overfull \hbox (3.00198pt too wide) detected at line 274
 
 LaTeX Info: Redefining \. on input line 302.
 LaTeX Info: Redefining \% on input line 302.
-[9]
-
-[10
-
-] (./main.lof
+[10] (./main.lof
 LaTeX Info: Redefining \sptext on input line 1.
 LaTeX Info: Redefining \. on input line 1.
 LaTeX Info: Redefining \% on input line 1.
 
 
-[11])
+[11
+
+])
 \tf@lof=\write8
 \openout8 = `main.lof'.
 
@@ -1948,7 +1951,7 @@ Underfull \vbox (badness 1205) has occurred while \output is active []
 [3
 
 ]
-<figuras/Cap1/fasescomp.png, id=1619, 683.55376pt x 503.8825pt>
+<figuras/Cap1/fasescomp.png, id=1712, 683.55376pt x 503.8825pt>
 File: figuras/Cap1/fasescomp.png Graphic file (type png)
 <use figuras/Cap1/fasescomp.png>
 Package pdftex.def Info: figuras/Cap1/fasescomp.png  used on input line 70.
@@ -2027,7 +2030,7 @@ LaTeX Info: Redefining \% on input line 120.
 LaTeX Info: Redefining \. on input line 168.
 LaTeX Info: Redefining \% on input line 168.
 [20]
-<figuras/Cap3/arbol-derivacion-gramatica-contexto-libre.pdf, id=1774, 547.04375
+<figuras/Cap3/arbol-derivacion-gramatica-contexto-libre.pdf, id=1866, 547.04375
 pt x 362.35374pt>
 File: figuras/Cap3/arbol-derivacion-gramatica-contexto-libre.pdf Graphic file (
 type pdf)
@@ -2044,7 +2047,7 @@ LaTeX Info: Redefining \% on input line 193.
 LaTeX Info: Redefining \. on input line 237.
 LaTeX Info: Redefining \% on input line 237.
 [22]
-<figuras/Cap3/Paso-2-arbol-derivacion-descendente.pdf, id=1796, 429.605pt x 543
+<figuras/Cap3/Paso-2-arbol-derivacion-descendente.pdf, id=1888, 429.605pt x 543
 .02875pt>
 File: figuras/Cap3/Paso-2-arbol-derivacion-descendente.pdf Graphic file (type p
 df)
@@ -2052,7 +2055,7 @@ df)
 Package pdftex.def Info: figuras/Cap3/Paso-2-arbol-derivacion-descendente.pdf  
 used on input line 240.
 (pdftex.def)             Requested size: 171.83894pt x 217.20764pt.
-<figuras/Cap3/Paso-13-arbol-derivacion-descendente.pdf, id=1797, 820.06375pt x 
+<figuras/Cap3/Paso-13-arbol-derivacion-descendente.pdf, id=1889, 820.06375pt x 
 551.05875pt>
 File: figuras/Cap3/Paso-13-arbol-derivacion-descendente.pdf Graphic file (type 
 pdf)
@@ -2078,13 +2081,13 @@ LaTeX Info: Redefining \% on input line 370.
 LaTeX Info: Redefining \. on input line 429.
 LaTeX Info: Redefining \% on input line 429.
 [26]
-<figuras/Cap3/SLR-paso-inicial.pdf, id=1844, 423.5825pt x 281.05pt>
+<figuras/Cap3/SLR-paso-inicial.pdf, id=1937, 423.5825pt x 281.05pt>
 File: figuras/Cap3/SLR-paso-inicial.pdf Graphic file (type pdf)
 <use figuras/Cap3/SLR-paso-inicial.pdf>
 Package pdftex.def Info: figuras/Cap3/SLR-paso-inicial.pdf  used on input line 
 436.
 (pdftex.def)             Requested size: 211.79073pt x 140.52464pt.
-<figuras/Cap3/SLR-paso-final.pdf, id=1845, 372.39125pt x 315.1775pt>
+<figuras/Cap3/SLR-paso-final.pdf, id=1938, 372.39125pt x 315.1775pt>
 File: figuras/Cap3/SLR-paso-final.pdf Graphic file (type pdf)
 <use figuras/Cap3/SLR-paso-final.pdf>
 Package pdftex.def Info: figuras/Cap3/SLR-paso-final.pdf  used on input line 43
@@ -2095,17 +2098,17 @@ Package pdftex.def Info: figuras/Cap3/SLR-paso-final.pdf  used on input line 43
 LaTeX Info: Redefining \. on input line 445.
 LaTeX Info: Redefining \% on input line 445.
 [27 <./figuras/Cap3/SLR-paso-inicial.pdf> <./figuras/Cap3/SLR-paso-final.pdf>]
-<figuras/Cap3/interfaz.JPG, id=1869, 689.57625pt x 839.135pt>
+<figuras/Cap3/interfaz.JPG, id=1962, 689.57625pt x 839.135pt>
 File: figuras/Cap3/interfaz.JPG Graphic file (type jpg)
 <use figuras/Cap3/interfaz.JPG>
 Package pdftex.def Info: figuras/Cap3/interfaz.JPG  used on input line 465.
 (pdftex.def)             Requested size: 344.78728pt x 419.56647pt.
-<figuras/Cap3/da12.png, id=1871, 822.07124pt x 665.48625pt>
+<figuras/Cap3/da12.png, id=1964, 822.07124pt x 665.48625pt>
 File: figuras/Cap3/da12.png Graphic file (type png)
 <use figuras/Cap3/da12.png>
 Package pdftex.def Info: figuras/Cap3/da12.png  used on input line 481.
 (pdftex.def)             Requested size: 328.82266pt x 266.18977pt.
-<figuras/Cap3/da14.png, id=1873, 679.53876pt x 717.68124pt>
+<figuras/Cap3/da14.png, id=1966, 679.53876pt x 717.68124pt>
 File: figuras/Cap3/da14.png Graphic file (type png)
 <use figuras/Cap3/da14.png>
 Package pdftex.def Info: figuras/Cap3/da14.png  used on input line 496.
@@ -2133,19 +2136,19 @@ LaTeX Info: Redefining \% on input line 513.
 LaTeX Info: Redefining \. on input line 535.
 LaTeX Info: Redefining \% on input line 535.
 [31]
-<figuras/Cap3/SimAS2/editor.png, id=1922, 684.5575pt x 819.06pt>
+<figuras/Cap3/SimAS2/editor.png, id=2014, 684.5575pt x 819.06pt>
 File: figuras/Cap3/SimAS2/editor.png Graphic file (type png)
 <use figuras/Cap3/SimAS2/editor.png>
 Package pdftex.def Info: figuras/Cap3/SimAS2/editor.png  used on input line 545
 .
 (pdftex.def)             Requested size: 342.27791pt x 409.52899pt.
-<figuras/Cap3/SimAS2/paso1.png, id=1924, 569.12625pt x 523.9575pt>
+<figuras/Cap3/SimAS2/paso1.png, id=2016, 569.12625pt x 523.9575pt>
 File: figuras/Cap3/SimAS2/paso1.png Graphic file (type png)
 <use figuras/Cap3/SimAS2/paso1.png>
 Package pdftex.def Info: figuras/Cap3/SimAS2/paso1.png  used on input line 560.
 
 (pdftex.def)             Requested size: 284.56242pt x 261.9781pt.
-<figuras/Cap3/SimAS2/paso2.png, id=1926, 605.26125pt x 487.8225pt>
+<figuras/Cap3/SimAS2/paso2.png, id=2018, 605.26125pt x 487.8225pt>
 File: figuras/Cap3/SimAS2/paso2.png Graphic file (type png)
 <use figuras/Cap3/SimAS2/paso2.png>
 Package pdftex.def Info: figuras/Cap3/SimAS2/paso2.png  used on input line 575.
@@ -2164,13 +2167,13 @@ LaTeX Info: Redefining \% on input line 580.
 LaTeX Info: Redefining \. on input line 580.
 LaTeX Info: Redefining \% on input line 580.
 [34 <./figuras/Cap3/SimAS2/paso1.png> <./figuras/Cap3/SimAS2/paso2.png>]
-<figuras/Cap3/SimAS2/paso3.png, id=1950, 705.63625pt x 521.95pt>
+<figuras/Cap3/SimAS2/paso3.png, id=2043, 705.63625pt x 521.95pt>
 File: figuras/Cap3/SimAS2/paso3.png Graphic file (type png)
 <use figuras/Cap3/SimAS2/paso3.png>
 Package pdftex.def Info: figuras/Cap3/SimAS2/paso3.png  used on input line 589.
 
 (pdftex.def)             Requested size: 352.81726pt x 260.97435pt.
-<figuras/Cap3/SimAS2/paso4.png, id=1952, 648.4225pt x 509.905pt>
+<figuras/Cap3/SimAS2/paso4.png, id=2045, 648.4225pt x 509.905pt>
 File: figuras/Cap3/SimAS2/paso4.png Graphic file (type png)
 <use figuras/Cap3/SimAS2/paso4.png>
 Package pdftex.def Info: figuras/Cap3/SimAS2/paso4.png  used on input line 602.
@@ -2181,13 +2184,13 @@ Package pdftex.def Info: figuras/Cap3/SimAS2/paso4.png  used on input line 602.
 LaTeX Info: Redefining \. on input line 611.
 LaTeX Info: Redefining \% on input line 611.
 [35 <./figuras/Cap3/SimAS2/paso3.png>]
-<figuras/Cap3/SimAS2/paso5.png, id=1964, 690.58pt x 634.37pt>
+<figuras/Cap3/SimAS2/paso5.png, id=2057, 690.58pt x 634.37pt>
 File: figuras/Cap3/SimAS2/paso5.png Graphic file (type png)
 <use figuras/Cap3/SimAS2/paso5.png>
 Package pdftex.def Info: figuras/Cap3/SimAS2/paso5.png  used on input line 616.
 
 (pdftex.def)             Requested size: 345.28915pt x 317.18422pt.
-<figuras/Cap3/SimAS2/finalizar.png, id=1966, 819.06pt x 732.7375pt>
+<figuras/Cap3/SimAS2/finalizar.png, id=2059, 819.06pt x 732.7375pt>
 File: figuras/Cap3/SimAS2/finalizar.png Graphic file (type png)
 <use figuras/Cap3/SimAS2/finalizar.png>
 Package pdftex.def Info: figuras/Cap3/SimAS2/finalizar.png  used on input line 
@@ -2214,7 +2217,7 @@ LaTeX Info: Redefining \% on input line 660.
 LaTeX Info: Redefining \. on input line 687.
 LaTeX Info: Redefining \% on input line 687.
 [40]
-<figuras/Cap3/SimAS2/fallos/ubuntu1.png, id=2010, 1445.4pt x 903.375pt>
+<figuras/Cap3/SimAS2/fallos/ubuntu1.png, id=2102, 1445.4pt x 903.375pt>
 File: figuras/Cap3/SimAS2/fallos/ubuntu1.png Graphic file (type png)
 <use figuras/Cap3/SimAS2/fallos/ubuntu1.png>
 Package pdftex.def Info: figuras/Cap3/SimAS2/fallos/ubuntu1.png  used on input 
@@ -2225,7 +2228,7 @@ line 704.
 LaTeX Info: Redefining \. on input line 716.
 LaTeX Info: Redefining \% on input line 716.
 [41]
-<figuras/Cap3/SimAS2/fallos/ubuntu2.png, id=2016, 674.52pt x 519.9425pt>
+<figuras/Cap3/SimAS2/fallos/ubuntu2.png, id=2108, 674.52pt x 519.9425pt>
 File: figuras/Cap3/SimAS2/fallos/ubuntu2.png Graphic file (type png)
 <use figuras/Cap3/SimAS2/fallos/ubuntu2.png>
 Package pdftex.def Info: figuras/Cap3/SimAS2/fallos/ubuntu2.png  used on input 
@@ -2237,7 +2240,7 @@ LaTeX Info: Redefining \. on input line 727.
 LaTeX Info: Redefining \% on input line 727.
 [42 <./figuras/Cap3/SimAS2/fallos/ubuntu1.png> <./figuras/Cap3/SimAS2/fallos/ub
 untu2.png>]
-<figuras/Cap3/SimAS2/fallos/macos1.png, id=2024, 1445.4pt x 903.375pt>
+<figuras/Cap3/SimAS2/fallos/macos1.png, id=2116, 1445.4pt x 903.375pt>
 File: figuras/Cap3/SimAS2/fallos/macos1.png Graphic file (type png)
 <use figuras/Cap3/SimAS2/fallos/macos1.png>
 Package pdftex.def Info: figuras/Cap3/SimAS2/fallos/macos1.png  used on input l
@@ -2248,7 +2251,7 @@ ine 734.
 LaTeX Info: Redefining \. on input line 744.
 LaTeX Info: Redefining \% on input line 744.
 [43 <./figuras/Cap3/SimAS2/fallos/macos1.png>]
-<figuras/Cap3/SimAS2/fallos/macos2.png, id=2031, 689.57625pt x 645.41125pt>
+<figuras/Cap3/SimAS2/fallos/macos2.png, id=2123, 689.57625pt x 645.41125pt>
 File: figuras/Cap3/SimAS2/fallos/macos2.png Graphic file (type png)
 <use figuras/Cap3/SimAS2/fallos/macos2.png>
 Package pdftex.def Info: figuras/Cap3/SimAS2/fallos/macos2.png  used on input l
@@ -2346,7 +2349,7 @@ LaTeX Info: Redefining \% on input line 318.
 
 [58] (./capitulos/06_Especificacion_Requisitos.tex
 Cap\'{\i }tulo 6.
-<figuras/Cap6/diagrama-descomposicion.png, id=2145, 542.025pt x 189.70876pt>
+<figuras/Cap6/diagrama-descomposicion.png, id=2237, 542.025pt x 189.70876pt>
 File: figuras/Cap6/diagrama-descomposicion.png Graphic file (type png)
 <use figuras/Cap6/diagrama-descomposicion.png>
 Package pdftex.def Info: figuras/Cap6/diagrama-descomposicion.png  used on inpu
@@ -2415,7 +2418,7 @@ Cap\'{\i }tulo 7.
 [73
 
 ]
-<figuras/Cap7/CU0.png, id=2225, 517.935pt x 414.54875pt>
+<figuras/Cap7/CU0.png, id=2317, 517.935pt x 414.54875pt>
 File: figuras/Cap7/CU0.png Graphic file (type png)
 <use figuras/Cap7/CU0.png>
 Package pdftex.def Info: figuras/Cap7/CU0.png  used on input line 36.
@@ -2432,7 +2435,7 @@ Underfull \hbox (badness 2644) in paragraph at lines 75--76
 LaTeX Info: Redefining \. on input line 97.
 LaTeX Info: Redefining \% on input line 97.
 [75]
-<figuras/Cap7/CU1.png, id=2244, 803.0pt x 761.84625pt>
+<figuras/Cap7/CU1.png, id=2336, 803.0pt x 761.84625pt>
 File: figuras/Cap7/CU1.png Graphic file (type png)
 <use figuras/Cap7/CU1.png>
 Package pdftex.def Info: figuras/Cap7/CU1.png  used on input line 108.
@@ -2471,7 +2474,7 @@ LaTeX Info: Redefining \% on input line 181.
 LaTeX Info: Redefining \. on input line 181.
 LaTeX Info: Redefining \% on input line 181.
  [79]
-<figuras/Cap7/CU11.png, id=2289, 517.935pt x 338.26375pt>
+<figuras/Cap7/CU11.png, id=2382, 517.935pt x 338.26375pt>
 File: figuras/Cap7/CU11.png Graphic file (type png)
 <use figuras/Cap7/CU11.png>
 Package pdftex.def Info: figuras/Cap7/CU11.png  used on input line 192.
@@ -2484,7 +2487,7 @@ LaTeX Info: Redefining \% on input line 196.
 LaTeX Info: Redefining \. on input line 231.
 LaTeX Info: Redefining \% on input line 231.
  [81 <./figuras/Cap7/CU11.png>]
-<figuras/Cap7/CU12.png, id=2320, 691.58376pt x 355.3275pt>
+<figuras/Cap7/CU12.png, id=2412, 691.58376pt x 355.3275pt>
 File: figuras/Cap7/CU12.png Graphic file (type png)
 <use figuras/Cap7/CU12.png>
 Package pdftex.def Info: figuras/Cap7/CU12.png  used on input line 241.
@@ -2504,7 +2507,7 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 LaTeX Info: Redefining \. on input line 290.
 LaTeX Info: Redefining \% on input line 290.
 [83]
-<figuras/Cap7/CU13.png, id=2345, 691.58376pt x 355.3275pt>
+<figuras/Cap7/CU13.png, id=2437, 691.58376pt x 355.3275pt>
 File: figuras/Cap7/CU13.png Graphic file (type png)
 <use figuras/Cap7/CU13.png>
 Package pdftex.def Info: figuras/Cap7/CU13.png  used on input line 299.
@@ -2530,7 +2533,7 @@ LaTeX Info: Redefining \% on input line 349.
 LaTeX Info: Redefining \. on input line 349.
 LaTeX Info: Redefining \% on input line 349.
  [85]
-<figuras/Cap7/CU14.png, id=2369, 707.64375pt x 355.3275pt>
+<figuras/Cap7/CU14.png, id=2462, 707.64375pt x 355.3275pt>
 File: figuras/Cap7/CU14.png Graphic file (type png)
 <use figuras/Cap7/CU14.png>
 Package pdftex.def Info: figuras/Cap7/CU14.png  used on input line 363.
@@ -2543,7 +2546,7 @@ LaTeX Info: Redefining \% on input line 415.
 LaTeX Info: Redefining \. on input line 415.
 LaTeX Info: Redefining \% on input line 415.
  [87]
-<figuras/Cap7/CU16.png, id=2393, 691.58376pt x 355.3275pt>
+<figuras/Cap7/CU16.png, id=2486, 691.58376pt x 355.3275pt>
 File: figuras/Cap7/CU16.png Graphic file (type png)
 <use figuras/Cap7/CU16.png>
 Package pdftex.def Info: figuras/Cap7/CU16.png  used on input line 431.
@@ -2559,7 +2562,7 @@ LaTeX Info: Redefining \% on input line 436.
 LaTeX Info: Redefining \. on input line 479.
 LaTeX Info: Redefining \% on input line 479.
  [89 <./figuras/Cap7/CU16.png>]
-<figuras/Cap7/CU17.png, id=2417, 707.64375pt x 355.3275pt>
+<figuras/Cap7/CU17.png, id=2509, 707.64375pt x 355.3275pt>
 File: figuras/Cap7/CU17.png Graphic file (type png)
 <use figuras/Cap7/CU17.png>
 Package pdftex.def Info: figuras/Cap7/CU17.png  used on input line 489.
@@ -2576,7 +2579,7 @@ LaTeX Info: Redefining \% on input line 494.
 LaTeX Info: Redefining \. on input line 495.
 LaTeX Info: Redefining \% on input line 495.
 [91 <./figuras/Cap7/CU17.png>]
-<figuras/Cap7/CU18.png, id=2435, 707.64375pt x 355.3275pt>
+<figuras/Cap7/CU18.png, id=2527, 707.64375pt x 355.3275pt>
 File: figuras/Cap7/CU18.png Graphic file (type png)
 <use figuras/Cap7/CU18.png>
 Package pdftex.def Info: figuras/Cap7/CU18.png  used on input line 543.
@@ -2602,7 +2605,7 @@ Underfull \hbox (badness 8000) in paragraph at lines 568--569
 LaTeX Info: Redefining \. on input line 594.
 LaTeX Info: Redefining \% on input line 594.
 [94]
-<figuras/Cap7/CU19.png, id=2469, 707.64375pt x 355.3275pt>
+<figuras/Cap7/CU19.png, id=2562, 707.64375pt x 355.3275pt>
 File: figuras/Cap7/CU19.png Graphic file (type png)
 <use figuras/Cap7/CU19.png>
 Package pdftex.def Info: figuras/Cap7/CU19.png  used on input line 601.
@@ -2610,7 +2613,7 @@ Package pdftex.def Info: figuras/Cap7/CU19.png  used on input line 601.
 LaTeX Info: Redefining \. on input line 648.
 LaTeX Info: Redefining \% on input line 648.
  [95 <./figuras/Cap7/CU19.png>]
-<figuras/Cap7/CU110.png, id=2480, 681.54625pt x 355.3275pt>
+<figuras/Cap7/CU110.png, id=2573, 681.54625pt x 355.3275pt>
 File: figuras/Cap7/CU110.png Graphic file (type png)
 <use figuras/Cap7/CU110.png>
 Package pdftex.def Info: figuras/Cap7/CU110.png  used on input line 658.
@@ -2630,7 +2633,7 @@ LaTeX Info: Redefining \% on input line 705.
 LaTeX Info: Redefining \. on input line 714.
 LaTeX Info: Redefining \% on input line 714.
 [98]
-<figuras/Cap7/CU112.png, id=2515, 707.64375pt x 355.3275pt>
+<figuras/Cap7/CU112.png, id=2607, 707.64375pt x 355.3275pt>
 File: figuras/Cap7/CU112.png Graphic file (type png)
 <use figuras/Cap7/CU112.png>
 Package pdftex.def Info: figuras/Cap7/CU112.png  used on input line 721.
@@ -2645,7 +2648,7 @@ Underfull \vbox (badness 4886) has occurred while \output is active []
 LaTeX Info: Redefining \. on input line 774.
 LaTeX Info: Redefining \% on input line 774.
 [100]
-<figuras/Cap7/CU2.png, id=2535, 691.58376pt x 623.32875pt>
+<figuras/Cap7/CU2.png, id=2627, 691.58376pt x 623.32875pt>
 File: figuras/Cap7/CU2.png Graphic file (type png)
 <use figuras/Cap7/CU2.png>
 Package pdftex.def Info: figuras/Cap7/CU2.png  used on input line 788.
@@ -2664,7 +2667,7 @@ LaTeX Info: Redefining \% on input line 828.
 LaTeX Info: Redefining \. on input line 839.
 LaTeX Info: Redefining \% on input line 839.
 [102]
-<figuras/Cap7/CU21.png, id=2556, 773.89125pt x 683.55376pt>
+<figuras/Cap7/CU21.png, id=2648, 773.89125pt x 683.55376pt>
 File: figuras/Cap7/CU21.png Graphic file (type png)
 <use figuras/Cap7/CU21.png>
 Package pdftex.def Info: figuras/Cap7/CU21.png  used on input line 854.
@@ -2684,7 +2687,7 @@ LaTeX Info: Redefining \% on input line 919.
 LaTeX Info: Redefining \. on input line 940.
 LaTeX Info: Redefining \% on input line 940.
 [106]
-<figuras/Cap7/CU3.png, id=2603, 681.54625pt x 355.3275pt>
+<figuras/Cap7/CU3.png, id=2696, 681.54625pt x 355.3275pt>
 File: figuras/Cap7/CU3.png Graphic file (type png)
 <use figuras/Cap7/CU3.png>
 Package pdftex.def Info: figuras/Cap7/CU3.png  used on input line 969.
@@ -2697,7 +2700,7 @@ LaTeX Info: Redefining \% on input line 974.
 LaTeX Info: Redefining \. on input line 1010.
 LaTeX Info: Redefining \% on input line 1010.
  [108 <./figuras/Cap7/CU3.png>]
-<figuras/Cap7/CU4.png, id=2622, 681.54625pt x 355.3275pt>
+<figuras/Cap7/CU4.png, id=2714, 681.54625pt x 355.3275pt>
 File: figuras/Cap7/CU4.png Graphic file (type png)
 <use figuras/Cap7/CU4.png>
 Package pdftex.def Info: figuras/Cap7/CU4.png  used on input line 1030.
@@ -2865,7 +2868,7 @@ LaTeX Info: Redefining \% on input line 714.
 LaTeX Info: Redefining \. on input line 756.
 LaTeX Info: Redefining \% on input line 756.
 [137]
-<figuras/Cap8/diagrama_paquetes.png, id=2857, 722.7pt x 626.34pt>
+<figuras/Cap8/diagrama_paquetes.png, id=2950, 722.7pt x 626.34pt>
 File: figuras/Cap8/diagrama_paquetes.png Graphic file (type png)
 <use figuras/Cap8/diagrama_paquetes.png>
 Package pdftex.def Info: figuras/Cap8/diagrama_paquetes.png  used on input line
@@ -3220,32 +3223,24 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 
-LaTeX Info: Redefining \. on input line 641.
-LaTeX Info: Redefining \% on input line 641.
+LaTeX Info: Redefining \. on input line 642.
+LaTeX Info: Redefining \% on input line 642.
 [165]
-<figuras/Cap9/diagrama_gramatica_bueno.png, id=3209, 878.28125pt x 830.10126pt>
+<figuras/Cap9/diagrama_gramatica_bueno.png, id=3302, 878.28125pt x 830.10126pt>
 
 File: figuras/Cap9/diagrama_gramatica_bueno.png Graphic file (type png)
 <use figuras/Cap9/diagrama_gramatica_bueno.png>
 Package pdftex.def Info: figuras/Cap9/diagrama_gramatica_bueno.png  used on inp
-ut line 656.
+ut line 658.
 (pdftex.def)             Requested size: 409.71692pt x 387.24707pt.
 
-Underfull \vbox (badness 5302) has occurred while \output is active []
+Underfull \vbox (badness 1968) has occurred while \output is active []
 
 
 
-LaTeX Info: Redefining \. on input line 660.
-LaTeX Info: Redefining \% on input line 660.
+LaTeX Info: Redefining \. on input line 662.
+LaTeX Info: Redefining \% on input line 662.
 [166]
-
-LaTeX Warning: Citation 'gamma1995design' on page 167 undefined on input line 6
-64.
-
-
-LaTeX Warning: Citation 'gamma1995design' on page 167 undefined on input line 6
-65.
-
 
 LaTeX Warning: Citation 'gamma1995design' on page 167 undefined on input line 6
 66.
@@ -3259,55 +3254,492 @@ LaTeX Warning: Citation 'gamma1995design' on page 167 undefined on input line 6
 68.
 
 
+LaTeX Warning: Citation 'gamma1995design' on page 167 undefined on input line 6
+69.
+
+
+LaTeX Warning: Citation 'gamma1995design' on page 167 undefined on input line 6
+70.
+
+
 LaTeX Warning: Citation 'burbeck1992applications' on page 167 undefined on inpu
-t line 669.
+t line 671.
 
 
-Overfull \hbox (47.71053pt too wide) in paragraph at lines 669--670
+Overfull \hbox (47.71053pt too wide) in paragraph at lines 671--672
 \T1/cmr/m/n/12 jan la pre-sen-ta-ción, y los con-tro-la-do-res coor-di-nan la i
 n-ter-ac-ción [[]]. 
  []
 
 
 
-LaTeX Info: Redefining \. on input line 670.
-LaTeX Info: Redefining \% on input line 670.
-[167 <./figuras/Cap9/diagrama_gramatica_bueno.png>])
-(./capitulos/10_Diseno_de_la_interfaz.tex
+LaTeX Info: Redefining \. on input line 672.
+LaTeX Info: Redefining \% on input line 672.
+[167 <./figuras/Cap9/diagrama_gramatica_bueno.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 716--717
+[]\T1/cmr/bx/n/12 EditorWindow(ResourceBundle)\T1/cmr/m/n/12 :
+ []
+
+
+Underfull \hbox (badness 1275) in paragraph at lines 718--719
+[]\T1/cmr/bx/n/12 configurarAtajosTeclado(Scene)\T1/cmr/m/n/12 : es-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 722--723
+[]\T1/cmr/bx/n/12 removeEditorTab(Editor)\T1/cmr/m/n/12 : eli-mi-na
+ []
+
+LaTeX Info: Redefining \. on input line 725.
+LaTeX Info: Redefining \% on input line 725.
+[168]
+Underfull \hbox (badness 10000) in paragraph at lines 756--757
+[]\T1/cmr/bx/n/12 Editor(TabPane, Me-nu-Prin-ci-pal)\T1/cmr/m/n/12 :
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 758--759
+[]\T1/cmr/bx/n/12 inicializarComponentes()\T1/cmr/m/n/12 : con-fi-gu-ra
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 770--771
+[]\T1/cmr/bx/n/12 actualizarTextos(ResourceBundle)\T1/cmr/m/n/12 :
+ []
+
+
+Underfull \hbox (badness 7326) in paragraph at lines 775--776
+[]\T1/cmr/bx/n/12 setGramatica(Gramatica)\T1/cmr/m/n/12 : es-ta-ble-ce
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 777--778
+[]\T1/cmr/bx/n/12 configurarRelacionesPadreHijo()\T1/cmr/m/n/12 :
+ []
+
+LaTeX Info: Redefining \. on input line 781.
+LaTeX Info: Redefining \% on input line 781.
+[169]
+LaTeX Info: Redefining \. on input line 781.
+LaTeX Info: Redefining \% on input line 781.
+ [170]
+LaTeX Info: Redefining \. on input line 781.
+LaTeX Info: Redefining \% on input line 781.
+ [171]
+Underfull \hbox (badness 10000) in paragraph at lines 811--812
+[]\T1/cmr/bx/n/12 PanelCreacionGramatica(Editor,
+ []
+
+
+Underfull \hbox (badness 5203) in paragraph at lines 816--817
+[]\T1/cmr/bx/n/12 retrocederAlPasoAnterior()\T1/cmr/m/n/12 : na-ve-ga
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 820--821
+[]\T1/cmr/bx/n/12 actualizarTextos(ResourceBundle)\T1/cmr/m/n/12 :
+ []
+
+LaTeX Info: Redefining \. on input line 823.
+LaTeX Info: Redefining \% on input line 823.
+[172]
+Underfull \hbox (badness 2165) in paragraph at lines 843--844
+[]\T1/cmr/bx/n/12 panelPadre\T1/cmr/m/n/12 : re-fe-ren-cia al Pa-nel-Crea-
+ []
+
+
+Underfull \hbox (badness 1226) in paragraph at lines 847--848
+[]\T1/cmr/bx/n/12 btnCancelar\T1/cmr/m/n/12 : bo-tón pa-ra can-ce-lar la
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 851--852
+[]\T1/cmr/bx/n/12 PanelCreacionGramaticaPaso1(
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 851--852
+\T1/cmr/bx/n/12 Pa-nel-Crea-cion-Gra-ma-ti-ca, Re-sour-
+ []
+
+
+Underfull \hbox (badness 1975) in paragraph at lines 853--854
+[]\T1/cmr/bx/n/12 configurarValidacion()\T1/cmr/m/n/12 : es-ta-ble-ce las
+ []
+
+
+Underfull \hbox (badness 4595) in paragraph at lines 855--856
+[]\T1/cmr/bx/n/12 setDescripcion(String)\T1/cmr/m/n/12 : es-ta-ble-ce la
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 858--859
+[]\T1/cmr/bx/n/12 btnSiguiente_action()\T1/cmr/m/n/12 : ma-ne-ja el
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 860--861
+[]\T1/cmr/bx/n/12 actualizarTextos(ResourceBundle)\T1/cmr/m/n/12 :
+ []
+
+LaTeX Info: Redefining \. on input line 863.
+LaTeX Info: Redefining \% on input line 863.
+[173]
+Underfull \hbox (badness 2165) in paragraph at lines 883--884
+[]\T1/cmr/bx/n/12 panelPadre\T1/cmr/m/n/12 : re-fe-ren-cia al Pa-nel-Crea-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 897--898
+[]\T1/cmr/bx/n/12 asignarListaSimbolosTerminales(
+ []
+
+
+Underfull \hbox (badness 1810) in paragraph at lines 897--898
+\T1/cmr/bx/n/12 Ob-ser-va-ble-List<String>)\T1/cmr/m/n/12 : asig-na la
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 898--899
+[]\T1/cmr/bx/n/12 asignarListaSimbolosNoTerminales(
+ []
+
+
+Underfull \hbox (badness 1810) in paragraph at lines 898--899
+\T1/cmr/bx/n/12 Ob-ser-va-ble-List<String>)\T1/cmr/m/n/12 : asig-na la
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 901--902
+[]\T1/cmr/bx/n/12 btnSiguiente_action()\T1/cmr/m/n/12 : ma-ne-ja el
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 904--905
+[]\T1/cmr/bx/n/12 actualizarTextos(ResourceBundle)\T1/cmr/m/n/12 :
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+LaTeX Info: Redefining \. on input line 907.
+LaTeX Info: Redefining \% on input line 907.
+[174]
+LaTeX Info: Redefining \. on input line 907.
+LaTeX Info: Redefining \% on input line 907.
+ [175]
+Underfull \hbox (badness 2165) in paragraph at lines 927--928
+[]\T1/cmr/bx/n/12 panelPadre\T1/cmr/m/n/12 : re-fe-ren-cia al Pa-nel-Crea-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 936--937
+[]\T1/cmr/bx/n/12 PanelCreacionGramaticaPaso3(
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 937--938
+[]\T1/cmr/bx/n/12 inicializarPanelProducciones()\T1/cmr/m/n/12 :
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 940--941
+[]\T1/cmr/bx/n/12 asignarProducciones( Ob-ser-va-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 940--941
+\T1/cmr/bx/n/12 ble-List<Produccion>)\T1/cmr/m/n/12 : asig-na las
+ []
+
+
+Underfull \hbox (badness 7796) in paragraph at lines 941--942
+[]\T1/cmr/bx/n/12 obtenerProducciones()\T1/cmr/m/n/12 : ob-tie-ne las
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 942--943
+[]\T1/cmr/bx/n/12 btnSiguiente_action()\T1/cmr/m/n/12 : ma-ne-ja el
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 945--946
+[]\T1/cmr/bx/n/12 actualizarTextos(ResourceBundle)\T1/cmr/m/n/12 :
+ []
+
+LaTeX Info: Redefining \. on input line 948.
+LaTeX Info: Redefining \% on input line 948.
+[176]
+LaTeX Info: Redefining \. on input line 948.
+LaTeX Info: Redefining \% on input line 948.
+ [177]
+Underfull \hbox (badness 2165) in paragraph at lines 968--969
+[]\T1/cmr/bx/n/12 panelPadre\T1/cmr/m/n/12 : re-fe-ren-cia al Pa-nel-Crea-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 976--977
+\T1/cmr/bx/n/12 nel-Crea-cion-Gra-ma-ti-ca, Tab-Pa-ne)\T1/cmr/m/n/12 :
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 979--980
+[]\T1/cmr/bx/n/12 mostrarResultadosValidacion()\T1/cmr/m/n/12 :
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 984--985
+[]\T1/cmr/bx/n/12 actualizarTextos(ResourceBundle)\T1/cmr/m/n/12 :
+ []
+
+LaTeX Info: Redefining \. on input line 987.
+LaTeX Info: Redefining \% on input line 987.
+[178]
+Underfull \hbox (badness 2165) in paragraph at lines 1007--1008
+[]\T1/cmr/bx/n/12 panelPadre\T1/cmr/m/n/12 : re-fe-ren-cia al Pa-nel-Crea-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1013--1014
+[]\T1/cmr/bx/n/12 Componentes FXML\T1/cmr/m/n/12 : Com-bo-Box,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1017--1018
+[]\T1/cmr/bx/n/12 PanelProducciones( Pa-nel-Crea-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1017--1018
+\T1/cmr/bx/n/12 cion-Gra-ma-ti-ca-Pa-so3, Ob-ser-va-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1017--1018
+\T1/cmr/bx/n/12 ble-List<Produccion>, Tab-Pa-ne)\T1/cmr/m/n/12 :
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1019--1020
+[]\T1/cmr/bx/n/12 inicializarComponentes()\T1/cmr/m/n/12 : con-fi-gu-ra
+ []
+
+
+Underfull \hbox (badness 1454) in paragraph at lines 1021--1022
+[]\T1/cmr/bx/n/12 actualizarListasSimbolos()\T1/cmr/m/n/12 : ac-tua-li-za
+ []
+
+
+Underfull \hbox (badness 5652) in paragraph at lines 1023--1024
+[]\T1/cmr/bx/n/12 btnModificar_action()\T1/cmr/m/n/12 : mo-di-fi-ca la
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1030--1031
+[]\T1/cmr/bx/n/12 actualizarTextos(ResourceBundle)\T1/cmr/m/n/12 :
+ []
+
+
+
+LaTeX Info: Redefining \. on input line 1033.
+LaTeX Info: Redefining \% on input line 1033.
+[179]
+LaTeX Info: Redefining \. on input line 1033.
+LaTeX Info: Redefining \% on input line 1033.
+ [180]
+Underfull \hbox (badness 2165) in paragraph at lines 1053--1054
+[]\T1/cmr/bx/n/12 panelPadre\T1/cmr/m/n/12 : re-fe-ren-cia al Pa-nel-Crea-
+ []
+
+
+Underfull \hbox (badness 1990) in paragraph at lines 1056--1057
+[]\T1/cmr/bx/n/12 simbolosTemporales\T1/cmr/m/n/12 : co-pia tem-po-ral
+ []
+
+
+Underfull \hbox (badness 1158) in paragraph at lines 1064--1065
+\T1/cmr/bx/n/12 ble-List<String>, Tab-Pa-ne, Pa-nel-
+ []
+
+
+Underfull \hbox (badness 1406) in paragraph at lines 1064--1065
+\T1/cmr/bx/n/12 Crea-cion-Gra-ma-ti-ca-Pa-so2)\T1/cmr/m/n/12 : cons-truc-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1066--1067
+[]\T1/cmr/bx/n/12 inicializarComponentes()\T1/cmr/m/n/12 : con-fi-gu-ra
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1069--1070
+[]\T1/cmr/bx/n/12 actualizarListaSimbolos()\T1/cmr/m/n/12 : ac-tua-li-za
+ []
+
+
+Underfull \hbox (badness 6412) in paragraph at lines 1071--1072
+[]\T1/cmr/bx/n/12 btnModificar_action()\T1/cmr/m/n/12 : mo-di-fi-ca el
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1076--1077
+[]\T1/cmr/bx/n/12 actualizarTextos(ResourceBundle)\T1/cmr/m/n/12 :
+ []
+
+
+
+LaTeX Info: Redefining \. on input line 1079.
+LaTeX Info: Redefining \% on input line 1079.
+[181]
+LaTeX Info: Redefining \. on input line 1079.
+LaTeX Info: Redefining \% on input line 1079.
+ [182]
+Underfull \hbox (badness 2165) in paragraph at lines 1099--1100
+[]\T1/cmr/bx/n/12 panelPadre\T1/cmr/m/n/12 : re-fe-ren-cia al Pa-nel-Crea-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1101--1102
+[]\T1/cmr/bx/n/12 simbolosNoTerminales\T1/cmr/m/n/12 : Ob-ser-va-ble-
+ []
+
+
+Underfull \hbox (badness 1990) in paragraph at lines 1102--1103
+[]\T1/cmr/bx/n/12 simbolosTemporales\T1/cmr/m/n/12 : co-pia tem-po-ral
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1109--1110
+[]\T1/cmr/bx/n/12 PanelSimbolosNoTerminales( Ob-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1109--1110
+\T1/cmr/bx/n/12 ser-va-ble-List<String>, Tab-Pa-ne,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1109--1110
+\T1/cmr/bx/n/12 Pa-nel-Crea-cion-Gra-ma-ti-ca-Pa-so2)\T1/cmr/m/n/12 :
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1111--1112
+[]\T1/cmr/bx/n/12 inicializarComponentes()\T1/cmr/m/n/12 : con-fi-gu-ra
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1113--1114
+[]\T1/cmr/bx/n/12 actualizarListaSimbolos()\T1/cmr/m/n/12 : ac-tua-li-za
+ []
+
+
+Underfull \hbox (badness 6412) in paragraph at lines 1115--1116
+[]\T1/cmr/bx/n/12 btnModificar_action()\T1/cmr/m/n/12 : mo-di-fi-ca el
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1120--1121
+[]\T1/cmr/bx/n/12 actualizarTextos(ResourceBundle)\T1/cmr/m/n/12 :
+ []
+
+
+
+LaTeX Info: Redefining \. on input line 1123.
+LaTeX Info: Redefining \% on input line 1123.
+[183]
+LaTeX Info: Redefining \. on input line 1123.
+LaTeX Info: Redefining \% on input line 1123.
+ [184]
+
+LaTeX Info: Redefining \. on input line 1133.
+LaTeX Info: Redefining \% on input line 1133.
+[185]
+
+LaTeX Warning: Citation 'burbeck1992applications' on page 186 undefined on inpu
+t line 1146.
+
+
+Overfull \hbox (25.51057pt too wide) in paragraph at lines 1146--1147
+\T1/cmr/m/n/12 coor-di-nan-do en-tre las vis-tas Ja-vaFX y el mo-de-lo gra-má-t
+i-ca [[]]. 
+ []
+
+
+LaTeX Warning: Citation 'gamma1995design' on page 186 undefined on input line 1
+147.
+
+
+LaTeX Warning: Citation 'gamma1995design' on page 186 undefined on input line 1
+148.
+
+
+Overfull \hbox (3.81676pt too wide) in paragraph at lines 1148--1149
+[]\T1/cmr/bx/n/12 Strategy\T1/cmr/m/n/12 : los di-fe-ren-tes pa-ne-les (Pa-nel-
+Pro-duc-cio-nes, Pa-nel-Sim-bo-los-Ter-mi-na-les, etc.)
+ []
+
+
+LaTeX Warning: Citation 'gamma1995design' on page 186 undefined on input line 1
+149.
+
+
+LaTeX Warning: Citation 'gamma1995design' on page 186 undefined on input line 1
+150.
+
+
+LaTeX Warning: Citation 'gamma1995design' on page 186 undefined on input line 1
+151.
+
+<figuras/Cap9/diagrama_editor.png, id=3571, 1453.43pt x 1008.76875pt>
+File: figuras/Cap9/diagrama_editor.png Graphic file (type png)
+<use figuras/Cap9/diagrama_editor.png>
+Package pdftex.def Info: figuras/Cap9/diagrama_editor.png  used on input line 1
+156.
+(pdftex.def)             Requested size: 1453.42645pt x 1008.7663pt.
+) (./capitulos/10_Diseno_de_la_interfaz.tex
 
 LaTeX Info: Redefining \. on input line 1.
 LaTeX Info: Redefining \% on input line 1.
-[168]
+[186]
+
+LaTeX Info: Redefining \. on input line 1.
+LaTeX Info: Redefining \% on input line 1.
+[187 <./figuras/Cap9/diagrama_editor.png>]
+
+[188
+
+]
 Cap\'{\i }tulo 10.
 )
 
-[169
+[189]
+
+[190
 
 ]
 
-[170
+[191]
 
-]
-
-[171]
-
-[172] (./capitulos/11_Pruebas.tex
+[192] (./capitulos/11_Pruebas.tex
 Cap\'{\i }tulo 11.
 )
 
-[173
+[193
 
 ]
 
-[174
+[194
 
 ]
 
-[175
+[195
 
 ]
 
-[176
+[196
 
 ]
 Overfull \hbox (21.44801pt too wide) in paragraph at lines 344--344
@@ -3318,12 +3750,12 @@ work /
 
 
 
-[177]
+[197]
 
 LaTeX Info: Redefining \. on input line 349.
 LaTeX Info: Redefining \% on input line 349.
-[178]
-runsystem(latexminted cleantemp  --timestamp 20250910003401 FAD58DE7366495DB465
+[198]
+runsystem(latexminted cleantemp  --timestamp 20250910011036 FAD58DE7366495DB465
 0CFEFAC2FCD61)...executed safely (allowed).
 
  (./main.aux
@@ -3336,19 +3768,19 @@ LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
  ***********
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 82F7A4A2F8FB0E66D096C634DFE10792;52538.
+(rerunfilecheck)             Checksum: 6386753730EF1EE0FA1901B5EA7D14F8;55584.
 Package logreq Info: Writing requests to 'main.run.xml'.
 \openout1 = `main.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 44828 strings out of 473190
- 863588 string characters out of 5715801
- 1811798 words of memory out of 5000000
- 66185 multiletter control sequences out of 15000+600000
+ 45097 strings out of 473190
+ 866596 string characters out of 5715801
+ 1812786 words of memory out of 5000000
+ 66229 multiletter control sequences out of 15000+600000
  607944 words of font info for 96 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 102i,14n,117p,1197b,2400s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 102i,14n,117p,1197b,2385s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb
 ></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb>
 </usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></
@@ -3371,10 +3803,10 @@ pe1/public/cm-super/sfrm1200.pfb></usr/local/texlive/2025/texmf-dist/fonts/type
 1/public/cm-super/sfti1000.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/
 public/cm-super/sfti1200.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/pu
 blic/cm-super/sftt1200.pfb>
-Output written on main.pdf (200 pages, 3857579 bytes).
+Output written on main.pdf (220 pages, 3945490 bytes).
 PDF statistics:
- 3641 PDF objects out of 4296 (max. 8388607)
- 3269 compressed objects within 33 object streams
- 1168 named destinations out of 1200 (max. 500000)
- 2297 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 4054 PDF objects out of 4296 (max. 8388607)
+ 3656 compressed objects within 37 object streams
+ 1393 named destinations out of 1440 (max. 500000)
+ 2414 words of extra memory for PDF output out of 10000 (max. 10000000)
 

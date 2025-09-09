@@ -636,6 +636,8 @@ La clase \textbf{TablaPredictivaPaso5} es una extensión especializada de TablaP
 
 \subsubsection{Dependencias internas del paquete gramática}
 
+Las dependencias internas del paquete gramática se muestran en la Figura \ref{fig:diagrama_gramatica}, donde se puede observar la estructura jerárquica y las relaciones entre las diferentes clases.
+
 \begin{itemize}
     \item \textbf{Gramatica $\rightarrow$ Simbolo}: La clase Gramatica contiene listas de Terminal y NoTerminal (que heredan de Simbolo).
     \item \textbf{Gramatica $\rightarrow$ Produccion}: Gramatica mantiene una lista de producciones que definen las reglas gramaticales.
@@ -669,3 +671,489 @@ La clase \textbf{TablaPredictivaPaso5} es una extensión especializada de TablaP
     \item \textbf{MVC (Model-View-Controller)}: el paquete completo sigue el patrón MVC donde las clases del paquete gramática representan el Modelo, las clases de vistas manejan la presentación, y los controladores coordinan la interacción \cite{burbeck1992applications}.
 \end{itemize}
 
+\subsection{Paquete editor}
+
+El paquete \textbf{editor} contiene las clases responsables de la interfaz de usuario para la creación y edición de gramáticas de contexto libre en SimAS 3.0. Este paquete implementa el patrón de diseño MVC donde las clases del editor actúan como controladores que coordinan la interacción entre la vista (componentes JavaFX) y el modelo (paquete gramática).
+
+Las clases de este paquete permiten:
+\begin{itemize}
+    \item Crear gramáticas mediante un asistente paso a paso
+    \item Editar símbolos terminales y no terminales
+    \item Gestionar producciones gramaticales
+    \item Validar gramáticas creadas
+    \item Gestionar múltiples editores en pestañas
+    \item Integración completa con el sistema de internacionalización
+\end{itemize}
+
+\subsubsection{Clases del paquete editor}
+
+Este paquete contiene 10 clases principales que conforman la interfaz de edición de SimAS 3.0, organizadas jerárquicamente desde la gestión de ventanas hasta los componentes específicos de edición.
+
+\subsubsection{Clase EditorWindow}
+
+La clase \textbf{EditorWindow} representa la ventana principal del editor de gramáticas, gestionando el ciclo de vida de la aplicación de edición y coordinando múltiples pestañas de edición.
+
+\begin{longtable}[H]{|>{\columncolor[rgb]{0.63,0.79,0.95}}m{6cm} | m{8.5cm} |}
+\caption{Clase EditorWindow - Ventana principal del editor}
+\endfirsthead
+\multicolumn{2}{c}{{\tablename\ \thetable{} -- continúa de la página anterior}} \\
+\endhead
+\hline \multicolumn{2}{|r|}{{Continúa en la página siguiente}} \\ \hline
+\endfoot
+\hline
+\endlastfoot
+\hline
+\textbf{Nombre} & \textbf{EditorWindow} \\ \hline
+\textbf{Descripción} & Gestiona la ventana principal del editor, incluyendo el sistema de pestañas, atajos de teclado y funcionalidades de arrastrar y soltar. \\ \hline
+\textbf{Atributos} &
+\begin{enumerate}
+    \item \textbf{stage}: Stage principal de la ventana del editor.
+    \item \textbf{tabPane}: TabPane que contiene todas las pestañas de edición.
+    \item \textbf{bundle}: ResourceBundle para internacionalización.
+\end{enumerate} \\ \hline
+\textbf{Métodos} &
+\begin{enumerate}
+    \item \textbf{EditorWindow(ResourceBundle)}: constructor que inicializa la ventana con internacionalización.
+    \item \textbf{initialize()}: configura la ventana, escena y componentes principales.
+    \item \textbf{configurarAtajosTeclado(Scene)}: establece los atajos de teclado globales.
+    \item \textbf{show()}: muestra la ventana del editor.
+    \item \textbf{close()}: cierra la ventana del editor.
+    \item \textbf{addEditorTab(String, Editor)}: añade una nueva pestaña de edición.
+    \item \textbf{removeEditorTab(Editor)}: elimina una pestaña de edición.
+\end{enumerate}
+\label{tabla_editor_window}
+\end{longtable}
+
+\subsubsection{Clase Editor}
+
+La clase \textbf{Editor} representa la interfaz principal de edición de una gramática específica, proporcionando acceso a todas las funcionalidades de edición y gestión.
+
+\begin{longtable}[H]{|>{\columncolor[rgb]{0.63,0.79,0.95}}m{6cm} | m{8.5cm} |}
+\caption{Clase Editor - Interfaz principal de edición}
+\endfirsthead
+\multicolumn{2}{c}{{\tablename\ \thetable{} -- continúa de la página anterior}} \\
+\endhead
+\hline \multicolumn{2}{|r|}{{Continúa en la página siguiente}} \\ \hline
+\endfoot
+\hline
+\endlastfoot
+\hline
+\textbf{Nombre} & \textbf{Editor} \\ \hline
+\textbf{Descripción} & Clase principal que representa un editor de gramáticas, gestionando la interfaz de usuario y la coordinación con el modelo de datos. \\ \hline
+\textbf{Atributos} &
+\begin{enumerate}
+    \item \textbf{gramatica}: instancia de Gramatica que se está editando.
+    \item \textbf{tabPane}: referencia al TabPane contenedor.
+    \item \textbf{menuPane}: referencia al MenuPrincipal.
+    \item \textbf{bundle}: ResourceBundle para internacionalización.
+    \item \textbf{editorId}: identificador único del editor.
+    \item \textbf{rootPane}: BorderPane raíz de la interfaz.
+    \item \textbf{Componentes FXML}: botones, campos de texto, listas, etiquetas.
+\end{enumerate} \\ \hline
+\textbf{Métodos} &
+\begin{enumerate}
+    \item \textbf{Editor()}: constructor vacío para carga FXML.
+    \item \textbf{Editor(TabPane, MenuPrincipal)}: constructor completo.
+    \item \textbf{cargarFXML()}: carga la interfaz desde archivo FXML.
+    \item \textbf{inicializarComponentes()}: configura todos los componentes de la UI.
+    \item \textbf{configurarEventos()}: establece los manejadores de eventos.
+    \item \textbf{actualizarListas()}: actualiza las listas de símbolos y producciones.
+    \item \textbf{btnAnadir\_action()}: maneja la acción de añadir nueva gramática.
+    \item \textbf{btnAbrir\_action()}: maneja la apertura de gramáticas existentes.
+    \item \textbf{btnGuardar\_action()}: maneja el guardado de gramáticas.
+    \item \textbf{btnEditar\_action()}: activa el modo de edición.
+    \item \textbf{btnEliminar\_action()}: elimina la gramática actual.
+    \item \textbf{btnValidar\_action()}: valida la gramática.
+    \item \textbf{btnInforme\_action()}: genera informes de la gramática.
+    \item \textbf{btnSimular\_action()}: inicia la simulación.
+    \item \textbf{btnSalir\_action()}: cierra el editor.
+    \item \textbf{actualizarTextos(ResourceBundle)}: actualiza textos para internacionalización.
+\end{enumerate} \\ \hline
+\textbf{Métodos} &
+\begin{enumerate}
+    \item \textbf{getGramatica()}: obtiene la gramática actual.
+    \item \textbf{setGramatica(Gramatica)}: establece una nueva gramática.
+    \item \textbf{getBundle()}: obtiene el ResourceBundle.
+    \item \textbf{configurarRelacionesPadreHijo()}: configura el sistema de identificación.
+    \item \textbf{crearGramatica()}: crea una nueva instancia de Gramatica.
+\end{enumerate}
+\label{tabla_editor}
+\end{longtable}
+
+\subsubsection{Clase PanelCreacionGramatica}
+
+La clase \textbf{PanelCreacionGramatica} coordina el asistente de creación de gramáticas paso a paso, gestionando la navegación entre los diferentes pasos del proceso.
+
+\begin{longtable}[H]{|>{\columncolor[rgb]{0.63,0.79,0.95}}m{6cm} | m{8.5cm} |}
+\caption{Clase PanelCreacionGramatica - Asistente de creación}
+\endfirsthead
+\multicolumn{2}{c}{{\tablename\ \thetable{} -- continúa de la página anterior}} \\
+\endhead
+\hline \multicolumn{2}{|r|}{{Continúa en la página siguiente}} \\ \hline
+\endfoot
+\hline
+\endlastfoot
+\hline
+\textbf{Nombre} & \textbf{PanelCreacionGramatica} \\ \hline
+\textbf{Descripción} & Coordina el asistente paso a paso para la creación de gramáticas, gestionando la navegación y el flujo de datos entre los diferentes paneles. \\ \hline
+\textbf{Atributos} &
+\begin{enumerate}
+    \item \textbf{tabPane}: TabPane contenedor de las pestañas.
+    \item \textbf{paso1-4}: instancias de los paneles de cada paso del asistente.
+    \item \textbf{panelPadre}: referencia al Editor padre.
+    \item \textbf{menuPane}: referencia al MenuPrincipal.
+    \item \textbf{gramaticaTemporal}: copia temporal de la gramática en edición.
+    \item \textbf{bundle}: ResourceBundle para internacionalización.
+    \item \textbf{creacionId}: identificador único del proceso de creación.
+\end{enumerate} \\ \hline
+\textbf{Métodos} &
+\begin{enumerate}
+    \item \textbf{PanelCreacionGramatica(Editor, TabPane, Gramatica, MenuPrincipal)}: constructor principal.
+    \item \textbf{inicializarPaneles()}: inicializa todos los paneles del asistente.
+    \item \textbf{configurarNavegacion()}: configura la navegación entre pasos.
+    \item \textbf{validarPasoActual()}: valida el contenido del paso actual.
+    \item \textbf{avanzarAlSiguientePaso()}: navega al siguiente paso del asistente.
+    \item \textbf{retrocederAlPasoAnterior()}: navega al paso anterior.
+    \item \textbf{finalizarCreacion()}: completa el proceso de creación.
+    \item \textbf{cancelarCreacion()}: cancela el proceso de creación.
+    \item \textbf{actualizarGramaticaTemporal()}: actualiza la gramática temporal con los datos actuales.
+    \item \textbf{actualizarTextos(ResourceBundle)}: actualiza textos para internacionalización.
+\end{enumerate}
+\label{tabla_panel_creacion_gramatica}
+\end{longtable}
+
+\subsubsection{Clase PanelCreacionGramaticaPaso1}
+
+La clase \textbf{PanelCreacionGramaticaPaso1} maneja el primer paso del asistente de creación, donde se definen los metadatos básicos de la gramática.
+
+\begin{longtable}[H]{|>{\columncolor[rgb]{0.63,0.79,0.95}}m{6cm} | m{8.5cm} |}
+\caption{Clase PanelCreacionGramaticaPaso1 - Paso 1: Metadatos}
+\endfirsthead
+\multicolumn{2}{c}{{\tablename\ \thetable{} -- continúa de la página anterior}} \\
+\endhead
+\hline \multicolumn{2}{|r|}{{Continúa en la página siguiente}} \\ \hline
+\endfoot
+\hline
+\endlastfoot
+\hline
+\textbf{Nombre} & \textbf{PanelCreacionGramaticaPaso1} \\ \hline
+\textbf{Descripción} & Primer paso del asistente de creación de gramáticas, donde se definen el nombre, descripción y símbolo inicial. \\ \hline
+\textbf{Atributos} &
+\begin{enumerate}
+    \item \textbf{panelPadre}: referencia al PanelCreacionGramatica padre.
+    \item \textbf{bundle}: ResourceBundle para internacionalización.
+    \item \textbf{Componentes FXML}: campos de texto para nombre, descripción y símbolo inicial.
+    \item \textbf{btnSiguiente}: botón para avanzar al siguiente paso.
+    \item \textbf{btnCancelar}: botón para cancelar la creación.
+\end{enumerate} \\ \hline
+\textbf{Métodos} &
+\begin{enumerate}
+    \item \textbf{PanelCreacionGramaticaPaso1( PanelCreacionGramatica, ResourceBundle)}: constructor.
+    \item \textbf{inicializarInterfaz()}: configura la interfaz del paso 1.
+    \item \textbf{configurarValidacion()}: establece las reglas de validación.
+    \item \textbf{setNombre(String)}: establece el nombre de la gramática.
+    \item \textbf{setDescripcion(String)}: establece la descripción.
+    \item \textbf{setSimboloInicial(String)}: establece el símbolo inicial.
+    \item \textbf{validarCampos()}: valida que todos los campos requeridos estén completos.
+    \item \textbf{btnSiguiente\_action()}: maneja el avance al siguiente paso.
+    \item \textbf{btnCancelar\_action()}: maneja la cancelación.
+    \item \textbf{actualizarTextos(ResourceBundle)}: actualiza textos para internacionalización.
+\end{enumerate}
+\label{tabla_panel_creacion_paso1}
+\end{longtable}
+
+\subsubsection{Clase PanelCreacionGramaticaPaso2}
+
+La clase \textbf{PanelCreacionGramaticaPaso2} maneja el segundo paso del asistente de creación, donde se definen los símbolos terminales y no terminales.
+
+\begin{longtable}[H]{|>{\columncolor[rgb]{0.63,0.79,0.95}}m{6cm} | m{8.5cm} |}
+\caption{Clase PanelCreacionGramaticaPaso2 - Paso 2: Símbolos}
+\endfirsthead
+\multicolumn{2}{c}{{\tablename\ \thetable{} -- continúa de la página anterior}} \\
+\endhead
+\hline \multicolumn{2}{|r|}{{Continúa en la página siguiente}} \\ \hline
+\endfoot
+\hline
+\endlastfoot
+\hline
+\textbf{Nombre} & \textbf{PanelCreacionGramaticaPaso2} \\ \hline
+\textbf{Descripción} & Segundo paso del asistente donde se definen y gestionan los símbolos terminales y no terminales de la gramática. \\ \hline
+\textbf{Atributos} &
+\begin{enumerate}
+    \item \textbf{panelPadre}: referencia al PanelCreacionGramatica padre.
+    \item \textbf{menuPane}: referencia al MenuPrincipal.
+    \item \textbf{tabPane}: TabPane para gestión de pestañas.
+    \item \textbf{panelTerminales}: PanelSimbolosTerminales para gestión de terminales.
+    \item \textbf{panelNoTerminales}: PanelSimbolosNoTerminales para gestión de no terminales.
+    \item \textbf{bundle}: ResourceBundle para internacionalización.
+    \item \textbf{btnSiguiente, btnAnterior, btnCancelar}: botones de navegación.
+\end{enumerate} \\ \hline
+\textbf{Métodos} &
+\begin{enumerate}
+    \item \textbf{PanelCreacionGramaticaPaso2( PanelCreacionGramatica, MenuPrincipal, TabPane)}: constructor.
+    \item \textbf{inicializarPaneles()}: inicializa los paneles de símbolos.
+    \item \textbf{configurarNavegacion()}: configura los botones de navegación.
+    \item \textbf{validarSimbolos()}: valida que los símbolos definidos sean correctos.
+    \item \textbf{asignarListaSimbolosTerminales( ObservableList<String>)}: asigna la lista de terminales.
+    \item \textbf{asignarListaSimbolosNoTerminales( ObservableList<String>)}: asigna la lista de no terminales.
+    \item \textbf{obtenerSimbolosTerminales()}: obtiene los símbolos terminales definidos.
+    \item \textbf{obtenerSimbolosNoTerminales()}: obtiene los símbolos no terminales definidos.
+    \item \textbf{btnSiguiente\_action()}: maneja el avance al siguiente paso.
+    \item \textbf{btnAnterior\_action()}: maneja el retroceso al paso anterior.
+    \item \textbf{btnCancelar\_action()}: maneja la cancelación.
+    \item \textbf{actualizarTextos(ResourceBundle)}: actualiza textos para internacionalización.
+\end{enumerate}
+\label{tabla_panel_creacion_paso2}
+\end{longtable}
+
+\subsubsection{Clase PanelCreacionGramaticaPaso3}
+
+La clase \textbf{PanelCreacionGramaticaPaso3} maneja el tercer paso del asistente, donde se definen las producciones de la gramática.
+
+\begin{longtable}[H]{|>{\columncolor[rgb]{0.63,0.79,0.95}}m{6cm} | m{8.5cm} |}
+\caption{Clase PanelCreacionGramaticaPaso3 - Paso 3: Producciones}
+\endfirsthead
+\multicolumn{2}{c}{{\tablename\ \thetable{} -- continúa de la página anterior}} \\
+\endhead
+\hline \multicolumn{2}{|r|}{{Continúa en la página siguiente}} \\ \hline
+\endfoot
+\hline
+\endlastfoot
+\hline
+\textbf{Nombre} & \textbf{PanelCreacionGramaticaPaso3} \\ \hline
+\textbf{Descripción} & Tercer paso del asistente donde se definen y gestionan las producciones de la gramática. \\ \hline
+\textbf{Atributos} &
+\begin{enumerate}
+    \item \textbf{panelPadre}: referencia al PanelCreacionGramatica padre.
+    \item \textbf{tabPane}: TabPane para gestión de pestañas.
+    \item \textbf{menuPane}: referencia al MenuPrincipal.
+    \item \textbf{panelProducciones}: PanelProducciones para gestión de producciones.
+    \item \textbf{bundle}: ResourceBundle para internacionalización.
+    \item \textbf{btnSiguiente, btnAnterior, btnCancelar}: botones de navegación.
+\end{enumerate} \\ \hline
+\textbf{Métodos} &
+\begin{enumerate}
+    \item \textbf{PanelCreacionGramaticaPaso3( PanelCreacionGramatica, TabPane, MenuPrincipal)}: constructor.
+    \item \textbf{inicializarPanelProducciones()}: inicializa el panel de producciones.
+    \item \textbf{configurarNavegacion()}: configura los botones de navegación.
+    \item \textbf{validarProducciones()}: valida que las producciones definidas sean correctas.
+    \item \textbf{asignarProducciones( ObservableList<Produccion>)}: asigna las producciones existentes.
+    \item \textbf{obtenerProducciones()}: obtiene las producciones definidas.
+    \item \textbf{btnSiguiente\_action()}: maneja el avance al siguiente paso.
+    \item \textbf{btnAnterior\_action()}: maneja el retroceso al paso anterior.
+    \item \textbf{btnCancelar\_action()}: maneja la cancelación.
+    \item \textbf{actualizarTextos(ResourceBundle)}: actualiza textos para internacionalización.
+\end{enumerate}
+\label{tabla_panel_creacion_paso3}
+\end{longtable}
+
+\subsubsection{Clase PanelCreacionGramaticaPaso4}
+
+La clase \textbf{PanelCreacionGramaticaPaso4} maneja el cuarto y último paso del asistente, donde se realiza la validación final y se completa la creación.
+
+\begin{longtable}[H]{|>{\columncolor[rgb]{0.63,0.79,0.95}}m{6cm} | m{8.5cm} |}
+\caption{Clase PanelCreacionGramaticaPaso4 - Paso 4: Validación}
+\endfirsthead
+\multicolumn{2}{c}{{\tablename\ \thetable{} -- continúa de la página anterior}} \\
+\endhead
+\hline \multicolumn{2}{|r|}{{Continúa en la página siguiente}} \\ \hline
+\endfoot
+\hline
+\endlastfoot
+\hline
+\textbf{Nombre} & \textbf{PanelCreacionGramaticaPaso4} \\ \hline
+\textbf{Descripción} & Cuarto y último paso del asistente donde se elige el símbolo inicial y se finaliza el proceso de creación. \\ \hline
+\textbf{Atributos} &
+\begin{enumerate}
+    \item \textbf{panelPadre}: referencia al PanelCreacionGramatica padre.
+    \item \textbf{tabPane}: TabPane para gestión de pestañas.
+    \item \textbf{bundle}: ResourceBundle para internacionalización.
+    \item \textbf{Componentes FXML}: etiquetas, botones de finalizar y cancelar.
+    \item \textbf{areaValidacion}: área de texto para mostrar resultados de validación.
+\end{enumerate} \\ \hline
+\textbf{Métodos} &
+\begin{enumerate}
+    \item \textbf{PanelCreacionGramaticaPaso4( PanelCreacionGramatica, TabPane)}: constructor.
+    \item \textbf{inicializarInterfaz()}: configura la interfaz del paso final.
+    \item \textbf{realizarValidacionFinal()}: ejecuta todas las validaciones de la gramática.
+    \item \textbf{mostrarResultadosValidacion()}: muestra los resultados de la validación.
+    \item \textbf{btnFinalizar\_action()}: maneja la finalización exitosa del asistente.
+    \item \textbf{btnVolver\_action()}: permite volver a pasos anteriores para correcciones.
+    \item \textbf{btnCancelar\_action()}: maneja la cancelación completa.
+    \item \textbf{generarResumenGramatica()}: genera un resumen de la gramática creada.
+    \item \textbf{actualizarTextos(ResourceBundle)}: actualiza textos para internacionalización.
+\end{enumerate}
+\label{tabla_panel_creacion_paso4}
+\end{longtable}
+
+\subsubsection{Clase PanelProducciones}
+
+La clase \textbf{PanelProducciones} proporciona la interfaz para editar y gestionar las producciones de la gramática.
+
+\begin{longtable}[H]{|>{\columncolor[rgb]{0.63,0.79,0.95}}m{6cm} | m{8.5cm} |}
+\caption{Clase PanelProducciones - Gestión de producciones}
+\endfirsthead
+\multicolumn{2}{c}{{\tablename\ \thetable{} -- continúa de la página anterior}} \\
+\endhead
+\hline \multicolumn{2}{|r|}{{Continúa en la página siguiente}} \\ \hline
+\endfoot
+\hline
+\endlastfoot
+\hline
+\textbf{Nombre} & \textbf{PanelProducciones} \\ \hline
+\textbf{Descripción} & Panel especializado para la creación, edición y eliminación de producciones gramaticales. \\ \hline
+\textbf{Atributos} &
+\begin{enumerate}
+    \item \textbf{panelPadre}: referencia al PanelCreacionGramaticaPaso3 padre.
+    \item \textbf{tabPane}: TabPane para gestión de pestañas.
+    \item \textbf{producciones}: ObservableList de producciones.
+    \item \textbf{noTerminales}: ObservableList de símbolos no terminales disponibles.
+    \item \textbf{terminales}: ObservableList de símbolos terminales disponibles.
+    \item \textbf{bundle}: ResourceBundle para internacionalización.
+    \item \textbf{Componentes FXML}: ComboBox, TextField, ListViews, Buttons, Labels.
+\end{enumerate} \\ \hline
+\textbf{Métodos} &
+\begin{enumerate}
+    \item \textbf{PanelProducciones( PanelCreacionGramaticaPaso3, ObservableList<Produccion>, TabPane)}: constructor.
+    \item \textbf{cargarFXML()}: carga la interfaz desde archivo FXML.
+    \item \textbf{inicializarComponentes()}: configura todos los componentes de la UI.
+    \item \textbf{configurarEventos()}: establece los manejadores de eventos.
+    \item \textbf{actualizarListasSimbolos()}: actualiza las listas de símbolos disponibles.
+    \item \textbf{btnInsertar\_action()}: inserta una nueva producción.
+    \item \textbf{btnModificar\_action()}: modifica la producción seleccionada.
+    \item \textbf{btnEliminar\_action()}: elimina la producción seleccionada.
+    \item \textbf{btnBorrar\_action()}: borra el contenido del campo de consecuente.
+    \item \textbf{btnEpsilon\_action()}: inserta el símbolo épsilon.
+    \item \textbf{btnCancelar\_action()}: cancela la operación actual.
+    \item \textbf{btnAceptar\_action()}: acepta y guarda los cambios.
+    \item \textbf{validarProduccion()}: valida que la producción sea correcta.
+    \item \textbf{actualizarTextos(ResourceBundle)}: actualiza textos para internacionalización.
+\end{enumerate}
+\label{tabla_panel_producciones}
+\end{longtable}
+
+\subsubsection{Clase PanelSimbolosTerminales}
+
+La clase \textbf{PanelSimbolosTerminales} proporciona la interfaz para gestionar los símbolos terminales de la gramática.
+
+\begin{longtable}[H]{|>{\columncolor[rgb]{0.63,0.79,0.95}}m{6cm} | m{8.5cm} |}
+\caption{Clase PanelSimbolosTerminales - Gestión de terminales}
+\endfirsthead
+\multicolumn{2}{c}{{\tablename\ \thetable{} -- continúa de la página anterior}} \\
+\endhead
+\hline \multicolumn{2}{|r|}{{Continúa en la página siguiente}} \\ \hline
+\endfoot
+\hline
+\endlastfoot
+\hline
+\textbf{Nombre} & \textbf{PanelSimbolosTerminales} \\ \hline
+\textbf{Descripción} & Panel especializado para la gestión de símbolos terminales, incluyendo símbolos predefinidos y personalizados. \\ \hline
+\textbf{Atributos} &
+\begin{enumerate}
+    \item \textbf{panelPadre}: referencia al PanelCreacionGramaticaPaso2 padre.
+    \item \textbf{tabPane}: TabPane para gestión de pestañas.
+    \item \textbf{simbolosTerminales}: ObservableList de símbolos terminales.
+    \item \textbf{simbolosTemporales}: copia temporal de los símbolos.
+    \item \textbf{simbolosSet}: Set para validación de unicidad.
+    \item \textbf{bundle}: ResourceBundle para internacionalización.
+    \item \textbf{simbolosPredefinidos}: array de símbolos comunes predefinidos.
+    \item \textbf{Componentes FXML}: FlowPane, TextField, ListView, Buttons, Labels.
+\end{enumerate} \\ \hline
+\textbf{Métodos} &
+\begin{enumerate}
+    \item \textbf{PanelSimbolosTerminales( ObservableList<String>, TabPane, PanelCreacionGramaticaPaso2)}: constructor.
+    \item \textbf{cargarFXML()}: carga la interfaz desde archivo FXML.
+    \item \textbf{inicializarComponentes()}: configura todos los componentes de la UI.
+    \item \textbf{crearBotonesPredefinidos()}: crea botones para símbolos predefinidos.
+    \item \textbf{configurarEventos()}: establece los manejadores de eventos.
+    \item \textbf{actualizarListaSimbolos()}: actualiza la lista visual de símbolos.
+    \item \textbf{btnInsertar\_action()}: inserta un nuevo símbolo terminal.
+    \item \textbf{btnModificar\_action()}: modifica el símbolo seleccionado.
+    \item \textbf{btnEliminar\_action()}: elimina el símbolo seleccionado.
+    \item \textbf{btnCancelar\_action()}: cancela la operación actual.
+    \item \textbf{btnAceptar\_action()}: acepta y guarda los cambios.
+    \item \textbf{validarSimbolo()}: valida que el símbolo sea único y válido.
+    \item \textbf{actualizarTextos(ResourceBundle)}: actualiza textos para internacionalización.
+\end{enumerate}
+\label{tabla_panel_simbolos_terminales}
+\end{longtable}
+
+\subsubsection{Clase PanelSimbolosNoTerminales}
+
+La clase \textbf{PanelSimbolosNoTerminales} proporciona la interfaz para gestionar los símbolos no terminales de la gramática.
+
+\begin{longtable}[H]{|>{\columncolor[rgb]{0.63,0.79,0.95}}m{6cm} | m{8.5cm} |}
+\caption{Clase PanelSimbolosNoTerminales - Gestión de no terminales}
+\endfirsthead
+\multicolumn{2}{c}{{\tablename\ \thetable{} -- continúa de la página anterior}} \\
+\endhead
+\hline \multicolumn{2}{|r|}{{Continúa en la página siguiente}} \\ \hline
+\endfoot
+\hline
+\endlastfoot
+\hline
+\textbf{Nombre} & \textbf{PanelSimbolosNoTerminales} \\ \hline
+\textbf{Descripción} & Panel especializado para la gestión de símbolos no terminales de la gramática. \\ \hline
+\textbf{Atributos} &
+\begin{enumerate}
+    \item \textbf{panelPadre}: referencia al PanelCreacionGramaticaPaso2 padre.
+    \item \textbf{tabPane}: TabPane para gestión de pestañas.
+    \item \textbf{simbolosNoTerminales}: ObservableList de símbolos no terminales.
+    \item \textbf{simbolosTemporales}: copia temporal de los símbolos.
+    \item \textbf{simbolosSet}: Set para validación de unicidad.
+    \item \textbf{bundle}: ResourceBundle para internacionalización.
+    \item \textbf{Componentes FXML}: TextField, ListView, Buttons, Labels.
+\end{enumerate} \\ \hline
+\textbf{Métodos} &
+\begin{enumerate}
+    \item \textbf{PanelSimbolosNoTerminales( ObservableList<String>, TabPane, PanelCreacionGramaticaPaso2)}: constructor.
+    \item \textbf{cargarFXML()}: carga la interfaz desde archivo FXML.
+    \item \textbf{inicializarComponentes()}: configura todos los componentes de la UI.
+    \item \textbf{configurarEventos()}: establece los manejadores de eventos.
+    \item \textbf{actualizarListaSimbolos()}: actualiza la lista visual de símbolos.
+    \item \textbf{btnInsertar\_action()}: inserta un nuevo símbolo no terminal.
+    \item \textbf{btnModificar\_action()}: modifica el símbolo seleccionado.
+    \item \textbf{btnEliminar\_action()}: elimina el símbolo seleccionado.
+    \item \textbf{btnCancelar\_action()}: cancela la operación actual.
+    \item \textbf{btnAceptar\_action()}: acepta y guarda los cambios.
+    \item \textbf{validarSimbolo()}: valida que el símbolo sea único y válido.
+    \item \textbf{actualizarTextos(ResourceBundle)}: actualiza textos para internacionalización.
+\end{enumerate}
+\label{tabla_panel_simbolos_no_terminales}
+\end{longtable}
+
+\subsubsection{Dependencias internas del paquete editor}
+
+Las dependencias internas del paquete editor se ilustran en la Figura \ref{fig:diagrama_editor}, donde se puede apreciar la estructura jerárquica del asistente de creación y las relaciones entre los diferentes componentes de la interfaz.
+
+\begin{itemize}
+    \item \textbf{EditorWindow $\rightarrow$ Editor}: EditorWindow crea y gestiona múltiples instancias de Editor.
+    \item \textbf{Editor $\rightarrow$ PanelCreacionGramatica}: Editor utiliza PanelCreacionGramatica para el asistente de creación.
+    \item \textbf{PanelCreacionGramatica $\rightarrow$ PanelCreacionGramaticaPaso1-4}: PanelCreacionGramatica coordina los cuatro pasos del asistente.
+    \item \textbf{PanelCreacionGramaticaPaso2 $\rightarrow$ PanelSimbolosTerminales, PanelSimbolosNoTerminales}: Paso 2 utiliza paneles específicos para gestión de símbolos.
+    \item \textbf{PanelCreacionGramaticaPaso3 $\rightarrow$ PanelProducciones}: Paso 3 utiliza PanelProducciones para gestión de producciones.
+    \item \textbf{PanelProducciones $\rightarrow$ gramatica.Gramatica}: PanelProducciones accede a la gramática para obtener símbolos disponibles.
+    \item \textbf{PanelSimbolosTerminales $\rightarrow$ gramatica.Terminal}: PanelSimbolosTerminales gestiona símbolos terminales.
+    \item \textbf{PanelSimbolosNoTerminales $\rightarrow$ gramatica.NoTerminal}: PanelSimbolosNoTerminales gestiona símbolos no terminales.
+    \item \textbf{Todas las clases $\rightarrow$ utils.ActualizableTextos}: todas las clases del editor implementan esta interfaz para internacionalización.
+    \item \textbf{Todas las clases $\rightarrow$ bienvenida.MenuPrincipal}: acceso al menú principal para navegación.
+    \item \textbf{Todas las clases $\rightarrow$ utils.TabManager}: gestión de pestañas y grupos de gramáticas.
+\end{itemize}
+
+\subsubsection{Patrones de diseño en el paquete editor}
+
+\begin{itemize}
+    \item \textbf{MVC (Model-View-Controller)}: las clases del editor actúan como controladores coordinando entre las vistas JavaFX y el modelo gramática \cite{burbeck1992applications}.
+    \item \textbf{Observer}: implementado mediante JavaFX Properties para notificación automática de cambios en la UI \cite{gamma1995design}.
+    \item \textbf{Strategy}: los diferentes paneles (PanelProducciones, PanelSimbolosTerminales, etc.) implementan estrategias específicas de edición \cite{gamma1995design}.
+    \item \textbf{Factory Method}: los constructores de las clases crean instancias con diferentes configuraciones iniciales \cite{gamma1995design}.
+    \item \textbf{Composite}: la estructura jerárquica de paneles (PanelCreacionGramatica conteniendo PanelCreacionGramaticaPaso1-4) \cite{gamma1995design}.
+    \item \textbf{Singleton}: uso implícito en la gestión de recursos compartidos como ResourceBundle \cite{gamma1995design}.
+\end{itemize}
+
+\begin{figure}[p]
+    \centering
+    \includegraphics[angle=90,width=0.95\textwidth]{figuras/Cap9/diagrama_editor.png}
+    \caption{Diagrama de clases del paquete editor - SimAS 3.0}
+    \label{fig:diagrama_editor}
+\end{figure}
