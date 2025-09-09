@@ -1,12 +1,12 @@
 # Fdb version 4
-["biber main"] 1757445850.54814 "main.bcf" "main.bbl" "main" 1757445885.61845 0
-  "main.bcf" 1757445884.90927 113338 17a0b3555e2ed879bd97a8ff13a2f4a7 "pdflatex"
+["biber main"] 1757457218.6202 "main.bcf" "main.bbl" "main" 1757457250.49067 0
+  "main.bcf" 1757457249.86513 113914 ff0f51798f079f9e259a19aff3be5b5c "pdflatex"
   "references.bib" 1757418317.58614 5708 1cc7f76518d3b0f2c6664fdc1fd96568 ""
   (generated)
   "main.bbl"
   "main.blg"
   (rewritten before read)
-["pdflatex"] 1757445875.24457 "main.tex" "main.pdf" "main" 1757445885.61902 0
+["pdflatex"] 1757457240.89165 "main.tex" "main.pdf" "main" 1757457250.49116 0
   "/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/base/8r.enc" 1165713224 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc" 1136849721 2971 def0b6c1f0b107b3b936def894055589 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc" 1136849721 2900 1537cc8184ad1792082cd229ecc269f4 ""
@@ -71,6 +71,7 @@
   "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfbx1728.pfb" 1215737283 139826 9213617a7cb78635fc326b859c0b2273 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfbx2488.pfb" 1215737283 135938 299ac3a69892db3b7674a8b2543b0a77 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfcc1200.pfb" 1215737283 108594 1a08a22405bc37650b977f219cc3597d ""
+  "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfrm0600.pfb" 1215737283 162624 9dcc92cd3b1dfe2ecc80e6da7f2eb6bd ""
   "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfrm0700.pfb" 1215737283 154599 ded6d7c21788a8930eadc7fef7518942 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfrm0800.pfb" 1215737283 164227 3df942b4ff2124425d8fb1b6d3e01c7a ""
   "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb" 1215737283 136101 f533469f523533d38317ab5729d00c8a ""
@@ -306,7 +307,7 @@
   "capitulos/06_Especificacion_Requisitos.tex" 1757418317.17974 33658 fe3ec52d5c6b3676ae25d113c1db13b9 ""
   "capitulos/07_Analisis_Funcional.tex" 1757418317.18165 70088 26e02448f61274299f93123711ae7203 ""
   "capitulos/08_Diseno_de_paquetes.tex" 1757418317.18296 53312 c93c358ced6d417e2ed9017e3aca51ed ""
-  "capitulos/09_Diseno_de_clases.tex" 1757445825.57187 102340 e23dcbaed3da670d47ebcd8881b542bc ""
+  "capitulos/09_Diseno_de_clases.tex" 1757457194.57701 38212 8a1a97fe9330d71c1293cd282266a159 ""
   "capitulos/10_Diseno_de_la_interfaz.tex" 1757418317.18542 12114 d321ab3864b8126f4f9fd300ce923f37 ""
   "capitulos/11_Pruebas.tex" 1757418317.18622 10028 b80f2203cc297a421fc1934a0389197b ""
   "figuras/Cap1/fasescomp.png" 1757418317.18996 45531 8fc69d01cc4de000286810c7750cfbe3 ""
@@ -347,20 +348,20 @@
   "figuras/Cap7/CU3.png" 1757418317.30296 28598 c071cd1b4267ad13db3a716b174d730d ""
   "figuras/Cap7/CU4.png" 1757418317.3041 28422 1cb4ac841debdf3f43775b3064b7cf7b ""
   "figuras/Cap8/diagrama_paquetes.png" 1757418317.30566 52638 4d67698ef50c203769ac0b9a894c5009 ""
-  "figuras/Cap9/clases.png" 1757418317.35453 192574 79afa8eab53c18030ec4a4ef1218ab95 ""
+  "figuras/Cap9/diagrama_gramatica_bueno.png" 1757456896.04027 46202 3aaf561f8c9d68ea61ea5299da096202 ""
   "img/LogotipoEPSC.pdf" 1757418317.38797 12822 57b0480af6abc8db2232e4c5207e32f8 ""
   "img/bottomLeftCorner.pdf" 1757418317.38852 1274 3330b3ba934c84653c1fb3e06eefe2ba ""
   "img/emblema-ing-informatica.pdf" 1757418317.46617 8580 50917c02c22450d26b55704c4c5679ec ""
   "img/topRightCorner.pdf" 1757418317.52638 1281 aa53b8ee73503bf55b28924ecfa3585f ""
   "img/uco_debajo.pdf" 1757418317.52695 22217 3f0ec81e6d4ee2ee174a8c125f9a9095 ""
-  "main.aux" 1757445884.88084 91166 97a8d74c2a2e4a8d991bea28ae3f314e "pdflatex"
-  "main.bbl" 1757445854.13419 34570 4e1a3a7e6c6e3e9dd0328da7675b1531 "biber main"
-  "main.lof" 1757445884.91099 4956 e5b9b76c9bde955cc17202f0dd9ffc3d "pdflatex"
-  "main.lot" 1757445884.91108 8006 db47c90ed8a5a08c1761e9cfecf069d7 "pdflatex"
-  "main.out" 1757445884.90198 71238 2f649c2e818d3da0a813760ef11aa554 "pdflatex"
-  "main.run.xml" 1757445884.91073 2305 76c44fea4789d1f6305c2f013e1aba2a "pdflatex"
+  "main.aux" 1757457249.84006 72303 ec1971938b78293f52b97444a8048ba7 "pdflatex"
+  "main.bbl" 1757457222.3524 34634 b701c8850f9ee1ddf42799fd626b0c1c "biber main"
+  "main.lof" 1757457249.86842 4978 18bfa6442f7f959f59b366d6eb535ca1 "pdflatex"
+  "main.lot" 1757457249.86875 5239 2c6cdbf345fa7aadcecaf24b42bb6a00 "pdflatex"
+  "main.out" 1757457249.85956 52538 82f7a4a2f8fb0e66d096c634dfe10792 "pdflatex"
+  "main.run.xml" 1757457249.86704 2305 76c44fea4789d1f6305c2f013e1aba2a "pdflatex"
   "main.tex" 1757418317.58437 8518 792d080b7154d554168f34e773983548 ""
-  "main.toc" 1757445884.91089 35877 08595abdf55e9b5f82194467339b0998 "pdflatex"
+  "main.toc" 1757457249.86776 27527 9fceee2f3739c79fccde6b4e9b6dffa8 "pdflatex"
   (generated)
   "main.aux"
   "main.bcf"

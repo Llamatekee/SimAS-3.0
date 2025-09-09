@@ -37,44 +37,17 @@
 \contentsline {table}{\numberline {8.3}{\ignorespaces Matriz de dependencias entre paquetes}}{140}{table.caption.76}%
 \addvspace {10\p@ }
 \contentsline {table}{\numberline {9.1}{\ignorespaces Clase Bienvenida}}{144}{table.9.1}%
-\contentsline {table}{\numberline {9.2}{\ignorespaces Clase Simbolo - Base abstracta para símbolos}}{145}{table.9.2}%
-\contentsline {table}{\numberline {9.3}{\ignorespaces Clase Terminal - Símbolos terminales}}{146}{table.9.3}%
-\contentsline {table}{\numberline {9.4}{\ignorespaces Clase NoTerminal - Símbolos no terminales}}{146}{table.9.4}%
-\contentsline {table}{\numberline {9.5}{\ignorespaces Clase Produccion - Reglas de producción}}{147}{table.9.5}%
-\contentsline {table}{\numberline {9.6}{\ignorespaces Clase Antecedente - Parte izquierda de producción}}{147}{table.9.6}%
-\contentsline {table}{\numberline {9.7}{\ignorespaces Clase Consecuente - Parte derecha de producción}}{148}{table.9.7}%
-\contentsline {table}{\numberline {9.8}{\ignorespaces Clase TablaPredictiva - Tabla de análisis sintáctico}}{148}{table.9.8}%
-\contentsline {table}{\numberline {9.9}{\ignorespaces Clase FuncionError - Funciones de recuperación de errores}}{149}{table.9.9}%
-\contentsline {table}{\numberline {9.10}{\ignorespaces Clase Editor - Controlador principal del editor}}{150}{table.9.10}%
-\contentsline {table}{\numberline {9.11}{\ignorespaces Clase EditorWindow - Gestión de ventana}}{151}{table.9.11}%
-\contentsline {table}{\numberline {9.12}{\ignorespaces Clase PanelCreacionGramatica - Asistente de creación}}{152}{table.9.12}%
-\contentsline {table}{\numberline {9.13}{\ignorespaces Pasos del asistente de creación de gramáticas}}{152}{table.9.13}%
-\contentsline {table}{\numberline {9.14}{\ignorespaces Clase PanelProducciones - Gestión de producciones.}}{153}{table.9.14}%
-\contentsline {table}{\numberline {9.15}{\ignorespaces Clase PanelSimbolosNoTerminales - Gestión de no terminales.}}{154}{table.9.15}%
-\contentsline {table}{\numberline {9.16}{\ignorespaces Clase PanelSimbolosTerminales - Gestión de terminales}}{154}{table.9.16}%
-\contentsline {table}{\numberline {9.17}{\ignorespaces Clase FilaTablaPredictiva}}{156}{table.9.17}%
-\contentsline {table}{\numberline {9.18}{\ignorespaces Clase PanelCreacionGramaticaPaso1}}{157}{table.9.18}%
-\contentsline {table}{\numberline {9.19}{\ignorespaces Clase PanelCreacionGramaticaPaso2}}{159}{table.9.19}%
-\contentsline {table}{\numberline {9.20}{\ignorespaces Clase PanelCreacionGramaticaPaso3}}{161}{table.9.20}%
-\contentsline {table}{\numberline {9.21}{\ignorespaces Clase PanelCreacionGramaticaPaso4}}{163}{table.9.21}%
-\contentsline {table}{\numberline {9.22}{\ignorespaces Clase EditorCadenaEntradaController}}{165}{table.9.22}%
-\contentsline {table}{\numberline {9.23}{\ignorespaces Clase NuevaFuncionError}}{165}{table.9.23}%
-\contentsline {table}{\numberline {9.24}{\ignorespaces Clase PanelGramaticaOriginal}}{166}{table.9.24}%
-\contentsline {table}{\numberline {9.25}{\ignorespaces Interfaz PanelNuevaSimDescPaso}}{167}{table.9.25}%
-\contentsline {table}{\numberline {9.26}{\ignorespaces Clase PanelNuevaSimDescPaso1}}{167}{table.9.26}%
-\contentsline {table}{\numberline {9.27}{\ignorespaces Clase PanelNuevaSimDescPaso2}}{169}{table.9.27}%
-\contentsline {table}{\numberline {9.28}{\ignorespaces Clase PanelNuevaSimDescPaso3}}{171}{table.9.28}%
-\contentsline {table}{\numberline {9.29}{\ignorespaces Clase PanelNuevaSimDescPaso4}}{173}{table.9.29}%
-\contentsline {table}{\numberline {9.30}{\ignorespaces Clase PanelNuevaSimDescPaso5}}{175}{table.9.30}%
-\contentsline {table}{\numberline {9.31}{\ignorespaces Clase PanelNuevaSimDescPaso6}}{178}{table.9.31}%
-\contentsline {table}{\numberline {9.32}{\ignorespaces Clase PanelSimulacion}}{180}{table.9.32}%
-\contentsline {table}{\numberline {9.33}{\ignorespaces Clase PanelSimuladorDesc}}{182}{table.9.33}%
-\contentsline {table}{\numberline {9.34}{\ignorespaces Clase SimulacionFinal}}{185}{table.9.34}%
-\contentsline {table}{\numberline {9.35}{\ignorespaces Interfaz ActualizableTextos}}{188}{table.9.35}%
-\contentsline {table}{\numberline {9.36}{\ignorespaces Clase LanguageItem}}{188}{table.9.36}%
-\contentsline {table}{\numberline {9.37}{\ignorespaces Clase LanguageListCell}}{189}{table.9.37}%
-\contentsline {table}{\numberline {9.38}{\ignorespaces Clase SecondaryWindow}}{190}{table.9.38}%
-\contentsline {table}{\numberline {9.39}{\ignorespaces Clase TabManager}}{191}{table.9.39}%
-\contentsline {table}{\numberline {9.40}{\ignorespaces Clase TabPaneMonitor}}{194}{table.9.40}%
+\contentsline {table}{\numberline {9.2}{\ignorespaces Clase MenuPrincipal - Interfaz principal de navegación}}{147}{table.9.2}%
+\contentsline {table}{\numberline {9.3}{\ignorespaces Clase Simbolo - Clase base para símbolos gramaticales}}{151}{table.9.3}%
+\contentsline {table}{\numberline {9.4}{\ignorespaces Clase Terminal - Símbolos terminales de la gramática}}{152}{table.9.4}%
+\contentsline {table}{\numberline {9.5}{\ignorespaces Clase NoTerminal - Símbolos no terminales de la gramática}}{152}{table.9.5}%
+\contentsline {table}{\numberline {9.6}{\ignorespaces Clase Consecuente - Parte derecha de las producciones}}{153}{table.9.6}%
+\contentsline {table}{\numberline {9.7}{\ignorespaces Clase Antecedente - Parte izquierda de las producciones}}{154}{table.9.7}%
+\contentsline {table}{\numberline {9.8}{\ignorespaces Clase Produccion - Reglas de producción gramatical}}{155}{table.9.8}%
+\contentsline {table}{\numberline {9.9}{\ignorespaces Clase Gramatica - Núcleo del modelo de datos}}{156}{table.9.9}%
+\contentsline {table}{\numberline {9.10}{\ignorespaces Clase FilaTablaPredictiva - Filas de la tabla predictiva}}{158}{table.9.10}%
+\contentsline {table}{\numberline {9.11}{\ignorespaces Clase FuncionError - Funciones de manejo de errores}}{160}{table.9.11}%
+\contentsline {table}{\numberline {9.12}{\ignorespaces Clase TablaPredictiva - Tabla de análisis sintáctico}}{162}{table.9.12}%
+\contentsline {table}{\numberline {9.13}{\ignorespaces Clase TablaPredictivaPaso5 - Tabla predictiva extendida}}{164}{table.9.13}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
