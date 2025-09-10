@@ -1920,3 +1920,329 @@ Las dependencias internas del paquete simulador se ilustran en la Figura \ref{fi
     \item \textbf{Factory Method}: los constructores de PanelSimuladorDesc crean diferentes configuraciones de simuladores según los parámetros \cite{gamma1995design}.
     \item \textbf{Registry}: PanelSimuladorDesc mantiene un registro estático de todos los simuladores activos para gestión centralizada.
 \end{itemize}
+
+\section{Paquetes de soporte}
+
+\subsection{Paquete centroayuda}
+
+El paquete \textbf{centroayuda} contiene recursos y componentes relacionados con el sistema de ayuda y tutoriales de la aplicación SimAS 3.0. Este paquete incluye:
+
+\begin{itemize}
+    \item \textbf{Contenido HTML}: archivos de ayuda interactiva y tutoriales accesibles desde la aplicación.
+    \item \textbf{Recursos multimedia}: imágenes, diagramas y elementos visuales que complementan la documentación.
+    \item \textbf{Archivos PDF}: manuales técnicos y guías de usuario en formato PDF para consulta offline.
+    \item \textbf{Documentación integrada}: sistema de ayuda contextual que se activa desde diferentes puntos de la interfaz.
+\end{itemize}
+
+Este paquete proporciona soporte integral al usuario, desde tutoriales interactivos hasta documentación técnica detallada, facilitando el aprendizaje y uso efectivo de la aplicación.
+
+\subsection{Paquete vistas}
+
+El paquete \textbf{vistas} contiene todos los archivos de interfaz de usuario definidos en formato FXML (JavaFX XML), que constituyen la capa de presentación de la aplicación SimAS 3.0. Este paquete incluye:
+
+\begin{itemize}
+    \item \textbf{Archivos FXML principales}: definiciones de las interfaces principales como Bienvenida, MenuPrincipal y Editor.
+    \item \textbf{Componentes reutilizables}: paneles y controles personalizados utilizados en múltiples secciones.
+    \item \textbf{Interfaces de simulación}: archivos FXML para cada paso del proceso de simulación descendente.
+    \item \textbf{Hojas de estilo}: archivos CSS que definen el aspecto visual y temas de la aplicación.
+\end{itemize}
+
+Este paquete implementa completamente la separación entre lógica de negocio y presentación visual, siguiendo el patrón MVC. Una descripción más detallada de la estructura FXML, organización de componentes y diseño de interfaces se presenta en el Capítulo 10 de este manual.
+
+\subsection{Paquete resources}
+
+El paquete \textbf{resources} centraliza todos los recursos estáticos y elementos multimedia utilizados por la aplicación SimAS 3.0. Este paquete incluye:
+
+\begin{itemize}
+    \item \textbf{Imágenes de interfaz}: iconos, botones y elementos gráficos utilizados en la interfaz de usuario.
+    \item \textbf{Recursos de internacionalización}: archivos de propiedades (.properties) para soporte multiidioma (español, inglés, francés, japonés, portugués).
+    \item \textbf{Elementos visuales}: imágenes decorativas, logos y componentes gráficos de la aplicación.
+    \item \textbf{Archivos de configuración}: recursos adicionales necesarios para el funcionamiento correcto de la aplicación.
+\end{itemize}
+
+Este paquete garantiza que todos los recursos necesarios estén organizados de manera eficiente y sean fácilmente accesibles desde cualquier parte de la aplicación, facilitando el mantenimiento y actualización de elementos visuales e internacionalización.
+
+\section{Dependencias entre Paquetes}
+
+Esta sección presenta un análisis detallado de las dependencias entre los diferentes paquetes del sistema SimAS 3.0, mostrando cómo se interconectan las clases para formar una arquitectura coherente y modular.
+
+\subsection{Dependencias Detalladas por Paquete}
+
+\subsubsection{Dependencias del paquete bienvenida}
+
+\begin{itemize}
+    \item \textbf{bienvenida.Bienvenida $\rightarrow$ bienvenida.MenuPrincipal}: la clase Bienvenida transita automáticamente al MenuPrincipal después de mostrar la pantalla de bienvenida.
+    \item \textbf{bienvenida.MenuPrincipal $\rightarrow$ editor.EditorWindow}: MenuPrincipal crea instancias de EditorWindow para iniciar editores.
+    \item \textbf{bienvenida.MenuPrincipal $\rightarrow$ simulador.PanelSimuladorDesc}: MenuPrincipal crea instancias del simulador descendente.
+    \item \textbf{bienvenida.MenuPrincipal $\rightarrow$ utils.TabManager}: MenuPrincipal utiliza TabManager para gestión avanzada de pestañas.
+    \item \textbf{bienvenida.MenuPrincipal $\rightarrow$ utils.LanguageItem}: MenuPrincipal utiliza LanguageItem para el selector de idiomas.
+    \item \textbf{bienvenida.MenuPrincipal $\rightarrow$ java.util.ResourceBundle}: MenuPrincipal gestiona la internacionalización mediante ResourceBundle.
+    \item \textbf{bienvenida.MenuPrincipal $\rightarrow$ utils.SecondaryWindow}: MenuPrincipal puede crear ventanas secundarias para gestión de pestañas.
+    \item \textbf{bienvenida.MenuPrincipal $\rightarrow$ centroayuda}: MenuPrincipal accede a recursos de ayuda cuando el usuario solicita asistencia.
+\end{itemize}
+
+\subsubsection{Dependencias del paquete editor}
+
+\begin{itemize}
+    \item \textbf{editor.* $\rightarrow$ gramatica.Gramatica}: todas las clases del editor utilizan la clase Gramatica como modelo de datos central.
+    \item \textbf{editor.* $\rightarrow$ utils.TabManager}: las clases del editor utilizan TabManager para gestión de pestañas y grupos.
+    \item \textbf{editor.* $\rightarrow$ utils.ActualizableTextos}: las clases del editor implementan esta interfaz para internacionalización.
+    \item \textbf{editor.PanelCreacionGramatica $\rightarrow$ editor.PanelCreacionGramaticaPaso*}: PanelCreacionGramatica coordina todos los pasos del asistente.
+    \item \textbf{editor.* $\rightarrow$ bienvenida.MenuPrincipal}: las clases del editor referencian al MenuPrincipal para navegación.
+    \item \textbf{editor.PanelProducciones $\rightarrow$ gramatica.Produccion}: PanelProducciones gestiona objetos Produccion.
+    \item \textbf{editor.PanelSimbolos* $\rightarrow$ gramatica.Terminal/NoTerminal}: los paneles de símbolos gestionan terminales y no terminales.
+    \item \textbf{editor.* $\rightarrow$ utils.ResourceBundle}: las clases del editor utilizan recursos de internacionalización.
+\end{itemize}
+
+\subsubsection{Dependencias del paquete gramática}
+
+\begin{itemize}
+    \item \textbf{gramatica.* $\rightarrow$ gramatica.Simbolo}: todas las clases gramaticales heredan o utilizan la clase base Simbolo.
+    \item \textbf{gramatica.Gramatica $\rightarrow$ gramatica.Terminal/NoTerminal/Produccion}: Gramatica contiene colecciones de estos elementos.
+    \item \textbf{gramatica.Gramatica $\rightarrow$ gramatica.TablaPredictiva}: Gramatica utiliza TablaPredictiva para análisis sintáctico.
+    \item \textbf{gramatica.TablaPredictiva $\rightarrow$ gramatica.FilaTablaPredictiva}: TablaPredictiva contiene filas de tabla predictiva.
+    \item \textbf{gramatica.TablaPredictiva $\rightarrow$ gramatica.FuncionError}: TablaPredictiva gestiona funciones de error.
+    \item \textbf{gramatica.TablaPredictivaPaso5 $\rightarrow$ gramatica.TablaPredictiva}: herencia y extensión de funcionalidad.
+    \item \textbf{gramatica.* $\rightarrow$ java.util.ObservableList}: las clases gramaticales utilizan ObservableList para notificación automática.
+\end{itemize}
+
+\subsubsection{Dependencias del paquete simulador}
+
+\begin{itemize}
+    \item \textbf{simulador.* $\rightarrow$ gramatica.Gramatica}: todas las clases del simulador utilizan Gramatica como modelo.
+    \item \textbf{simulador.* $\rightarrow$ gramatica.TablaPredictivaPaso5}: los simuladores utilizan la tabla predictiva extendida.
+    \item \textbf{simulador.PanelSimuladorDesc $\rightarrow$ simulador.PanelNuevaSimDescPaso*}: PanelSimuladorDesc coordina todos los pasos.
+    \item \textbf{simulador.PanelNuevaSimDescPaso* $\rightarrow$ simulador.PanelNuevaSimDescPaso}: implementan la interfaz común.
+    \item \textbf{simulador.* $\rightarrow$ utils.ActualizableTextos}: las clases del simulador implementan internacionalización.
+    \item \textbf{simulador.PanelNuevaSimDescPaso4 $\rightarrow$ simulador.NuevaFuncionError}: Paso 4 utiliza NuevaFuncionError para gestión de errores.
+    \item \textbf{simulador.* $\rightarrow$ utils.TabManager}: los simuladores utilizan gestión de pestañas.
+    \item \textbf{simulador.* $\rightarrow$ utils.ResourceBundle}: los simuladores utilizan recursos de internacionalización.
+\end{itemize}
+
+\subsubsection{Dependencias del paquete utils}
+
+\begin{itemize}
+    \item \textbf{utils.TabManager $\rightarrow$ utils.TabPaneMonitor}: TabManager utiliza el monitor para supervisión.
+    \item \textbf{utils.SecondaryWindow $\rightarrow$ utils.TabManager}: SecondaryWindow utiliza gestión de pestañas.
+    \item \textbf{utils.* $\rightarrow$ utils.ActualizableTextos}: las clases utils implementan o utilizan esta interfaz.
+    \item \textbf{utils.TabPaneMonitor $\rightarrow$ javafx.scene.control.TabPane}: el monitor supervisa TabPanes.
+    \item \textbf{utils.* $\rightarrow$ java.util.ResourceBundle}: las clases utils utilizan internacionalización.
+    \item \textbf{utils.LanguageItem $\rightarrow$ java.util.ResourceBundle}: LanguageItem utiliza recursos de idioma.
+\end{itemize}
+
+\subsubsection{Dependencias transversales del sistema}
+
+\begin{itemize}
+    \item \textbf{Todos los paquetes $\rightarrow$ utils.ActualizableTextos}: interfaz implementada por clases de todos los paquetes para internacionalización.
+    \item \textbf{Todos los paquetes $\rightarrow$ java.util.ResourceBundle}: todos los paquetes utilizan recursos de internacionalización.
+    \item \textbf{Todos los paquetes $\rightarrow$ utils.TabManager}: gestión centralizada de pestañas utilizada por múltiples paquetes.
+    \item \textbf{Paquet vista $\rightarrow$ Todos los paquetes}: los archivos FXML referencian controladores de todos los paquetes.
+    \item \textbf{Paquet resources $\rightarrow$ Todos los paquetes}: recursos utilizados por clases de todos los paquetes.
+\end{itemize}
+
+\subsection{Análisis de acoplamiento}
+
+\subsubsection{Acoplamiento bajo (recomendable)}
+\begin{itemize}
+    \item \textbf{Interfaces}: el uso de interfaces como \texttt{ActualizableTextos} y \texttt{PanelNuevaSimDescPaso} reduce el acoplamiento.
+    \item \textbf{Inyección de dependencias}: las clases reciben sus dependencias a través de constructores, facilitando testing.
+    \item \textbf{Patrones de diseño}: MVC, Strategy, Observer y Factory Method promueven bajo acoplamiento.
+\end{itemize}
+
+\subsubsection{Acoplamiento alto (áreas de atención)}
+\begin{itemize}
+    \item \textbf{Dependencia circular}: algunos paquetes tienen dependencias bidireccionales que podrían refactorizarse.
+    \item \textbf{Dependencias transversales}: ResourceBundle y TabManager son utilizados por muchos paquetes.
+    \item \textbf{Dependencias específicas}: algunas clases tienen dependencias muy específicas que limitan la reutilización.
+\end{itemize}
+
+\subsection{Principios SOLID aplicados}
+
+En esta sección se analiza la aplicación de los principios SOLID (Single Responsibility, Open-Closed, Liskov Substitution, Interface Segregation, Dependency Inversion) en la arquitectura de SimAS 3.0, con referencias específicas a clases concretas y fundamentación teórica.
+
+\subsubsection{Principio de Responsabilidad Única (SRP)}
+
+El Principio de Responsabilidad Única establece que una clase debe tener una sola razón para cambiar, es decir, debe tener una única responsabilidad \cite{martin2003agile, martin2018clean}.
+
+\begin{itemize}
+    \item \textbf{Clase gramatica.Gramatica}: responsable únicamente de gestionar la lógica de datos de una gramática (terminales, no terminales, producciones). No maneja presentación ni persistencia.
+    \begin{itemize}
+        \item \textit{Ejemplo}: métodos como \texttt{validarGramatica()}, \texttt{generarConjPrim()}, \texttt{generarConjSig()} se centran exclusivamente en la lógica gramatical.
+    \end{itemize}
+
+    \item \textbf{Clase utils.TabManager}: responsable únicamente de la gestión centralizada de pestañas y grupos. No conoce detalles específicos de editores o simuladores.
+    \begin{itemize}
+        \item \textit{Ejemplo}: métodos como \texttt{getOrCreateTab()}, \texttt{asignarElementoANuevoGrupo()} manejan exclusivamente lógica de pestañas.
+    \end{itemize}
+
+    \item \textbf{Clase editor.PanelCreacionGramatica}: responsable únicamente de coordinar el asistente de creación paso a paso. No implementa la lógica de cada paso.
+    \begin{itemize}
+        \item \textit{Ejemplo}: método \texttt{cambiarPaso(int)} coordina navegación, mientras que cada PanelCreacionGramaticaPaso* implementa su propio paso.
+    \end{itemize}
+
+    \item \textbf{Clase simulador.PanelSimuladorDesc}: responsable únicamente de orquestar la simulación descendente. No implementa la lógica de cada paso individual.
+    \begin{itemize}
+        \item \textit{Ejemplo}: gestiona el estado global de la simulación (\texttt{pasoActual}, \texttt{pasos}) sin conocer detalles de análisis sintáctico.
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{Principio de Abierto/Cerrado (OCP)}
+
+El Principio de Abierto/Cerrado establece que las entidades de software deben estar abiertas para extensión pero cerradas para modificación \cite{meyer1988object, martin2003agile}.
+
+\begin{itemize}
+    \item \textbf{Interfaz simulador.PanelNuevaSimDescPaso}: permite agregar nuevos pasos de simulación sin modificar el código existente del simulador principal.
+    \begin{itemize}
+        \item \textit{Ejemplo}: para agregar un nuevo paso 7, solo se crea una clase \texttt{PanelNuevaSimDescPaso7} que implemente la interfaz, sin modificar \texttt{PanelSimuladorDesc}.
+    \end{itemize}
+
+    \item \textbf{Interfaz utils.ActualizableTextos}: permite agregar internacionalización a cualquier clase sin modificar su implementación interna.
+    \begin{itemize}
+        \item \textit{Ejemplo}: cualquier clase puede implementar \texttt{actualizarTextos(ResourceBundle)} para soporte multiidioma sin cambiar su lógica principal.
+    \end{itemize}
+
+    \item \textbf{Clase gramatica.TablaPredictiva}: puede extenderse con nuevas estrategias de análisis sin modificar la implementación base.
+    \begin{itemize}
+        \item \textit{Ejemplo}: \texttt{TablaPredictivaPaso5} extiende \texttt{TablaPredictiva} agregando funcionalidad específica para el paso 5 del simulador.
+    \end{itemize}
+
+    \item \textbf{Clase utils.TabManager}: puede manejar nuevos tipos de pestañas sin modificar su lógica central.
+    \begin{itemize}
+        \item \textit{Ejemplo}: método \texttt{getOrCreateTab(Class<?> tabType, ...)} acepta cualquier tipo de controlador, permitiendo extensión sin modificación.
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{Principio de Sustitución de Liskov (LSP)}
+
+El Principio de Sustitución de Liskov establece que los objetos de una clase derivada deben poder sustituirse por objetos de la clase base sin afectar la corrección del programa \cite{liсков1994program, martin2003agile}.
+
+\begin{itemize}
+    \item \textbf{Jerarquía gramatica.Simbolo}: las clases \texttt{Terminal} y \texttt{NoTerminal} pueden sustituirse por \texttt{Simbolo} en cualquier contexto.
+    \begin{itemize}
+        \item \textit{Ejemplo}: en \texttt{Gramatica.getTerminales()} y \texttt{Gramatica.getNoTerminales()}, ambos retornan \texttt{ObservableList<? extends Simbolo>}, permitiendo tratamiento uniforme.
+    \end{itemize}
+
+    \item \textbf{Implementaciones de PanelNuevaSimDescPaso}: cualquier implementación de la interfaz puede sustituirse por otra sin afectar \texttt{PanelSimuladorDesc}.
+    \begin{itemize}
+        \item \textit{Ejemplo}: \texttt{PanelNuevaSimDescPaso1} puede reemplazarse por cualquier otra implementación sin modificar el código del simulador principal.
+    \end{itemize}
+
+    \item \textbf{Clases de pasos de creación}: los diferentes \texttt{PanelCreacionGramaticaPaso*} pueden sustituirse entre sí manteniendo compatibilidad.
+    \begin{itemize}
+        \item \textit{Ejemplo}: cualquier paso del asistente puede reemplazarse por otro que implemente la misma interfaz sin afectar \texttt{PanelCreacionGramatica}.
+    \end{itemize}
+
+    \item \textbf{Implementaciones de ActualizableTextos}: cualquier clase que implemente la interfaz puede utilizarse donde se espere internacionalización.
+    \begin{itemize}
+        \item \textit{Ejemplo}: tanto \texttt{Editor} como \texttt{PanelSimuladorDesc} implementan la interfaz y pueden tratarse uniformemente para cambios de idioma.
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{Principio de Segregación de Interfaces (ISP)}
+
+El Principio de Segregación de Interfaces establece que los clientes no deben verse forzados a depender de interfaces que no utilizan \cite{martin2003agile, martin2018clean}.
+
+\begin{itemize}
+    \item \textbf{Interfaz utils.ActualizableTextos}: interfaz específica y minimalista solo para internacionalización.
+    \begin{itemize}
+        \item \textit{Ejemplo}: solo declara \texttt{actualizarTextos(ResourceBundle)}, evitando forzar a las clases a implementar métodos innecesarios de internacionalización compleja.
+    \end{itemize}
+
+    \item \textbf{Interfaz simulador.PanelNuevaSimDescPaso}: interfaz minimalista solo para la estructura de pasos de simulación.
+    \begin{itemize}
+        \item \textit{Ejemplo}: solo declara \texttt{getRoot()}, evitando obligar a los pasos a implementar métodos de navegación o estado que maneja el coordinador.
+    \end{itemize}
+
+    \item \textbf{Clase utils.TabManager}: proporciona métodos específicos separados en lugar de una interfaz monolítica.
+    \begin{itemize}
+        \item \textit{Ejemplo}: métodos como \texttt{isSimuladorContent()}, \texttt{isEditorContent()} permiten a los clientes usar solo la funcionalidad necesaria.
+    \end{itemize}
+
+    \item \textbf{Ausencia de interfaces infladas}: las clases evitan depender de interfaces con métodos no utilizados.
+    \begin{itemize}
+        \item \textit{Ejemplo}: \texttt{Editor} no implementa interfaces con métodos de simulación que no necesita, manteniendo separación clara de responsabilidades.
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{Principio de Inversión de Dependencias (DIP)}
+
+El Principio de Inversión de Dependencias establece que los módulos de alto nivel no deben depender de módulos de bajo nivel, sino que ambos deben depender de abstracciones \cite{martin2003agile, martin2018clean}.
+
+\begin{itemize}
+    \item \textbf{Dependencias de interfaces en lugar de clases concretas}: las clases dependen de interfaces, no de implementaciones concretas.
+    \begin{itemize}
+        \item \textit{Ejemplo}: \texttt{PanelSimuladorDesc} depende de \texttt{PanelNuevaSimDescPaso} (interfaz), no de implementaciones concretas como \texttt{PanelNuevaSimDescPaso1}.
+    \end{itemize}
+
+    \item \textbf{Inyección de dependencias a través de constructores}: las clases reciben sus dependencias externas en lugar de crearlas internamente.
+    \begin{itemize}
+        \item \textit{Ejemplo}: \texttt{Editor(TabPane, MenuPrincipal, ResourceBundle)} recibe todas sus dependencias, facilitando testing y reutilización.
+        \item \textit{Ejemplo}: \texttt{PanelSimuladorDesc(Gramatica, TabPane, ResourceBundle)} permite inyectar diferentes implementaciones.
+    \end{itemize}
+
+    \item \textbf{Dependencia de abstracciones}: las clases de alto nivel dependen de interfaces, no de implementaciones concretas.
+    \begin{itemize}
+        \item \textit{Ejemplo}: \texttt{MenuPrincipal} depende de \texttt{utils.ActualizableTextos} (interfaz) para internacionalización, no de implementaciones específicas.
+    \end{itemize}
+
+    \item \textbf{Fábricas y constructores parametrizados}: permiten crear diferentes configuraciones sin violar DIP.
+    \begin{itemize}
+        \item \textit{Ejemplo}: los múltiples constructores de \texttt{PanelSimuladorDesc} permiten diferentes configuraciones manteniendo la dependencia de interfaces.
+    \end{itemize}
+\end{itemize}
+
+\subsection{Evaluación de Calidad Arquitectural}
+
+\subsubsection{Métricas de Acoplamiento y Cohesión}
+
+Basado en el análisis de dependencias, la arquitectura presenta:
+
+\begin{itemize}
+    \item \textbf{Cohesión Alta}: cada paquete tiene responsabilidades claramente definidas
+    \begin{itemize}
+        \item Paquete \texttt{gramatica}: cohesión máxima en lógica gramatical
+        \item Paquete \texttt{utils}: cohesión máxima en utilidades transversales
+        \item Paquete \texttt{editor}: cohesión máxima en interfaces de edición
+    \end{itemize}
+
+    \item \textbf{Acoplamiento Controlado}: uso estratégico de interfaces reduce acoplamiento
+    \begin{itemize}
+        \item Acoplamiento a través de interfaces (\texttt{PanelNuevaSimDescPaso}, \texttt{ActualizableTextos})
+        \item Inyección de dependencias reduce acoplamiento temporal
+        \item Patrones Observer y Strategy mantienen bajo acoplamiento
+    \end{itemize}
+
+    \item \textbf{Complejidad Ciclomática Aceptable}: separación clara de responsabilidades
+    \begin{itemize}
+        \item Clases con responsabilidades únicas tienen baja complejidad
+        \item Coordinadores (como \texttt{PanelSimuladorDesc}) manejan complejidad de integración
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{Puntos Fuertes de la Arquitectura}
+
+\begin{itemize}
+    \item \textbf{Mantenibilidad}: principios SOLID facilitan modificaciones localizadas
+    \item \textbf{Testabilidad}: inyección de dependencias permite mock objects
+    \item \textbf{Reutilización}: interfaces permiten uso polimórfico
+    \item \textbf{Escalabilidad}: OCP permite agregar funcionalidad sin modificar código existente
+    \item \textbf{Comprensibilidad}: separación clara de responsabilidades facilita comprensión
+\end{itemize}
+
+\subsubsection{Áreas de Mejora Identificadas}
+
+\begin{itemize}
+    \item \textbf{Dependencias transversales}: \texttt{TabManager} y \texttt{ResourceBundle} podrían refactorizarse para reducir acoplamiento
+    \item \textbf{Complejidad de constructores}: algunos constructores tienen muchos parámetros, podrían beneficiarse de Builder Pattern
+    \item \textbf{Dependencias circulares}: algunas relaciones bidireccionales podrían eliminarse con eventos o mediadores
+\end{itemize}
+
+\section{Conclusiones}
+
+Este capítulo ha presentado un análisis exhaustivo de la arquitectura de clases de SimAS 3.0, demostrando una implementación robusta de principios de diseño orientado a objetos y patrones de diseño reconocidos. La estructura modular y bien organizada facilita el mantenimiento, extensión y comprensión del sistema.
+
+Los paquetes principales (bienvenida, editor, gramática, simulador, utils) han sido analizados en detalle, mostrando cómo cada componente cumple con responsabilidades específicas mientras mantiene una cohesión adecuada y un acoplamiento flexible. Los paquetes de soporte (centroayuda, vistas, resources) complementan esta arquitectura proporcionando recursos esenciales para la experiencia del usuario.
+
+La implementación del patrón MVC, junto con otros patrones como Strategy, Observer, Factory Method y Registry, demuestra un diseño profesional que facilita la evolución del software y su adaptación a nuevos requisitos. La documentación detallada de atributos y métodos asegura que cualquier desarrollador pueda comprender y extender el sistema de manera efectiva.
+
+En el siguiente capítulo se profundizará en la capa de presentación (paquete vistas), analizando en detalle los archivos FXML y el diseño de interfaces de usuario que complementan esta arquitectura de clases.
