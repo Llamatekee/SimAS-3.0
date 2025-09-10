@@ -114,23 +114,26 @@ La clase \textbf{MenuPrincipal} gestiona la interfaz principal de navegación de
     \item \textbf{cambiarIdioma()}: cambia el idioma de la aplicación basado en la selección del usuario.
     \item \textbf{cargarBundle(Locale)}: carga el ResourceBundle para el idioma especificado.
     \item \textbf{actualizarTextos()}: actualiza todos los textos de la interfaz según el bundle actual.
-    \item \textbf{sincronizarIdiomaConVentanasSecundarias()}: sincroniza el cambio de idioma con todas las ventanas secundarias activas.
+    \item \textbf{sincronizarIdiomaConVentanas Secundarias()}: sincroniza el cambio de idioma con todas las ventanas secundarias activas.
     \item \textbf{actualizarTodosLosSimuladores()}: actualiza el bundle de todos los simuladores activos.
     \item \textbf{onBtnCerrarTabsAction()}: maneja el cierre de todas las pestañas con confirmación.
     \item \textbf{onBtnEditorAction()}: abre una nueva instancia del editor de gramáticas.
     \item \textbf{onBtnAyudaAction()}: abre el manual de usuario en el navegador.
     \item \textbf{onBtnTutorialAction()}: abre el tutorial interactivo.
     \item \textbf{onBtnSimuladorAction()}: carga una gramática y abre el simulador directamente.
-    \item \textbf{cargarGramaticaYSimularDirectamente()}: proceso completo para cargar gramática y crear simulador.
-    \item \textbf{crearSimuladorDirectoAlPaso6(Gramatica)}: crea simulador y lo posiciona en el paso 6.
-    \item \textbf{mostrarErroresValidacion(ObservableList<String>)}: muestra errores de validación en diálogo.
+\end{enumerate} \\ \hline
+\textbf{Métodos} &
+\begin{enumerate}
+    \item \textbf{cargarGramaticaYSimular Directamente()}: proceso completo para cargar gramática y crear simulador.
+    \item \textbf{crearSimuladorDirectoAlPaso6( Gramatica)}: crea simulador y lo posiciona en el paso 6.
+    \item \textbf{mostrarErroresValidacion( ObservableList<String>)}: muestra errores de validación en diálogo.
     \item \textbf{mostrarError(String, String)}: muestra mensaje de error genérico.
     \item \textbf{onMostrarErrorAction(String)}: muestra alerta de error para operaciones fallidas.
     \item \textbf{onBtnSalirAction()}: maneja la salida de la aplicación con confirmación.
     \item \textbf{onBtnInfoAction()}: muestra información "Acerca de" de la aplicación.
     \item \textbf{setBundle(ResourceBundle)}: establece un nuevo bundle y actualiza textos.
     \item \textbf{actualizarTextos(ResourceBundle)}: sobrecarga para actualizar textos con bundle específico.
-    \item \textbf{reasignarNumerosSimulaciones(TabPane)}: reasigna números de simulación tras cambios.
+    \item \textbf{reasignarNumerosSimulaciones( TabPane)}: reasigna números de simulación tras cambios.
     \item \textbf{findFirstTabInGroup(TabPane, int)}: encuentra la primera pestaña de un grupo específico.
 \end{enumerate} \\ \hline
 \label{tabla_menu_principal}
@@ -550,7 +553,7 @@ La clase \textbf{TablaPredictiva} representa la tabla predictiva completa utiliz
     \item \textbf{cargarDatos()}: carga los datos de las filas en la tabla visual (método protegido).
     \item \textbf{crearFunError(FuncionError)}: crea y añade una función de error a la lista.
     \item \textbf{getFuncionesError()}: obtiene la lista de funciones de error.
-    \item \textbf{setFuncionesError(List<FuncionError>)}: establece la lista de funciones de error.
+    \item \textbf{setFuncionesError( List<FuncionError>)}: establece la lista de funciones de error.
     \item \textbf{getTablaPredictiva()}: obtiene la vista de tabla TableView.
     \item \textbf{getFilas()}: obtiene la lista de filas de la tabla.
     \item \textbf{getColumnas()}: obtiene el número de columnas de la tabla.
@@ -585,7 +588,7 @@ La clase \textbf{TablaPredictivaPaso5} es una extensión especializada de TablaP
 \begin{enumerate}
     \item \textbf{TablaPredictivaPaso5()}: constructor sin parámetros con inicialización básica.
     \item \textbf{TablaPredictivaPaso5(TableView)}: constructor con vista de tabla específica.
-    \item \textbf{setPanelPaso5(PanelNuevaSimDescPaso5)}: establece el panel del paso 5 asociado.
+    \item \textbf{setPanelPaso5( PanelNuevaSimDescPaso5)}: establece el panel del paso 5 asociado.
     \item \textbf{apareceSoloPrimeraPos(Terminal)}: verifica si un terminal aparece solo en primera posición de las producciones.
     \item \textbf{rellenarProduccionesEpsilon()}: rellena automáticamente producciones épsilon en las celdas vacías.
     \item \textbf{construir(Gramatica)}: construye la tabla con lógica específica del paso 5 (override).
@@ -601,7 +604,7 @@ La clase \textbf{TablaPredictivaPaso5} es una extensión especializada de TablaP
 \textbf{Métodos Heredados} &
 \begin{enumerate}
     \item \textbf{getFuncionesError()}: obtiene la lista de funciones de error (override).
-    \item \textbf{setFuncionesError(List<FuncionError>)}: establece las funciones de error (override).
+    \item \textbf{setFuncionesError( List<FuncionError>)}: establece las funciones de error (override).
     \item \textbf{getTablaPredictiva()}: obtiene la vista de tabla TableView.
     \item \textbf{construir(Gramatica)}: construye la tabla predictiva base.
     \item \textbf{cargarDatos()}: carga los datos básicos (método base).
@@ -708,8 +711,8 @@ La clase \textbf{LanguageItem} representa un elemento de idioma en el sistema de
 \textbf{Descripción} & Representa un idioma disponible en la aplicación, incluyendo su nombre, código de localización y bandera visual para el selector de idiomas. \\ \hline
 \textbf{Atributos} &
 \begin{enumerate}
-    \item \textbf{name}: String con el nombre del idioma (ej: "Español", "English").
-    \item \textbf{locale}: String con el código de localización (ej: "es", "en").
+    \item \textbf{name}: String con el nombre del idioma (ej: \string"Español\string", \string"English\string").
+    \item \textbf{locale}: String con el código de localización (ej: \string"es\string", \string"en\string").
     \item \textbf{flagPath}: String con la ruta de la imagen de la bandera.
     \item \textbf{flagImageView}: ImageView que contiene la bandera visual del idioma.
 \end{enumerate} \\ \hline
@@ -784,14 +787,14 @@ La clase \textbf{TabManager} es el gestor central de pestañas de la aplicación
 \begin{enumerate}
     \item \textbf{getOrCreateTab(TabPane, Class, String, Object)}: obtiene o crea una pestaña del tipo especificado.
     \item \textbf{getOrCreateTab(TabPane, Class, String, Object, String, String)}: versión completa con IDs padre-hijo.
-    \item \textbf{asignarElementoANuevoGrupo(TabPane, String)}: asigna un elemento a un nuevo grupo de gramática.
+    \item \textbf{asignarElementoANuevoGrupo( TabPane, String)}: asigna un elemento a un nuevo grupo de gramática.
     \item \textbf{contarGruposActivos(TabPane)}: cuenta los grupos activos en un TabPane.
     \item \textbf{isSimuladorContent(Object)}: verifica si un objeto es contenido de simulador.
     \item \textbf{isSimuladorTab(Tab)}: verifica si una pestaña es de simulador.
     \item \textbf{obtenerGrupoDeElemento(TabPane, String)}: obtiene el grupo al que pertenece un elemento.
-    \item \textbf{asignarSimuladorAGrupoDeEditor(TabPane, String, String)}: asigna un simulador al grupo de un editor.
+    \item \textbf{asignarSimuladorAGrupoDeEditor( TabPane, String, String)}: asigna un simulador al grupo de un editor.
     \item \textbf{calcularPosicionInsercion(TabPane, Class, String, String)}: calcula la posición de inserción de una nueva pestaña.
-    \item \textbf{calcularPosicionSeguaDespuesDelMenu(TabPane)}: calcula posición segura después del menú.
+    \item \textbf{calcularPosicionSeguaDespues DelMenu(TabPane)}: calcula posición segura después del menú.
     \item \textbf{isPestañaHijaDeElemento(String, String)}: verifica si una pestaña es hija de un elemento.
     \item \textbf{isEditorContent(Object)}: verifica si un objeto es contenido de editor.
     \item \textbf{closeTab(TabPane, Class)}: cierra una pestaña específica.
@@ -846,12 +849,12 @@ La clase \textbf{TabPaneMonitor} es un monitor singleton que supervisa continuam
     \item \textbf{getInstance()}: obtiene la instancia singleton del monitor.
     \item \textbf{registrarTabPane(TabPane, String)}: registra un TabPane para monitoreo.
     \item \textbf{desregistrarTabPane(TabPane)}: desregistra un TabPane del monitoreo.
-    \item \textbf{validarConsistenciaTabPane(TabPane, boolean)}: valida la consistencia de un TabPane específico.
+    \item \textbf{validarConsistenciaTabPane( TabPane, boolean)}: valida la consistencia de un TabPane específico.
     \item \textbf{forzarValidacion(TabPane)}: fuerza una validación inmediata de un TabPane.
     \item \textbf{obtenerEstadisticas()}: obtiene estadísticas del monitoreo.
     \item \textbf{shutdown()}: detiene el monitoreo y libera recursos.
     \item \textbf{setMovimientoEnProgreso(boolean)}: establece si hay un movimiento en progreso.
-    \item \textbf{reiniciarContadorReparaciones(TabPane)}: reinicia el contador de reparaciones de un TabPane.
+    \item \textbf{reiniciarContadorReparaciones( TabPane)}: reinicia el contador de reparaciones de un TabPane.
     \item \textbf{reiniciarTodosLosContadores()}: reinicia todos los contadores de reparaciones.
 \end{enumerate} \\ \hline
 \textbf{Clase Interna TabPaneInfo} &
@@ -997,12 +1000,12 @@ La clase \textbf{EditorWindow} representa la ventana principal del editor de gra
     \item \textbf{getTabPane()}: obtiene el TabPane de la ventana.
     \item \textbf{abrirEditorEnEditorWindow()}: abre un nuevo editor en esta ventana.
     \item \textbf{abrirSimuladorEnEditorWindow()}: abre el simulador directo en esta ventana.
-    \item \textbf{cargarGramaticaYSimularDirectamenteEnEditorWindow()}: carga gramática y va directo a simulación.
-    \item \textbf{crearSimuladorDirectoAlPaso6EnEditorWindow( Gramatica)}: crea simulador directo al paso 6.
+    \item \textbf{cargarGramaticaYSimular DirectamenteEnEditorWindow()}: carga gramática y va directo a simulación.
+    \item \textbf{crearSimuladorDirectoAl Paso6EnEditorWindow( Gramatica)}: crea simulador directo al paso 6.
     \item \textbf{abrirAyuda()}: abre el manual de ayuda.
     \item \textbf{abrirTutorial()}: abre el tutorial.
     \item \textbf{salirAplicacion()}: sale de la aplicación.
-    \item \textbf{mostrarErroresValidacion(ObservableList<String>)}: muestra errores de validación.
+    \item \textbf{mostrarErroresValidacion( ObservableList<String>)}: muestra errores de validación.
     \item \textbf{mostrarError(String, String)}: muestra mensaje de error simple.
 \end{enumerate}
 \label{tabla_editor_window}
@@ -1131,7 +1134,7 @@ La clase \textbf{PanelCreacionGramaticaPaso1} maneja el primer paso del asistent
 \end{enumerate} \\ \hline
 \textbf{Métodos} &
 \begin{enumerate}
-    \item \textbf{PanelCreacionGramaticaPaso1(PanelCreacionGramatica, ResourceBundle)}: constructor.
+    \item \textbf{PanelCreacionGramaticaPaso1( PanelCreacionGramatica, ResourceBundle)}: constructor.
     \item \textbf{cargarFXML()}: carga la interfaz desde archivo FXML.
     \item \textbf{initialize()}: método de inicialización FXML.
     \item \textbf{configurarValidaciones()}: configura las validaciones en tiempo real.
@@ -1170,14 +1173,14 @@ La clase \textbf{PanelCreacionGramaticaPaso2} maneja el segundo paso del asisten
 \end{enumerate} \\ \hline
 \textbf{Métodos} &
 \begin{enumerate}
-    \item \textbf{PanelCreacionGramaticaPaso2(PanelCreacionGramatica, MenuPrincipal, TabPane)}: constructor.
+    \item \textbf{PanelCreacionGramaticaPaso2( PanelCreacionGramatica, MenuPrincipal, TabPane)}: constructor.
     \item \textbf{cargarFXML()}: carga la interfaz desde archivo FXML.
     \item \textbf{initialize()}: método de inicialización FXML.
     \item \textbf{aplicarEstilosResponsivos()}: aplica estilos responsivos según el tamaño de pantalla.
     \item \textbf{cargarDatosDesdeGramatica()}: carga datos desde la gramática padre.
     \item \textbf{configurarValidacionSimbolos()}: configura la validación de símbolos.
-    \item \textbf{asignarListaSimbolosNoTerminales(ObservableList<String>)}: asigna la lista de no terminales.
-    \item \textbf{asignarListaSimbolosTerminales(ObservableList<String>)}: asigna la lista de terminales.
+    \item \textbf{asignarListaSimbolosNoTerminales( ObservableList<String>)}: asigna la lista de no terminales.
+    \item \textbf{asignarListaSimbolosTerminales( ObservableList<String>)}: asigna la lista de terminales.
     \item \textbf{actualizarTextos(ResourceBundle)}: actualiza textos para internacionalización.
 \end{enumerate}
 \label{tabla_panel_creacion_paso2}
@@ -1210,10 +1213,10 @@ La clase \textbf{PanelCreacionGramaticaPaso3} maneja el tercer paso del asistent
 \end{enumerate} \\ \hline
 \textbf{Métodos} &
 \begin{enumerate}
-    \item \textbf{PanelCreacionGramaticaPaso3(PanelCreacionGramatica, TabPane, MenuPrincipal)}: constructor.
+    \item \textbf{PanelCreacionGramaticaPaso3( PanelCreacionGramatica, TabPane, MenuPrincipal)}: constructor.
     \item \textbf{cargarFXML()}: carga la interfaz desde archivo FXML.
     \item \textbf{initialize()}: método de inicialización FXML.
-    \item \textbf{asignarProducciones(ObservableList<Produccion>)}: asigna las producciones existentes.
+    \item \textbf{asignarProducciones( ObservableList<Produccion>)}: asigna las producciones existentes.
     \item \textbf{configurarValidacionProducciones()}: configura la validación de producciones.
     \item \textbf{actualizarTextos(ResourceBundle)}: actualiza textos para internacionalización.
 \end{enumerate}
@@ -1246,7 +1249,7 @@ La clase \textbf{PanelCreacionGramaticaPaso4} maneja el cuarto y último paso de
 \end{enumerate} \\ \hline
 \textbf{Métodos} &
 \begin{enumerate}
-    \item \textbf{PanelCreacionGramaticaPaso4(PanelCreacionGramatica, TabPane)}: constructor.
+    \item \textbf{PanelCreacionGramaticaPaso4( PanelCreacionGramatica, TabPane)}: constructor.
     \item \textbf{cargarFXML()}: carga la interfaz desde archivo FXML.
     \item \textbf{initialize()}: método de inicialización FXML.
     \item \textbf{configurarValidacionSimboloInicial()}: configura la validación del símbolo inicial.
@@ -1284,7 +1287,7 @@ La clase \textbf{PanelProducciones} proporciona la interfaz para editar y gestio
 \end{enumerate} \\ \hline
 \textbf{Métodos} &
 \begin{enumerate}
-    \item \textbf{PanelProducciones(PanelCreacionGramaticaPaso3, ObservableList<Produccion>, TabPane)}: constructor.
+    \item \textbf{PanelProducciones( PanelCreacionGramaticaPaso3, ObservableList<Produccion>, TabPane)}: constructor.
     \item \textbf{cargarFXML()}: carga la interfaz desde archivo FXML.
     \item \textbf{initialize()}: método de inicialización FXML.
     \item \textbf{actualizarTextos(ResourceBundle)}: actualiza textos para internacionalización.
@@ -1321,8 +1324,8 @@ La clase \textbf{PanelSimbolosTerminales} proporciona la interfaz para gestionar
 \end{enumerate} \\ \hline
 \textbf{Métodos} &
 \begin{enumerate}
-    \item \textbf{PanelSimbolosTerminales(ObservableList<String>, TabPane, PanelCreacionGramaticaPaso2)}: constructor.
-    \item \textbf{PanelSimbolosTerminales(ObservableList<String>, TabPane, PanelCreacionGramaticaPaso2, ResourceBundle)}: constructor con internacionalización.
+    \item \textbf{PanelSimbolosTerminales( ObservableList<String>, TabPane, PanelCreacionGramaticaPaso2)}: constructor.
+    \item \textbf{PanelSimbolosTerminales( ObservableList<String>, TabPane, PanelCreacionGramaticaPaso2, ResourceBundle)}: constructor con internacionalización.
     \item \textbf{cargarFXML()}: carga la interfaz desde archivo FXML.
     \item \textbf{initialize()}: método de inicialización FXML.
     \item \textbf{generarBotonesPredefinidos()}: genera botones para símbolos predefinidos.
@@ -1361,8 +1364,8 @@ La clase \textbf{PanelSimbolosNoTerminales} proporciona la interfaz para gestion
 \end{enumerate} \\ \hline
 \textbf{Métodos} &
 \begin{enumerate}
-    \item \textbf{PanelSimbolosNoTerminales(ObservableList<String>, TabPane, PanelCreacionGramaticaPaso2)}: constructor.
-    \item \textbf{PanelSimbolosNoTerminales(ObservableList<String>, TabPane, PanelCreacionGramaticaPaso2, ResourceBundle)}: constructor con internacionalización.
+    \item \textbf{PanelSimbolosNoTerminales( ObservableList<String>, TabPane, PanelCreacionGramaticaPaso2)}: constructor.
+    \item \textbf{PanelSimbolosNoTerminales( ObservableList<String>, TabPane, PanelCreacionGramaticaPaso2, ResourceBundle)}: constructor con internacionalización.
     \item \textbf{cargarFXML()}: carga la interfaz desde archivo FXML.
     \item \textbf{initialize()}: método de inicialización FXML.
     \item \textbf{generarBotonesPredefinidos()}: genera botones para símbolos predefinidos.
@@ -1644,8 +1647,8 @@ La clase \textbf{PanelNuevaSimDescPaso6} implementa el sexto y último paso de l
 \end{enumerate} \\ \hline
 \textbf{Métodos} &
 \begin{enumerate}
-    \item \textbf{PanelNuevaSimDescPaso6(Gramatica, PanelSimuladorDesc)}: constructor principal con gramática y panel padre.
-    \item \textbf{PanelNuevaSimDescPaso6(Gramatica)}: constructor alternativo con solo gramática.
+    \item \textbf{PanelNuevaSimDescPaso6( Gramatica, PanelSimuladorDesc)}: constructor principal con gramática y panel padre.
+    \item \textbf{PanelNuevaSimDescPaso6( Gramatica)}: constructor alternativo con solo gramática.
     \item \textbf{getRoot()}: retorna el nodo raíz de la interfaz gráfica.
     \item \textbf{actualizarVisualizacion()}: actualiza la visualización de la simulación.
     \item \textbf{actualizarTextos(ResourceBundle)}: actualiza los textos según el idioma seleccionado.
@@ -1687,7 +1690,7 @@ La clase \textbf{PanelSimuladorDesc} es el controlador principal para la simulac
     \item \textbf{PanelSimuladorDesc(Gramatica, TabPane, ResourceBundle, String)}: constructor con ID personalizado.
     \item \textbf{PanelSimuladorDesc(Gramatica, TabPane, MenuPrincipal, String, ResourceBundle)}: constructor completo.
     \item \textbf{getTablaPredictivaExtendidaGlobal()}: obtiene la tabla predictiva extendida global.
-    \item \textbf{setTablaPredictivaExtendidaGlobal(TablaPredictivaPaso5)}: establece la tabla predictiva extendida global.
+    \item \textbf{setTablaPredictivaExtendidaGlobal( TablaPredictivaPaso5)}: establece la tabla predictiva extendida global.
     \item \textbf{getGramaticaOriginal()}: obtiene la gramática original.
     \item \textbf{mostrarGramaticaOriginal()}: muestra la gramática original.
     \item \textbf{cancelarSimulacion()}: cancela la simulación actual.
@@ -1702,7 +1705,7 @@ La clase \textbf{PanelSimuladorDesc} es el controlador principal para la simulac
 \end{enumerate} \\ \hline
 \textbf{Métodos Estáticos} &
 \begin{enumerate}
-    \item \textbf{actualizarTodosLosSimuladores(ResourceBundle)}: actualiza todos los simuladores activos.
+    \item \textbf{actualizarTodosLosSimuladores( ResourceBundle)}: actualiza todos los simuladores activos.
     \item \textbf{desregistrarSimulador(String)}: desregistra un simulador del registro global.
     \item \textbf{obtenerSimulador(String)}: obtiene un simulador por su ID.
 \end{enumerate}

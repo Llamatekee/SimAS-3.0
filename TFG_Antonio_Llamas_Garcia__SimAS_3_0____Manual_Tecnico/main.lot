@@ -38,17 +38,17 @@
 \addvspace {10\p@ }
 \contentsline {table}{\numberline {9.1}{\ignorespaces Clase Bienvenida}}{144}{table.9.1}%
 \contentsline {table}{\numberline {9.2}{\ignorespaces Clase MenuPrincipal - Interfaz principal de navegación}}{145}{table.9.2}%
-\contentsline {table}{\numberline {9.3}{\ignorespaces Clase Simbolo - Clase base para símbolos gramaticales}}{149}{table.9.3}%
-\contentsline {table}{\numberline {9.4}{\ignorespaces Clase Terminal - Símbolos terminales de la gramática}}{150}{table.9.4}%
+\contentsline {table}{\numberline {9.3}{\ignorespaces Clase Simbolo - Clase base para símbolos gramaticales}}{150}{table.9.3}%
+\contentsline {table}{\numberline {9.4}{\ignorespaces Clase Terminal - Símbolos terminales de la gramática}}{151}{table.9.4}%
 \contentsline {table}{\numberline {9.5}{\ignorespaces Clase NoTerminal - Símbolos no terminales de la gramática}}{151}{table.9.5}%
 \contentsline {table}{\numberline {9.6}{\ignorespaces Clase Consecuente - Parte derecha de las producciones}}{152}{table.9.6}%
-\contentsline {table}{\numberline {9.7}{\ignorespaces Clase Antecedente - Parte izquierda de las producciones}}{152}{table.9.7}%
-\contentsline {table}{\numberline {9.8}{\ignorespaces Clase Produccion - Reglas de producción gramatical}}{153}{table.9.8}%
-\contentsline {table}{\numberline {9.9}{\ignorespaces Clase Gramatica - Núcleo del modelo de datos}}{154}{table.9.9}%
+\contentsline {table}{\numberline {9.7}{\ignorespaces Clase Antecedente - Parte izquierda de las producciones}}{153}{table.9.7}%
+\contentsline {table}{\numberline {9.8}{\ignorespaces Clase Produccion - Reglas de producción gramatical}}{154}{table.9.8}%
+\contentsline {table}{\numberline {9.9}{\ignorespaces Clase Gramatica - Núcleo del modelo de datos}}{155}{table.9.9}%
 \contentsline {table}{\numberline {9.10}{\ignorespaces Clase FilaTablaPredictiva - Filas de la tabla predictiva}}{158}{table.9.10}%
 \contentsline {table}{\numberline {9.11}{\ignorespaces Clase FuncionError - Funciones de manejo de errores}}{159}{table.9.11}%
 \contentsline {table}{\numberline {9.12}{\ignorespaces Clase TablaPredictiva - Tabla de análisis sintáctico}}{161}{table.9.12}%
-\contentsline {table}{\numberline {9.13}{\ignorespaces Clase TablaPredictivaPaso5 - Tabla predictiva extendida}}{163}{table.9.13}%
+\contentsline {table}{\numberline {9.13}{\ignorespaces Clase TablaPredictivaPaso5 - Tabla predictiva extendida}}{164}{table.9.13}%
 \contentsline {table}{\numberline {9.14}{\ignorespaces Clase ActualizableTextos - Interfaz de internacionalización}}{169}{table.9.14}%
 \contentsline {table}{\numberline {9.15}{\ignorespaces Clase LanguageItem - Elemento de idioma}}{169}{table.9.15}%
 \contentsline {table}{\numberline {9.16}{\ignorespaces Clase LanguageListCell - Celda de lista de idiomas}}{170}{table.9.16}%
