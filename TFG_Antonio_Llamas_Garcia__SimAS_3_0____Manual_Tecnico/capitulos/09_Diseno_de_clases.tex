@@ -38,7 +38,7 @@ Este paquete contiene 2 clases principales que gestionan el punto de entrada y l
 
 \subsubsection{Clase Bienvenida}
 
-Esta clase representa la pantalla de bienvenida de la aplicación SimAS 3.0, heredando de Application para ser el punto de entrada principal.
+Esta clase representa la pantalla de bienvenida de la aplicación SimAS 3.0, heredando de Application para ser el punto de entrada principal. La implementación actual es simple y delega la interfaz gráfica a un archivo FXML.
 
 \begin{longtable}[H]{|>{\columncolor[rgb]{0.63,0.79,0.95}}m{6cm} | m{8.5cm} |}
  \caption{Clase Bienvenida}
@@ -57,54 +57,16 @@ Esta clase representa la pantalla de bienvenida de la aplicación SimAS 3.0, her
 
 \hline
  \textbf{Nombre} & \textbf{Bienvenida}  \\ \hline
- 
- \textbf{Descripción} & Representa la pantalla de bienvenida de la aplicación.  \\ \hline
-                       
- \textbf{Atributos} & \begin{enumerate}
- 		\item \textbf{stage}: Stage principal de la aplicación JavaFX.
- 		\item \textbf{scene}: Scene que contiene la interfaz de bienvenida.
- 		\item \textbf{root}: VBox principal que organiza el layout vertical.
- 		\item \textbf{logo}: ImageView que muestra el logo de la aplicación.
- 		\item \textbf{titulo}: Label con el título principal de SimAS 3.0.
- 		\item \textbf{subtitulo}: Label con información adicional.
- 		\item \textbf{selectorIdioma}: ComboBox para selección de idioma.
- 		\item \textbf{botonContinuar}: Button para acceder al menú principal.
- 		\item \textbf{bundle}: ResourceBundle para internacionalización.
- 		\item \textbf{idiomaSeleccionado}: String con el código del idioma actual.
- 		\item \textbf{preferencias}: Properties para guardar configuración.
- 		\item \textbf{animacionFadeIn}: FadeTransition para animación de entrada.
- 		\item \textbf{timeline}: Timeline para animaciones secuenciales.
- 		\item \textbf{esPrimeraEjecucion}: boolean que indica si es la primera vez.
- 		\item \textbf{versionAplicacion}: String con la versión actual.
- 		\item \textbf{fechaCompilacion}: String con la fecha de compilación.
-\end{enumerate} \\ \hline
- 
-\textbf{Métodos} & \begin{enumerate}
- 		\item \textbf{start(Stage)}: método principal que inicializa la aplicación y configura la escena inicial.
- 		\item \textbf{main(String[])}: punto de entrada estático de la aplicación JavaFX.
- 		\item \textbf{inicializarInterfaz()}: configura todos los elementos visuales de la pantalla de bienvenida.
- 		\item \textbf{configurarIdioma()}: detecta y configura el idioma por defecto del sistema.
- 		\item \textbf{cargarRecursos()}: carga imágenes, estilos y recursos necesarios.
- 		\item \textbf{crearLayoutPrincipal()}: crea el layout principal con VBox y elementos centrados.
- 		\item \textbf{agregarLogo()}: añade el logo de la aplicación al centro.
- 		\item \textbf{agregarTitulo()}: añade el título principal de la aplicación.
- 		\item \textbf{agregarSelectorIdioma()}: crea el ComboBox para selección de idioma.
- 		\item \textbf{agregarBotonContinuar()}: añade el botón para continuar al menú principal.
- 		\item \textbf{configurarEstilos()}: aplica estilos CSS a todos los componentes.
- 		\item \textbf{animarEntrada()}: ejecuta animaciones de entrada suaves.
- 		\item \textbf{transitarAMenuPrincipal()}: realiza la transición suave al menú principal.
- 		\item \textbf{guardarPreferenciasIdioma()}: guarda la selección de idioma del usuario.
- 		\item \textbf{cargarPreferencias()}: carga preferencias guardadas anteriormente.
-\end{enumerate} \\ \hline
+
+ \textbf{Descripción} & Representa la pantalla de bienvenida de la aplicación. Es el punto de entrada principal que carga la interfaz desde un archivo FXML y transita al menú principal después de un tiempo determinado.  \\ \hline
+
+ \textbf{Atributos} & La clase no define atributos específicos, ya que la interfaz está definida en el archivo FXML correspondiente. \\ \hline
 
 \textbf{Métodos} & \begin{enumerate}
- 		\item \textbf{verificarPrimeraEjecucion()}: determina si es la primera vez que se ejecuta.
- 		\item \textbf{mostrarTutorialInicial()}: muestra tutorial básico para nuevos usuarios.
- 		\item \textbf{centrarVentana()}: centra la ventana en la pantalla.
- 		\item \textbf{establecerTamanoMinimo()}: establece el tamaño mínimo de la ventana.
- 		\item \textbf{configurarEventosTeclado()}: configura atajos de teclado.
- 		\item \textbf{limpiarRecursos()}: libera recursos antes de la transición.
-\end{enumerate}                                 
+ 		\item \textbf{start(Stage)}: método principal que inicializa la aplicación, carga la interfaz FXML y configura la transición automática al menú principal.
+ 		\item \textbf{main(String[])}: punto de entrada estático de la aplicación JavaFX.
+ 		\item \textbf{abrirMenuPrincipal()}: método privado que crea y muestra la ventana del menú principal.
+\end{enumerate} \\ \hline
 
  \label{tabla99}
 
@@ -112,7 +74,7 @@ Esta clase representa la pantalla de bienvenida de la aplicación SimAS 3.0, her
 
 \subsubsection{Clase MenuPrincipal}
 
-La clase \textbf{MenuPrincipal} gestiona la interfaz principal de navegación de la aplicación SimAS 3.0, proporcionando acceso a todas las funcionalidades principales del sistema.
+La clase \textbf{MenuPrincipal} gestiona la interfaz principal de navegación de la aplicación SimAS 3.0, proporcionando acceso a todas las funcionalidades principales del sistema. Implementa un sistema avanzado de pestañas con soporte para arrastrar y soltar, internacionalización completa y gestión de múltiples ventanas.
 
 \begin{longtable}[H]{|>{\columncolor[rgb]{0.63,0.79,0.95}}m{6cm} | m{8.5cm} |}
 \caption{Clase MenuPrincipal - Interfaz principal de navegación}
@@ -125,61 +87,74 @@ La clase \textbf{MenuPrincipal} gestiona la interfaz principal de navegación de
 \endlastfoot
 \hline
 \textbf{Nombre} & \textbf{MenuPrincipal} \\ \hline
-\textbf{Descripción} & Gestiona el menú principal de navegación (extends Application) \\ \hline
+\textbf{Descripción} & Gestiona el menú principal de navegación con sistema de pestañas avanzado, internacionalización y gestión de módulos. \\ \hline
 \textbf{Atributos} &
 \begin{enumerate}
-    \item \textbf{stage}: escena principal de la aplicación JavaFX.
-    \item \textbf{scene}: escena que contiene la interfaz del menú.
-    \item \textbf{root}: BorderPane que organiza el layout principal.
-    \item \textbf{menuBar}: MenuBar con las opciones principales.
-    \item \textbf{toolBar}: ToolBar con accesos rápidos.
-    \item \textbf{contentArea}: área central para contenido dinámico.
-    \item \textbf{statusBar}: barra de estado inferior.
+    \item \textbf{tabPane}: TabPane que contiene todas las pestañas de edición y simulación.
+    \item \textbf{mainTab}: pestaña principal del menú.
+    \item \textbf{btnCerrarTabs}: botón para cerrar todas las pestañas.
+    \item \textbf{comboIdioma}: ComboBox para selección de idioma.
+    \item \textbf{btnEditor}: botón para abrir el editor de gramáticas.
+    \item \textbf{btnSalir}: botón para salir de la aplicación.
+    \item \textbf{btnSimulador}: botón para abrir el simulador.
+    \item \textbf{btnAyuda}: botón para abrir la ayuda.
+    \item \textbf{btnTutorial}: botón para abrir el tutorial.
+    \item \textbf{labelTitulo}: etiqueta con el título de la aplicación.
+    \item \textbf{labelSubtitulo}: etiqueta con el subtítulo.
+    \item \textbf{labelDesarrollado}: etiqueta con información del desarrollador.
+    \item \textbf{lastSelectedTab}: referencia a la última pestaña seleccionada.
     \item \textbf{bundle}: ResourceBundle para internacionalización.
-    \item \textbf{currentModule}: módulo actualmente activo.
+    \item \textbf{currentLocale}: Locale actual de la aplicación.
 \end{enumerate} \\ \hline
 \textbf{Métodos} &
 \begin{enumerate}
-    \item \textbf{start(Stage)}: método principal que inicializa la interfaz del menú.
+    \item \textbf{start(Stage)}: método principal que inicializa la interfaz del menú con configuración completa.
     \item \textbf{main(String[])}: punto de entrada alternativo de la aplicación.
-    \item \textbf{inicializarMenuBar()}: configura la barra de menú principal.
-    \item \textbf{inicializarToolBar()}: configura la barra de herramientas.
-    \item \textbf{inicializarStatusBar()}: configura la barra de estado.
-    \item \textbf{abrirEditor()}: abre la ventana del editor de gramáticas.
-    \item \textbf{abrirSimulador()}: abre la ventana del simulador.
-    \item \textbf{abrirAyuda()}: abre el sistema de ayuda integrado.
-    \item \textbf{abrirAcercaDe()}: muestra la ventana "Acerca de".
-    \item \textbf{cambiarIdioma(String)}: cambia el idioma de la aplicación.
-    \item \textbf{mostrarPreferencias()}: muestra el diálogo de preferencias.
-    \item \textbf{salirAplicacion()}: cierra la aplicación correctamente.
-    \item \textbf{actualizarTextos()}: actualiza todos los textos de la interfaz.
-    \item \textbf{guardarEstado()}: guarda el estado actual de la aplicación.
-    \item \textbf{cargarEstado()}: carga el estado guardado previamente.
-    \item \textbf{mostrarMensajeEstado(String)}: muestra mensajes en la barra de estado.
-    \item \textbf{configurarAtajosTeclado()}: configura los atajos de teclado globales.
+    \item \textbf{initialize()}: método de inicialización FXML que configura componentes y eventos.
+    \item \textbf{cambiarIdioma()}: cambia el idioma de la aplicación basado en la selección del usuario.
+    \item \textbf{cargarBundle(Locale)}: carga el ResourceBundle para el idioma especificado.
+    \item \textbf{actualizarTextos()}: actualiza todos los textos de la interfaz según el bundle actual.
+    \item \textbf{sincronizarIdiomaConVentanasSecundarias()}: sincroniza el cambio de idioma con todas las ventanas secundarias activas.
+    \item \textbf{actualizarTodosLosSimuladores()}: actualiza el bundle de todos los simuladores activos.
+    \item \textbf{onBtnCerrarTabsAction()}: maneja el cierre de todas las pestañas con confirmación.
+    \item \textbf{onBtnEditorAction()}: abre una nueva instancia del editor de gramáticas.
+    \item \textbf{onBtnAyudaAction()}: abre el manual de usuario en el navegador.
+    \item \textbf{onBtnTutorialAction()}: abre el tutorial interactivo.
+    \item \textbf{onBtnSimuladorAction()}: carga una gramática y abre el simulador directamente.
+    \item \textbf{cargarGramaticaYSimularDirectamente()}: proceso completo para cargar gramática y crear simulador.
+    \item \textbf{crearSimuladorDirectoAlPaso6(Gramatica)}: crea simulador y lo posiciona en el paso 6.
+    \item \textbf{mostrarErroresValidacion(ObservableList<String>)}: muestra errores de validación en diálogo.
+    \item \textbf{mostrarError(String, String)}: muestra mensaje de error genérico.
+    \item \textbf{onMostrarErrorAction(String)}: muestra alerta de error para operaciones fallidas.
+    \item \textbf{onBtnSalirAction()}: maneja la salida de la aplicación con confirmación.
+    \item \textbf{onBtnInfoAction()}: muestra información "Acerca de" de la aplicación.
+    \item \textbf{setBundle(ResourceBundle)}: establece un nuevo bundle y actualiza textos.
+    \item \textbf{actualizarTextos(ResourceBundle)}: sobrecarga para actualizar textos con bundle específico.
+    \item \textbf{reasignarNumerosSimulaciones(TabPane)}: reasigna números de simulación tras cambios.
+    \item \textbf{findFirstTabInGroup(TabPane, int)}: encuentra la primera pestaña de un grupo específico.
 \end{enumerate} \\ \hline
-\textbf{Métodos} &
-\begin{enumerate}
-    \item \textbf{maximizarVentana()}: maximiza la ventana principal.
-    \item \textbf{minimizarVentana()}: minimiza la ventana principal.
-    \item \textbf{restaurarVentana()}: restaura el tamaño normal de la ventana.
-    \item \textbf{centrarVentana()}: centra la ventana en la pantalla.
-\end{enumerate}
 \label{tabla_menu_principal}
 \end{longtable}
 
 \subsubsection{Dependencias internas del paquete bienvenida}
 
 \begin{itemize}
-    \item \textbf{Bienvenida $\rightarrow$ MenuPrincipal}: la clase Bienvenida crea y transita hacia MenuPrincipal después de la inicialización.
-    \item \textbf{MenuPrincipal $\rightarrow$ Sistema}: MenuPrincipal coordina el acceso a todos los módulos principales (editor, simulador, ayuda).
+    \item \textbf{Bienvenida $\rightarrow$ MenuPrincipal}: la clase Bienvenida crea y transita hacia MenuPrincipal después de mostrar la pantalla de bienvenida.
+    \item \textbf{MenuPrincipal $\rightarrow$ Editor}: MenuPrincipal crea instancias del Editor para edición de gramáticas.
+    \item \textbf{MenuPrincipal $\rightarrow$ PanelSimuladorDesc}: MenuPrincipal crea instancias del simulador descendente.
+    \item \textbf{MenuPrincipal $\rightarrow$ SecondaryWindow}: MenuPrincipal puede crear ventanas secundarias para gestión de pestañas.
+    \item \textbf{MenuPrincipal $\rightarrow$ TabManager}: MenuPrincipal utiliza TabManager para gestión avanzada de pestañas.
+    \item \textbf{MenuPrincipal $\rightarrow$ LanguageItem}: MenuPrincipal utiliza LanguageItem para el selector de idiomas.
+    \item \textbf{MenuPrincipal $\rightarrow$ ResourceBundle}: MenuPrincipal gestiona la internacionalización mediante ResourceBundle.
 \end{itemize}
 
 \subsubsection{Patrones de diseño en el paquete bienvenida}
 
 \begin{itemize}
-    \item \textbf{Singleton}: implementado en Bienvenida para garantizar una única instancia de pantalla de bienvenida \cite{gamma1995design}.
-    \item \textbf{Facade}: MenuPrincipal actúa como fachada simplificando el acceso a los módulos complejos del sistema \cite{gamma1995design}.
+    \item \textbf{Facade}: MenuPrincipal actúa como fachada simplificando el acceso a los módulos complejos del sistema (editor, simulador, ayuda) \cite{gamma1995design}.
+    \item \textbf{Observer}: MenuPrincipal implementa el patrón Observer para actualizar textos cuando cambia el idioma \cite{gamma1995design}.
+    \item \textbf{Factory Method}: Los métodos de creación de editores y simuladores siguen el patrón Factory Method \cite{gamma1995design}.
+    \item \textbf{Strategy}: La gestión de diferentes tipos de módulos (editores, simuladores) utiliza el patrón Strategy \cite{gamma1995design}.
 \end{itemize}
 
 \subsection{Paquete gramática}
@@ -444,18 +419,17 @@ La clase \textbf{Gramatica} representa el núcleo del modelo de datos de SimAS 3
 \end{enumerate} \\ \hline
 \textbf{Métodos} &
 \begin{enumerate}
-    \item \textbf{calcularPrimeros()}: calcula los conjuntos primeros de todos los no terminales.
-    \item \textbf{calcularSiguientes()}: calcula los conjuntos siguientes de todos los no terminales.
-    \item \textbf{construirTablaPredictiva()}: construye la tabla predictiva completa.
-    \item \textbf{validarGramatica()}: valida que la gramática esté bien formada.
-    \item \textbf{esLL1()}: verifica si la gramática es LL(1).
-    \item \textbf{guardarEnArchivo(String)}: guarda la gramática en un archivo XML.
-    \item \textbf{cargarDesdeArchivo(String)}: carga una gramática desde un archivo XML.
-    \item \textbf{generarPDF()}: genera un informe PDF de la gramática completa.
-    \item \textbf{exportarAFormato(String)}: exporta la gramática a diferentes formatos.
-    \item \textbf{importarDesdeFormato(String)}: importa gramáticas desde diferentes formatos.
-    \item \textbf{obtenerEstadisticas()}: obtiene estadísticas de la gramática.
-    \item \textbf{limpiar()}: limpia todos los datos de la gramática.
+    \item \textbf{validarGramatica()}: valida que la gramática esté bien formada y retorna lista de errores.
+    \item \textbf{guardarGramatica(Window)}: guarda la gramática en un archivo mediante diálogo de selección.
+    \item \textbf{cargarGramatica(Window)}: carga una gramática desde archivo mediante diálogo de selección.
+    \item \textbf{generarInforme(String)}: genera un informe PDF básico de la gramática.
+    \item \textbf{generarInforme(String, ResourceBundle)}: genera un informe PDF con internacionalización.
+    \item \textbf{generarNombreArchivoPDF(String, ResourceBundle)}: genera nombre apropiado para archivo PDF según tipo.
+    \item \textbf{actualizarNoTerminalesDesdeModel()}: actualiza la lista de no terminales desde el modelo UI.
+    \item \textbf{numerarProducciones()}: asigna números secuenciales a todas las producciones.
+    \item \textbf{getNumeroProduccion(String)}: obtiene el número de una producción específica.
+    \item \textbf{selecSimboloInicial(String)}: selecciona y valida el símbolo inicial.
+    \item \textbf{setVocabulario(ObservableList, ObservableList)}: establece el vocabulario de terminales y no terminales.
 \end{enumerate}
 \label{tabla_gramatica}
 \end{longtable}
