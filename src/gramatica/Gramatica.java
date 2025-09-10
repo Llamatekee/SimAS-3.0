@@ -1220,7 +1220,17 @@ public class Gramatica {
 
         // Usar un contador para generar IDs únicos de nodos
         int[] idCounter = {0};
-        generarDotRec(raiz, sb, idCounter, null);
+        List<String> hojas = new ArrayList<>();
+        generarDotRec(raiz, sb, idCounter, null, hojas);
+
+        // Forzar que todas las hojas queden alineadas en el mismo nivel
+        if (!hojas.isEmpty()) {
+            sb.append("  { rank=same; ");
+            for (String leafId : hojas) {
+                sb.append(leafId).append("; ");
+            }
+            sb.append("}\n");
+        }
 
         sb.append("}\n");
         return sb.toString();
@@ -1229,14 +1239,18 @@ public class Gramatica {
     /**
      * Función recursiva para generar código DOT
      */
-    private void generarDotRec(NodoArbol nodo, StringBuilder sb, int[] id, String parentId) {
+    private void generarDotRec(NodoArbol nodo, StringBuilder sb, int[] id, String parentId, List<String> hojas) {
         String myId = "n" + id[0]++;
         sb.append(myId + " [label=\"" + nodo.valor.replace("\"", "\\\"") + "\"];\n");
         if (parentId != null) {
             sb.append(parentId + " -> " + myId + ";\n");
         }
+        if (nodo.hijos == null || nodo.hijos.isEmpty()) {
+            hojas.add(myId);
+            return;
+        }
         for (NodoArbol hijo : nodo.hijos) {
-            generarDotRec(hijo, sb, id, myId);
+            generarDotRec(hijo, sb, id, myId, hojas);
         }
     }
 
