@@ -2389,59 +2389,146 @@ public class Gramatica {
      * @return true si la gramática tenía recursividad y fue modificada, false si ya estaba correcta.
      */
     public boolean eliminarRecursividad() {
-        boolean esRecursiva = false;
-        ObservableList<String> produccionesOriginales = getProduccionesModel();
-        ObservableList<String> produccionesModificadas = FXCollections.observableArrayList();
-        ObservableList<String> noTerminalesModificados = getNoTerminalesModel();
+        // Implementación correcta para recursividad por la izquierda (directa e indirecta)
+        // 1) Reescritura para eliminar recursividad indirecta
+        // 2) Eliminación de recursividad directa por no terminal
 
-        for (String produccionStr : produccionesOriginales) {
-            // Dividir por la flecha "→"
-            String[] partesFlecha = produccionStr.split(" → ");
-            if (partesFlecha.length != 2) {
-                produccionesModificadas.add(produccionStr);
-                continue;
-            }
+        // Preparar estructuras de trabajo
+        ObservableList<String> noTermModel = FXCollections.observableArrayList(getNoTerminalesModel());
+        ObservableList<String> prodsModel = getProduccionesModel();
 
-            String antecedente = partesFlecha[0].trim();
-            String consecuente = partesFlecha[1].trim();
+        // Mapa: NT -> lista de alternativas (cada alternativa es lista de símbolos; ε = lista vacía)
+        Map<String, List<List<String>>> produccionesPorNT = new LinkedHashMap<>();
+        for (String nt : noTermModel) {
+            produccionesPorNT.put(nt, new ArrayList<>());
+        }
 
-            // Dividir el consecuente por espacios para obtener los símbolos
-            String[] simbolos = consecuente.split("\\s+");
-
-            // Verificar recursividad por la izquierda
-            if (simbolos.length > 0 && antecedente.equals(simbolos[0])) {
-                esRecursiva = true;
-                String nuevoNoTerminal = antecedente + "'";
-
-                if (!noTerminalesModificados.contains(nuevoNoTerminal)) {
-                    noTerminalesModificados.add(nuevoNoTerminal);
-                }
-
-                // Nueva producción sin recursividad
-                StringBuilder nuevaProduccion = new StringBuilder(antecedente + " →");
-
-                // Agregar todos los símbolos después del primero
-                for (int i = 1; i < simbolos.length; i++) {
-                    nuevaProduccion.append(" ").append(simbolos[i]);
-                }
-
-                // Agregar el nuevo no terminal
-                nuevaProduccion.append(" ").append(nuevoNoTerminal);
-                produccionesModificadas.add(nuevaProduccion.toString());
-
-                // Agregar la nueva producción con ε
-                produccionesModificadas.add(nuevoNoTerminal + " → ε");
+        for (String prodStr : prodsModel) {
+            String[] partes = prodStr.split(" → ");
+            if (partes.length != 2) continue;
+            String A = partes[0].trim();
+            String rhs = partes[1].trim();
+            List<String> alt;
+            if (rhs.equals("ε") || rhs.isEmpty()) {
+                alt = new ArrayList<>(); // ε como lista vacía
             } else {
-                produccionesModificadas.add(produccionStr);
+                alt = new ArrayList<>(Arrays.asList(rhs.split("\\s+")));
+            }
+            produccionesPorNT.computeIfAbsent(A, k -> new ArrayList<>()).add(alt);
+        }
+
+        boolean huboCambios = false;
+
+        // Eliminar recursividad indirecta y luego directa para cada no terminal en orden
+        for (int i = 0; i < noTermModel.size(); i++) {
+            String Ai = noTermModel.get(i);
+            List<List<String>> AiAlternativas = produccionesPorNT.getOrDefault(Ai, new ArrayList<>());
+
+            // Sustitución para recursividad indirecta: para todo Aj con j < i
+            for (int j = 0; j < i; j++) {
+                String Aj = noTermModel.get(j);
+                List<List<String>> AjAlternativas = produccionesPorNT.getOrDefault(Aj, new ArrayList<>());
+                if (AjAlternativas.isEmpty()) continue;
+
+                List<List<String>> nuevasAlternativasAi = new ArrayList<>();
+                boolean reemplazo = false;
+                for (List<String> alt : AiAlternativas) {
+                    if (!alt.isEmpty() && alt.get(0).equals(Aj)) {
+                        // Ai -> Aj γ  ==>  Ai -> δ γ  para cada Aj -> δ
+                        List<String> gamma = alt.subList(1, alt.size());
+                        for (List<String> delta : AjAlternativas) {
+                            List<String> combinada = new ArrayList<>();
+                            combinada.addAll(delta); // δ (vacía significa ε)
+                            combinada.addAll(gamma); // + γ
+                            nuevasAlternativasAi.add(combinada);
+                        }
+                        reemplazo = true;
+                    } else {
+                        nuevasAlternativasAi.add(new ArrayList<>(alt));
+                    }
+                }
+
+                if (reemplazo) {
+                    // Deduplicar preservando orden
+                    LinkedHashSet<String> visto = new LinkedHashSet<>();
+                    List<List<String>> dedup = new ArrayList<>();
+                    for (List<String> alt : nuevasAlternativasAi) {
+                        String clave = String.join(" ", alt);
+                        if (visto.add(clave)) dedup.add(alt);
+                    }
+                    produccionesPorNT.put(Ai, dedup);
+                    AiAlternativas = dedup;
+                    huboCambios = true;
+                }
+            }
+
+            // Eliminar recursividad directa Ai -> Ai α
+            List<List<String>> alphas = new ArrayList<>();
+            List<List<String>> betas = new ArrayList<>();
+            for (List<String> alt : AiAlternativas) {
+                if (!alt.isEmpty() && alt.get(0).equals(Ai)) {
+                    alphas.add(new ArrayList<>(alt.subList(1, alt.size()))); // α
+                } else {
+                    betas.add(new ArrayList<>(alt)); // β (puede ser ε como lista vacía)
+                }
+            }
+
+            if (!alphas.isEmpty()) {
+                // Crear nuevo no terminal Ai'
+                String base = Ai + "'";
+                Set<String> existentes = new HashSet<>(noTermModel);
+                existentes.addAll(produccionesPorNT.keySet());
+                String AiPrima = generarNombreNoTerminalUnico(base, existentes);
+
+                if (!produccionesPorNT.containsKey(AiPrima)) {
+                    produccionesPorNT.put(AiPrima, new ArrayList<>());
+                }
+                if (!noTermModel.contains(AiPrima)) {
+                    noTermModel.add(AiPrima);
+                }
+
+                // Ai -> β Ai'  (si β es ε, entonces Ai -> Ai')
+                List<List<String>> nuevasAi = new ArrayList<>();
+                for (List<String> beta : betas) {
+                    List<String> nueva = new ArrayList<>(beta);
+                    nueva.add(AiPrima);
+                    nuevasAi.add(nueva);
+                }
+                if (nuevasAi.isEmpty()) {
+                    // Caso extremo: no había β, generamos Ai -> Ai'
+                    nuevasAi.add(new ArrayList<>(Collections.singletonList(AiPrima)));
+                }
+
+                // Ai' -> α Ai' | ε
+                List<List<String>> nuevasAiPrima = produccionesPorNT.get(AiPrima);
+                for (List<String> alpha : alphas) {
+                    List<String> nueva = new ArrayList<>(alpha);
+                    nueva.add(AiPrima);
+                    nuevasAiPrima.add(nueva);
+                }
+                nuevasAiPrima.add(new ArrayList<>()); // ε
+
+                produccionesPorNT.put(Ai, nuevasAi);
+                huboCambios = true;
             }
         }
 
-        if (esRecursiva) {
-            this.setNoTerminalesModel(noTerminalesModificados);
-            this.setProduccionesModel(produccionesModificadas);
+        if (huboCambios) {
+            // Reconstruir modelos
+            ObservableList<String> nuevoNoTerm = FXCollections.observableArrayList(noTermModel);
+            ObservableList<String> nuevasProducciones = FXCollections.observableArrayList();
+            for (String nt : noTermModel) {
+                List<List<String>> alts = produccionesPorNT.getOrDefault(nt, Collections.emptyList());
+                for (List<String> alt : alts) {
+                    String rhs = alt.isEmpty() ? "ε" : String.join(" ", alt);
+                    nuevasProducciones.add(nt + " → " + rhs);
+                }
+            }
+            this.setNoTerminalesModel(nuevoNoTerm);
+            this.setProduccionesModel(nuevasProducciones);
         }
 
-        return esRecursiva;
+        return huboCambios;
     }
 
 
@@ -2451,87 +2538,147 @@ public class Gramatica {
      * @return true si la gramática fue factorizada, false si ya estaba correcta.
      */
     public boolean factorizar() {
-        boolean necesitaFactorizacion = false;
-        ObservableList<String> produccionesOriginales = getProduccionesModel();
-        ObservableList<String> produccionesModificadas = FXCollections.observableArrayList();
-        ObservableList<String> noTerminales = getNoTerminalesModel();
+        // Factorización por prefijos comunes (longest common prefix), iterativa y por no terminal
+        ObservableList<String> noTermModel = FXCollections.observableArrayList(getNoTerminalesModel());
+        ObservableList<String> prodsModel = getProduccionesModel();
 
-        Map<String, List<String>> gruposProducciones = new HashMap<>();
-
-        // Agrupar producciones por antecedente y primer símbolo
-        for (String produccionStr : produccionesOriginales) {
-            String[] partesFlecha = produccionStr.split(" → ");
-            if (partesFlecha.length != 2) {
-                continue;
-            }
-
-            String antecedente = partesFlecha[0].trim();
-            String consecuente = partesFlecha[1].trim();
-            String[] simbolos = consecuente.split("\\s+");
-
-            if (simbolos.length > 0) {
-                String primerSimbolo = simbolos[0];
-                String clave = antecedente + " → " + primerSimbolo;
-
-                gruposProducciones.putIfAbsent(clave, new ArrayList<>());
-                gruposProducciones.get(clave).add(produccionStr);
-            }
+        // Mapa: NT -> alternativas (ε = lista vacía)
+        Map<String, List<List<String>>> produccionesPorNT = new LinkedHashMap<>();
+        for (String nt : noTermModel) {
+            produccionesPorNT.put(nt, new ArrayList<>());
+        }
+        for (String prodStr : prodsModel) {
+            String[] partes = prodStr.split(" → ");
+            if (partes.length != 2) continue;
+            String A = partes[0].trim();
+            String rhs = partes[1].trim();
+            List<String> alt = rhs.equals("ε") || rhs.isEmpty()
+                    ? new ArrayList<>()
+                    : new ArrayList<>(Arrays.asList(rhs.split("\\s+")));
+            produccionesPorNT.computeIfAbsent(A, k -> new ArrayList<>()).add(alt);
         }
 
-        // Procesar cada grupo
-        for (Map.Entry<String, List<String>> grupo : gruposProducciones.entrySet()) {
-            List<String> listaProducciones = grupo.getValue();
+        boolean huboCambios = false;
 
-            if (listaProducciones.size() > 1) { // Hay factor común
-                necesitaFactorizacion = true;
+        for (int idx = 0; idx < noTermModel.size(); idx++) {
+            String A = noTermModel.get(idx);
+            List<List<String>> alternativas = produccionesPorNT.getOrDefault(A, new ArrayList<>());
 
-                // Extraer antecedente del primer grupo
-                String[] partesPrimera = listaProducciones.get(0).split(" → ");
-                String antecedente = partesPrimera[0].trim();
-                String consecuentePrimera = partesPrimera[1].trim();
-                String[] simbolosPrimera = consecuentePrimera.split("\\s+");
-                String primerSimbolo = simbolosPrimera[0];
+            boolean factorizadoEnEsteNT;
+            do {
+                factorizadoEnEsteNT = false;
 
-                String nuevoNoTerminal = antecedente + "'";
-
-                if (!noTerminales.contains(nuevoNoTerminal)) {
-                    noTerminales.add(nuevoNoTerminal);
+                // Agrupar por primer símbolo para candidatos
+                Map<String, List<List<String>>> grupos = new LinkedHashMap<>();
+                for (List<String> alt : alternativas) {
+                    String clave = alt.isEmpty() ? "" : alt.get(0);
+                    grupos.computeIfAbsent(clave, k -> new ArrayList<>()).add(alt);
                 }
 
-                // Nueva producción con factor común extraído
-                produccionesModificadas.add(antecedente + " → " + primerSimbolo + " " + nuevoNoTerminal);
+                int mejorL = 0;
+                String mejorClave = null;
+                List<List<String>> mejorGrupo = null;
 
-                // Crear producciones para el nuevo no terminal
-                for (String produccionStr : listaProducciones) {
-                    String[] partesFlecha = produccionStr.split(" → ");
-                    String consecuente = partesFlecha[1].trim();
-                    String[] simbolos = consecuente.split("\\s+");
+                for (Map.Entry<String, List<List<String>>> e : grupos.entrySet()) {
+                    List<List<String>> grupo = e.getValue();
+                    if (grupo.size() < 2) continue;
 
-                    StringBuilder nuevaProduccion = new StringBuilder(nuevoNoTerminal + " →");
+                    // Calcular LCP (longest common prefix) entre todas las alternativas del grupo
+                    int lcp = grupo.get(0).size();
+                    for (int i = 1; i < grupo.size(); i++) {
+                        lcp = Math.min(lcp, longitudPrefijoComun(grupo.get(0), grupo.get(i)));
+                        if (lcp == 0) break;
+                    }
+                    if (lcp > mejorL) {
+                        mejorL = lcp;
+                        mejorClave = e.getKey();
+                        mejorGrupo = grupo;
+                    }
+                }
 
-                    // Agregar todos los símbolos después del primer símbolo (el factor común)
-                    if (simbolos.length > 1) {
-                        for (int i = 1; i < simbolos.length; i++) {
-                            nuevaProduccion.append(" ").append(simbolos[i]);
+                if (mejorL > 0 && mejorGrupo != null) {
+                    // Prefijo común de longitud mejorL para factorización
+                    List<String> prefijo = new ArrayList<>(mejorGrupo.get(0).subList(0, mejorL));
+
+                    // Crear nuevo no terminal A'
+                    String base = A + "'";
+                    Set<String> existentes = new HashSet<>(noTermModel);
+                    existentes.addAll(produccionesPorNT.keySet());
+                    String APrima = generarNombreNoTerminalUnico(base, existentes);
+
+                    noTermModel.add(APrima);
+                    produccionesPorNT.putIfAbsent(APrima, new ArrayList<>());
+
+                    // Quitar las alternativas del grupo de A y añadir A -> prefijo A'
+                    List<List<String>> nuevasA = new ArrayList<>();
+                    // Mantener las alternativas que no están en mejorGrupo
+                    for (List<String> alt : alternativas) {
+                        if (!mejorGrupo.contains(alt)) {
+                            nuevasA.add(alt);
                         }
-                    } else {
-                        nuevaProduccion.append(" ε");
+                    }
+                    List<String> nuevaAltA = new ArrayList<>(prefijo);
+                    nuevaAltA.add(APrima);
+                    nuevasA.add(nuevaAltA);
+
+                    // Añadir alternativas a A'
+                    List<List<String>> alternativasAPrima = produccionesPorNT.get(APrima);
+                    for (List<String> alt : mejorGrupo) {
+                        List<String> sufijo = new ArrayList<>(alt.subList(mejorL, alt.size()));
+                        alternativasAPrima.add(sufijo); // si sufijo vacío, será ε
                     }
 
-                    produccionesModificadas.add(nuevaProduccion.toString());
+                    alternativas = nuevasA;
+                    produccionesPorNT.put(A, alternativas);
+                    huboCambios = true;
+                    factorizadoEnEsteNT = true;
                 }
-            } else {
-                // Si no hay factorización, agregar la producción original
-                produccionesModificadas.addAll(listaProducciones);
+
+            } while (factorizadoEnEsteNT);
+        }
+
+        if (huboCambios) {
+            ObservableList<String> nuevoNoTerm = FXCollections.observableArrayList(noTermModel);
+            ObservableList<String> nuevasProducciones = FXCollections.observableArrayList();
+            for (String nt : noTermModel) {
+                for (List<String> alt : produccionesPorNT.getOrDefault(nt, Collections.emptyList())) {
+                    String rhs = alt.isEmpty() ? "ε" : String.join(" ", alt);
+                    nuevasProducciones.add(nt + " → " + rhs);
+                }
+            }
+            this.setNoTerminalesModel(nuevoNoTerm);
+            this.setProduccionesModel(nuevasProducciones);
+        }
+
+        return huboCambios;
+    }
+
+    // Helpers
+    private String generarNombreNoTerminalUnico(String base, Set<String> existentes) {
+        if (!existentes.contains(base)) return base;
+        // Probar con más comillas primas, luego con números si es necesario
+        String intento = base;
+        while (existentes.contains(intento)) {
+            intento = intento + "'";
+            if (intento.length() > base.length() + 5) {
+                // fallback con índice
+                int idx = 1;
+                intento = base + idx;
+                while (existentes.contains(intento)) {
+                    idx++;
+                    intento = base + idx;
+                }
+                break;
             }
         }
+        return intento;
+    }
 
-        if (necesitaFactorizacion) {
-            this.setNoTerminalesModel(noTerminales);
-            this.setProduccionesModel(produccionesModificadas);
-        }
-
-        return necesitaFactorizacion;
+    private int longitudPrefijoComun(List<String> a, List<String> b) {
+        int n = Math.min(a.size(), b.size());
+        int i = 0;
+        while (i < n && Objects.equals(a.get(i), b.get(i))) i++;
+        return i;
     }
 
     /**
