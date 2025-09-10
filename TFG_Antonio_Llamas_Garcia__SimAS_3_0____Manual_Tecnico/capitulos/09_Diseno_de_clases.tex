@@ -549,15 +549,18 @@ La clase \textbf{TablaPredictiva} representa la tabla predictiva completa utiliz
 \end{enumerate} \\ \hline
 \textbf{Métodos} &
 \begin{enumerate}
-    \item \textbf{TablaPredictiva()}: constructor sin parámetros.
-    \item \textbf{TablaPredictiva(TableView, ResourceBundle)}: constructor completo.
-    \item \textbf{construir(Gramatica)}: construye la tabla predictiva a partir de una gramática.
-    \item \textbf{cargarDatos()}: carga los datos de las filas en la tabla visual.
-    \item \textbf{obtenerAccion(String, String)}: obtiene la acción para una pareja (no terminal, terminal).
-    \item \textbf{agregarFuncionError(FuncionError)}: añade una función de error.
-    \item \textbf{obtenerFuncionesError()}: obtiene todas las funciones de error.
-    \item \textbf{validarTabla()}: valida que la tabla esté correctamente construida.
-    \item \textbf{exportarTabla()}: exporta la tabla a diferentes formatos.
+    \item \textbf{TablaPredictiva()}: constructor sin parámetros con inicialización básica.
+    \item \textbf{TablaPredictiva(TableView)}: constructor con vista de tabla específica.
+    \item \textbf{TablaPredictiva(TableView, ResourceBundle)}: constructor completo con internacionalización.
+    \item \textbf{construir(Gramatica)}: construye la tabla predictiva completa a partir de una gramática.
+    \item \textbf{cargarDatos()}: carga los datos de las filas en la tabla visual (método protegido).
+    \item \textbf{crearFunError(FuncionError)}: crea y añade una función de error a la lista.
+    \item \textbf{getFuncionesError()}: obtiene la lista de funciones de error.
+    \item \textbf{setFuncionesError(List<FuncionError>)}: establece la lista de funciones de error.
+    \item \textbf{getTablaPredictiva()}: obtiene la vista de tabla TableView.
+    \item \textbf{getFilas()}: obtiene la lista de filas de la tabla.
+    \item \textbf{getColumnas()}: obtiene el número de columnas de la tabla.
+    \item \textbf{setItems(ObservableList)}: establece los items en la tabla (método protegido).
 \end{enumerate}
 \label{tabla_tabla_predictiva}
 \end{longtable}
@@ -586,24 +589,28 @@ La clase \textbf{TablaPredictivaPaso5} es una extensión especializada de TablaP
 \end{enumerate} \\ \hline
 \textbf{Métodos} &
 \begin{enumerate}
-    \item \textbf{TablaPredictivaPaso5()}: constructor sin parámetros.
-    \item \textbf{TablaPredictivaPaso5(TableView)}: constructor con vista de tabla.
-    \item \textbf{setPanelPaso5(PanelNuevaSimDescPaso5)}: establece el panel asociado.
-    \item \textbf{apareceSoloPrimeraPos(Terminal)}: verifica si un terminal aparece solo en primera posición.
-    \item \textbf{rellenarProduccionesEpsilon()}: rellena automáticamente producciones épsilon.
-    \item \textbf{construir(Gramatica)}: construye la tabla con lógica específica del paso 5.
+    \item \textbf{TablaPredictivaPaso5()}: constructor sin parámetros con inicialización básica.
+    \item \textbf{TablaPredictivaPaso5(TableView)}: constructor con vista de tabla específica.
+    \item \textbf{setPanelPaso5(PanelNuevaSimDescPaso5)}: establece el panel del paso 5 asociado.
+    \item \textbf{apareceSoloPrimeraPos(Terminal)}: verifica si un terminal aparece solo en primera posición de las producciones.
+    \item \textbf{rellenarProduccionesEpsilon()}: rellena automáticamente producciones épsilon en las celdas vacías.
+    \item \textbf{construir(Gramatica)}: construye la tabla con lógica específica del paso 5 (override).
     \item \textbf{crearColumnas(Gramatica)}: crea las columnas de la tabla de forma dinámica.
-    \item \textbf{cargarDatos()}: carga datos con filas para terminales y no terminales.
+    \item \textbf{cargarDatos()}: carga datos con filas para terminales y no terminales (override).
     \item \textbf{configurarColumnas()}: configura el estilo y comportamiento de las columnas.
     \item \textbf{configurarSeleccion()}: configura la selección de celdas.
-    \item \textbf{configurarManejadorClics()}: configura el manejo de eventos de clic.
+    \item \textbf{configurarManejadorClics()}: configura el manejo de eventos de clic en celdas.
     \item \textbf{mostrarError(String, String, String)}: muestra mensajes de error al usuario.
     \item \textbf{setTablaPredictiva(TableView)}: establece la vista de tabla con validaciones.
+    \item \textbf{getGramatica()}: obtiene la gramática asociada a esta tabla.
 \end{enumerate} \\ \hline
 \textbf{Métodos Heredados} &
 \begin{enumerate}
-    \item \textbf{getFuncionesError()}: obtiene la lista de funciones de error.
-    \item \textbf{setFuncionesError(List<FuncionError>)}: establece las funciones de error.
+    \item \textbf{getFuncionesError()}: obtiene la lista de funciones de error (override).
+    \item \textbf{setFuncionesError(List<FuncionError>)}: establece las funciones de error (override).
+    \item \textbf{getTablaPredictiva()}: obtiene la vista de tabla TableView.
+    \item \textbf{construir(Gramatica)}: construye la tabla predictiva base.
+    \item \textbf{cargarDatos()}: carga los datos básicos (método base).
 \end{enumerate}
 \label{tabla_tabla_predictiva_paso5}
 \end{longtable}
@@ -616,15 +623,18 @@ Las dependencias internas del paquete gramática se muestran en la Figura \ref{f
     \item \textbf{Gramatica $\rightarrow$ Simbolo}: La clase Gramatica contiene listas de Terminal y NoTerminal (que heredan de Simbolo).
     \item \textbf{Gramatica $\rightarrow$ Produccion}: Gramatica mantiene una lista de producciones que definen las reglas gramaticales.
     \item \textbf{Gramatica $\rightarrow$ TablaPredictiva}: Gramatica utiliza TablaPredictiva para el análisis sintáctico.
-    \item \textbf{Simbolo $\rightarrow$ Terminal, NoTerminal}: Simbolo es la clase base abstracta para Terminal y NoTerminal.
+    \item \textbf{Gramatica $\rightarrow$ FilaTablaPredictiva}: Gramatica crea instancias de FilaTablaPredictiva para la tabla predictiva.
+    \item \textbf{Simbolo $\rightarrow$ Terminal, NoTerminal}: Simbolo es la clase base para Terminal y NoTerminal.
     \item \textbf{Produccion $\rightarrow$ Antecedente, Consecuente}: Produccion combina Antecedente y Consecuente.
     \item \textbf{Antecedente $\rightarrow$ NoTerminal}: Antecedente referencia un NoTerminal como símbolo de la izquierda.
     \item \textbf{Consecuente $\rightarrow$ Simbolo}: Consecuente contiene una lista de símbolos (Terminal y NoTerminal).
     \item \textbf{NoTerminal $\rightarrow$ Terminal}: NoTerminal contiene listas de Terminal para conjuntos primeros y siguientes.
     \item \textbf{TablaPredictiva $\rightarrow$ FilaTablaPredictiva}: TablaPredictiva contiene filas de FilaTablaPredictiva.
     \item \textbf{TablaPredictiva $\rightarrow$ FuncionError}: TablaPredictiva gestiona una lista de FuncionError para recuperación de errores.
-    \item \textbf{TablaPredictivaPaso5 $\rightarrow$ TablaPredictiva}: TablaPredictivaPaso5 extiende TablaPredictiva con funcionalidades específicas.
+    \item \textbf{TablaPredictivaPaso5 $\rightarrow$ TablaPredictiva}: TablaPredictivaPaso5 extiende TablaPredictiva con funcionalidades específicas para el paso 5.
+    \item \textbf{TablaPredictivaPaso5 $\rightarrow$ PanelNuevaSimDescPaso5}: TablaPredictivaPaso5 interactúa con el panel del paso 5 del simulador.
     \item \textbf{FuncionError $\rightarrow$ Terminal}: FuncionError puede estar asociado con un Terminal específico.
+    \item \textbf{FilaTablaPredictiva $\rightarrow$ Terminal}: FilaTablaPredictiva referencia terminales para las columnas de la tabla.
 \end{itemize}
 
 \begin{figure}[H]
@@ -637,11 +647,12 @@ Las dependencias internas del paquete gramática se muestran en la Figura \ref{f
 \subsubsection{Patrones de diseño en el paquete gramática}
 
 \begin{itemize}
-    \item \textbf{Composite}: el patrón Composite se utiliza en la jerarquía de símbolos (Simbolo como componente abstracto, Terminal y NoTerminal como componentes concretos) \cite{gamma1995design}.
-    \item \textbf{Observer/Observable}: implementado mediante JavaFX Properties para notificación automática de cambios en la UI cuando se modifican los datos del modelo \cite{gamma1995design}.
-    \item \textbf{Strategy}: el patrón Strategy se utiliza en las funciones de error (FuncionError) que encapsulan diferentes estrategias de recuperación de errores \cite{gamma1995design}.
-    \item \textbf{Factory Method}: implícito en los constructores de las clases que crean instancias con diferentes configuraciones iniciales \cite{gamma1995design}.
-    \item \textbf{Singleton}: la clase Gramatica actúa como contenedor singleton para una gramática específica durante su edición \cite{gamma1995design}.
+    \item \textbf{Composite}: el patrón Composite se utiliza en la jerarquía de símbolos (Simbolo como componente base, Terminal y NoTerminal como componentes especializados) \cite{gamma1995design}.
+    \item \textbf{Observer/Observable}: implementado mediante JavaFX Properties para notificación automática de cambios en la interfaz cuando se modifican los datos del modelo \cite{gamma1995design}.
+    \item \textbf{Strategy}: el patrón Strategy se utiliza en las funciones de error (FuncionError) que encapsulan diferentes estrategias de recuperación de errores durante el análisis sintáctico \cite{gamma1995design}.
+    \item \textbf{Factory Method}: utilizado en los constructores de TablaPredictiva y TablaPredictivaPaso5 para crear instancias con diferentes configuraciones \cite{gamma1995design}.
+    \item \textbf{Builder}: implícito en la construcción de Gramatica a través de sus múltiples constructores que permiten diferentes configuraciones iniciales \cite{gamma1995design}.
+    \item \textbf{Template Method}: utilizado en TablaPredictivaPaso5 que redefine métodos de TablaPredictiva para proporcionar comportamiento específico \cite{gamma1995design}.
     \item \textbf{MVC (Model-View-Controller)}: el paquete completo sigue el patrón MVC donde las clases del paquete gramática representan el Modelo, las clases de vistas manejan la presentación, y los controladores coordinan la interacción \cite{burbeck1992applications}.
 \end{itemize}
 
