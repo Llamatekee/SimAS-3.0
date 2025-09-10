@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.9.1)  10 SEP 2025 08:55
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.9.1)  10 SEP 2025 09:41
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -3107,104 +3107,94 @@ Underfull \hbox (badness 10000) in paragraph at lines 408--409
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 414--415
-[]\T1/cmr/bx/n/12 agregarNoTerminal(NoTerminal)\T1/cmr/m/n/12 :
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 415--416
-[]\T1/cmr/bx/n/12 agregarProduccion(Produccion)\T1/cmr/m/n/12 :
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 424--425
+Underfull \hbox (badness 10000) in paragraph at lines 418--419
 []\T1/cmr/bx/n/12 cargarGramatica(Window)\T1/cmr/m/n/12 : car-ga
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 426--427
+Underfull \hbox (badness 10000) in paragraph at lines 420--421
 []\T1/cmr/bx/n/12 generarInforme(String, Re-sour-ce-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 427--428
+Underfull \hbox (badness 10000) in paragraph at lines 421--422
 []\T1/cmr/bx/n/12 generarNombreArchivoPDF(String,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 427--428
+Underfull \hbox (badness 10000) in paragraph at lines 421--422
 \T1/cmr/bx/n/12 Re-sour-ce-Bund-le)\T1/cmr/m/n/12 : ge-ne-ra nom-bre
  []
 
 
-Overfull \hbox (13.05852pt too wide) in paragraph at lines 428--429
+Overfull \hbox (13.05852pt too wide) in paragraph at lines 422--423
 []\T1/cmr/bx/n/12 actualizarNoTerminalesDesdeModel()\T1/cmr/m/n/12 :
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 430--431
+Underfull \hbox (badness 10000) in paragraph at lines 424--425
 []\T1/cmr/bx/n/12 getNumeroProduccion(String)\T1/cmr/m/n/12 :
  []
 
 
-Underfull \hbox (badness 1117) in paragraph at lines 430--431
+Underfull \hbox (badness 1117) in paragraph at lines 424--425
 \T1/cmr/m/n/12 ob-tie-ne el nú-me-ro de una pro-duc-ción
  []
 
 
-Underfull \hbox (badness 2503) in paragraph at lines 431--432
+Underfull \hbox (badness 2503) in paragraph at lines 425--426
 []\T1/cmr/bx/n/12 selecSimboloInicial(String)\T1/cmr/m/n/12 : se-lec-cio-
  []
 
-LaTeX Info: Redefining \. on input line 435.
-LaTeX Info: Redefining \% on input line 435.
+LaTeX Info: Redefining \. on input line 429.
+LaTeX Info: Redefining \% on input line 429.
 [154]
-LaTeX Info: Redefining \. on input line 435.
-LaTeX Info: Redefining \% on input line 435.
+LaTeX Info: Redefining \. on input line 429.
+LaTeX Info: Redefining \% on input line 429.
  [155]
-LaTeX Info: Redefining \. on input line 435.
-LaTeX Info: Redefining \% on input line 435.
+LaTeX Info: Redefining \. on input line 429.
+LaTeX Info: Redefining \% on input line 429.
  [156]
-Underfull \hbox (badness 3646) in paragraph at lines 463--464
+Underfull \hbox (badness 3646) in paragraph at lines 457--458
 []\T1/cmr/bx/n/12 FilaTablaPredictiva(String, String,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 468--469
+Underfull \hbox (badness 10000) in paragraph at lines 462--463
 []\T1/cmr/bx/n/12 tieneProduccionEnCelda(String)\T1/cmr/m/n/12 :
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 470--471
+Underfull \hbox (badness 10000) in paragraph at lines 464--465
 []\T1/cmr/bx/n/12 esTerminalProperty()\T1/cmr/m/n/12 : de-vuel-ve la
  []
 
 
 
-LaTeX Info: Redefining \. on input line 473.
-LaTeX Info: Redefining \% on input line 473.
+LaTeX Info: Redefining \. on input line 467.
+LaTeX Info: Redefining \% on input line 467.
 [157]
-Underfull \hbox (badness 10000) in paragraph at lines 509--510
+Underfull \hbox (badness 10000) in paragraph at lines 503--504
 []\T1/cmr/bx/n/12 setSimbolo(Terminal)\T1/cmr/m/n/12 : es-ta-ble-ce el
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 515--516
+Underfull \hbox (badness 10000) in paragraph at lines 509--510
 []\T1/cmr/bx/n/12 INSERTAR_ENTRADA\T1/cmr/m/n/12 : in-ser-tar
  []
 
 
-Underfull \hbox (badness 5681) in paragraph at lines 517--518
+Underfull \hbox (badness 5681) in paragraph at lines 511--512
 []\T1/cmr/bx/n/12 MODIFICAR_ENTRADA\T1/cmr/m/n/12 : mo-di-fi-
  []
 
 
-Underfull \hbox (badness 2165) in paragraph at lines 520--521
+Underfull \hbox (badness 2165) in paragraph at lines 514--515
 []\T1/cmr/bx/n/12 MODIFICAR_PILA\T1/cmr/m/n/12 : mo-di-fi-car ele-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 521--522
+Underfull \hbox (badness 10000) in paragraph at lines 515--516
 []\T1/cmr/bx/n/12 TERMINAR_ANALISIS\T1/cmr/m/n/12 : ter-mi-nar
  []
 
@@ -3213,666 +3203,813 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 
-LaTeX Info: Redefining \. on input line 524.
-LaTeX Info: Redefining \% on input line 524.
+LaTeX Info: Redefining \. on input line 518.
+LaTeX Info: Redefining \% on input line 518.
 [158]
-LaTeX Info: Redefining \. on input line 524.
-LaTeX Info: Redefining \% on input line 524.
+LaTeX Info: Redefining \. on input line 518.
+LaTeX Info: Redefining \% on input line 518.
  [159]
-LaTeX Info: Redefining \. on input line 524.
-LaTeX Info: Redefining \% on input line 524.
+LaTeX Info: Redefining \. on input line 518.
+LaTeX Info: Redefining \% on input line 518.
  [160]
-Overfull \hbox (2.0779pt too wide) in paragraph at lines 557--558
-[]\T1/cmr/bx/n/12 agregarFuncionError(FuncionError)\T1/cmr/m/n/12 :
- []
-
-LaTeX Info: Redefining \. on input line 563.
-LaTeX Info: Redefining \% on input line 563.
-[161]
-Underfull \hbox (badness 10000) in paragraph at lines 589--590
-[]\T1/cmr/bx/n/12 TablaPredictivaPaso5()\T1/cmr/m/n/12 : cons-truc-tor
+Underfull \hbox (badness 10000) in paragraph at lines 547--548
+[]\T1/cmr/bx/n/12 TablaPredictiva(TableView)\T1/cmr/m/n/12 : cons-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 590--591
-[]\T1/cmr/bx/n/12 TablaPredictivaPaso5(TableView)\T1/cmr/m/n/12 :
- []
-
-
-Overfull \hbox (39.55621pt too wide) in paragraph at lines 591--592
-[]\T1/cmr/bx/n/12 setPanelPaso5(PanelNuevaSimDescPaso5)\T1/cmr/m/n/12 :
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 592--593
-[]\T1/cmr/bx/n/12 apareceSoloPrimeraPos(Terminal)\T1/cmr/m/n/12 :
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 600--601
-[]\T1/cmr/bx/n/12 mostrarError(String, String,
- []
-
-
-Underfull \hbox (badness 4805) in paragraph at lines 600--601
-\T1/cmr/bx/n/12 String)\T1/cmr/m/n/12 : mues-tra men-sa-jes de error
- []
-
-
-Overfull \hbox (29.91417pt too wide) in paragraph at lines 606--607
+Overfull \hbox (29.91417pt too wide) in paragraph at lines 553--554
 []\T1/cmr/bx/n/12 setFuncionesError(List<FuncionError>)\T1/cmr/m/n/12 :
  []
 
 
+Underfull \hbox (badness 10000) in paragraph at lines 557--558
+[]\T1/cmr/bx/n/12 setItems(ObservableList)\T1/cmr/m/n/12 : es-ta-ble-ce
+ []
 
-LaTeX Info: Redefining \. on input line 609.
-LaTeX Info: Redefining \% on input line 609.
-[162]
-LaTeX Info: Redefining \. on input line 609.
-LaTeX Info: Redefining \% on input line 609.
- [163]
-Underfull \vbox (badness 10000) has occurred while \output is active []
+LaTeX Info: Redefining \. on input line 560.
+LaTeX Info: Redefining \% on input line 560.
+[161]
+LaTeX Info: Redefining \. on input line 560.
+LaTeX Info: Redefining \% on input line 560.
+ [162]
+Underfull \hbox (badness 10000) in paragraph at lines 586--587
+[]\T1/cmr/bx/n/12 TablaPredictivaPaso5()\T1/cmr/m/n/12 : cons-truc-tor
+ []
 
 
+Underfull \hbox (badness 10000) in paragraph at lines 587--588
+[]\T1/cmr/bx/n/12 TablaPredictivaPaso5(TableView)\T1/cmr/m/n/12 :
+ []
 
-LaTeX Info: Redefining \. on input line 616.
-LaTeX Info: Redefining \% on input line 616.
-[164]
-<figuras/Cap9/diagrama_gramatica_bueno.png, id=3450, 878.28125pt x 830.10126pt>
+
+Overfull \hbox (39.55621pt too wide) in paragraph at lines 588--589
+[]\T1/cmr/bx/n/12 setPanelPaso5(PanelNuevaSimDescPaso5)\T1/cmr/m/n/12 :
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 589--590
+[]\T1/cmr/bx/n/12 apareceSoloPrimeraPos(Terminal)\T1/cmr/m/n/12 :
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 597--598
+[]\T1/cmr/bx/n/12 mostrarError(String, String,
+ []
+
+
+Underfull \hbox (badness 4805) in paragraph at lines 597--598
+\T1/cmr/bx/n/12 String)\T1/cmr/m/n/12 : mues-tra men-sa-jes de error
+ []
+
+
+Overfull \hbox (29.91417pt too wide) in paragraph at lines 604--605
+[]\T1/cmr/bx/n/12 setFuncionesError(List<FuncionError>)\T1/cmr/m/n/12 :
+ []
+
+LaTeX Info: Redefining \. on input line 610.
+LaTeX Info: Redefining \% on input line 610.
+[163]
+LaTeX Info: Redefining \. on input line 610.
+LaTeX Info: Redefining \% on input line 610.
+ [164]
+LaTeX Info: Redefining \. on input line 610.
+LaTeX Info: Redefining \% on input line 610.
+ [165]
+
+LaTeX Info: Redefining \. on input line 628.
+LaTeX Info: Redefining \% on input line 628.
+[166]
+<figuras/Cap9/diagrama_gramatica_bueno.png, id=3460, 878.28125pt x 830.10126pt>
 
 File: figuras/Cap9/diagrama_gramatica_bueno.png Graphic file (type png)
 <use figuras/Cap9/diagrama_gramatica_bueno.png>
 Package pdftex.def Info: figuras/Cap9/diagrama_gramatica_bueno.png  used on inp
-ut line 632.
+ut line 636.
 (pdftex.def)             Requested size: 409.71692pt x 387.24707pt.
 
-Underfull \vbox (badness 1968) has occurred while \output is active []
 
-
-
-LaTeX Info: Redefining \. on input line 636.
-LaTeX Info: Redefining \% on input line 636.
-[165]
-
-LaTeX Warning: Citation 'gamma1995design' on page 166 undefined on input line 6
-40.
-
-
-LaTeX Warning: Citation 'gamma1995design' on page 166 undefined on input line 6
-41.
-
-
-LaTeX Warning: Citation 'gamma1995design' on page 166 undefined on input line 6
-42.
-
-
-LaTeX Warning: Citation 'gamma1995design' on page 166 undefined on input line 6
-43.
-
-
-LaTeX Warning: Citation 'gamma1995design' on page 166 undefined on input line 6
+LaTeX Warning: Citation 'gamma1995design' on page 167 undefined on input line 6
 44.
 
 
-LaTeX Warning: Citation 'burbeck1992applications' on page 166 undefined on inpu
-t line 645.
-
-
-Overfull \hbox (47.71053pt too wide) in paragraph at lines 645--646
-\T1/cmr/m/n/12 jan la pre-sen-ta-ción, y los con-tro-la-do-res coor-di-nan la i
-n-ter-ac-ción [[]]. 
- []
+LaTeX Warning: Citation 'gamma1995design' on page 167 undefined on input line 6
+45.
 
 
 
 LaTeX Info: Redefining \. on input line 646.
 LaTeX Info: Redefining \% on input line 646.
-[166 <./figuras/Cap9/diagrama_gramatica_bueno.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 683--684
+[167 <./figuras/Cap9/diagrama_gramatica_bueno.png>]
+
+LaTeX Warning: Citation 'gamma1995design' on page 168 undefined on input line 6
+46.
+
+
+LaTeX Warning: Citation 'gamma1995design' on page 168 undefined on input line 6
+47.
+
+
+Overfull \hbox (0.7346pt too wide) in paragraph at lines 647--648
+\T1/cmr/m/n/12 ti-va-Pa-so5 pa-ra crear ins-tan-cias con di-fe-ren-tes con-fi-g
+u-ra-cio-nes [[]]. 
+ []
+
+
+LaTeX Warning: Citation 'gamma1995design' on page 168 undefined on input line 6
+48.
+
+
+LaTeX Warning: Citation 'gamma1995design' on page 168 undefined on input line 6
+49.
+
+
+LaTeX Warning: Citation 'burbeck1992applications' on page 168 undefined on inpu
+t line 650.
+
+
+Overfull \hbox (47.71053pt too wide) in paragraph at lines 650--651
+\T1/cmr/m/n/12 jan la pre-sen-ta-ción, y los con-tro-la-do-res coor-di-nan la i
+n-ter-ac-ción [[]]. 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 688--689
 []\T1/cmr/bx/n/12 actualizarTextos(ResourceBundle)\T1/cmr/m/n/12 :
  []
 
 
-Underfull \hbox (badness 5119) in paragraph at lines 683--684
+Underfull \hbox (badness 5119) in paragraph at lines 688--689
 \T1/cmr/m/n/12 mé-to-do que de-be im-ple-men-tar ca-da
  []
 
-LaTeX Info: Redefining \. on input line 686.
-LaTeX Info: Redefining \% on input line 686.
-[167]
-Underfull \hbox (badness 10000) in paragraph at lines 713--714
+
+
+LaTeX Info: Redefining \. on input line 691.
+LaTeX Info: Redefining \% on input line 691.
+[168]
+Underfull \hbox (badness 10000) in paragraph at lines 718--719
 []\T1/cmr/bx/n/12 LanguageItem(String, String,
  []
 
 
-Underfull \hbox (badness 2343) in paragraph at lines 713--714
+Underfull \hbox (badness 2343) in paragraph at lines 718--719
 \T1/cmr/bx/n/12 String)\T1/cmr/m/n/12 : cons-truc-tor que ini-cia-li-za el
  []
 
-LaTeX Info: Redefining \. on input line 723.
-LaTeX Info: Redefining \% on input line 723.
-[168]
-Underfull \hbox (badness 3690) in paragraph at lines 747--748
+LaTeX Info: Redefining \. on input line 728.
+LaTeX Info: Redefining \% on input line 728.
+[169]
+Underfull \hbox (badness 3690) in paragraph at lines 752--753
 []\T1/cmr/bx/n/12 LanguageListCell()\T1/cmr/m/n/12 : cons-truc-tor que
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 748--749
+Underfull \hbox (badness 10000) in paragraph at lines 753--754
 []\T1/cmr/bx/n/12 updateItem(LanguageItem, boo-
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 749--750
-[]\T1/cmr/bx/n/12 inicializarComponentes()\T1/cmr/m/n/12 : con-fi-gu-ra
- []
-
-LaTeX Info: Redefining \. on input line 752.
-LaTeX Info: Redefining \% on input line 752.
-[169]
-Underfull \hbox (badness 10000) in paragraph at lines 781--782
-[]\T1/cmr/bx/n/12 getOrCreateTab(TabPane, Class,
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 782--783
-[]\T1/cmr/bx/n/12 getOrCreateTab(TabPane, Class,
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 782--783
-\T1/cmr/bx/n/12 String, Ob-ject, String, String)\T1/cmr/m/n/12 :
- []
-
-
-Overfull \hbox (6.27135pt too wide) in paragraph at lines 783--784
-[]\T1/cmr/bx/n/12 configurarMenuContextual(TabPane,
- []
-
-
-Underfull \hbox (badness 1221) in paragraph at lines 783--784
-\T1/cmr/bx/n/12 Re-sour-ce-Bund-le)\T1/cmr/m/n/12 : con-fi-gu-ra el me-nú
- []
-
-
-Overfull \hbox (2.8999pt too wide) in paragraph at lines 784--785
-[]\T1/cmr/bx/n/12 reasignarNumerosGrupos(TabPane)\T1/cmr/m/n/12 :
- []
-
-
+LaTeX Info: Redefining \. on input line 756.
+LaTeX Info: Redefining \% on input line 756.
+[170]
 Underfull \hbox (badness 10000) in paragraph at lines 785--786
-[]\T1/cmr/bx/n/12 crearGrupoGramatica(TabPane,
+[]\T1/cmr/bx/n/12 getOrCreateTab(TabPane, Class,
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 786--787
+[]\T1/cmr/bx/n/12 getOrCreateTab(TabPane, Class,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 786--787
+\T1/cmr/bx/n/12 String, Ob-ject, String, String)\T1/cmr/m/n/12 :
+ []
+
+
+Overfull \hbox (31.29161pt too wide) in paragraph at lines 787--788
+[]\T1/cmr/bx/n/12 asignarElementoANuevoGrupo(TabPane,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 788--789
+[]\T1/cmr/bx/n/12 contarGruposActivos(TabPane)\T1/cmr/m/n/12 :
+ []
+
+
+Overfull \hbox (2.76521pt too wide) in paragraph at lines 791--792
+[]\T1/cmr/bx/n/12 obtenerGrupoDeElemento(TabPane,
+ []
+
+
+Overfull \hbox (51.72412pt too wide) in paragraph at lines 792--793
+[]\T1/cmr/bx/n/12 asignarSimuladorAGrupoDeEditor(TabPane,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 793--794
+[]\T1/cmr/bx/n/12 calcularPosicionInsercion(TabPane,
+ []
+
+
+Underfull \hbox (badness 5490) in paragraph at lines 793--794
+\T1/cmr/bx/n/12 Class, String, String)\T1/cmr/m/n/12 : cal-cu-la la
+ []
+
+
+Underfull \hbox (badness 4366) in paragraph at lines 793--794
+\T1/cmr/m/n/12 po-si-ción de in-ser-ción de una nue-va
+ []
+
+
+Overfull \hbox (83.56071pt too wide) in paragraph at lines 794--795
+[]\T1/cmr/bx/n/12 calcularPosicionSeguaDespuesDelMenu(TabPane)\T1/cmr/m/n/12 :
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 795--796
+[]\T1/cmr/bx/n/12 isPestañaHijaDeElemento(String,
+ []
+
+
+Underfull \hbox (badness 3179) in paragraph at lines 796--797
+[]\T1/cmr/bx/n/12 isEditorContent(Object)\T1/cmr/m/n/12 : ve-ri-fi-ca si
+ []
+
+
+Underfull \hbox (badness 1264) in paragraph at lines 798--799
+[]\T1/cmr/bx/n/12 hasTab(TabPane, Class)\T1/cmr/m/n/12 : ve-ri-fi-ca si
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 799--800
+[]\T1/cmr/bx/n/12 closeChildTabs(TabPane, String)\T1/cmr/m/n/12 :
+ []
+
+
+Underfull \hbox (badness 1057) in paragraph at lines 799--800
+\T1/cmr/m/n/12 cie-rra to-das las pes-ta-ñas hi-jas de un
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 800--801
+[]\T1/cmr/bx/n/12 closeAllDescendantTabs(TabPane,
+ []
+
+
+Overfull \hbox (64.94724pt too wide) in paragraph at lines 801--802
+[]\T1/cmr/bx/n/12 reasignarNumerosGruposGramatica(TabPane)\T1/cmr/m/n/12 :
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 802--803
 []\T1/cmr/bx/n/12 setResourceBundle(TabPane, Re-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 787--788
-[]\T1/cmr/bx/n/12 renumerarGrupos(TabPane)\T1/cmr/m/n/12 : re-nu-
+Underfull \hbox (badness 10000) in paragraph at lines 803--804
+[]\T1/cmr/bx/n/12 obtenerNumeroGrupo(TabPane,
  []
 
 
-Overfull \hbox (16.53687pt too wide) in paragraph at lines 788--789
-[]\T1/cmr/bx/n/12 limpiarRelacionesHuérfanas(TabPane)\T1/cmr/m/n/12 :
+Overfull \hbox (6.16718pt too wide) in paragraph at lines 804--805
+[]\T1/cmr/bx/n/12 eliminarElementoDeGrupo(TabPane,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 789--790
-[]\T1/cmr/bx/n/12 obtenerGruposActivos(TabPane)\T1/cmr/m/n/12 :
+Underfull \hbox (badness 10000) in paragraph at lines 806--807
+[]\T1/cmr/bx/n/12 asignarElementoAGrupo(TabPane,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 790--791
-[]\T1/cmr/bx/n/12 imprimirEstadoTabPane(TabPane)\T1/cmr/m/n/12 :
+Overfull \hbox (6.27135pt too wide) in paragraph at lines 807--808
+[]\T1/cmr/bx/n/12 configurarMenuContextual(TabPane,
  []
 
-LaTeX Info: Redefining \. on input line 793.
-LaTeX Info: Redefining \% on input line 793.
-[170]
-Underfull \hbox (badness 10000) in paragraph at lines 815--816
+
+Underfull \hbox (badness 1221) in paragraph at lines 807--808
+\T1/cmr/bx/n/12 Re-sour-ce-Bund-le)\T1/cmr/m/n/12 : con-fi-gu-ra el me-nú
+ []
+
+
+Overfull \hbox (4.133pt too wide) in paragraph at lines 808--809
+[]\T1/cmr/bx/n/12 actualizarMenuContextual(TabPane,
+ []
+
+
+Underfull \hbox (badness 1609) in paragraph at lines 808--809
+\T1/cmr/bx/n/12 Re-sour-ce-Bund-le)\T1/cmr/m/n/12 : ac-tua-li-za el me-nú
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 809--810
+[]\T1/cmr/bx/n/12 actualizarIdsRelacionados(TabPane,
+ []
+
+
+Overfull \hbox (3.3304pt too wide) in paragraph at lines 810--811
+[]\T1/cmr/bx/n/12 actualizarTitulosPestañas(TabPane)\T1/cmr/m/n/12 :
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 811--812
+[]\T1/cmr/bx/n/12 debugTabPaneState(TabPane)\T1/cmr/m/n/12 :
+ []
+
+
+Underfull \hbox (badness 1924) in paragraph at lines 811--812
+\T1/cmr/m/n/12 im-pri-me el es-ta-do del Tab-Pa-ne pa-ra
+ []
+
+
+Overfull \hbox (63.65866pt too wide) in paragraph at lines 812--813
+[]\T1/cmr/bx/n/12 moverGrupoEntreVentanasMejorado(TabPane,
+ []
+
+LaTeX Info: Redefining \. on input line 817.
+LaTeX Info: Redefining \% on input line 817.
+[171]
+Overfull \vbox (788.81479pt too high) has occurred while \output is active []
+
+
+
+LaTeX Info: Redefining \. on input line 817.
+LaTeX Info: Redefining \% on input line 817.
+[172]
+Underfull \hbox (badness 10000) in paragraph at lines 839--840
 []\T1/cmr/bx/n/12 scheduler\T1/cmr/m/n/12 : Sche-du-le-dE-xe-cu-tor-Ser-vi-ce
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 826--827
-[]\T1/cmr/bx/n/12 repararInconsistencias(TabPane,
+Overfull \hbox (12.8989pt too wide) in paragraph at lines 849--850
+[]\T1/cmr/bx/n/12 validarConsistenciaTabPane(TabPane,
  []
 
 
-Underfull \hbox (badness 4048) in paragraph at lines 826--827
-\T1/cmr/bx/n/12 Tab-Pa-neIn-fo)\T1/cmr/m/n/12 : re-pa-ra in-con-sis-ten-cias
+Underfull \hbox (badness 10000) in paragraph at lines 850--851
+[]\T1/cmr/bx/n/12 forzarValidacion(TabPane)\T1/cmr/m/n/12 : fuer-za
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 829--830
-[]\T1/cmr/bx/n/12 imprimirEstadoTabPane(TabPane)\T1/cmr/m/n/12 :
+Overfull \hbox (2.38062pt too wide) in paragraph at lines 853--854
+[]\T1/cmr/bx/n/12 setMovimientoEnProgreso(boolean)\T1/cmr/m/n/12 :
  []
 
-LaTeX Info: Redefining \. on input line 843.
-LaTeX Info: Redefining \% on input line 843.
-[171]
-LaTeX Info: Redefining \. on input line 843.
-LaTeX Info: Redefining \% on input line 843.
- [172]
-Overfull \hbox (1.38922pt too wide) in paragraph at lines 872--873
+
+Overfull \hbox (34.17976pt too wide) in paragraph at lines 854--855
+[]\T1/cmr/bx/n/12 reiniciarContadorReparaciones(TabPane)\T1/cmr/m/n/12 :
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 855--856
+[]\T1/cmr/bx/n/12 reiniciarTodosLosContadores()\T1/cmr/m/n/12 :
+ []
+
+LaTeX Info: Redefining \. on input line 868.
+LaTeX Info: Redefining \% on input line 868.
+[173]
+LaTeX Info: Redefining \. on input line 868.
+LaTeX Info: Redefining \% on input line 868.
+ [174]
+Overfull \hbox (1.38922pt too wide) in paragraph at lines 897--898
 []\T1/cmr/bx/n/12 SecondaryWindow(ResourceBundle,
  []
 
 
-Underfull \hbox (badness 4479) in paragraph at lines 876--877
-[]\T1/cmr/bx/n/12 setupDragAndDrop()\T1/cmr/m/n/12 : con-fi-gu-ra las
+Underfull \hbox (badness 10000) in paragraph at lines 899--900
+[]\T1/cmr/bx/n/12 moveGroupToWindow(TabPane,
  []
 
+
+Underfull \hbox (badness 4048) in paragraph at lines 899--900
+\T1/cmr/bx/n/12 String, Tab)\T1/cmr/m/n/12 : mue-ve un gru-po de
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 904--905
+[]\T1/cmr/bx/n/12 actualizarIdioma(ResourceBundle)\T1/cmr/m/n/12 :
+ []
+
+LaTeX Info: Redefining \. on input line 913.
+LaTeX Info: Redefining \% on input line 913.
+[175]
+LaTeX Info: Redefining \. on input line 913.
+LaTeX Info: Redefining \% on input line 913.
+ [176]
+<figuras/Cap9/diagrama_utils.png, id=3596, 735.74875pt x 533.995pt>
+File: figuras/Cap9/diagrama_utils.png Graphic file (type png)
+<use figuras/Cap9/diagrama_utils.png>
+Package pdftex.def Info: figuras/Cap9/diagrama_utils.png  used on input line 93
+1.
+(pdftex.def)             Requested size: 409.71692pt x 297.37296pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 
-LaTeX Info: Redefining \. on input line 891.
-LaTeX Info: Redefining \% on input line 891.
-[173]
-LaTeX Info: Redefining \. on input line 891.
-LaTeX Info: Redefining \% on input line 891.
- [174]
+LaTeX Info: Redefining \. on input line 935.
+LaTeX Info: Redefining \% on input line 935.
+[177]
 
-LaTeX Info: Redefining \. on input line 899.
-LaTeX Info: Redefining \% on input line 899.
-[175]
-<figuras/Cap9/diagrama_utils.png, id=3575, 735.74875pt x 533.995pt>
-File: figuras/Cap9/diagrama_utils.png Graphic file (type png)
-<use figuras/Cap9/diagrama_utils.png>
-Package pdftex.def Info: figuras/Cap9/diagrama_utils.png  used on input line 90
-9.
-(pdftex.def)             Requested size: 409.71692pt x 297.37296pt.
+LaTeX Warning: Citation 'gamma1995design' on page 178 undefined on input line 9
+39.
 
 
-LaTeX Warning: Citation 'gamma1995design' on page 176 undefined on input line 9
-17.
+LaTeX Warning: Citation 'gamma1995design' on page 178 undefined on input line 9
+40.
 
 
-LaTeX Warning: Citation 'gamma1995design' on page 176 undefined on input line 9
-18.
+LaTeX Warning: Citation 'gamma1995design' on page 178 undefined on input line 9
+41.
+
+
+LaTeX Warning: Citation 'gamma1995design' on page 178 undefined on input line 9
+42.
 
 
 
-LaTeX Info: Redefining \. on input line 919.
-LaTeX Info: Redefining \% on input line 919.
-[176 <./figuras/Cap9/diagrama_utils.png>]
-
-LaTeX Warning: Citation 'gamma1995design' on page 177 undefined on input line 9
-19.
-
-
-LaTeX Warning: Citation 'gamma1995design' on page 177 undefined on input line 9
-20.
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 967--968
+LaTeX Info: Redefining \. on input line 951.
+LaTeX Info: Redefining \% on input line 951.
+[178 <./figuras/Cap9/diagrama_utils.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 989--990
 []\T1/cmr/bx/n/12 EditorWindow(ResourceBundle)\T1/cmr/m/n/12 :
  []
 
 
-Underfull \hbox (badness 1275) in paragraph at lines 969--970
+Underfull \hbox (badness 1275) in paragraph at lines 991--992
 []\T1/cmr/bx/n/12 configurarAtajosTeclado(Scene)\T1/cmr/m/n/12 : es-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 973--974
-[]\T1/cmr/bx/n/12 removeEditorTab(Editor)\T1/cmr/m/n/12 : eli-mi-na
+Underfull \hbox (badness 1881) in paragraph at lines 992--993
+[]\T1/cmr/bx/n/12 findFirstTabInGroup(int)\T1/cmr/m/n/12 : en-cuen-tra
  []
 
 
+Underfull \hbox (badness 10000) in paragraph at lines 995--996
+[]\T1/cmr/bx/n/12 moveGroupToWindow(TabPane,
+ []
 
-LaTeX Info: Redefining \. on input line 976.
-LaTeX Info: Redefining \% on input line 976.
-[177]
-Underfull \hbox (badness 10000) in paragraph at lines 1007--1008
+
+Underfull \hbox (badness 4048) in paragraph at lines 995--996
+\T1/cmr/bx/n/12 String, Tab)\T1/cmr/m/n/12 : mue-ve un gru-po de
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 999--1000
+[]\T1/cmr/bx/n/12 abrirSimuladorEnEditorWindow()\T1/cmr/m/n/12 :
+ []
+
+
+Overfull \hbox (138.14882pt too wide) in paragraph at lines 1000--1001
+[]\T1/cmr/bx/n/12 cargarGramaticaYSimularDirectamenteEnEditorWindow()\T1/cmr/m/
+n/12 :
+ []
+
+
+Overfull \hbox (147.47154pt too wide) in paragraph at lines 1001--1002
+[]\T1/cmr/bx/n/12 crearSimuladorDirectoAlPaso6EnEditorWindow(Gramatica)\T1/cmr/
+m/n/12 :
+ []
+
+
+Overfull \hbox (96.89638pt too wide) in paragraph at lines 1005--1006
+[]\T1/cmr/bx/n/12 mostrarErroresValidacion(ObservableList<String>)\T1/cmr/m/n/1
+2 :
+ []
+
+LaTeX Info: Redefining \. on input line 1009.
+LaTeX Info: Redefining \% on input line 1009.
+[179]
+Overfull \vbox (175.81479pt too high) has occurred while \output is active []
+
+
+
+LaTeX Info: Redefining \. on input line 1009.
+LaTeX Info: Redefining \% on input line 1009.
+[180]
+Underfull \hbox (badness 10000) in paragraph at lines 1040--1041
 []\T1/cmr/bx/n/12 Editor(TabPane, Me-nu-Prin-ci-pal)\T1/cmr/m/n/12 :
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1009--1010
-[]\T1/cmr/bx/n/12 inicializarComponentes()\T1/cmr/m/n/12 : con-fi-gu-ra
+Underfull \hbox (badness 10000) in paragraph at lines 1042--1043
+[]\T1/cmr/bx/n/12 Editor(TabPane, Me-nu-Prin-ci-pal,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1021--1022
-[]\T1/cmr/bx/n/12 actualizarTextos(ResourceBundle)\T1/cmr/m/n/12 :
+Underfull \hbox (badness 10000) in paragraph at lines 1042--1043
+\T1/cmr/bx/n/12 Re-sour-ce-Bund-le)\T1/cmr/m/n/12 : cons-truc-tor con
  []
 
 
-Underfull \hbox (badness 7326) in paragraph at lines 1026--1027
+Underfull \hbox (badness 10000) in paragraph at lines 1043--1044
+[]\T1/cmr/bx/n/12 configurarRelacionesPadreHijo()\T1/cmr/m/n/12 :
+ []
+
+
+Underfull \hbox (badness 7326) in paragraph at lines 1047--1048
 []\T1/cmr/bx/n/12 setGramatica(Gramatica)\T1/cmr/m/n/12 : es-ta-ble-ce
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1028--1029
-[]\T1/cmr/bx/n/12 configurarRelacionesPadreHijo()\T1/cmr/m/n/12 :
+Underfull \hbox (badness 4492) in paragraph at lines 1048--1049
+[]\T1/cmr/bx/n/12 initialize()\T1/cmr/m/n/12 : mé-to-do de ini-cia-li-za-ción
  []
 
-LaTeX Info: Redefining \. on input line 1032.
-LaTeX Info: Redefining \% on input line 1032.
-[178]
-LaTeX Info: Redefining \. on input line 1032.
-LaTeX Info: Redefining \% on input line 1032.
- [179]
-LaTeX Info: Redefining \. on input line 1032.
-LaTeX Info: Redefining \% on input line 1032.
- [180]
-Underfull \hbox (badness 10000) in paragraph at lines 1062--1063
+
+Underfull \hbox (badness 10000) in paragraph at lines 1056--1057
+[]\T1/cmr/bx/n/12 actualizarTextos(ResourceBundle)\T1/cmr/m/n/12 :
+ []
+
+LaTeX Info: Redefining \. on input line 1061.
+LaTeX Info: Redefining \% on input line 1061.
+[181]
+Overfull \vbox (152.31479pt too high) has occurred while \output is active []
+
+
+
+LaTeX Info: Redefining \. on input line 1061.
+LaTeX Info: Redefining \% on input line 1061.
+[182]
+Underfull \hbox (badness 10000) in paragraph at lines 1091--1092
 []\T1/cmr/bx/n/12 PanelCreacionGramatica(Editor,
  []
 
 
-Underfull \hbox (badness 5203) in paragraph at lines 1067--1068
-[]\T1/cmr/bx/n/12 retrocederAlPasoAnterior()\T1/cmr/m/n/12 : na-ve-ga
+Underfull \hbox (badness 10000) in paragraph at lines 1092--1093
+[]\T1/cmr/bx/n/12 PanelCreacionGramatica(Editor,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1071--1072
+Underfull \hbox (badness 6910) in paragraph at lines 1092--1093
+\T1/cmr/bx/n/12 Tab-Pa-ne, Gra-ma-ti-ca, Me-nu-Prin-
+ []
+
+
+Underfull \hbox (badness 5622) in paragraph at lines 1092--1093
+\T1/cmr/bx/n/12 ci-pal, String)\T1/cmr/m/n/12 : cons-truc-tor con ID
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1093--1094
+[]\T1/cmr/bx/n/12 configurarRelacionesPadreHijo()\T1/cmr/m/n/12 :
+ []
+
+
+Underfull \hbox (badness 7326) in paragraph at lines 1096--1097
+[]\T1/cmr/bx/n/12 setGramatica(Gramatica)\T1/cmr/m/n/12 : es-ta-ble-ce
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1102--1103
 []\T1/cmr/bx/n/12 actualizarTextos(ResourceBundle)\T1/cmr/m/n/12 :
  []
 
-LaTeX Info: Redefining \. on input line 1074.
-LaTeX Info: Redefining \% on input line 1074.
-[181]
-Underfull \hbox (badness 2165) in paragraph at lines 1094--1095
+LaTeX Info: Redefining \. on input line 1106.
+LaTeX Info: Redefining \% on input line 1106.
+[183]
+Underfull \hbox (badness 2165) in paragraph at lines 1126--1127
 []\T1/cmr/bx/n/12 panelPadre\T1/cmr/m/n/12 : re-fe-ren-cia al Pa-nel-Crea-
  []
 
 
-Underfull \hbox (badness 1226) in paragraph at lines 1098--1099
+Underfull \hbox (badness 1226) in paragraph at lines 1130--1131
 []\T1/cmr/bx/n/12 btnCancelar\T1/cmr/m/n/12 : bo-tón pa-ra can-ce-lar la
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1102--1103
-[]\T1/cmr/bx/n/12 PanelCreacionGramaticaPaso1(
+Overfull \hbox (124.41467pt too wide) in paragraph at lines 1134--1135
+[]\T1/cmr/bx/n/12 PanelCreacionGramaticaPaso1(PanelCreacionGramatica,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1102--1103
-\T1/cmr/bx/n/12 Pa-nel-Crea-cion-Gra-ma-ti-ca, Re-sour-
+Underfull \hbox (badness 4492) in paragraph at lines 1136--1137
+[]\T1/cmr/bx/n/12 initialize()\T1/cmr/m/n/12 : mé-to-do de ini-cia-li-za-ción
  []
 
 
-Underfull \hbox (badness 1975) in paragraph at lines 1104--1105
-[]\T1/cmr/bx/n/12 configurarValidacion()\T1/cmr/m/n/12 : es-ta-ble-ce las
- []
-
-
-Underfull \hbox (badness 4595) in paragraph at lines 1106--1107
+Underfull \hbox (badness 4595) in paragraph at lines 1139--1140
 []\T1/cmr/bx/n/12 setDescripcion(String)\T1/cmr/m/n/12 : es-ta-ble-ce la
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1109--1110
-[]\T1/cmr/bx/n/12 btnSiguiente_action()\T1/cmr/m/n/12 : ma-ne-ja el
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 1111--1112
+Underfull \hbox (badness 10000) in paragraph at lines 1140--1141
 []\T1/cmr/bx/n/12 actualizarTextos(ResourceBundle)\T1/cmr/m/n/12 :
  []
 
-LaTeX Info: Redefining \. on input line 1114.
-LaTeX Info: Redefining \% on input line 1114.
-[182]
-Underfull \hbox (badness 2165) in paragraph at lines 1134--1135
+
+
+LaTeX Info: Redefining \. on input line 1143.
+LaTeX Info: Redefining \% on input line 1143.
+[184]
+Underfull \hbox (badness 2165) in paragraph at lines 1163--1164
 []\T1/cmr/bx/n/12 panelPadre\T1/cmr/m/n/12 : re-fe-ren-cia al Pa-nel-Crea-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1148--1149
-[]\T1/cmr/bx/n/12 asignarListaSimbolosTerminales(
+Overfull \hbox (124.41467pt too wide) in paragraph at lines 1173--1174
+[]\T1/cmr/bx/n/12 PanelCreacionGramaticaPaso2(PanelCreacionGramatica,
  []
 
 
-Underfull \hbox (badness 1810) in paragraph at lines 1148--1149
-\T1/cmr/bx/n/12 Ob-ser-va-ble-List<String>)\T1/cmr/m/n/12 : asig-na la
+Underfull \hbox (badness 4492) in paragraph at lines 1175--1176
+[]\T1/cmr/bx/n/12 initialize()\T1/cmr/m/n/12 : mé-to-do de ini-cia-li-za-ción
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1149--1150
-[]\T1/cmr/bx/n/12 asignarListaSimbolosNoTerminales(
+Underfull \hbox (badness 10000) in paragraph at lines 1176--1177
+[]\T1/cmr/bx/n/12 aplicarEstilosResponsivos()\T1/cmr/m/n/12 : apli-ca
  []
 
 
-Underfull \hbox (badness 1810) in paragraph at lines 1149--1150
-\T1/cmr/bx/n/12 Ob-ser-va-ble-List<String>)\T1/cmr/m/n/12 : asig-na la
+Overfull \hbox (150.96373pt too wide) in paragraph at lines 1179--1180
+[]\T1/cmr/bx/n/12 asignarListaSimbolosNoTerminales(ObservableList<String>)\T1/c
+mr/m/n/12 :
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1152--1153
-[]\T1/cmr/bx/n/12 btnSiguiente_action()\T1/cmr/m/n/12 : ma-ne-ja el
+Overfull \hbox (133.66241pt too wide) in paragraph at lines 1180--1181
+[]\T1/cmr/bx/n/12 asignarListaSimbolosTerminales(ObservableList<String>)\T1/cmr
+/m/n/12 :
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1155--1156
+Underfull \hbox (badness 10000) in paragraph at lines 1181--1182
 []\T1/cmr/bx/n/12 actualizarTextos(ResourceBundle)\T1/cmr/m/n/12 :
  []
 
 
-Underfull \vbox (badness 10000) has occurred while \output is active []
 
-
-
-LaTeX Info: Redefining \. on input line 1158.
-LaTeX Info: Redefining \% on input line 1158.
-[183]
-LaTeX Info: Redefining \. on input line 1158.
-LaTeX Info: Redefining \% on input line 1158.
- [184]
-Underfull \hbox (badness 2165) in paragraph at lines 1178--1179
-[]\T1/cmr/bx/n/12 panelPadre\T1/cmr/m/n/12 : re-fe-ren-cia al Pa-nel-Crea-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 1187--1188
-[]\T1/cmr/bx/n/12 PanelCreacionGramaticaPaso3(
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 1188--1189
-[]\T1/cmr/bx/n/12 inicializarPanelProducciones()\T1/cmr/m/n/12 :
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 1191--1192
-[]\T1/cmr/bx/n/12 asignarProducciones( Ob-ser-va-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 1191--1192
-\T1/cmr/bx/n/12 ble-List<Produccion>)\T1/cmr/m/n/12 : asig-na las
- []
-
-
-Underfull \hbox (badness 7796) in paragraph at lines 1192--1193
-[]\T1/cmr/bx/n/12 obtenerProducciones()\T1/cmr/m/n/12 : ob-tie-ne las
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 1193--1194
-[]\T1/cmr/bx/n/12 btnSiguiente_action()\T1/cmr/m/n/12 : ma-ne-ja el
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 1196--1197
-[]\T1/cmr/bx/n/12 actualizarTextos(ResourceBundle)\T1/cmr/m/n/12 :
- []
-
-LaTeX Info: Redefining \. on input line 1199.
-LaTeX Info: Redefining \% on input line 1199.
+LaTeX Info: Redefining \. on input line 1184.
+LaTeX Info: Redefining \% on input line 1184.
 [185]
-LaTeX Info: Redefining \. on input line 1199.
-LaTeX Info: Redefining \% on input line 1199.
+LaTeX Info: Redefining \. on input line 1184.
+LaTeX Info: Redefining \% on input line 1184.
  [186]
-Underfull \hbox (badness 2165) in paragraph at lines 1219--1220
+Underfull \hbox (badness 2165) in paragraph at lines 1204--1205
 []\T1/cmr/bx/n/12 panelPadre\T1/cmr/m/n/12 : re-fe-ren-cia al Pa-nel-Crea-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1227--1228
-\T1/cmr/bx/n/12 nel-Crea-cion-Gra-ma-ti-ca, Tab-Pa-ne)\T1/cmr/m/n/12 :
+Overfull \hbox (124.41467pt too wide) in paragraph at lines 1213--1214
+[]\T1/cmr/bx/n/12 PanelCreacionGramaticaPaso3(PanelCreacionGramatica,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1230--1231
-[]\T1/cmr/bx/n/12 mostrarResultadosValidacion()\T1/cmr/m/n/12 :
+Underfull \hbox (badness 4492) in paragraph at lines 1215--1216
+[]\T1/cmr/bx/n/12 initialize()\T1/cmr/m/n/12 : mé-to-do de ini-cia-li-za-ción
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1235--1236
+Overfull \hbox (96.80614pt too wide) in paragraph at lines 1216--1217
+[]\T1/cmr/bx/n/12 asignarProducciones(ObservableList<Produccion>)\T1/cmr/m/n/12
+ :
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1218--1219
 []\T1/cmr/bx/n/12 actualizarTextos(ResourceBundle)\T1/cmr/m/n/12 :
  []
 
-LaTeX Info: Redefining \. on input line 1238.
-LaTeX Info: Redefining \% on input line 1238.
+LaTeX Info: Redefining \. on input line 1221.
+LaTeX Info: Redefining \% on input line 1221.
 [187]
-Underfull \hbox (badness 2165) in paragraph at lines 1258--1259
+Underfull \hbox (badness 2165) in paragraph at lines 1241--1242
 []\T1/cmr/bx/n/12 panelPadre\T1/cmr/m/n/12 : re-fe-ren-cia al Pa-nel-Crea-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1264--1265
+Overfull \hbox (124.41467pt too wide) in paragraph at lines 1249--1250
+[]\T1/cmr/bx/n/12 PanelCreacionGramaticaPaso4(PanelCreacionGramatica,
+ []
+
+
+Underfull \hbox (badness 4492) in paragraph at lines 1251--1252
+[]\T1/cmr/bx/n/12 initialize()\T1/cmr/m/n/12 : mé-to-do de ini-cia-li-za-ción
+ []
+
+
+Overfull \hbox (5.61186pt too wide) in paragraph at lines 1252--1253
+[]\T1/cmr/bx/n/12 configurarValidacionSimboloInicial()\T1/cmr/m/n/12 :
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1254--1255
+[]\T1/cmr/bx/n/12 actualizarTextos(ResourceBundle)\T1/cmr/m/n/12 :
+ []
+
+LaTeX Info: Redefining \. on input line 1257.
+LaTeX Info: Redefining \% on input line 1257.
+[188]
+Underfull \hbox (badness 2165) in paragraph at lines 1277--1278
+[]\T1/cmr/bx/n/12 panelPadre\T1/cmr/m/n/12 : re-fe-ren-cia al Pa-nel-Crea-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1283--1284
 []\T1/cmr/bx/n/12 Componentes FXML\T1/cmr/m/n/12 : Com-bo-Box,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1268--1269
-[]\T1/cmr/bx/n/12 PanelProducciones( Pa-nel-Crea-
+Overfull \hbox (88.72061pt too wide) in paragraph at lines 1287--1288
+[]\T1/cmr/bx/n/12 PanelProducciones(PanelCreacionGramaticaPaso3,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1268--1269
-\T1/cmr/bx/n/12 cion-Gra-ma-ti-ca-Pa-so3, Ob-ser-va-
+Underfull \hbox (badness 4492) in paragraph at lines 1289--1290
+[]\T1/cmr/bx/n/12 initialize()\T1/cmr/m/n/12 : mé-to-do de ini-cia-li-za-ción
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1268--1269
-\T1/cmr/bx/n/12 ble-List<Produccion>, Tab-Pa-ne)\T1/cmr/m/n/12 :
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 1270--1271
-[]\T1/cmr/bx/n/12 inicializarComponentes()\T1/cmr/m/n/12 : con-fi-gu-ra
- []
-
-
-Underfull \hbox (badness 1454) in paragraph at lines 1272--1273
-[]\T1/cmr/bx/n/12 actualizarListasSimbolos()\T1/cmr/m/n/12 : ac-tua-li-za
- []
-
-
-Underfull \hbox (badness 5652) in paragraph at lines 1274--1275
-[]\T1/cmr/bx/n/12 btnModificar_action()\T1/cmr/m/n/12 : mo-di-fi-ca la
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 1281--1282
+Underfull \hbox (badness 10000) in paragraph at lines 1290--1291
 []\T1/cmr/bx/n/12 actualizarTextos(ResourceBundle)\T1/cmr/m/n/12 :
  []
 
-
-
-LaTeX Info: Redefining \. on input line 1284.
-LaTeX Info: Redefining \% on input line 1284.
-[188]
-LaTeX Info: Redefining \. on input line 1284.
-LaTeX Info: Redefining \% on input line 1284.
- [189]
-Underfull \hbox (badness 2165) in paragraph at lines 1304--1305
+LaTeX Info: Redefining \. on input line 1293.
+LaTeX Info: Redefining \% on input line 1293.
+[189]
+Underfull \hbox (badness 2165) in paragraph at lines 1313--1314
 []\T1/cmr/bx/n/12 panelPadre\T1/cmr/m/n/12 : re-fe-ren-cia al Pa-nel-Crea-
  []
 
 
-Underfull \hbox (badness 1990) in paragraph at lines 1307--1308
+Underfull \hbox (badness 1990) in paragraph at lines 1316--1317
 []\T1/cmr/bx/n/12 simbolosTemporales\T1/cmr/m/n/12 : co-pia tem-po-ral
  []
 
 
-Underfull \hbox (badness 1158) in paragraph at lines 1315--1316
-\T1/cmr/bx/n/12 ble-List<String>, Tab-Pa-ne, Pa-nel-
+Overfull \hbox (90.76595pt too wide) in paragraph at lines 1324--1325
+[]\T1/cmr/bx/n/12 PanelSimbolosTerminales(ObservableList<String>,
  []
 
 
-Underfull \hbox (badness 1406) in paragraph at lines 1315--1316
-\T1/cmr/bx/n/12 Crea-cion-Gra-ma-ti-ca-Pa-so2)\T1/cmr/m/n/12 : cons-truc-
+Overfull \hbox (90.76595pt too wide) in paragraph at lines 1325--1326
+[]\T1/cmr/bx/n/12 PanelSimbolosTerminales(ObservableList<String>,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1317--1318
-[]\T1/cmr/bx/n/12 inicializarComponentes()\T1/cmr/m/n/12 : con-fi-gu-ra
+Underfull \hbox (badness 4492) in paragraph at lines 1327--1328
+[]\T1/cmr/bx/n/12 initialize()\T1/cmr/m/n/12 : mé-to-do de ini-cia-li-za-ción
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1320--1321
-[]\T1/cmr/bx/n/12 actualizarListaSimbolos()\T1/cmr/m/n/12 : ac-tua-li-za
+Underfull \hbox (badness 1360) in paragraph at lines 1328--1329
+\T1/cmr/m/n/12 ra bo-to-nes pa-ra sím-bo-los pre-de-fi-ni-dos
  []
 
 
-Underfull \hbox (badness 6412) in paragraph at lines 1322--1323
-[]\T1/cmr/bx/n/12 btnModificar_action()\T1/cmr/m/n/12 : mo-di-fi-ca el
+Underfull \hbox (badness 10000) in paragraph at lines 1329--1330
+[]\T1/cmr/bx/n/12 agregarSimbolo(String)\T1/cmr/m/n/12 : agre-ga un
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1327--1328
+Underfull \hbox (badness 10000) in paragraph at lines 1331--1332
 []\T1/cmr/bx/n/12 actualizarTextos(ResourceBundle)\T1/cmr/m/n/12 :
  []
 
-
-
-LaTeX Info: Redefining \. on input line 1330.
-LaTeX Info: Redefining \% on input line 1330.
+LaTeX Info: Redefining \. on input line 1334.
+LaTeX Info: Redefining \% on input line 1334.
 [190]
-LaTeX Info: Redefining \. on input line 1330.
-LaTeX Info: Redefining \% on input line 1330.
+LaTeX Info: Redefining \. on input line 1334.
+LaTeX Info: Redefining \% on input line 1334.
  [191]
-Underfull \hbox (badness 2165) in paragraph at lines 1350--1351
+Underfull \hbox (badness 2165) in paragraph at lines 1354--1355
 []\T1/cmr/bx/n/12 panelPadre\T1/cmr/m/n/12 : re-fe-ren-cia al Pa-nel-Crea-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1352--1353
+Underfull \hbox (badness 10000) in paragraph at lines 1356--1357
 []\T1/cmr/bx/n/12 simbolosNoTerminales\T1/cmr/m/n/12 : Ob-ser-va-ble-
  []
 
 
-Underfull \hbox (badness 1990) in paragraph at lines 1353--1354
+Underfull \hbox (badness 1990) in paragraph at lines 1357--1358
 []\T1/cmr/bx/n/12 simbolosTemporales\T1/cmr/m/n/12 : co-pia tem-po-ral
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1360--1361
-[]\T1/cmr/bx/n/12 PanelSimbolosNoTerminales( Ob-
+Overfull \hbox (108.06726pt too wide) in paragraph at lines 1364--1365
+[]\T1/cmr/bx/n/12 PanelSimbolosNoTerminales(ObservableList<String>,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1360--1361
-\T1/cmr/bx/n/12 ser-va-ble-List<String>, Tab-Pa-ne,
+Overfull \hbox (108.06726pt too wide) in paragraph at lines 1365--1366
+[]\T1/cmr/bx/n/12 PanelSimbolosNoTerminales(ObservableList<String>,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1360--1361
-\T1/cmr/bx/n/12 Pa-nel-Crea-cion-Gra-ma-ti-ca-Pa-so2)\T1/cmr/m/n/12 :
+Underfull \hbox (badness 4492) in paragraph at lines 1367--1368
+[]\T1/cmr/bx/n/12 initialize()\T1/cmr/m/n/12 : mé-to-do de ini-cia-li-za-ción
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1362--1363
-[]\T1/cmr/bx/n/12 inicializarComponentes()\T1/cmr/m/n/12 : con-fi-gu-ra
+Underfull \hbox (badness 1360) in paragraph at lines 1368--1369
+\T1/cmr/m/n/12 ra bo-to-nes pa-ra sím-bo-los pre-de-fi-ni-dos
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1364--1365
-[]\T1/cmr/bx/n/12 actualizarListaSimbolos()\T1/cmr/m/n/12 : ac-tua-li-za
- []
-
-
-Underfull \hbox (badness 6412) in paragraph at lines 1366--1367
-[]\T1/cmr/bx/n/12 btnModificar_action()\T1/cmr/m/n/12 : mo-di-fi-ca el
+Underfull \hbox (badness 10000) in paragraph at lines 1369--1370
+[]\T1/cmr/bx/n/12 agregarSimbolo(String)\T1/cmr/m/n/12 : agre-ga un
  []
 
 
@@ -3880,20 +4017,18 @@ Underfull \hbox (badness 10000) in paragraph at lines 1371--1372
 []\T1/cmr/bx/n/12 actualizarTextos(ResourceBundle)\T1/cmr/m/n/12 :
  []
 
-
-
 LaTeX Info: Redefining \. on input line 1374.
 LaTeX Info: Redefining \% on input line 1374.
 [192]
-LaTeX Info: Redefining \. on input line 1374.
-LaTeX Info: Redefining \% on input line 1374.
- [193]
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
-LaTeX Info: Redefining \. on input line 1384.
-LaTeX Info: Redefining \% on input line 1384.
-[194]
 
-LaTeX Warning: Citation 'burbeck1992applications' on page 195 undefined on inpu
+
+LaTeX Info: Redefining \. on input line 1379.
+LaTeX Info: Redefining \% on input line 1379.
+[193]
+
+LaTeX Warning: Citation 'burbeck1992applications' on page 194 undefined on inpu
 t line 1397.
 
 
@@ -3903,11 +4038,11 @@ i-ca [[]].
  []
 
 
-LaTeX Warning: Citation 'gamma1995design' on page 195 undefined on input line 1
+LaTeX Warning: Citation 'gamma1995design' on page 194 undefined on input line 1
 398.
 
 
-LaTeX Warning: Citation 'gamma1995design' on page 195 undefined on input line 1
+LaTeX Warning: Citation 'gamma1995design' on page 194 undefined on input line 1
 399.
 
 
@@ -3917,32 +4052,31 @@ Pro-duc-cio-nes, Pa-nel-Sim-bo-los-Ter-mi-na-les, etc.)
  []
 
 
-LaTeX Warning: Citation 'gamma1995design' on page 195 undefined on input line 1
+LaTeX Warning: Citation 'gamma1995design' on page 194 undefined on input line 1
 400.
 
 
-LaTeX Warning: Citation 'gamma1995design' on page 195 undefined on input line 1
+LaTeX Warning: Citation 'gamma1995design' on page 194 undefined on input line 1
 401.
 
+
+
+LaTeX Info: Redefining \. on input line 1402.
+LaTeX Info: Redefining \% on input line 1402.
+[194]
 
 LaTeX Warning: Citation 'gamma1995design' on page 195 undefined on input line 1
 402.
 
-<figuras/Cap9/diagrama_editor.png, id=3840, 1453.43pt x 1008.76875pt>
+<figuras/Cap9/diagrama_editor.png, id=3839, 1453.43pt x 1008.76875pt>
 File: figuras/Cap9/diagrama_editor.png Graphic file (type png)
 <use figuras/Cap9/diagrama_editor.png>
 Package pdftex.def Info: figuras/Cap9/diagrama_editor.png  used on input line 1
 407.
 (pdftex.def)             Requested size: 1453.42645pt x 1008.7663pt.
-
-
-LaTeX Info: Redefining \. on input line 1416.
-LaTeX Info: Redefining \% on input line 1416.
+LaTeX Info: Redefining \. on input line 1451.
+LaTeX Info: Redefining \% on input line 1451.
 [195]
-
-LaTeX Info: Redefining \. on input line 1416.
-LaTeX Info: Redefining \% on input line 1416.
-[196 <./figuras/Cap9/diagrama_editor.png>]
 Underfull \hbox (badness 3557) in paragraph at lines 1471--1472
 []\T1/cmr/bx/n/12 panelPadre\T1/cmr/m/n/12 : Pa-nel-Si-mu-la-dor-Desc que
  []
@@ -3958,10 +4092,6 @@ Underfull \hbox (badness 3029) in paragraph at lines 1480--1481
  []
 
 
-
-LaTeX Info: Redefining \. on input line 1485.
-LaTeX Info: Redefining \% on input line 1485.
-[197]
 Underfull \hbox (badness 3557) in paragraph at lines 1505--1506
 []\T1/cmr/bx/n/12 panelPadre\T1/cmr/m/n/12 : Pa-nel-Si-mu-la-dor-Desc que
  []
@@ -3976,9 +4106,18 @@ Underfull \hbox (badness 3029) in paragraph at lines 1514--1515
 \T1/cmr/m/n/12 ac-tua-li-za los tex-tos se-gún el idio-ma
  []
 
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
 LaTeX Info: Redefining \. on input line 1517.
 LaTeX Info: Redefining \% on input line 1517.
-[198]
+[196]
+
+LaTeX Info: Redefining \. on input line 1517.
+LaTeX Info: Redefining \% on input line 1517.
+[197 <./figuras/Cap9/diagrama_editor.png>]
 Underfull \hbox (badness 3557) in paragraph at lines 1537--1538
 []\T1/cmr/bx/n/12 panelPadre\T1/cmr/m/n/12 : Pa-nel-Si-mu-la-dor-Desc que
  []
@@ -3995,261 +4134,309 @@ Underfull \hbox (badness 3029) in paragraph at lines 1546--1547
 
 LaTeX Info: Redefining \. on input line 1549.
 LaTeX Info: Redefining \% on input line 1549.
-[199]
+[198]
 Underfull \hbox (badness 3557) in paragraph at lines 1569--1570
 []\T1/cmr/bx/n/12 panelPadre\T1/cmr/m/n/12 : Pa-nel-Si-mu-la-dor-Desc que
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1578--1579
+Underfull \hbox (badness 10000) in paragraph at lines 1579--1580
+[]\T1/cmr/bx/n/12 reordenarIndicesFuncionesError()\T1/cmr/m/n/12 :
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1580--1581
 []\T1/cmr/bx/n/12 actualizarTextos(ResourceBundle)\T1/cmr/m/n/12 :
  []
 
 
-Underfull \hbox (badness 3029) in paragraph at lines 1578--1579
+Underfull \hbox (badness 3029) in paragraph at lines 1580--1581
 \T1/cmr/m/n/12 ac-tua-li-za los tex-tos se-gún el idio-ma
  []
 
-
-Underfull \hbox (badness 3557) in paragraph at lines 1601--1602
+LaTeX Info: Redefining \. on input line 1583.
+LaTeX Info: Redefining \% on input line 1583.
+[199]
+Underfull \hbox (badness 3557) in paragraph at lines 1603--1604
 []\T1/cmr/bx/n/12 panelPadre\T1/cmr/m/n/12 : Pa-nel-Si-mu-la-dor-Desc que
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1610--1611
+Overfull \hbox (6.30605pt too wide) in paragraph at lines 1612--1613
+[]\T1/cmr/bx/n/12 funcionErrorToString(FuncionError)\T1/cmr/m/n/12 :
+ []
+
+
+Underfull \hbox (badness 5908) in paragraph at lines 1615--1616
+[]\T1/cmr/bx/n/12 getFuncionErrorSeleccionada()\T1/cmr/m/n/12 : ob-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1617--1618
 []\T1/cmr/bx/n/12 actualizarTextos(ResourceBundle)\T1/cmr/m/n/12 :
  []
 
 
-Underfull \hbox (badness 3029) in paragraph at lines 1610--1611
+Underfull \hbox (badness 3029) in paragraph at lines 1617--1618
 \T1/cmr/m/n/12 ac-tua-li-za los tex-tos se-gún el idio-ma
  []
 
-
-Underfull \vbox (badness 2556) has occurred while \output is active []
-
-
-
-LaTeX Info: Redefining \. on input line 1613.
-LaTeX Info: Redefining \% on input line 1613.
+LaTeX Info: Redefining \. on input line 1620.
+LaTeX Info: Redefining \% on input line 1620.
 [200]
-Underfull \hbox (badness 3557) in paragraph at lines 1633--1634
+Underfull \hbox (badness 3557) in paragraph at lines 1640--1641
 []\T1/cmr/bx/n/12 panelPadre\T1/cmr/m/n/12 : Pa-nel-Si-mu-la-dor-Desc que
  []
 
 
-Overfull \hbox (76.11116pt too wide) in paragraph at lines 1640--1641
-[]\T1/cmr/bx/n/12 PanelNuevaSimDescPaso6(PanelSimuladorDesc)\T1/cmr/m/n/12 :
+Overfull \hbox (13.07246pt too wide) in paragraph at lines 1647--1648
+[]\T1/cmr/bx/n/12 PanelNuevaSimDescPaso6(Gramatica,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1642--1643
+Underfull \hbox (badness 10000) in paragraph at lines 1647--1648
+\T1/cmr/bx/n/12 Pa-nel-Si-mu-la-dor-Desc)\T1/cmr/m/n/12 : cons-truc-tor
+ []
+
+
+Overfull \hbox (17.83517pt too wide) in paragraph at lines 1648--1649
+[]\T1/cmr/bx/n/12 PanelNuevaSimDescPaso6(Gramatica)\T1/cmr/m/n/12 :
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1651--1652
 []\T1/cmr/bx/n/12 actualizarTextos(ResourceBundle)\T1/cmr/m/n/12 :
  []
 
 
-Underfull \hbox (badness 3029) in paragraph at lines 1642--1643
+Underfull \hbox (badness 3029) in paragraph at lines 1651--1652
 \T1/cmr/m/n/12 ac-tua-li-za los tex-tos se-gún el idio-ma
  []
 
-LaTeX Info: Redefining \. on input line 1645.
-LaTeX Info: Redefining \% on input line 1645.
+LaTeX Info: Redefining \. on input line 1654.
+LaTeX Info: Redefining \% on input line 1654.
 [201]
-Underfull \hbox (badness 10000) in paragraph at lines 1671--1672
+Underfull \hbox (badness 10000) in paragraph at lines 1680--1681
 []\T1/cmr/bx/n/12 tablaPredictivaExtendidaGlobal\T1/cmr/m/n/12 :
  []
 
 
-Underfull \hbox (badness 1072) in paragraph at lines 1671--1672
+Underfull \hbox (badness 1072) in paragraph at lines 1680--1681
 \T1/cmr/m/n/12 Ta-bla-Pre-dic-ti-va-Pa-so5 con fun-cio-nes de
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1677--1678
+Underfull \hbox (badness 10000) in paragraph at lines 1686--1687
 []\T1/cmr/bx/n/12 PanelSimuladorDesc(Gramatica,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1677--1678
+Underfull \hbox (badness 10000) in paragraph at lines 1686--1687
 \T1/cmr/bx/n/12 Tab-Pa-ne, Re-sour-ce-Bund-le)\T1/cmr/m/n/12 : cons-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1678--1679
+Underfull \hbox (badness 10000) in paragraph at lines 1687--1688
 []\T1/cmr/bx/n/12 PanelSimuladorDesc(Gramatica,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1679--1680
+Underfull \hbox (badness 10000) in paragraph at lines 1688--1689
+[]\T1/cmr/bx/n/12 PanelSimuladorDesc(Gramatica,
+ []
+
+
+Underfull \hbox (badness 5832) in paragraph at lines 1688--1689
+\T1/cmr/bx/n/12 Tab-Pa-ne, Me-nu-Prin-ci-pal, String,
+ []
+
+
+Overfull \hbox (11.24931pt too wide) in paragraph at lines 1689--1690
+[]\T1/cmr/bx/n/12 getTablaPredictivaExtendidaGlobal()\T1/cmr/m/n/12 :
+ []
+
+
+Overfull \hbox (136.75053pt too wide) in paragraph at lines 1690--1691
+[]\T1/cmr/bx/n/12 setTablaPredictivaExtendidaGlobal(TablaPredictivaPaso5)\T1/cm
+r/m/n/12 :
+ []
+
+
+Underfull \hbox (badness 7631) in paragraph at lines 1691--1692
+[]\T1/cmr/bx/n/12 getGramaticaOriginal()\T1/cmr/m/n/12 : ob-tie-ne la
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1692--1693
+[]\T1/cmr/bx/n/12 mostrarGramaticaOriginal()\T1/cmr/m/n/12 : mues-
+ []
+
+
+Underfull \hbox (badness 2503) in paragraph at lines 1695--1696
+[]\T1/cmr/bx/n/12 cerrarPestañaFuncionesError()\T1/cmr/m/n/12 : cie-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1700--1701
 []\T1/cmr/bx/n/12 configurarRelacionesPadreHijo()\T1/cmr/m/n/12 :
  []
 
 
-Overfull \hbox (51.02983pt too wide) in paragraph at lines 1680--1681
-[]\T1/cmr/bx/n/12 inicializarTablaPredictivaYFuncionesError()\T1/cmr/m/n/12 :
+Overfull \hbox (80.49069pt too wide) in paragraph at lines 1705--1706
+[]\T1/cmr/bx/n/12 actualizarTodosLosSimuladores(ResourceBundle)\T1/cmr/m/n/12 :
+
  []
 
-
-Overfull \hbox (11.24931pt too wide) in paragraph at lines 1684--1685
-[]\T1/cmr/bx/n/12 getTablaPredictivaExtendidaGlobal()\T1/cmr/m/n/12 :
- []
-
-LaTeX Info: Redefining \. on input line 1687.
-LaTeX Info: Redefining \% on input line 1687.
+LaTeX Info: Redefining \. on input line 1710.
+LaTeX Info: Redefining \% on input line 1710.
 [202]
-LaTeX Info: Redefining \. on input line 1687.
-LaTeX Info: Redefining \% on input line 1687.
+LaTeX Info: Redefining \. on input line 1710.
+LaTeX Info: Redefining \% on input line 1710.
  [203]
-Underfull \hbox (badness 1286) in paragraph at lines 1708--1709
+LaTeX Info: Redefining \. on input line 1710.
+LaTeX Info: Redefining \% on input line 1710.
+ [204]
+Underfull \hbox (badness 1286) in paragraph at lines 1731--1732
 []\T1/cmr/bx/n/12 tablaPredictiva\T1/cmr/m/n/12 : Ta-bla-Pre-dic-ti-va-Pa-so5
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1719--1720
+Underfull \hbox (badness 10000) in paragraph at lines 1742--1743
 []\T1/cmr/bx/n/12 PanelSimulacion(Gramatica, Re-
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 1720--1721
-[]\T1/cmr/bx/n/12 inicializarComponentes()\T1/cmr/m/n/12 : con-fi-gu-ra
- []
-
-
-Underfull \hbox (badness 1755) in paragraph at lines 1724--1725
-[]\T1/cmr/bx/n/12 procesarEntrada(String)\T1/cmr/m/n/12 : pro-ce-sa la
- []
-
-LaTeX Info: Redefining \. on input line 1727.
-LaTeX Info: Redefining \% on input line 1727.
-[204]
-Underfull \hbox (badness 1286) in paragraph at lines 1748--1749
+LaTeX Info: Redefining \. on input line 1746.
+LaTeX Info: Redefining \% on input line 1746.
+[205]
+Underfull \hbox (badness 1286) in paragraph at lines 1767--1768
 []\T1/cmr/bx/n/12 tablaPredictiva\T1/cmr/m/n/12 : Ta-bla-Pre-dic-ti-va-Pa-so5
  []
 
 
-Underfull \hbox (badness 1377) in paragraph at lines 1752--1753
+Underfull \hbox (badness 1377) in paragraph at lines 1771--1772
 []\T1/cmr/bx/n/12 historialPasos\T1/cmr/m/n/12 : Ob-ser-va-ble-List con el
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1758--1759
-[]\T1/cmr/bx/n/12 SimulacionFinal(Gramatica, Re-
+Underfull \hbox (badness 1735) in paragraph at lines 1777--1778
+[]\T1/cmr/bx/n/12 SimulacionFinal(Gramatica, Ta-bla-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1766--1767
+Underfull \hbox (badness 4266) in paragraph at lines 1779--1780
+[]\T1/cmr/bx/n/12 actualizarGrupoYTitulo()\T1/cmr/m/n/12 : ac-tua-li-za
+ []
+
+
+Underfull \hbox (badness 1845) in paragraph at lines 1780--1781
+[]\T1/cmr/bx/n/12 actualizarTitulosPestañas(int, boo-
+ []
+
+
+Underfull \hbox (badness 2351) in paragraph at lines 1781--1782
+[]\T1/cmr/bx/n/12 actualizarTitulosPestañas()\T1/cmr/m/n/12 : ac-tua-li-
+ []
+
+
+Underfull \hbox (badness 1097) in paragraph at lines 1783--1784
+[]\T1/cmr/bx/n/12 esHijaDeLaSimulacion(Tab)\T1/cmr/m/n/12 : ve-ri-fi-ca
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1789--1790
 []\T1/cmr/bx/n/12 actualizarTextos(ResourceBundle)\T1/cmr/m/n/12 :
  []
 
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-
-
-LaTeX Info: Redefining \. on input line 1769.
-LaTeX Info: Redefining \% on input line 1769.
-[205]
-LaTeX Info: Redefining \. on input line 1769.
-LaTeX Info: Redefining \% on input line 1769.
- [206]
-Overfull \hbox (1.13374pt too wide) in paragraph at lines 1794--1795
+LaTeX Info: Redefining \. on input line 1792.
+LaTeX Info: Redefining \% on input line 1792.
+[206]
+LaTeX Info: Redefining \. on input line 1792.
+LaTeX Info: Redefining \% on input line 1792.
+ [207]
+Overfull \hbox (1.13374pt too wide) in paragraph at lines 1817--1818
 []\T1/cmr/bx/n/12 PanelGramaticaOriginal(Gramatica,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1795--1796
+Underfull \hbox (badness 10000) in paragraph at lines 1819--1820
 []\T1/cmr/bx/n/12 actualizarTextos(ResourceBundle)\T1/cmr/m/n/12 :
  []
 
 
-Underfull \hbox (badness 3029) in paragraph at lines 1795--1796
+Underfull \hbox (badness 3029) in paragraph at lines 1819--1820
 \T1/cmr/m/n/12 ac-tua-li-za los tex-tos se-gún el idio-ma
  []
 
-LaTeX Info: Redefining \. on input line 1798.
-LaTeX Info: Redefining \% on input line 1798.
-[207]
-Underfull \hbox (badness 7415) in paragraph at lines 1819--1820
+LaTeX Info: Redefining \. on input line 1822.
+LaTeX Info: Redefining \% on input line 1822.
+[208]
+Underfull \hbox (badness 7415) in paragraph at lines 1843--1844
 []\T1/cmr/bx/n/12 paso4\T1/cmr/m/n/12 : Pa-nel-Nue-va-Sim-Desc-Pa-so4 que
  []
 
 
-Underfull \hbox (badness 3219) in paragraph at lines 1825--1826
+Underfull \hbox (badness 3219) in paragraph at lines 1849--1850
 \T1/cmr/bx/n/12 nel-Nue-va-Sim-Desc-Pa-so4, Re-sour-ce-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1828--1829
+Underfull \hbox (badness 10000) in paragraph at lines 1851--1852
 []\T1/cmr/bx/n/12 actualizarTextos(ResourceBundle)\T1/cmr/m/n/12 :
  []
 
 
-Underfull \hbox (badness 3029) in paragraph at lines 1828--1829
+Underfull \hbox (badness 3029) in paragraph at lines 1851--1852
 \T1/cmr/m/n/12 ac-tua-li-za los tex-tos se-gún el idio-ma
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 1860--1861
-[]\T1/cmr/bx/n/12 actualizarTextos(ResourceBundle)\T1/cmr/m/n/12 :
- []
-
-
-Underfull \hbox (badness 3029) in paragraph at lines 1860--1861
-\T1/cmr/m/n/12 ac-tua-li-za los tex-tos se-gún el idio-ma
- []
-
-
-
-LaTeX Info: Redefining \. on input line 1863.
-LaTeX Info: Redefining \% on input line 1863.
-[208]
-
-LaTeX Info: Redefining \. on input line 1874.
-LaTeX Info: Redefining \% on input line 1874.
+LaTeX Info: Redefining \. on input line 1854.
+LaTeX Info: Redefining \% on input line 1854.
 [209]
-<figuras/Cap9/diagrama_simulador2.png, id=4021, 1845.89626pt x 512.91624pt>
+
+LaTeX Info: Redefining \. on input line 1892.
+LaTeX Info: Redefining \% on input line 1892.
+[210]
+<figuras/Cap9/diagrama_simulador2.png, id=4043, 1845.89626pt x 512.91624pt>
 File: figuras/Cap9/diagrama_simulador2.png Graphic file (type png)
 <use figuras/Cap9/diagrama_simulador2.png>
 Package pdftex.def Info: figuras/Cap9/diagrama_simulador2.png  used on input li
-ne 1884.
+ne 1906.
 (pdftex.def)             Requested size: 1845.89177pt x 512.915pt.
 
 
-LaTeX Warning: Float too large for page by 24.48859pt on input line 1887.
+LaTeX Warning: Float too large for page by 24.48859pt on input line 1909.
 
 
-LaTeX Warning: Citation 'burbeck1992applications' on page 210 undefined on inpu
-t line 1892.
+LaTeX Warning: Citation 'burbeck1992applications' on page 211 undefined on inpu
+t line 1914.
 
 
-LaTeX Warning: Citation 'gamma1995design' on page 210 undefined on input line 1
-893.
+LaTeX Warning: Citation 'gamma1995design' on page 211 undefined on input line 1
+915.
 
 
-LaTeX Warning: Citation 'gamma1995design' on page 210 undefined on input line 1
-894.
+LaTeX Warning: Citation 'gamma1995design' on page 211 undefined on input line 1
+916.
 
 
-LaTeX Warning: Citation 'gamma1995design' on page 210 undefined on input line 1
-895.
+LaTeX Warning: Citation 'gamma1995design' on page 211 undefined on input line 1
+917.
 
 ) (./capitulos/10_Diseno_de_la_interfaz.tex
 
 LaTeX Info: Redefining \. on input line 1.
 LaTeX Info: Redefining \% on input line 1.
-[210]
+[211]
 
 LaTeX Info: Redefining \. on input line 1.
 LaTeX Info: Redefining \% on input line 1.
-[211 <./figuras/Cap9/diagrama_simulador2.png>]
-
-[212
-
-]
+[212 <./figuras/Cap9/diagrama_simulador2.png>]
 Cap\'{\i }tulo 10.
 )
 
-[213]
+[213
+
+]
 
 [214
 
@@ -4289,7 +4476,7 @@ work /
 LaTeX Info: Redefining \. on input line 349.
 LaTeX Info: Redefining \% on input line 349.
 [222]
-runsystem(latexminted cleantemp  --timestamp 20250910085537 FAD58DE7366495DB465
+runsystem(latexminted cleantemp  --timestamp 20250910094155 FAD58DE7366495DB465
 0CFEFAC2FCD61)...executed safely (allowed).
 
  (./main.aux
@@ -4302,15 +4489,15 @@ LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
  ***********
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 2BBC1FD8E4923193B9520A05EE07F40C;61249.
+(rerunfilecheck)             Checksum: FC4FD1654A59980E8556A26865ECE360;61264.
 Package logreq Info: Writing requests to 'main.run.xml'.
 \openout1 = `main.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 45414 strings out of 473190
- 870806 string characters out of 5715801
- 1814634 words of memory out of 5000000
+ 45432 strings out of 473190
+ 870950 string characters out of 5715801
+ 1814637 words of memory out of 5000000
  66312 multiletter control sequences out of 15000+600000
  607944 words of font info for 96 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -4337,10 +4524,10 @@ pe1/public/cm-super/sfrm1200.pfb></usr/local/texlive/2025/texmf-dist/fonts/type
 1/public/cm-super/sfti1000.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/
 public/cm-super/sfti1200.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/pu
 blic/cm-super/sftt1200.pfb>
-Output written on main.pdf (244 pages, 4041541 bytes).
+Output written on main.pdf (244 pages, 4045126 bytes).
 PDF statistics:
- 4552 PDF objects out of 5155 (max. 8388607)
- 4120 compressed objects within 42 object streams
- 1627 named destinations out of 1728 (max. 500000)
+ 4573 PDF objects out of 5155 (max. 8388607)
+ 4141 compressed objects within 42 object streams
+ 1645 named destinations out of 1728 (max. 500000)
  2640 words of extra memory for PDF output out of 10000 (max. 10000000)
 

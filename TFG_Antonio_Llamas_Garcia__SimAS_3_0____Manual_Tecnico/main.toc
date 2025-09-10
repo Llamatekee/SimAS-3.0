@@ -258,50 +258,50 @@
 \contentsline {subsubsection}{\numberline {9.2.2.9}Clase FilaTablaPredictiva}{157}{subsubsection.9.2.2.9}%
 \contentsline {subsubsection}{\numberline {9.2.2.10}Clase FuncionError}{159}{subsubsection.9.2.2.10}%
 \contentsline {subsubsection}{\numberline {9.2.2.11}Clase TablaPredictiva}{161}{subsubsection.9.2.2.11}%
-\contentsline {subsubsection}{\numberline {9.2.2.12}Clase TablaPredictivaPaso5}{162}{subsubsection.9.2.2.12}%
-\contentsline {subsubsection}{\numberline {9.2.2.13}Dependencias internas del paquete gramática}{165}{subsubsection.9.2.2.13}%
-\contentsline {subsubsection}{\numberline {9.2.2.14}Patrones de diseño en el paquete gramática}{166}{subsubsection.9.2.2.14}%
-\contentsline {subsection}{\numberline {9.2.3}Paquete utils}{167}{subsection.9.2.3}%
-\contentsline {subsubsection}{\numberline {9.2.3.1}Clases del paquete utils}{167}{subsubsection.9.2.3.1}%
-\contentsline {subsubsection}{\numberline {9.2.3.2}Clase ActualizableTextos}{167}{subsubsection.9.2.3.2}%
-\contentsline {subsubsection}{\numberline {9.2.3.3}Clase LanguageItem}{168}{subsubsection.9.2.3.3}%
-\contentsline {subsubsection}{\numberline {9.2.3.4}Clase LanguageListCell}{169}{subsubsection.9.2.3.4}%
-\contentsline {subsubsection}{\numberline {9.2.3.5}Clase TabManager}{170}{subsubsection.9.2.3.5}%
-\contentsline {subsubsection}{\numberline {9.2.3.6}Clase TabPaneMonitor}{171}{subsubsection.9.2.3.6}%
-\contentsline {subsubsection}{\numberline {9.2.3.7}Clase SecondaryWindow}{174}{subsubsection.9.2.3.7}%
-\contentsline {subsubsection}{\numberline {9.2.3.8}Dependencias internas del paquete utils}{175}{subsubsection.9.2.3.8}%
-\contentsline {subsubsection}{\numberline {9.2.3.9}Patrones de diseño en el paquete utils}{176}{subsubsection.9.2.3.9}%
-\contentsline {subsection}{\numberline {9.2.4}Paquete editor}{177}{subsection.9.2.4}%
-\contentsline {subsubsection}{\numberline {9.2.4.1}Clases del paquete editor}{177}{subsubsection.9.2.4.1}%
-\contentsline {subsubsection}{\numberline {9.2.4.2}Clase EditorWindow}{177}{subsubsection.9.2.4.2}%
-\contentsline {subsubsection}{\numberline {9.2.4.3}Clase Editor}{178}{subsubsection.9.2.4.3}%
-\contentsline {subsubsection}{\numberline {9.2.4.4}Clase PanelCreacionGramatica}{181}{subsubsection.9.2.4.4}%
-\contentsline {subsubsection}{\numberline {9.2.4.5}Clase PanelCreacionGramaticaPaso1}{182}{subsubsection.9.2.4.5}%
-\contentsline {subsubsection}{\numberline {9.2.4.6}Clase PanelCreacionGramaticaPaso2}{184}{subsubsection.9.2.4.6}%
-\contentsline {subsubsection}{\numberline {9.2.4.7}Clase PanelCreacionGramaticaPaso3}{185}{subsubsection.9.2.4.7}%
-\contentsline {subsubsection}{\numberline {9.2.4.8}Clase PanelCreacionGramaticaPaso4}{187}{subsubsection.9.2.4.8}%
-\contentsline {subsubsection}{\numberline {9.2.4.9}Clase PanelProducciones}{188}{subsubsection.9.2.4.9}%
+\contentsline {subsubsection}{\numberline {9.2.2.12}Clase TablaPredictivaPaso5}{163}{subsubsection.9.2.2.12}%
+\contentsline {subsubsection}{\numberline {9.2.2.13}Dependencias internas del paquete gramática}{166}{subsubsection.9.2.2.13}%
+\contentsline {subsubsection}{\numberline {9.2.2.14}Patrones de diseño en el paquete gramática}{167}{subsubsection.9.2.2.14}%
+\contentsline {subsection}{\numberline {9.2.3}Paquete utils}{168}{subsection.9.2.3}%
+\contentsline {subsubsection}{\numberline {9.2.3.1}Clases del paquete utils}{168}{subsubsection.9.2.3.1}%
+\contentsline {subsubsection}{\numberline {9.2.3.2}Clase ActualizableTextos}{169}{subsubsection.9.2.3.2}%
+\contentsline {subsubsection}{\numberline {9.2.3.3}Clase LanguageItem}{169}{subsubsection.9.2.3.3}%
+\contentsline {subsubsection}{\numberline {9.2.3.4}Clase LanguageListCell}{170}{subsubsection.9.2.3.4}%
+\contentsline {subsubsection}{\numberline {9.2.3.5}Clase TabManager}{171}{subsubsection.9.2.3.5}%
+\contentsline {subsubsection}{\numberline {9.2.3.6}Clase TabPaneMonitor}{173}{subsubsection.9.2.3.6}%
+\contentsline {subsubsection}{\numberline {9.2.3.7}Clase SecondaryWindow}{175}{subsubsection.9.2.3.7}%
+\contentsline {subsubsection}{\numberline {9.2.3.8}Dependencias internas del paquete utils}{177}{subsubsection.9.2.3.8}%
+\contentsline {subsubsection}{\numberline {9.2.3.9}Patrones de diseño en el paquete utils}{178}{subsubsection.9.2.3.9}%
+\contentsline {subsection}{\numberline {9.2.4}Paquete editor}{178}{subsection.9.2.4}%
+\contentsline {subsubsection}{\numberline {9.2.4.1}Clases del paquete editor}{179}{subsubsection.9.2.4.1}%
+\contentsline {subsubsection}{\numberline {9.2.4.2}Clase EditorWindow}{179}{subsubsection.9.2.4.2}%
+\contentsline {subsubsection}{\numberline {9.2.4.3}Clase Editor}{181}{subsubsection.9.2.4.3}%
+\contentsline {subsubsection}{\numberline {9.2.4.4}Clase PanelCreacionGramatica}{183}{subsubsection.9.2.4.4}%
+\contentsline {subsubsection}{\numberline {9.2.4.5}Clase PanelCreacionGramaticaPaso1}{184}{subsubsection.9.2.4.5}%
+\contentsline {subsubsection}{\numberline {9.2.4.6}Clase PanelCreacionGramaticaPaso2}{185}{subsubsection.9.2.4.6}%
+\contentsline {subsubsection}{\numberline {9.2.4.7}Clase PanelCreacionGramaticaPaso3}{187}{subsubsection.9.2.4.7}%
+\contentsline {subsubsection}{\numberline {9.2.4.8}Clase PanelCreacionGramaticaPaso4}{188}{subsubsection.9.2.4.8}%
+\contentsline {subsubsection}{\numberline {9.2.4.9}Clase PanelProducciones}{189}{subsubsection.9.2.4.9}%
 \contentsline {subsubsection}{\numberline {9.2.4.10}Clase PanelSimbolosTerminales}{190}{subsubsection.9.2.4.10}%
 \contentsline {subsubsection}{\numberline {9.2.4.11}Clase PanelSimbolosNoTerminales}{192}{subsubsection.9.2.4.11}%
 \contentsline {subsubsection}{\numberline {9.2.4.12}Dependencias internas del paquete editor}{194}{subsubsection.9.2.4.12}%
-\contentsline {subsubsection}{\numberline {9.2.4.13}Patrones de diseño en el paquete editor}{195}{subsubsection.9.2.4.13}%
-\contentsline {subsection}{\numberline {9.2.5}Paquete simulador}{197}{subsection.9.2.5}%
-\contentsline {subsubsection}{\numberline {9.2.5.1}Clases del paquete simulador}{197}{subsubsection.9.2.5.1}%
-\contentsline {subsubsection}{\numberline {9.2.5.2}Clase PanelNuevaSimDescPaso}{197}{subsubsection.9.2.5.2}%
-\contentsline {subsubsection}{\numberline {9.2.5.3}Clase PanelNuevaSimDescPaso1}{197}{subsubsection.9.2.5.3}%
+\contentsline {subsubsection}{\numberline {9.2.4.13}Patrones de diseño en el paquete editor}{194}{subsubsection.9.2.4.13}%
+\contentsline {subsection}{\numberline {9.2.5}Paquete simulador}{195}{subsection.9.2.5}%
+\contentsline {subsubsection}{\numberline {9.2.5.1}Clases del paquete simulador}{195}{subsubsection.9.2.5.1}%
+\contentsline {subsubsection}{\numberline {9.2.5.2}Interfaz PanelNuevaSimDescPaso}{195}{subsubsection.9.2.5.2}%
+\contentsline {subsubsection}{\numberline {9.2.5.3}Clase PanelNuevaSimDescPaso1}{196}{subsubsection.9.2.5.3}%
 \contentsline {subsubsection}{\numberline {9.2.5.4}Clase PanelNuevaSimDescPaso2}{198}{subsubsection.9.2.5.4}%
-\contentsline {subsubsection}{\numberline {9.2.5.5}Clase PanelNuevaSimDescPaso3}{199}{subsubsection.9.2.5.5}%
-\contentsline {subsubsection}{\numberline {9.2.5.6}Clase PanelNuevaSimDescPaso4}{200}{subsubsection.9.2.5.6}%
-\contentsline {subsubsection}{\numberline {9.2.5.7}Clase PanelNuevaSimDescPaso5}{201}{subsubsection.9.2.5.7}%
+\contentsline {subsubsection}{\numberline {9.2.5.5}Clase PanelNuevaSimDescPaso3}{198}{subsubsection.9.2.5.5}%
+\contentsline {subsubsection}{\numberline {9.2.5.6}Clase PanelNuevaSimDescPaso4}{199}{subsubsection.9.2.5.6}%
+\contentsline {subsubsection}{\numberline {9.2.5.7}Clase PanelNuevaSimDescPaso5}{200}{subsubsection.9.2.5.7}%
 \contentsline {subsubsection}{\numberline {9.2.5.8}Clase PanelNuevaSimDescPaso6}{201}{subsubsection.9.2.5.8}%
 \contentsline {subsubsection}{\numberline {9.2.5.9}Clase PanelSimuladorDesc}{202}{subsubsection.9.2.5.9}%
-\contentsline {subsubsection}{\numberline {9.2.5.10}Clase PanelSimulacion}{204}{subsubsection.9.2.5.10}%
+\contentsline {subsubsection}{\numberline {9.2.5.10}Clase PanelSimulacion}{205}{subsubsection.9.2.5.10}%
 \contentsline {subsubsection}{\numberline {9.2.5.11}Clase SimulacionFinal}{206}{subsubsection.9.2.5.11}%
-\contentsline {subsubsection}{\numberline {9.2.5.12}Clase PanelGramaticaOriginal}{207}{subsubsection.9.2.5.12}%
-\contentsline {subsubsection}{\numberline {9.2.5.13}Clase NuevaFuncionError}{208}{subsubsection.9.2.5.13}%
-\contentsline {subsubsection}{\numberline {9.2.5.14}Clase EditorCadenaEntradaController}{209}{subsubsection.9.2.5.14}%
-\contentsline {subsubsection}{\numberline {9.2.5.15}Dependencias internas del paquete simulador}{209}{subsubsection.9.2.5.15}%
-\contentsline {subsubsection}{\numberline {9.2.5.16}Patrones de diseño en el paquete simulador}{210}{subsubsection.9.2.5.16}%
+\contentsline {subsubsection}{\numberline {9.2.5.12}Clase PanelGramaticaOriginal}{208}{subsubsection.9.2.5.12}%
+\contentsline {subsubsection}{\numberline {9.2.5.13}Clase NuevaFuncionError}{209}{subsubsection.9.2.5.13}%
+\contentsline {subsubsection}{\numberline {9.2.5.14}Clase EditorCadenaEntradaController}{210}{subsubsection.9.2.5.14}%
+\contentsline {subsubsection}{\numberline {9.2.5.15}Dependencias internas del paquete simulador}{210}{subsubsection.9.2.5.15}%
+\contentsline {subsubsection}{\numberline {9.2.5.16}Patrones de diseño en el paquete simulador}{211}{subsubsection.9.2.5.16}%
 \contentsline {chapter}{\numberline {10}Diseño de la interfaz}{213}{chapter.10}%
 \contentsline {section}{\numberline {10.1}Introducción}{213}{section.10.1}%
 \contentsline {section}{\numberline {10.2}Barras de menús}{213}{section.10.2}%

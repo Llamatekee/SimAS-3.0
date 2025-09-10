@@ -49,34 +49,34 @@
 \contentsline {table}{\numberline {9.11}{\ignorespaces Clase FuncionError - Funciones de manejo de errores}}{159}{table.9.11}%
 \contentsline {table}{\numberline {9.12}{\ignorespaces Clase TablaPredictiva - Tabla de análisis sintáctico}}{161}{table.9.12}%
 \contentsline {table}{\numberline {9.13}{\ignorespaces Clase TablaPredictivaPaso5 - Tabla predictiva extendida}}{163}{table.9.13}%
-\contentsline {table}{\numberline {9.14}{\ignorespaces Clase ActualizableTextos - Interfaz de internacionalización}}{167}{table.9.14}%
-\contentsline {table}{\numberline {9.15}{\ignorespaces Clase LanguageItem - Elemento de idioma}}{168}{table.9.15}%
-\contentsline {table}{\numberline {9.16}{\ignorespaces Clase LanguageListCell - Celda de lista de idiomas}}{169}{table.9.16}%
-\contentsline {table}{\numberline {9.17}{\ignorespaces Clase TabManager - Gestor central de pestañas}}{170}{table.9.17}%
-\contentsline {table}{\numberline {9.18}{\ignorespaces Clase TabPaneMonitor - Monitor de pestañas}}{171}{table.9.18}%
-\contentsline {table}{\numberline {9.19}{\ignorespaces Clase SecondaryWindow - Ventanas secundarias}}{174}{table.9.19}%
-\contentsline {table}{\numberline {9.20}{\ignorespaces Clase EditorWindow - Ventana principal del editor}}{178}{table.9.20}%
-\contentsline {table}{\numberline {9.21}{\ignorespaces Clase Editor - Interfaz principal de edición}}{178}{table.9.21}%
-\contentsline {table}{\numberline {9.22}{\ignorespaces Clase PanelCreacionGramatica - Asistente de creación}}{181}{table.9.22}%
-\contentsline {table}{\numberline {9.23}{\ignorespaces Clase PanelCreacionGramaticaPaso1 - Paso 1: Metadatos}}{182}{table.9.23}%
-\contentsline {table}{\numberline {9.24}{\ignorespaces Clase PanelCreacionGramaticaPaso2 - Paso 2: Símbolos}}{184}{table.9.24}%
-\contentsline {table}{\numberline {9.25}{\ignorespaces Clase PanelCreacionGramaticaPaso3 - Paso 3: Producciones}}{185}{table.9.25}%
-\contentsline {table}{\numberline {9.26}{\ignorespaces Clase PanelCreacionGramaticaPaso4 - Paso 4: Validación}}{187}{table.9.26}%
+\contentsline {table}{\numberline {9.14}{\ignorespaces Clase ActualizableTextos - Interfaz de internacionalización}}{169}{table.9.14}%
+\contentsline {table}{\numberline {9.15}{\ignorespaces Clase LanguageItem - Elemento de idioma}}{169}{table.9.15}%
+\contentsline {table}{\numberline {9.16}{\ignorespaces Clase LanguageListCell - Celda de lista de idiomas}}{170}{table.9.16}%
+\contentsline {table}{\numberline {9.17}{\ignorespaces Clase TabManager - Gestor central de pestañas}}{171}{table.9.17}%
+\contentsline {table}{\numberline {9.18}{\ignorespaces Clase TabPaneMonitor - Monitor de pestañas}}{173}{table.9.18}%
+\contentsline {table}{\numberline {9.19}{\ignorespaces Clase SecondaryWindow - Ventanas secundarias}}{175}{table.9.19}%
+\contentsline {table}{\numberline {9.20}{\ignorespaces Clase EditorWindow - Ventana principal del editor}}{179}{table.9.20}%
+\contentsline {table}{\numberline {9.21}{\ignorespaces Clase Editor - Interfaz principal de edición}}{181}{table.9.21}%
+\contentsline {table}{\numberline {9.22}{\ignorespaces Clase PanelCreacionGramatica - Asistente de creación}}{183}{table.9.22}%
+\contentsline {table}{\numberline {9.23}{\ignorespaces Clase PanelCreacionGramaticaPaso1 - Paso 1: Metadatos}}{185}{table.9.23}%
+\contentsline {table}{\numberline {9.24}{\ignorespaces Clase PanelCreacionGramaticaPaso2 - Paso 2: Símbolos}}{186}{table.9.24}%
+\contentsline {table}{\numberline {9.25}{\ignorespaces Clase PanelCreacionGramaticaPaso3 - Paso 3: Producciones}}{187}{table.9.25}%
+\contentsline {table}{\numberline {9.26}{\ignorespaces Clase PanelCreacionGramaticaPaso4 - Paso 4: Validación}}{188}{table.9.26}%
 \contentsline {table}{\numberline {9.27}{\ignorespaces Clase PanelProducciones - Gestión de producciones}}{189}{table.9.27}%
-\contentsline {table}{\numberline {9.28}{\ignorespaces Clase PanelSimbolosTerminales - Gestión de terminales}}{191}{table.9.28}%
-\contentsline {table}{\numberline {9.29}{\ignorespaces Clase PanelSimbolosNoTerminales - Gestión de no terminales}}{193}{table.9.29}%
-\contentsline {table}{\numberline {9.30}{\ignorespaces Clase PanelNuevaSimDescPaso - Interfaz de pasos de simulación}}{197}{table.9.30}%
-\contentsline {table}{\numberline {9.31}{\ignorespaces Clase PanelNuevaSimDescPaso1 - Paso 1 de simulación}}{198}{table.9.31}%
+\contentsline {table}{\numberline {9.28}{\ignorespaces Clase PanelSimbolosTerminales - Gestión de terminales}}{190}{table.9.28}%
+\contentsline {table}{\numberline {9.29}{\ignorespaces Clase PanelSimbolosNoTerminales - Gestión de no terminales}}{192}{table.9.29}%
+\contentsline {table}{\numberline {9.30}{\ignorespaces Interfaz PanelNuevaSimDescPaso - Interfaz de pasos de simulación}}{195}{table.9.30}%
+\contentsline {table}{\numberline {9.31}{\ignorespaces Clase PanelNuevaSimDescPaso1 - Paso 1 de simulación}}{196}{table.9.31}%
 \contentsline {table}{\numberline {9.32}{\ignorespaces Clase PanelNuevaSimDescPaso2 - Paso 2 de simulación}}{198}{table.9.32}%
-\contentsline {table}{\numberline {9.33}{\ignorespaces Clase PanelNuevaSimDescPaso3 - Paso 3 de simulación}}{199}{table.9.33}%
-\contentsline {table}{\numberline {9.34}{\ignorespaces Clase PanelNuevaSimDescPaso4 - Paso 4 de simulación}}{200}{table.9.34}%
-\contentsline {table}{\numberline {9.35}{\ignorespaces Clase PanelNuevaSimDescPaso5 - Paso 5 de simulación}}{201}{table.9.35}%
+\contentsline {table}{\numberline {9.33}{\ignorespaces Clase PanelNuevaSimDescPaso3 - Paso 3 de simulación}}{198}{table.9.33}%
+\contentsline {table}{\numberline {9.34}{\ignorespaces Clase PanelNuevaSimDescPaso4 - Paso 4 de simulación}}{199}{table.9.34}%
+\contentsline {table}{\numberline {9.35}{\ignorespaces Clase PanelNuevaSimDescPaso5 - Paso 5 de simulación}}{200}{table.9.35}%
 \contentsline {table}{\numberline {9.36}{\ignorespaces Clase PanelNuevaSimDescPaso6 - Paso 6 (Simulador) de simulación}}{201}{table.9.36}%
 \contentsline {table}{\numberline {9.37}{\ignorespaces Clase PanelSimuladorDesc - Controlador principal de simulación}}{202}{table.9.37}%
-\contentsline {table}{\numberline {9.38}{\ignorespaces Clase PanelSimulacion - Panel de simulación interactiva}}{204}{table.9.38}%
+\contentsline {table}{\numberline {9.38}{\ignorespaces Clase PanelSimulacion - Panel de simulación interactiva}}{205}{table.9.38}%
 \contentsline {table}{\numberline {9.39}{\ignorespaces Clase SimulacionFinal - Simulación completa avanzada}}{206}{table.9.39}%
-\contentsline {table}{\numberline {9.40}{\ignorespaces Clase PanelGramaticaOriginal - Panel de gramática original}}{207}{table.9.40}%
-\contentsline {table}{\numberline {9.41}{\ignorespaces Clase NuevaFuncionError - Creación de funciones de error}}{208}{table.9.41}%
-\contentsline {table}{\numberline {9.42}{\ignorespaces Clase EditorCadenaEntradaController - Editor de cadenas de entrada}}{209}{table.9.42}%
+\contentsline {table}{\numberline {9.40}{\ignorespaces Clase PanelGramaticaOriginal - Panel de gramática original}}{208}{table.9.40}%
+\contentsline {table}{\numberline {9.41}{\ignorespaces Clase NuevaFuncionError - Creación de funciones de error}}{209}{table.9.41}%
+\contentsline {table}{\numberline {9.42}{\ignorespaces Clase EditorCadenaEntradaController - Editor de cadenas de entrada}}{210}{table.9.42}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }

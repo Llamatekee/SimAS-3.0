@@ -987,23 +987,23 @@ La clase \textbf{EditorWindow} representa la ventana principal del editor de gra
 \textbf{Métodos} &
 \begin{enumerate}
     \item \textbf{EditorWindow(ResourceBundle)}: constructor que inicializa la ventana con internacionalización.
-    \item \textbf{initialize()}: configura la ventana, escena y componentes principales (método privado).
-    \item \textbf{configurarAtajosTeclado(Scene)}: establece los atajos de teclado globales (método privado).
-    \item \textbf{findFirstTabInGroup(int)}: encuentra la primera pestaña de un grupo específico (método privado).
+    \item \textbf{initialize()}: configura la ventana, escena y componentes principales.
+    \item \textbf{configurarAtajosTeclado(Scene)}: establece los atajos de teclado globales.
+    \item \textbf{findFirstTabInGroup(int)}: encuentra la primera pestaña de un grupo específico.
     \item \textbf{show()}: muestra la ventana del editor.
     \item \textbf{addTab(Tab)}: añade una pestaña a la ventana.
     \item \textbf{moveGroupToWindow(TabPane, String, Tab)}: mueve un grupo de pestañas a esta ventana.
     \item \textbf{addEditor(Editor)}: añade un editor como nueva pestaña.
     \item \textbf{getTabPane()}: obtiene el TabPane de la ventana.
-    \item \textbf{abrirEditorEnEditorWindow()}: abre un nuevo editor en esta ventana (método privado).
-    \item \textbf{abrirSimuladorEnEditorWindow()}: abre el simulador directo en esta ventana (método privado).
-    \item \textbf{cargarGramaticaYSimularDirectamenteEnEditorWindow()}: carga gramática y va directo a simulación (método privado).
-    \item \textbf{crearSimuladorDirectoAlPaso6EnEditorWindow(Gramatica)}: crea simulador directo al paso 6 (método privado).
-    \item \textbf{abrirAyuda()}: abre el manual de ayuda (método privado).
-    \item \textbf{abrirTutorial()}: abre el tutorial (método privado).
-    \item \textbf{salirAplicacion()}: sale de la aplicación (método privado).
-    \item \textbf{mostrarErroresValidacion(ObservableList<String>)}: muestra errores de validación (método privado).
-    \item \textbf{mostrarError(String, String)}: muestra mensaje de error simple (método privado).
+    \item \textbf{abrirEditorEnEditorWindow()}: abre un nuevo editor en esta ventana.
+    \item \textbf{abrirSimuladorEnEditorWindow()}: abre el simulador directo en esta ventana.
+    \item \textbf{cargarGramaticaYSimularDirectamenteEnEditorWindow()}: carga gramática y va directo a simulación.
+    \item \textbf{crearSimuladorDirectoAlPaso6EnEditorWindow( Gramatica)}: crea simulador directo al paso 6.
+    \item \textbf{abrirAyuda()}: abre el manual de ayuda.
+    \item \textbf{abrirTutorial()}: abre el tutorial.
+    \item \textbf{salirAplicacion()}: sale de la aplicación.
+    \item \textbf{mostrarErroresValidacion(ObservableList<String>)}: muestra errores de validación.
+    \item \textbf{mostrarError(String, String)}: muestra mensaje de error simple.
 \end{enumerate}
 \label{tabla_editor_window}
 \end{longtable}
@@ -1041,7 +1041,7 @@ La clase \textbf{Editor} representa la interfaz principal de edición de una gra
     \item \textbf{Editor(TabPane, Gramatica, MenuPrincipal)}: constructor con gramática preexistente.
     \item \textbf{Editor(TabPane, MenuPrincipal, ResourceBundle)}: constructor con internacionalización.
     \item \textbf{configurarRelacionesPadreHijo()}: configura las relaciones padre-hijo para cerrar pestañas hijas.
-    \item \textbf{cargarFXML()}: carga la interfaz desde archivo FXML (método privado).
+    \item \textbf{cargarFXML()}: carga la interfaz desde archivo FXML.
     \item \textbf{getEditorId()}: obtiene el ID único del editor.
     \item \textbf{getGramatica()}: obtiene la gramática actual.
     \item \textbf{setGramatica(Gramatica)}: establece una nueva gramática.
@@ -1090,7 +1090,7 @@ La clase \textbf{PanelCreacionGramatica} coordina el asistente de creación de g
 \begin{enumerate}
     \item \textbf{PanelCreacionGramatica(Editor, TabPane, Gramatica, MenuPrincipal)}: constructor principal.
     \item \textbf{PanelCreacionGramatica(Editor, TabPane, Gramatica, MenuPrincipal, String)}: constructor con ID específico.
-    \item \textbf{configurarRelacionesPadreHijo()}: configura las relaciones padre-hijo (método privado).
+    \item \textbf{configurarRelacionesPadreHijo()}: configura las relaciones padre-hijo.
     \item \textbf{getCreacionId()}: obtiene el ID único del proceso de creación.
     \item \textbf{getGramatica()}: obtiene la gramática temporal.
     \item \textbf{setGramatica(Gramatica)}: establece la gramática temporal.
@@ -1132,9 +1132,9 @@ La clase \textbf{PanelCreacionGramaticaPaso1} maneja el primer paso del asistent
 \textbf{Métodos} &
 \begin{enumerate}
     \item \textbf{PanelCreacionGramaticaPaso1(PanelCreacionGramatica, ResourceBundle)}: constructor.
-    \item \textbf{cargarFXML()}: carga la interfaz desde archivo FXML (método privado).
+    \item \textbf{cargarFXML()}: carga la interfaz desde archivo FXML.
     \item \textbf{initialize()}: método de inicialización FXML.
-    \item \textbf{configurarValidaciones()}: configura las validaciones en tiempo real (método privado).
+    \item \textbf{configurarValidaciones()}: configura las validaciones en tiempo real.
     \item \textbf{setNombre(String)}: establece el nombre de la gramática.
     \item \textbf{setDescripcion(String)}: establece la descripción de la gramática.
     \item \textbf{actualizarTextos(ResourceBundle)}: actualiza textos para internacionalización.
@@ -1171,11 +1171,11 @@ La clase \textbf{PanelCreacionGramaticaPaso2} maneja el segundo paso del asisten
 \textbf{Métodos} &
 \begin{enumerate}
     \item \textbf{PanelCreacionGramaticaPaso2(PanelCreacionGramatica, MenuPrincipal, TabPane)}: constructor.
-    \item \textbf{cargarFXML()}: carga la interfaz desde archivo FXML (método privado).
+    \item \textbf{cargarFXML()}: carga la interfaz desde archivo FXML.
     \item \textbf{initialize()}: método de inicialización FXML.
-    \item \textbf{aplicarEstilosResponsivos()}: aplica estilos responsivos según el tamaño de pantalla (método privado).
-    \item \textbf{cargarDatosDesdeGramatica()}: carga datos desde la gramática padre (método privado).
-    \item \textbf{configurarValidacionSimbolos()}: configura la validación de símbolos (método privado).
+    \item \textbf{aplicarEstilosResponsivos()}: aplica estilos responsivos según el tamaño de pantalla.
+    \item \textbf{cargarDatosDesdeGramatica()}: carga datos desde la gramática padre.
+    \item \textbf{configurarValidacionSimbolos()}: configura la validación de símbolos.
     \item \textbf{asignarListaSimbolosNoTerminales(ObservableList<String>)}: asigna la lista de no terminales.
     \item \textbf{asignarListaSimbolosTerminales(ObservableList<String>)}: asigna la lista de terminales.
     \item \textbf{actualizarTextos(ResourceBundle)}: actualiza textos para internacionalización.
@@ -1211,10 +1211,10 @@ La clase \textbf{PanelCreacionGramaticaPaso3} maneja el tercer paso del asistent
 \textbf{Métodos} &
 \begin{enumerate}
     \item \textbf{PanelCreacionGramaticaPaso3(PanelCreacionGramatica, TabPane, MenuPrincipal)}: constructor.
-    \item \textbf{cargarFXML()}: carga la interfaz desde archivo FXML (método privado).
+    \item \textbf{cargarFXML()}: carga la interfaz desde archivo FXML.
     \item \textbf{initialize()}: método de inicialización FXML.
     \item \textbf{asignarProducciones(ObservableList<Produccion>)}: asigna las producciones existentes.
-    \item \textbf{configurarValidacionProducciones()}: configura la validación de producciones (método privado).
+    \item \textbf{configurarValidacionProducciones()}: configura la validación de producciones.
     \item \textbf{actualizarTextos(ResourceBundle)}: actualiza textos para internacionalización.
 \end{enumerate}
 \label{tabla_panel_creacion_paso3}
@@ -1247,10 +1247,10 @@ La clase \textbf{PanelCreacionGramaticaPaso4} maneja el cuarto y último paso de
 \textbf{Métodos} &
 \begin{enumerate}
     \item \textbf{PanelCreacionGramaticaPaso4(PanelCreacionGramatica, TabPane)}: constructor.
-    \item \textbf{cargarFXML()}: carga la interfaz desde archivo FXML (método privado).
+    \item \textbf{cargarFXML()}: carga la interfaz desde archivo FXML.
     \item \textbf{initialize()}: método de inicialización FXML.
-    \item \textbf{configurarValidacionSimboloInicial()}: configura la validación del símbolo inicial (método privado).
-    \item \textbf{cerrarAsistente()}: cierra el asistente de creación (método privado).
+    \item \textbf{configurarValidacionSimboloInicial()}: configura la validación del símbolo inicial.
+    \item \textbf{cerrarAsistente()}: cierra el asistente de creación.
     \item \textbf{actualizarTextos(ResourceBundle)}: actualiza textos para internacionalización.
 \end{enumerate}
 \label{tabla_panel_creacion_paso4}
@@ -1285,7 +1285,7 @@ La clase \textbf{PanelProducciones} proporciona la interfaz para editar y gestio
 \textbf{Métodos} &
 \begin{enumerate}
     \item \textbf{PanelProducciones(PanelCreacionGramaticaPaso3, ObservableList<Produccion>, TabPane)}: constructor.
-    \item \textbf{cargarFXML()}: carga la interfaz desde archivo FXML (método privado).
+    \item \textbf{cargarFXML()}: carga la interfaz desde archivo FXML.
     \item \textbf{initialize()}: método de inicialización FXML.
     \item \textbf{actualizarTextos(ResourceBundle)}: actualiza textos para internacionalización.
 \end{enumerate}
@@ -1323,10 +1323,10 @@ La clase \textbf{PanelSimbolosTerminales} proporciona la interfaz para gestionar
 \begin{enumerate}
     \item \textbf{PanelSimbolosTerminales(ObservableList<String>, TabPane, PanelCreacionGramaticaPaso2)}: constructor.
     \item \textbf{PanelSimbolosTerminales(ObservableList<String>, TabPane, PanelCreacionGramaticaPaso2, ResourceBundle)}: constructor con internacionalización.
-    \item \textbf{cargarFXML()}: carga la interfaz desde archivo FXML (método privado).
+    \item \textbf{cargarFXML()}: carga la interfaz desde archivo FXML.
     \item \textbf{initialize()}: método de inicialización FXML.
-    \item \textbf{generarBotonesPredefinidos()}: genera botones para símbolos predefinidos (método privado).
-    \item \textbf{agregarSimbolo(String)}: agrega un símbolo a la lista (método privado).
+    \item \textbf{generarBotonesPredefinidos()}: genera botones para símbolos predefinidos.
+    \item \textbf{agregarSimbolo(String)}: agrega un símbolo a la lista.
     \item \textbf{cerrarPestanaActual()}: cierra la pestaña actual.
     \item \textbf{actualizarTextos(ResourceBundle)}: actualiza textos para internacionalización.
 \end{enumerate}
@@ -1363,10 +1363,10 @@ La clase \textbf{PanelSimbolosNoTerminales} proporciona la interfaz para gestion
 \begin{enumerate}
     \item \textbf{PanelSimbolosNoTerminales(ObservableList<String>, TabPane, PanelCreacionGramaticaPaso2)}: constructor.
     \item \textbf{PanelSimbolosNoTerminales(ObservableList<String>, TabPane, PanelCreacionGramaticaPaso2, ResourceBundle)}: constructor con internacionalización.
-    \item \textbf{cargarFXML()}: carga la interfaz desde archivo FXML (método privado).
+    \item \textbf{cargarFXML()}: carga la interfaz desde archivo FXML.
     \item \textbf{initialize()}: método de inicialización FXML.
-    \item \textbf{generarBotonesPredefinidos()}: genera botones para símbolos predefinidos (método privado).
-    \item \textbf{agregarSimbolo(String)}: agrega un símbolo a la lista (método privado).
+    \item \textbf{generarBotonesPredefinidos()}: genera botones para símbolos predefinidos.
+    \item \textbf{agregarSimbolo(String)}: agrega un símbolo a la lista.
     \item \textbf{cerrarPestanaActual()}: cierra la pestaña actual.
     \item \textbf{actualizarTextos(ResourceBundle)}: actualiza textos para internacionalización.
 \end{enumerate}
@@ -1478,8 +1478,8 @@ La clase \textbf{PanelNuevaSimDescPaso1} implementa el primer paso de la simulac
     \item \textbf{PanelNuevaSimDescPaso1( PanelSimuladorDesc)}: constructor que inicializa el paso con su panel padre.
     \item \textbf{getRoot()}: retorna el nodo raíz de la interfaz gráfica.
     \item \textbf{actualizarTextos(ResourceBundle)}: actualiza los textos según el idioma seleccionado.
-    \item \textbf{cargarFXML()}: carga el archivo FXML correspondiente al paso (método privado).
-    \item \textbf{inicializarBotones()}: configura los botones de navegación (método privado).
+    \item \textbf{cargarFXML()}: carga el archivo FXML correspondiente al paso.
+    \item \textbf{inicializarBotones()}: configura los botones de navegación.
 \end{enumerate}
 \label{tabla_panel_nueva_sim_desc_paso1}
 \end{longtable}
