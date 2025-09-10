@@ -410,12 +410,6 @@ La clase \textbf{Gramatica} representa el núcleo del modelo de datos de SimAS 3
     \item \textbf{getTerminales()}: obtiene la lista de terminales.
     \item \textbf{getNoTerminales()}: obtiene la lista de no terminales.
     \item \textbf{getProducciones()}: obtiene la lista de producciones.
-    \item \textbf{agregarTerminal(Terminal)}: añade un terminal a la gramática.
-    \item \textbf{agregarNoTerminal(NoTerminal)}: añade un no terminal a la gramática.
-    \item \textbf{agregarProduccion(Produccion)}: añade una producción a la gramática.
-    \item \textbf{eliminarTerminal(String)}: elimina un terminal por nombre.
-    \item \textbf{eliminarNoTerminal(String)}: elimina un no terminal por nombre.
-    \item \textbf{eliminarProduccion(int)}: elimina una producción por índice.
 \end{enumerate} \\ \hline
 \textbf{Métodos} &
 \begin{enumerate}
@@ -671,7 +665,7 @@ Las clases de este paquete permiten:
 
 \subsubsection{Clases del paquete utils}
 
-Este paquete contiene 8 clases principales que proporcionan servicios transversales a toda la aplicación SimAS 3.0, organizadas por funcionalidad: gestión de pestañas, internacionalización, monitoreo y ventanas.
+Este paquete contiene 6 clases principales que proporcionan servicios transversales a toda la aplicación SimAS 3.0, organizadas por funcionalidad: gestión de pestañas, internacionalización, monitoreo y ventanas. Además incluye archivos de propiedades para la internacionalización.
 
 \subsubsection{Clase ActualizableTextos}
 
@@ -755,9 +749,8 @@ La clase \textbf{LanguageListCell} es una celda personalizada para listas de sel
 \end{enumerate} \\ \hline
 \textbf{Métodos} &
 \begin{enumerate}
-    \item \textbf{LanguageListCell()}: constructor que inicializa la celda personalizada.
-    \item \textbf{updateItem(LanguageItem, boolean)}: actualiza el contenido visual de la celda con el idioma correspondiente.
-    \item \textbf{inicializarComponentes()}: configura los componentes visuales de la celda.
+    \item \textbf{LanguageListCell()}: constructor que inicializa la celda personalizada con componentes visuales.
+    \item \textbf{updateItem(LanguageItem, boolean)}: actualiza el contenido visual de la celda con el idioma correspondiente, incluyendo bandera y texto.
 \end{enumerate}
 \label{tabla_language_list_cell}
 \end{longtable}
@@ -791,14 +784,34 @@ La clase \textbf{TabManager} es el gestor central de pestañas de la aplicación
 \begin{enumerate}
     \item \textbf{getOrCreateTab(TabPane, Class, String, Object)}: obtiene o crea una pestaña del tipo especificado.
     \item \textbf{getOrCreateTab(TabPane, Class, String, Object, String, String)}: versión completa con IDs padre-hijo.
-    \item \textbf{configurarMenuContextual(TabPane, ResourceBundle)}: configura el menú contextual de las pestañas.
-    \item \textbf{reasignarNumerosGrupos(TabPane)}: reasigna números de grupo después de cambios.
-    \item \textbf{crearGrupoGramatica(TabPane, String)}: crea un nuevo grupo de gramática.
+    \item \textbf{asignarElementoANuevoGrupo(TabPane, String)}: asigna un elemento a un nuevo grupo de gramática.
+    \item \textbf{contarGruposActivos(TabPane)}: cuenta los grupos activos en un TabPane.
+    \item \textbf{isSimuladorContent(Object)}: verifica si un objeto es contenido de simulador.
+    \item \textbf{isSimuladorTab(Tab)}: verifica si una pestaña es de simulador.
+    \item \textbf{obtenerGrupoDeElemento(TabPane, String)}: obtiene el grupo al que pertenece un elemento.
+    \item \textbf{asignarSimuladorAGrupoDeEditor(TabPane, String, String)}: asigna un simulador al grupo de un editor.
+    \item \textbf{calcularPosicionInsercion(TabPane, Class, String, String)}: calcula la posición de inserción de una nueva pestaña.
+    \item \textbf{calcularPosicionSeguaDespuesDelMenu(TabPane)}: calcula posición segura después del menú.
+    \item \textbf{isPestañaHijaDeElemento(String, String)}: verifica si una pestaña es hija de un elemento.
+    \item \textbf{isEditorContent(Object)}: verifica si un objeto es contenido de editor.
+    \item \textbf{closeTab(TabPane, Class)}: cierra una pestaña específica.
+    \item \textbf{hasTab(TabPane, Class)}: verifica si existe una pestaña de cierto tipo.
+    \item \textbf{closeChildTabs(TabPane, String)}: cierra todas las pestañas hijas de un elemento.
+    \item \textbf{closeAllDescendantTabs(TabPane, String)}: cierra todos los descendientes de un elemento.
+    \item \textbf{reasignarNumerosGruposGramatica(TabPane)}: reasigna números de grupo después de cambios.
     \item \textbf{setResourceBundle(TabPane, ResourceBundle)}: establece el ResourceBundle para un TabPane.
-    \item \textbf{renumerarGrupos(TabPane)}: renumera todos los grupos de un TabPane.
-    \item \textbf{limpiarRelacionesHuérfanas(TabPane)}: limpia relaciones padre-hijo huérfanas.
-    \item \textbf{obtenerGruposActivos(TabPane)}: obtiene todos los grupos activos en un TabPane.
-    \item \textbf{imprimirEstadoTabPane(TabPane)}: imprime el estado actual de un TabPane para debugging.
+    \item \textbf{obtenerNumeroGrupo(TabPane, String)}: obtiene el número de grupo de un elemento.
+    \item \textbf{eliminarElementoDeGrupo(TabPane, String, String)}: elimina un elemento de un grupo.
+    \item \textbf{resetGrupos(TabPane)}: resetea todos los grupos de un TabPane.
+    \item \textbf{asignarElementoAGrupo(TabPane, String, String)}: asigna un elemento a un grupo específico.
+    \item \textbf{configurarMenuContextual(TabPane, ResourceBundle)}: configura el menú contextual de las pestañas.
+    \item \textbf{actualizarMenuContextual(TabPane, ResourceBundle)}: actualiza el menú contextual con nuevos textos.
+    \item \textbf{actualizarIdsRelacionados(TabPane, String, String)}: actualiza IDs relacionados de un simulador.
+    \item \textbf{actualizarTitulosPestañas(TabPane)}: actualiza los títulos de todas las pestañas.
+    \item \textbf{debugTabPaneState(TabPane)}: imprime el estado del TabPane para debugging.
+    \item \textbf{moverGrupoEntreVentanasMejorado(TabPane, TabPane, String, Tab)}: mueve un grupo entre ventanas.
+    \item \textbf{getElementoToGrupo(TabPane)}: obtiene el mapa de elementos a grupos.
+    \item \textbf{getGruposGramatica(TabPane)}: obtiene el mapa de grupos de gramática.
 \end{enumerate}
 \label{tabla_tab_manager}
 \end{longtable}
@@ -833,12 +846,13 @@ La clase \textbf{TabPaneMonitor} es un monitor singleton que supervisa continuam
     \item \textbf{getInstance()}: obtiene la instancia singleton del monitor.
     \item \textbf{registrarTabPane(TabPane, String)}: registra un TabPane para monitoreo.
     \item \textbf{desregistrarTabPane(TabPane)}: desregistra un TabPane del monitoreo.
-    \item \textbf{validarConsistenciaGlobal()}: valida la consistencia de todos los TabPanes monitoreados.
-    \item \textbf{repararInconsistencias(TabPane, TabPaneInfo)}: repara inconsistencias detectadas.
+    \item \textbf{validarConsistenciaTabPane(TabPane, boolean)}: valida la consistencia de un TabPane específico.
+    \item \textbf{forzarValidacion(TabPane)}: fuerza una validación inmediata de un TabPane.
     \item \textbf{obtenerEstadisticas()}: obtiene estadísticas del monitoreo.
-    \item \textbf{setDebugMode(boolean)}: activa o desactiva el modo debug.
-    \item \textbf{imprimirEstadoTabPane(TabPane)}: imprime el estado de un TabPane.
-    \item \textbf{reiniciarContadores()}: reinicia los contadores de reparaciones.
+    \item \textbf{shutdown()}: detiene el monitoreo y libera recursos.
+    \item \textbf{setMovimientoEnProgreso(boolean)}: establece si hay un movimiento en progreso.
+    \item \textbf{reiniciarContadorReparaciones(TabPane)}: reinicia el contador de reparaciones de un TabPane.
+    \item \textbf{reiniciarTodosLosContadores()}: reinicia todos los contadores de reparaciones.
 \end{enumerate} \\ \hline
 \textbf{Clase Interna TabPaneInfo} &
 \begin{enumerate}
@@ -882,21 +896,18 @@ La clase \textbf{SecondaryWindow} extiende EditorWindow para crear ventanas secu
 \begin{enumerate}
     \item \textbf{SecondaryWindow(ResourceBundle, String)}: constructor que inicializa la ventana secundaria.
     \item \textbf{getActiveWindows()}: obtiene un mapa con todas las ventanas secundarias activas.
-    \item \textbf{initialize()}: inicializa la ventana secundaria con sus componentes.
-    \item \textbf{addTabFromDrag(Tab, String)}: añade una pestaña desde un arrastre.
-    \item \textbf{setupDragAndDrop()}: configura las funcionalidades de arrastrar y soltar.
-    \item \textbf{handleTabClose()}: maneja el cierre de pestañas en la ventana secundaria.
-    \item \textbf{updateWindowTitle()}: actualiza el título de la ventana según su contenido.
-    \item \textbf{closeWindow()}: cierra la ventana secundaria correctamente.
-    \item \textbf{getWindowId()}: obtiene el identificador único de la ventana.
-    \item \textbf{getStage()}: obtiene el Stage de la ventana secundaria.
+    \item \textbf{moveGroupToWindow(TabPane, String, Tab)}: mueve un grupo de pestañas a esta ventana.
+    \item \textbf{show()}: muestra la ventana secundaria.
     \item \textbf{getTabPane()}: obtiene el TabPane de la ventana secundaria.
+    \item \textbf{addTab(Tab)}: añade una pestaña individual a la ventana.
+    \item \textbf{getStage()}: obtiene el Stage de la ventana secundaria.
+    \item \textbf{actualizarIdioma(ResourceBundle)}: actualiza el idioma de la ventana secundaria.
+    \item \textbf{getWindowNumber()}: obtiene el número de la ventana.
 \end{enumerate} \\ \hline
 \textbf{Métodos Estáticos} &
 \begin{enumerate}
     \item \textbf{getActiveWindows()}: obtiene todas las ventanas secundarias activas.
-    \item \textbf{findWindowById(String)}: busca una ventana por su ID.
-    \item \textbf{cleanupClosedWindows()}: limpia ventanas cerradas del registro.
+    \item \textbf{getActiveWindowCount()}: obtiene el conteo de ventanas secundarias activas.
 \end{enumerate}
 \label{tabla_secondary_window}
 \end{longtable}
