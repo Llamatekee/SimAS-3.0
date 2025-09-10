@@ -1434,3 +1434,490 @@ Las dependencias internas del paquete editor se ilustran en la Figura \ref{fig:d
     \caption{Diagrama de clases del paquete editor - SimAS 3.0}
     \label{fig:diagrama_editor}
 \end{figure}
+
+\subsection{Paquete simulador}
+
+El paquete \textbf{simulador} contiene las clases responsables de la simulación del análisis sintáctico descendente en SimAS 3.0. Este paquete implementa el núcleo funcional de la aplicación, permitiendo a los usuarios simular paso a paso el proceso de análisis sintáctico de cadenas de entrada utilizando gramáticas libres de contexto.
+
+Las clases de este paquete permiten:
+\begin{itemize}
+    \item Simulación completa del análisis sintáctico descendente
+    \item Visualización paso a paso del proceso de análisis
+    \item Gestión de funciones de error y recuperación
+    \item Creación y edición de cadenas de entrada
+    \item Interfaz interactiva para la simulación
+    \item Generación de informes y árboles de derivación
+\end{itemize}
+
+\subsubsection{Clases del paquete simulador}
+
+Este paquete contiene 13 clases principales que implementan el sistema completo de simulación de análisis sintáctico, organizadas por funcionalidad: clases principales de simulación, pasos de la simulación descendente y componentes auxiliares.
+
+\subsubsection{Clase PanelNuevaSimDescPaso}
+
+La clase \textbf{PanelNuevaSimDescPaso} es una interfaz que define el contrato que deben implementar todos los pasos de la simulación descendente.
+
+\begin{longtable}[H]{|>{\columncolor[rgb]{0.63,0.79,0.95}}m{6cm} | m{8.5cm} |}
+\caption{Clase PanelNuevaSimDescPaso - Interfaz de pasos de simulación}
+\endfirsthead
+\multicolumn{2}{c}{{\tablename\ \thetable{} -- continúa de la página anterior}} \\
+\endhead
+\hline \multicolumn{2}{|r|}{{Continúa en la página siguiente}} \\ \hline
+\endfoot
+\hline
+\endlastfoot
+\hline
+\textbf{Nombre} & \textbf{PanelNuevaSimDescPaso} \\ \hline
+\textbf{Descripción} & Interfaz que define el contrato para todos los pasos de la simulación descendente, asegurando consistencia en la implementación. \\ \hline
+\textbf{Métodos} &
+\begin{enumerate}
+    \item \textbf{getRoot()}: retorna el nodo raíz del paso de simulación.
+\end{enumerate}
+\label{tabla_panel_nueva_sim_desc_paso}
+\end{longtable}
+
+\subsubsection{Clase PanelNuevaSimDescPaso1}
+
+La clase \textbf{PanelNuevaSimDescPaso1} implementa el primer paso de la simulación descendente, mostrando la gramática original y permitiendo la navegación entre pasos.
+
+\begin{longtable}[H]{|>{\columncolor[rgb]{0.63,0.79,0.95}}m{6cm} | m{8.5cm} |}
+\caption{Clase PanelNuevaSimDescPaso1 - Paso 1 de simulación}
+\endfirsthead
+\multicolumn{2}{c}{{\tablename\ \thetable{} -- continúa de la página anterior}} \\
+\endhead
+\hline \multicolumn{2}{|r|}{{Continúa en la página siguiente}} \\ \hline
+\endfoot
+\hline
+\endlastfoot
+\hline
+\textbf{Nombre} & \textbf{PanelNuevaSimDescPaso1} \\ \hline
+\textbf{Descripción} & Implementa el primer paso de la simulación descendente, mostrando la gramática original y permitiendo navegación entre los diferentes pasos del proceso. \\ \hline
+\textbf{Atributos} &
+\begin{enumerate}
+    \item \textbf{panelPadre}: PanelSimuladorDesc que contiene este paso.
+    \item \textbf{gramatica}: Gramatica que se está simulando.
+    \item \textbf{bundle}: ResourceBundle para internacionalización.
+    \item \textbf{root}: Parent que representa la interfaz gráfica del paso.
+\end{enumerate} \\ \hline
+\textbf{Métodos} &
+\begin{enumerate}
+    \item \textbf{PanelNuevaSimDescPaso1( PanelSimuladorDesc)}: constructor que inicializa el paso con su panel padre.
+    \item \textbf{getRoot()}: retorna el nodo raíz de la interfaz gráfica.
+    \item \textbf{actualizarTextos(ResourceBundle)}: actualiza los textos según el idioma seleccionado.
+    \item \textbf{cargarFXML()}: carga el archivo FXML correspondiente al paso.
+    \item \textbf{inicializarBotones()}: configura los botones de navegación.
+\end{enumerate}
+\label{tabla_panel_nueva_sim_desc_paso1}
+\end{longtable}
+
+\subsubsection{Clase PanelNuevaSimDescPaso2}
+
+La clase \textbf{PanelNuevaSimDescPaso2} implementa el segundo paso de la simulación descendente, mostrando los símbolos terminales y no terminales.
+
+\begin{longtable}[H]{|>{\columncolor[rgb]{0.63,0.79,0.95}}m{6cm} | m{8.5cm} |}
+\caption{Clase PanelNuevaSimDescPaso2 - Paso 2 de simulación}
+\endfirsthead
+\multicolumn{2}{c}{{\tablename\ \thetable{} -- continúa de la página anterior}} \\
+\endhead
+\hline \multicolumn{2}{|r|}{{Continúa en la página siguiente}} \\ \hline
+\endfoot
+\hline
+\endlastfoot
+\hline
+\textbf{Nombre} & \textbf{PanelNuevaSimDescPaso2} \\ \hline
+\textbf{Descripción} & Implementa el segundo paso de la simulación descendente, mostrando los símbolos terminales y no terminales de la gramática. \\ \hline
+\textbf{Atributos} &
+\begin{enumerate}
+    \item \textbf{panelPadre}: PanelSimuladorDesc que contiene este paso.
+    \item \textbf{gramatica}: Gramatica que se está simulando.
+    \item \textbf{bundle}: ResourceBundle para internacionalización.
+    \item \textbf{root}: Parent que representa la interfaz gráfica del paso.
+\end{enumerate} \\ \hline
+\textbf{Métodos} &
+\begin{enumerate}
+    \item \textbf{PanelNuevaSimDescPaso2( PanelSimuladorDesc)}: constructor que inicializa el paso con su panel padre.
+    \item \textbf{getRoot()}: retorna el nodo raíz de la interfaz gráfica.
+    \item \textbf{actualizarTextos(ResourceBundle)}: actualiza los textos según el idioma seleccionado.
+\end{enumerate}
+\label{tabla_panel_nueva_sim_desc_paso2}
+\end{longtable}
+
+\subsubsection{Clase PanelNuevaSimDescPaso3}
+
+La clase \textbf{PanelNuevaSimDescPaso3} implementa el tercer paso de la simulación descendente, mostrando los conjuntos First y Follow.
+
+\begin{longtable}[H]{|>{\columncolor[rgb]{0.63,0.79,0.95}}m{6cm} | m{8.5cm} |}
+\caption{Clase PanelNuevaSimDescPaso3 - Paso 3 de simulación}
+\endfirsthead
+\multicolumn{2}{c}{{\tablename\ \thetable{} -- continúa de la página anterior}} \\
+\endhead
+\hline \multicolumn{2}{|r|}{{Continúa en la página siguiente}} \\ \hline
+\endfoot
+\hline
+\endlastfoot
+\hline
+\textbf{Nombre} & \textbf{PanelNuevaSimDescPaso3} \\ \hline
+\textbf{Descripción} & Implementa el tercer paso de la simulación descendente, mostrando los conjuntos First y Follow de los símbolos no terminales. \\ \hline
+\textbf{Atributos} &
+\begin{enumerate}
+    \item \textbf{panelPadre}: PanelSimuladorDesc que contiene este paso.
+    \item \textbf{gramatica}: Gramatica que se está simulando.
+    \item \textbf{bundle}: ResourceBundle para internacionalización.
+    \item \textbf{root}: Parent que representa la interfaz gráfica del paso.
+\end{enumerate} \\ \hline
+\textbf{Métodos} &
+\begin{enumerate}
+    \item \textbf{PanelNuevaSimDescPaso3( PanelSimuladorDesc)}: constructor que inicializa el paso con su panel padre.
+    \item \textbf{getRoot()}: retorna el nodo raíz de la interfaz gráfica.
+    \item \textbf{actualizarTextos(ResourceBundle)}: actualiza los textos según el idioma seleccionado.
+\end{enumerate}
+\label{tabla_panel_nueva_sim_desc_paso3}
+\end{longtable}
+
+\subsubsection{Clase PanelNuevaSimDescPaso4}
+
+La clase \textbf{PanelNuevaSimDescPaso4} implementa el cuarto paso de la simulación descendente, mostrando la tabla predictiva.
+
+\begin{longtable}[H]{|>{\columncolor[rgb]{0.63,0.79,0.95}}m{6cm} | m{8.5cm} |}
+\caption{Clase PanelNuevaSimDescPaso4 - Paso 4 de simulación}
+\endfirsthead
+\multicolumn{2}{c}{{\tablename\ \thetable{} -- continúa de la página anterior}} \\
+\endhead
+\hline \multicolumn{2}{|r|}{{Continúa en la página siguiente}} \\ \hline
+\endfoot
+\hline
+\endlastfoot
+\hline
+\textbf{Nombre} & \textbf{PanelNuevaSimDescPaso4} \\ \hline
+\textbf{Descripción} & Implementa el cuarto paso de la simulación descendente, mostrando la tabla predictiva completa con sus celdas y funciones de error. \\ \hline
+\textbf{Atributos} &
+\begin{enumerate}
+    \item \textbf{panelPadre}: PanelSimuladorDesc que contiene este paso.
+    \item \textbf{gramatica}: Gramatica que se está simulando.
+    \item \textbf{bundle}: ResourceBundle para internacionalización.
+    \item \textbf{root}: Parent que representa la interfaz gráfica del paso.
+\end{enumerate} \\ \hline
+\textbf{Métodos} &
+\begin{enumerate}
+    \item \textbf{PanelNuevaSimDescPaso4( PanelSimuladorDesc)}: constructor que inicializa el paso con su panel padre.
+    \item \textbf{getRoot()}: retorna el nodo raíz de la interfaz gráfica.
+    \item \textbf{actualizarTextos(ResourceBundle)}: actualiza los textos según el idioma seleccionado.
+\end{enumerate}
+\label{tabla_panel_nueva_sim_desc_paso4}
+\end{longtable}
+
+\subsubsection{Clase PanelNuevaSimDescPaso5}
+
+La clase \textbf{PanelNuevaSimDescPaso5} implementa el quinto paso de la simulación descendente, permitiendo la edición de funciones de error.
+
+\begin{longtable}[H]{|>{\columncolor[rgb]{0.63,0.79,0.95}}m{6cm} | m{8.5cm} |}
+\caption{Clase PanelNuevaSimDescPaso5 - Paso 5 de simulación}
+\endfirsthead
+\multicolumn{2}{c}{{\tablename\ \thetable{} -- continúa de la página anterior}} \\
+\endhead
+\hline \multicolumn{2}{|r|}{{Continúa en la página siguiente}} \\ \hline
+\endfoot
+\hline
+\endlastfoot
+\hline
+\textbf{Nombre} & \textbf{PanelNuevaSimDescPaso5} \\ \hline
+\textbf{Descripción} & Implementa el quinto paso de la simulación descendente, permitiendo la edición y configuración de funciones de error para recuperación de errores. \\ \hline
+\textbf{Atributos} &
+\begin{enumerate}
+    \item \textbf{panelPadre}: PanelSimuladorDesc que contiene este paso.
+    \item \textbf{gramatica}: Gramatica que se está simulando.
+    \item \textbf{bundle}: ResourceBundle para internacionalización.
+    \item \textbf{root}: Parent que representa la interfaz gráfica del paso.
+\end{enumerate} \\ \hline
+\textbf{Métodos} &
+\begin{enumerate}
+    \item \textbf{PanelNuevaSimDescPaso5( PanelSimuladorDesc)}: constructor que inicializa el paso con su panel padre.
+    \item \textbf{getRoot()}: retorna el nodo raíz de la interfaz gráfica.
+    \item \textbf{actualizarTextos(ResourceBundle)}: actualiza los textos según el idioma seleccionado.
+\end{enumerate}
+\label{tabla_panel_nueva_sim_desc_paso5}
+\end{longtable}
+
+\subsubsection{Clase PanelNuevaSimDescPaso6}
+
+La clase \textbf{PanelNuevaSimDescPaso6} implementa el sexto y último paso de la simulación descendente, que corresponde al \textbf{Simulador} principal donde se ejecuta la simulación completa del análisis sintáctico.
+
+\begin{longtable}[H]{|>{\columncolor[rgb]{0.63,0.79,0.95}}m{6cm} | m{8.5cm} |}
+\caption{Clase PanelNuevaSimDescPaso6 - Paso 6 (Simulador) de simulación}
+\endfirsthead
+\multicolumn{2}{c}{{\tablename\ \thetable{} -- continúa de la página anterior}} \\
+\endhead
+\hline \multicolumn{2}{|r|}{{Continúa en la página siguiente}} \\ \hline
+\endfoot
+\hline
+\endlastfoot
+\hline
+\textbf{Nombre} & \textbf{ PanelNuevaSimDescPaso6} \\ \hline
+\textbf{Descripción} & Implementa el sexto y último paso de la simulación descendente (el Simulador principal), permitiendo ejecutar la simulación completa del análisis sintáctico. \\ \hline
+\textbf{Atributos} &
+\begin{enumerate}
+    \item \textbf{panelPadre}: PanelSimuladorDesc que contiene este paso.
+    \item \textbf{gramatica}: Gramatica que se está simulando.
+    \item \textbf{bundle}: ResourceBundle para internacionalización.
+    \item \textbf{root}: Parent que representa la interfaz gráfica del paso.
+\end{enumerate} \\ \hline
+\textbf{Métodos} &
+\begin{enumerate}
+    \item \textbf{PanelNuevaSimDescPaso6(PanelSimuladorDesc)}: constructor que inicializa el paso con su panel padre.
+    \item \textbf{getRoot()}: retorna el nodo raíz de la interfaz gráfica.
+    \item \textbf{actualizarTextos(ResourceBundle)}: actualiza los textos según el idioma seleccionado.
+\end{enumerate}
+\label{tabla_panel_nueva_sim_desc_paso6}
+\end{longtable}
+
+\subsubsection{Clase PanelSimuladorDesc}
+
+La clase \textbf{PanelSimuladorDesc} es el controlador principal para la simulación descendente, coordinando todos los pasos del proceso de análisis sintáctico.
+
+\begin{longtable}[H]{|>{\columncolor[rgb]{0.63,0.79,0.95}}m{6cm} | m{8.5cm} |}
+\caption{Clase PanelSimuladorDesc - Controlador principal de simulación}
+\endfirsthead
+\multicolumn{2}{c}{{\tablename\ \thetable{} -- continúa de la página anterior}} \\
+\endhead
+\hline \multicolumn{2}{|r|}{{Continúa en la página siguiente}} \\ \hline
+\endfoot
+\hline
+\endlastfoot
+\hline
+\textbf{Nombre} & \textbf{PanelSimuladorDesc} \\ \hline
+\textbf{Descripción} & Controlador principal que coordina toda la simulación descendente, gestionando los diferentes pasos, la gramática y la interacción con el usuario. \\ \hline
+\textbf{Atributos} &
+\begin{enumerate}
+    \item \textbf{tabPane}: TabPane donde se muestran los pasos de simulación.
+    \item \textbf{gramatica}: Gramatica que se está simulando.
+    \item \textbf{gramaticaOriginal}: copia independiente de la gramática original.
+    \item \textbf{pasoActual}: número del paso actual en la simulación.
+    \item \textbf{pasos}: ArrayList con todos los pasos de la simulación.
+    \item \textbf{bundle}: ResourceBundle para internacionalización.
+    \item \textbf{tablaPredictivaExtendidaGlobal}: TablaPredictivaPaso5 con funciones de error.
+    \item \textbf{simuladorId}: identificador único del simulador.
+    \item \textbf{simuladoresActivos}: Map estático con todos los simuladores activos.
+\end{enumerate} \\ \hline
+\textbf{Métodos} &
+\begin{enumerate}
+    \item \textbf{PanelSimuladorDesc(Gramatica, TabPane, ResourceBundle)}: constructor principal.
+    \item \textbf{PanelSimuladorDesc(Gramatica, TabPane, ResourceBundle, String)}: constructor con ID personalizado.
+    \item \textbf{configurarRelacionesPadreHijo()}: configura las relaciones entre pestañas.
+    \item \textbf{inicializarTablaPredictivaYFuncionesError()}: inicializa la tabla predictiva y funciones de error.
+    \item \textbf{crearPestanaSimulacion()}: crea la pestaña principal de simulación.
+    \item \textbf{mostrarPaso(int)}: muestra un paso específico de la simulación.
+    \item \textbf{getBundle()}: obtiene el ResourceBundle actual.
+    \item \textbf{getTablaPredictivaExtendidaGlobal()}: obtiene la tabla predictiva extendida.
+\end{enumerate}
+\label{tabla_panel_simulador_desc}
+\end{longtable}
+
+\subsubsection{Clase PanelSimulacion}
+
+La clase \textbf{PanelSimulacion} implementa un panel completo para la simulación interactiva del análisis sintáctico.
+
+\begin{longtable}[H]{|>{\columncolor[rgb]{0.63,0.79,0.95}}m{6cm} | m{8.5cm} |}
+\caption{Clase PanelSimulacion - Panel de simulación interactiva}
+\endfirsthead
+\multicolumn{2}{c}{{\tablename\ \thetable{} -- continúa de la página anterior}} \\
+\endhead
+\hline \multicolumn{2}{|r|}{{Continúa en la página siguiente}} \\ \hline
+\endfoot
+\hline
+\endlastfoot
+\hline
+\textbf{Nombre} & \textbf{PanelSimulacion} \\ \hline
+\textbf{Descripción} & Panel que proporciona una interfaz completa para la simulación interactiva del análisis sintáctico, permitiendo controlar paso a paso el proceso de análisis. \\ \hline
+\textbf{Atributos} &
+\begin{enumerate}
+    \item \textbf{gramatica}: Gramatica que se está simulando.
+    \item \textbf{tablaPredictiva}: TablaPredictivaPaso5 con funciones de error.
+    \item \textbf{funcionesError}: List de FuncionError disponibles.
+    \item \textbf{entrada}: String que representa la cadena de entrada.
+    \item \textbf{pila}: Stack que simula la pila del analizador.
+    \item \textbf{entradaActual}: List que contiene los símbolos de entrada.
+    \item \textbf{posicionEntrada}: posición actual en la cadena de entrada.
+    \item \textbf{simulacionEnCurso}: boolean que indica si la simulación está activa.
+    \item \textbf{bundle}: ResourceBundle para internacionalización.
+\end{enumerate} \\ \hline
+\textbf{Métodos} &
+\begin{enumerate}
+    \item \textbf{PanelSimulacion(Gramatica, ResourceBundle)}: constructor que inicializa el panel de simulación.
+    \item \textbf{inicializarComponentes()}: configura todos los componentes de la interfaz.
+    \item \textbf{simular()}: ejecuta un paso de la simulación.
+    \item \textbf{reiniciar()}: reinicia la simulación al estado inicial.
+    \item \textbf{actualizarInterfaz()}: actualiza la interfaz gráfica según el estado actual.
+    \item \textbf{procesarEntrada(String)}: procesa la cadena de entrada para análisis.
+\end{enumerate}
+\label{tabla_panel_simulacion}
+\end{longtable}
+
+\subsubsection{Clase SimulacionFinal}
+
+La clase \textbf{SimulacionFinal} implementa la simulación completa del análisis sintáctico con capacidades avanzadas de visualización y control.
+
+\begin{longtable}[H]{|>{\columncolor[rgb]{0.63,0.79,0.95}}m{6cm} | m{8.5cm} |}
+\caption{Clase SimulacionFinal - Simulación completa avanzada}
+\endfirsthead
+\multicolumn{2}{c}{{\tablename\ \thetable{} -- continúa de la página anterior}} \\
+\endhead
+\hline \multicolumn{2}{|r|}{{Continúa en la página siguiente}} \\ \hline
+\endfoot
+\hline
+\endlastfoot
+\hline
+\textbf{Nombre} & \textbf{SimulacionFinal} \\ \hline
+\textbf{Descripción} & Implementa la simulación completa del análisis sintáctico con capacidades avanzadas como historial, navegación, generación de informes y visualización de árboles de derivación. \\ \hline
+\textbf{Atributos} &
+\begin{enumerate}
+    \item \textbf{gramatica}: Gramatica que se está simulando.
+    \item \textbf{tablaPredictiva}: TablaPredictivaPaso5 con funciones de error.
+    \item \textbf{funcionesError}: List de FuncionError para recuperación.
+    \item \textbf{pila}: Stack que simula la pila del analizador.
+    \item \textbf{entradaActual}: ArrayList con la cadena de entrada.
+    \item \textbf{historialPasos}: ObservableList con el historial de pasos.
+    \item \textbf{pasoActual}: posición actual en la simulación.
+    \item \textbf{bundle}: ResourceBundle para internacionalización.
+\end{enumerate} \\ \hline
+\textbf{Métodos} &
+\begin{enumerate}
+    \item \textbf{SimulacionFinal(Gramatica, ResourceBundle)}: constructor principal.
+    \item \textbf{inicializarComponentes()}: configura la interfaz gráfica completa.
+    \item \textbf{simularPaso()}: ejecuta un paso individual de la simulación.
+    \item \textbf{simularCompleta()}: ejecuta toda la simulación automáticamente.
+    \item \textbf{retrocederPaso()}: retrocede un paso en la simulación.
+    \item \textbf{reiniciarSimulacion()}: reinicia la simulación al estado inicial.
+    \item \textbf{generarInforme()}: genera un informe completo de la simulación.
+    \item \textbf{mostrarArbolDerivacion()}: muestra el árbol de derivación.
+    \item \textbf{actualizarTextos(ResourceBundle)}: actualiza textos según el idioma.
+\end{enumerate}
+\label{tabla_simulacion_final}
+\end{longtable}
+
+\subsubsection{Clase PanelGramaticaOriginal}
+
+La clase \textbf{PanelGramaticaOriginal} muestra la gramática original en una pestaña separada con soporte para internacionalización.
+
+\begin{longtable}[H]{|>{\columncolor[rgb]{0.63,0.79,0.95}}m{6cm} | m{8.5cm} |}
+\caption{Clase PanelGramaticaOriginal - Panel de gramática original}
+\endfirsthead
+\multicolumn{2}{c}{{\tablename\ \thetable{} -- continúa de la página anterior}} \\
+\endhead
+\hline \multicolumn{2}{|r|}{{Continúa en la página siguiente}} \\ \hline
+\endfoot
+\hline
+\endlastfoot
+\hline
+\textbf{Nombre} & \textbf{PanelGramaticaOriginal} \\ \hline
+\textbf{Descripción} & Panel que muestra la gramática original en una pestaña separada, permitiendo visualizar todas las producciones de forma clara y organizada. \\ \hline
+\textbf{Atributos} &
+\begin{enumerate}
+    \item \textbf{gramaticaOriginal}: Gramatica original que se muestra.
+    \item \textbf{bundle}: ResourceBundle para internacionalización.
+\end{enumerate} \\ \hline
+\textbf{Métodos} &
+\begin{enumerate}
+    \item \textbf{PanelGramaticaOriginal(Gramatica, ResourceBundle)}: constructor que inicializa el panel.
+    \item \textbf{actualizarTextos(ResourceBundle)}: actualiza los textos según el idioma seleccionado.
+\end{enumerate}
+\label{tabla_panel_gramatica_original}
+\end{longtable}
+
+\subsubsection{Clase NuevaFuncionError}
+
+La clase \textbf{NuevaFuncionError} permite crear y configurar nuevas funciones de error para la recuperación en el análisis sintáctico.
+
+\begin{longtable}[H]{|>{\columncolor[rgb]{0.63,0.79,0.95}}m{6cm} | m{8.5cm} |}
+\caption{Clase NuevaFuncionError - Creación de funciones de error}
+\endfirsthead
+\multicolumn{2}{c}{{\tablename\ \thetable{} -- continúa de la página anterior}} \\
+\endhead
+\hline \multicolumn{2}{|r|}{{Continúa en la página siguiente}} \\ \hline
+\endfoot
+\hline
+\endlastfoot
+\hline
+\textbf{Nombre} & \textbf{NuevaFuncionError} \\ \hline
+\textbf{Descripción} & Permite crear y configurar nuevas funciones de error para la recuperación automática durante el análisis sintáctico descendente. \\ \hline
+\textbf{Atributos} &
+\begin{enumerate}
+    \item \textbf{gramatica}: Gramatica donde se aplicarán las funciones de error.
+    \item \textbf{paso4}: PanelNuevaSimDescPaso4 que contiene este componente.
+    \item \textbf{bundle}: ResourceBundle para internacionalización.
+    \item \textbf{root}: Parent que representa la interfaz gráfica.
+\end{enumerate} \\ \hline
+\textbf{Métodos} &
+\begin{enumerate}
+    \item \textbf{NuevaFuncionError(Gramatica, PanelNuevaSimDescPaso4, ResourceBundle)}: constructor principal.
+    \item \textbf{inicializarCampos()}: configura los campos de entrada para la función de error.
+    \item \textbf{crearFuncionError()}: crea una nueva función de error con los parámetros especificados.
+    \item \textbf{actualizarTextos(ResourceBundle)}: actualiza los textos según el idioma seleccionado.
+\end{enumerate}
+\label{tabla_nueva_funcion_error}
+\end{longtable}
+
+\subsubsection{Clase EditorCadenaEntradaController}
+
+La clase \textbf{EditorCadenaEntradaController} proporciona una interfaz para editar y gestionar las cadenas de entrada que se utilizarán en la simulación.
+
+\begin{longtable}[H]{|>{\columncolor[rgb]{0.63,0.79,0.95}}m{6cm} | m{8.5cm} |}
+\caption{Clase EditorCadenaEntradaController - Editor de cadenas de entrada}
+\endfirsthead
+\multicolumn{2}{c}{{\tablename\ \thetable{} -- continúa de la página anterior}} \\
+\endhead
+\hline \multicolumn{2}{|r|}{{Continúa en la página siguiente}} \\ \hline
+\endfoot
+\hline
+\endlastfoot
+\hline
+\textbf{Nombre} & \textbf{EditorCadenaEntradaController} \\ \hline
+\textbf{Descripción} & Controlador que proporciona una interfaz completa para editar, validar y gestionar las cadenas de entrada que se utilizarán en las simulaciones de análisis sintáctico. \\ \hline
+\textbf{Atributos} &
+\begin{enumerate}
+    \item \textbf{cadenaActual}: String que contiene la cadena de entrada actual.
+    \item \textbf{gramatica}: Gramatica utilizada para validar la cadena.
+    \item \textbf{bundle}: ResourceBundle para internacionalización.
+\end{enumerate} \\ \hline
+\textbf{Métodos} &
+\begin{enumerate}
+    \item \textbf{validarCadena(String)}: valida que la cadena sea aceptada por la gramática.
+    \item \textbf{editarCadena()}: abre el editor para modificar la cadena de entrada.
+    \item \textbf{guardarCadena(String)}: guarda la cadena editada.
+    \item \textbf{actualizarTextos(ResourceBundle)}: actualiza los textos según el idioma seleccionado.
+\end{enumerate}
+\label{tabla_editor_cadena_entrada_controller}
+\end{longtable}
+
+\subsubsection{Dependencias internas del paquete simulador}
+
+Las dependencias internas del paquete simulador se ilustran en la Figura \ref{fig:diagrama_simulador}, donde se puede apreciar la estructura organizada del sistema de simulación paso a paso y sus interacciones con otros paquetes.
+
+\begin{itemize}
+    \item \textbf{PanelSimuladorDesc $\rightarrow$ PanelNuevaSimDescPaso1-6}: PanelSimuladorDesc contiene y coordina todos los pasos de simulación, siendo PanelNuevaSimDescPaso6 el Simulador principal.
+    \item \textbf{PanelNuevaSimDescPaso1-6 $\rightarrow$ PanelNuevaSimDescPaso}: todos los pasos implementan la interfaz PanelNuevaSimDescPaso.
+    \item \textbf{PanelSimuladorDesc $\leftrightarrow$ Gramatica}: utiliza la gramática para la simulación.
+    \item \textbf{PanelSimuladorDesc $\leftrightarrow$ TablaPredictivaPaso5}: utiliza la tabla predictiva extendida.
+    \item \textbf{SimulacionFinal $\rightarrow$ Gramatica}: utiliza la gramática para simulación completa.
+    \item \textbf{PanelSimulacion $\rightarrow$ TablaPredictivaPaso5}: utiliza la tabla predictiva para simulación interactiva.
+    \item \textbf{NuevaFuncionError $\rightarrow$ PanelNuevaSimDescPaso4}: se integra en el paso 4 de la simulación.
+    \item \textbf{PanelGramaticaOriginal $\rightarrow$ Gramatica}: muestra la gramática original.
+    \item \textbf{EditorCadenaEntradaController $\rightarrow$ Gramatica}: valida cadenas contra la gramática.
+    \item \textbf{Todas las clases $\rightarrow$ ResourceBundle}: utilizan internacionalización.
+\end{itemize}
+
+\begin{figure}[p]
+    \centering
+    \includegraphics[angle=90,width=\textwidth,height=\textheight]{figuras/Cap9/diagrama_simulador2.png}
+    \caption{Diagrama de dependencias del paquete simulador - SimAS 3.0}
+    \label{fig:diagrama_simulador}
+\end{figure}
+
+\subsubsection{Patrones de diseño en el paquete simulador}
+
+\begin{itemize}
+    \item \textbf{MVC (Model-View-Controller)}: el paquete sigue el patrón MVC donde las clases del paquete gramática son el Modelo, las clases del simulador son los Controladores, y los componentes FXML son las Vistas \cite{burbeck1992applications}.
+    \item \textbf{Strategy}: los diferentes pasos de simulación (PanelNuevaSimDescPaso1-6) implementan estrategias diferentes para cada fase del análisis \cite{gamma1995design}.
+    \item \textbf{Observer}: las clases implementan ActualizableTextos para observar cambios en el idioma y actualizar automáticamente la interfaz \cite{gamma1995design}.
+    \item \textbf{Factory Method}: los constructores de PanelSimuladorDesc crean diferentes configuraciones de simuladores según los parámetros \cite{gamma1995design}.
+    \item \textbf{Registry}: PanelSimuladorDesc mantiene un registro estático de todos los simuladores activos para gestión centralizada.
+\end{itemize}
