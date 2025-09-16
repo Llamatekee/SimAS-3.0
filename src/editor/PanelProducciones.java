@@ -174,7 +174,8 @@ public class PanelProducciones extends VBox implements ActualizableTextos {
         ObservableList<Simbolo> consecuente = FXCollections.observableArrayList();
         for (String simbolo : txtConsecuente.getText().split(" ")) {
             if (!simbolo.isEmpty()) {
-                consecuente.add(new Simbolo(simbolo, ""));
+                // El valor debe coincidir con el nombre para que la validación compare correctamente
+                consecuente.add(new Simbolo(simbolo, simbolo));
             }
         }
 
