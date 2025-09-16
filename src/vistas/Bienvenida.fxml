@@ -32,7 +32,8 @@
         <!-- Información de desarrollo -->
         <VBox alignment="CENTER" spacing="8" styleClass="welcome-info">
             <Label text="Desarrollado por Antonio Llamas García" styleClass="welcome-author" />
-            <Label text="Dirigido por Dr. Nicolás Luis Fernández García" styleClass="welcome-director" />
+            <Label text="Dirigido por Dr. Antonio Araúzo Azofra" styleClass="welcome-director" />
+            <Label text="Dirigido por Dra. María Luque Rodríguez" styleClass="welcome-director" />
         </VBox>
         
         <!-- Versión -->
