@@ -27,6 +27,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
 import java.util.List;
 import java.util.*;
+import java.text.MessageFormat;
 import java.util.logging.Level;
 import simulador.SimulacionFinal.HistorialPaso;
 import java.util.logging.Logger;
@@ -646,34 +647,59 @@ public class Gramatica {
     }
 
     public ObservableList<String> validarGramatica() {
+        // Intentar usar el bundle por defecto del sistema si existe
+        ResourceBundle bundle = null;
+        try {
+            bundle = ResourceBundle.getBundle("utils.messages", java.util.Locale.getDefault());
+        } catch (Exception ignored) {}
+        return validarGramatica(bundle);
+    }
+
+    public ObservableList<String> validarGramatica(ResourceBundle bundle) {
         // Usamos ObservableList para que, si se requiere, se pueda enlazar con la UI
         ObservableList<String> mensajesError = FXCollections.observableArrayList();
         // Variables locales para la validación
         ObservableList<Simbolo> conjSimbolos;
         this.setEstado(1);
 
+        // Helpers i18n
+        final ResourceBundle localBundle = bundle;
+        java.util.function.Function<String, String> tr = key -> {
+            if (localBundle != null) {
+                try { if (localBundle.containsKey(key)) return localBundle.getString(key); } catch (Exception ignored) {}
+            }
+            return key; // fallback
+        };
+        java.util.function.BiFunction<String, Object[], String> fmt = (key, args) -> {
+            String pattern = tr.apply(key);
+            return MessageFormat.format(pattern, args);
+        };
+
+        // Evitar duplicados (preserva orden)
+        java.util.Set<String> erroresUnicos = new java.util.LinkedHashSet<>();
+
         // Validar existencia de producciones
         if (this.producciones.isEmpty()) {
             this.setEstado(-1);
-            mensajesError.add("No existen producciones.\nLa gramática no contiene ninguna producción. Debería contener al menos una para poder ser válida.");
+            erroresUnicos.add(tr.apply("validation.no_productions.title") + "\n" + tr.apply("validation.no_productions.desc"));
         }
 
         // Validar existencia de símbolos terminales
         if (this.terminales.isEmpty()) {
             this.setEstado(-1);
-            mensajesError.add("No existen símbolos terminales.\nLa gramática no contiene ningún símbolo terminal. Debería contener al menos uno para poder ser válida.");
+            erroresUnicos.add(tr.apply("validation.no_terminals.title") + "\n" + tr.apply("validation.no_terminals.desc"));
         }
 
         // Validar existencia de símbolos no terminales
         if (this.noTerminales.isEmpty()) {
             this.setEstado(-1);
-            mensajesError.add("No existen símbolos no terminales.\nLa gramática no contiene ningún símbolo no terminal. Debería contener al menos uno para poder ser válida.");
+            erroresUnicos.add(tr.apply("validation.no_nonterminals.title") + "\n" + tr.apply("validation.no_nonterminals.desc"));
         }
 
         // Validar asignación del símbolo inicial
         if (this.getSimbInicial() == null) {
             this.setEstado(-1);
-            mensajesError.add("Símbolo inicial no asignado.\nLa gramática no tiene asignado el símbolo inicial.");
+            erroresUnicos.add(tr.apply("validation.no_start.title") + "\n" + tr.apply("validation.no_start.desc"));
         }
 
         // Validar que cada símbolo terminal aparezca en el consecuente de alguna producción
@@ -691,8 +717,8 @@ public class Gramatica {
             }
             if (!encontrado) {
                 this.setEstado(-1);
-                mensajesError.add("Símbolo terminal no usado.\n" +
-                        "El símbolo terminal '" + t.getNombre() + "' no aparece en ningún consecuente de ninguna producción.");
+                erroresUnicos.add(tr.apply("validation.terminal_not_used.title") + "\n" +
+                        fmt.apply("validation.terminal_not_used.desc", new Object[]{t.getNombre()}));
             }
         }
 
@@ -715,8 +741,8 @@ public class Gramatica {
             }
             if (!encontrado) {
                 this.setEstado(-1);
-                mensajesError.add("Simbolo no terminal no usado. " +
-                        "El símbolo no terminal " + nt.getNombre() + " no aparece en ningún consecuente de ninguna producción.");
+                erroresUnicos.add(tr.apply("validation.nonterminal_not_used_consequent.title") + "\n" +
+                        fmt.apply("validation.nonterminal_not_used_consequent.desc", new Object[]{nt.getNombre()}));
             }
         }
 
@@ -732,9 +758,8 @@ public class Gramatica {
             }
             if (!encontrado) {
                 this.setEstado(-1);
-                mensajesError.add("Simbolo no terminal no usado. " +
-                        "El símbolo no terminal " + antecProd.getSimboloNT().getNombre() +
-                        " no aparece en el antecedente de ninguna producción.");
+                erroresUnicos.add(tr.apply("validation.nonterminal_not_used_antecedent.title") + "\n" +
+                        fmt.apply("validation.nonterminal_not_used_antecedent.desc", new Object[]{antecProd.getSimboloNT().getNombre()}));
             }
         }
 
@@ -766,11 +791,12 @@ public class Gramatica {
                 }
                 if (!encontrado) {
                     this.setEstado(-1);
-                    mensajesError.add("Consecuente erróneo. " +
-                            "El símbolo " + s.getNombre() + " del consecuente de la producción no pertenece al conjunto de símbolos declarado.");
+                    erroresUnicos.add(tr.apply("validation.consequent_symbol_not_declared.title") + "\n" +
+                            fmt.apply("validation.consequent_symbol_not_declared.desc", new Object[]{s.getNombre()}));
                 }
             }
         }
+        mensajesError.setAll(erroresUnicos);
         return mensajesError;
     }
 

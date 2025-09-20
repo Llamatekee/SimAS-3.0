@@ -421,7 +421,7 @@ public class EditorWindow {
 
             if (gramaticaCargada != null) {
                 // Validar la gramática cargada
-                javafx.collections.ObservableList<String> errores = gramaticaCargada.validarGramatica();
+                javafx.collections.ObservableList<String> errores = gramaticaCargada.validarGramatica(bundle);
 
                 if (gramaticaCargada.getEstado() == 1) {
                     // Gramática válida - proceder con la simulación
@@ -550,18 +550,19 @@ public class EditorWindow {
      * Muestra errores de validación de la gramática
      */
     private void mostrarErroresValidacion(javafx.collections.ObservableList<String> errores) {
-        StringBuilder mensaje = new StringBuilder("Errores de validación:\n\n");
+        String resumen = bundle != null ? bundle.getString("editor.msg.validar.errores") + " (" + errores.size() + ")" : "Validation errors (" + errores.size() + ")";
+        StringBuilder detalle = new StringBuilder();
         for (int i = 0; i < errores.size(); i++) {
-            mensaje.append(i + 1).append(". ").append(errores.get(i)).append("\n\n");
+            detalle.append(i + 1).append(". ").append(errores.get(i)).append("\n\n");
         }
 
         Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error de Validación");
-        alert.setHeaderText("La gramática seleccionada contiene errores");
-        alert.setContentText(mensaje.toString());
+        alert.setTitle(bundle != null ? bundle.getString("editor.dialog.validar.error.titulo") : "Validation Error");
+        alert.setHeaderText(bundle != null ? bundle.getString("editor.dialog.validar.error.header") : "Errors found:");
+        alert.setContentText(resumen);
 
         // Expandir el diálogo para mostrar todo el texto
-        TextArea textArea = new TextArea(mensaje.toString());
+        TextArea textArea = new TextArea(detalle.toString());
         textArea.setEditable(false);
         textArea.setWrapText(true);
         textArea.setMaxWidth(Double.MAX_VALUE);
@@ -574,6 +575,31 @@ public class EditorWindow {
         gridPane.add(textArea, 0, 0);
 
         alert.getDialogPane().setExpandableContent(gridPane);
+        try {
+            javafx.scene.control.DialogPane dp = alert.getDialogPane();
+            dp.setExpanded(true);
+            dp.setExpandableContent(gridPane);
+            ((javafx.scene.control.Button) dp.lookupButton(ButtonType.OK)).setText(bundle != null ? bundle.getString("button.aceptar") : "Accept");
+            javafx.scene.control.Button details = (javafx.scene.control.Button) dp.lookup(".details-button");
+            if (details != null && bundle != null) {
+                String txt = bundle.getString(dp.isExpanded() ? "dialog.ocultar.detalles" : "dialog.mostrar.detalles");
+                details.setText(txt);
+                javafx.application.Platform.runLater(() -> {
+                    details.setText(bundle.getString(dp.isExpanded() ? "dialog.ocultar.detalles" : "dialog.mostrar.detalles"));
+                });
+                dp.expandedProperty().addListener((obs, was, isNow) -> {
+                    String t = bundle.getString(isNow ? "dialog.ocultar.detalles" : "dialog.mostrar.detalles");
+                    details.setText(t);
+                    javafx.application.Platform.runLater(() -> details.setText(t));
+                });
+                details.textProperty().addListener((o, oldV, newV) -> {
+                    String desired = bundle.getString(dp.isExpanded() ? "dialog.ocultar.detalles" : "dialog.mostrar.detalles");
+                    if (!desired.equals(newV)) {
+                        details.setText(desired);
+                    }
+                });
+            }
+        } catch (Exception ignored) {}
         alert.showAndWait();
     }
 

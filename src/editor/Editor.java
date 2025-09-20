@@ -427,7 +427,7 @@ public class Editor extends VBox implements ActualizableTextos {
     }
 
     public void validarGramatica(Gramatica gramatica) {
-        ObservableList<String> mensajesError = gramatica.validarGramatica();
+        ObservableList<String> mensajesError = gramatica.validarGramatica(bundle);
         int estadoValidacion = gramatica.getEstado();
 
         if (estadoValidacion == 1) {
@@ -440,20 +440,21 @@ public class Editor extends VBox implements ActualizableTextos {
         } else {
             gramatica.setEstado(-1);
 
-            // Construcción del mensaje sin etiquetas HTML
-            StringBuilder mensajeError = new StringBuilder(bundle.getString("editor.msg.validar.errores") + "\n\n");
+            // Crear resumen y detalle de errores
+            String resumen = bundle.getString("editor.msg.validar.errores") + " (" + mensajesError.size() + ")";
+            StringBuilder detalleErrores = new StringBuilder();
             for (int i = 0; i < mensajesError.size(); i++) {
-                mensajeError.append(i + 1).append(". ").append(mensajesError.get(i)).append("\n\n");
+                detalleErrores.append(i + 1).append(". ").append(mensajesError.get(i)).append("\n\n");
             }
 
-            // Crear un alert de error con el formato correcto
+            // Crear un alert de error con resumen en el contenido y detalle en el panel expandible
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle(bundle.getString("editor.dialog.validar.error.titulo"));
             alert.setHeaderText(bundle.getString("editor.dialog.validar.error.header"));
-            alert.setContentText(mensajeError.toString());
+            alert.setContentText(resumen);
 
             // Hacer que la alerta muestre todo el texto correctamente si es muy largo
-            TextArea textArea = new TextArea(mensajeError.toString());
+            TextArea textArea = new TextArea(detalleErrores.toString());
             textArea.setEditable(false);
             textArea.setWrapText(true);
             textArea.setMaxWidth(Double.MAX_VALUE);
@@ -466,6 +467,36 @@ public class Editor extends VBox implements ActualizableTextos {
             gridPane.add(textArea, 0, 0);
 
             alert.getDialogPane().setExpandableContent(gridPane);
+            try {
+                javafx.scene.control.DialogPane dp = alert.getDialogPane();
+                dp.setExpanded(true);
+                dp.setExpandableContent(gridPane);
+                // Botón aceptar
+                ((Button) dp.lookupButton(ButtonType.OK)).setText(bundle.getString("button.aceptar"));
+                // Botón de detalles (mostrar/ocultar)
+                javafx.scene.control.Button details = (javafx.scene.control.Button) dp.lookup(".details-button");
+                if (details != null) {
+                    // Set immediately and after layout to override default skin text
+                    String txt = bundle.getString(dp.isExpanded() ? "dialog.ocultar.detalles" : "dialog.mostrar.detalles");
+                    details.setText(txt);
+                    javafx.application.Platform.runLater(() -> {
+                        details.setText(bundle.getString(dp.isExpanded() ? "dialog.ocultar.detalles" : "dialog.mostrar.detalles"));
+                    });
+                    // Keep synchronized on expand/collapse
+                    dp.expandedProperty().addListener((obs, was, isNow) -> {
+                        String t = bundle.getString(isNow ? "dialog.ocultar.detalles" : "dialog.mostrar.detalles");
+                        details.setText(t);
+                        javafx.application.Platform.runLater(() -> details.setText(t));
+                    });
+                    // If skin resets the text, force our translation back
+                    details.textProperty().addListener((o, oldV, newV) -> {
+                        String desired = bundle.getString(dp.isExpanded() ? "dialog.ocultar.detalles" : "dialog.mostrar.detalles");
+                        if (!desired.equals(newV)) {
+                            details.setText(desired);
+                        }
+                    });
+                }
+            } catch (Exception ignored) {}
             alert.showAndWait();
         }
     }
