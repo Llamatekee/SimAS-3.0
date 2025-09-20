@@ -7,6 +7,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 import javafx.beans.binding.BooleanBinding;
 import java.io.IOException;
 import java.util.ResourceBundle;
@@ -94,11 +96,72 @@ public class PanelCreacionGramaticaPaso4 extends VBox implements ActualizableTex
         if (simboloInicial != null) {
             // Asignar el símbolo inicial a la gramática temporal
             panelPadre.getGramatica().setSimbInicial(simboloInicial.getNombre());
+
+            // Validar antes de finalizar
+            javafx.collections.ObservableList<String> errores = panelPadre.getGramatica().validarGramatica(bundle);
+            if (panelPadre.getGramatica().getEstado() != 1) {
+                mostrarErroresValidacion(errores);
+                return; // No cerrar el asistente
+            }
+
             panelPadre.getPanelPadre().setGramatica(panelPadre.getGramatica());
             panelPadre.getPanelPadre().actualizarVisualizacion();
             cerrarAsistente();
         }
         // No es necesario mostrar alerta ya que el botón estará deshabilitado si no hay selección
+    }
+
+    private void mostrarErroresValidacion(javafx.collections.ObservableList<String> errores) {
+        String resumen = bundle.getString("editor.msg.validar.errores") + " (" + errores.size() + ")";
+        StringBuilder detalle = new StringBuilder();
+        for (int i = 0; i < errores.size(); i++) {
+            detalle.append(i + 1).append(". ").append(errores.get(i)).append("\n\n");
+        }
+
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(bundle.getString("editor.dialog.validar.error.titulo"));
+        alert.setHeaderText(bundle.getString("editor.dialog.validar.error.header"));
+        alert.setContentText(resumen);
+
+        TextArea textArea = new TextArea(detalle.toString());
+        textArea.setEditable(false);
+        textArea.setWrapText(true);
+        textArea.setMaxWidth(Double.MAX_VALUE);
+        textArea.setMaxHeight(Double.MAX_VALUE);
+        GridPane.setVgrow(textArea, Priority.ALWAYS);
+        GridPane.setHgrow(textArea, Priority.ALWAYS);
+
+        GridPane gridPane = new GridPane();
+        gridPane.setMaxWidth(Double.MAX_VALUE);
+        gridPane.add(textArea, 0, 0);
+
+        alert.getDialogPane().setExpandableContent(gridPane);
+        try {
+            javafx.scene.control.DialogPane dp = alert.getDialogPane();
+            dp.setExpanded(true);
+            dp.setExpandableContent(gridPane);
+            ((javafx.scene.control.Button) dp.lookupButton(ButtonType.OK)).setText(bundle.getString("button.aceptar"));
+            javafx.scene.control.Button details = (javafx.scene.control.Button) dp.lookup(".details-button");
+            if (details != null) {
+                String txt = bundle.getString(dp.isExpanded() ? "dialog.ocultar.detalles" : "dialog.mostrar.detalles");
+                details.setText(txt);
+                javafx.application.Platform.runLater(() -> {
+                    details.setText(bundle.getString(dp.isExpanded() ? "dialog.ocultar.detalles" : "dialog.mostrar.detalles"));
+                });
+                dp.expandedProperty().addListener((obs, was, isNow) -> {
+                    String t = bundle.getString(isNow ? "dialog.ocultar.detalles" : "dialog.mostrar.detalles");
+                    details.setText(t);
+                    javafx.application.Platform.runLater(() -> details.setText(t));
+                });
+                details.textProperty().addListener((o, oldV, newV) -> {
+                    String desired = bundle.getString(dp.isExpanded() ? "dialog.ocultar.detalles" : "dialog.mostrar.detalles");
+                    if (!desired.equals(newV)) {
+                        details.setText(desired);
+                    }
+                });
+            }
+        } catch (Exception ignored) {}
+        alert.showAndWait();
     }
 
     /**
