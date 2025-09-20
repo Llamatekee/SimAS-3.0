@@ -333,6 +333,8 @@ public class Gramatica {
         if (partes.length < 2) return null;
 
         String antecedente = partes[0].trim();
+        // Quitar numeración opcional tipo "1. " al inicio del antecedente
+        antecedente = antecedente.replaceFirst("^\\d+\\.\\s*", "");
         String[] consecuente = partes[1].trim().split(" ");
 
         Antecedente antec = new Antecedente();
