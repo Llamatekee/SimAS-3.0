@@ -14,6 +14,6 @@ app.classpath=$APPDIR/javafx/javafx.web.jar
 [JavaOptions]
 java-options=-Djpackage.app-version=1.0
 java-options=--module-path
-java-options=$APPDIR/javafx
+java-options=apps/macos/input/javafx
 java-options=--add-modules
 java-options=javafx.controls,javafx.fxml,javafx.graphics,javafx.web

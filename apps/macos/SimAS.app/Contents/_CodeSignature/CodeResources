@@ -36,14 +36,28 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			6qiaisxXe1reIrS6tQh1tUhx9HXSPLmoKcFNin46Qrs=
+			3wpqURUvywl0sUeoWOLChWCTcR7hDknDZGO8NCj2Vqs=
 			</data>
 		</dict>
 		<key>app/SimAS.jar</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			yQHK9taXMKX5KcIYGsBsLac8gW2fMKP5szmf8xwUTdM=
+			+ea6ayCE7QjPcumUqUqEYX/l9QQ/+26+Mu+xiOq4JUo=
+			</data>
+		</dict>
+		<key>app/fonts/arial.ttf</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			GQance2Hml3nWj/1UvutUzgn/ns54YMZzp2a4TTDRsc=
+			</data>
+		</dict>
+		<key>app/fonts/arialuni.ttf</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			aZuBi93R1/R7PM2/CJFAMDGYrr4pf9LnP30P3mBFU+U=
 			</data>
 		</dict>
 		<key>app/javafx/itextpdf-5.5.13.3.jar</key>

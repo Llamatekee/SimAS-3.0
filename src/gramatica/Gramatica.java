@@ -69,6 +69,36 @@ public class Gramatica {
         }
     }
 
+    /**
+     * Resuelve una ruta válida hacia la fuente usada en los PDFs tanto en desarrollo
+     * como dentro de un bundle .app (jpackage). Intenta, en este orden:
+     * 1) Cargar desde recursos del classpath (si estuviera embebido)
+     * 2) Cargar desde el directorio del JAR (Contents/app/fonts/...)
+     * 3) Usar la ruta relativa de trabajo (fonts/...)
+     */
+    private static String resolveFontPath() {
+        final String relativeFont = "fonts/arial.ttf";
+        try {
+            java.net.URL res = Gramatica.class.getResource("/fonts/arial.ttf");
+            if (res != null) {
+                try (java.io.InputStream in = Gramatica.class.getResourceAsStream("/fonts/arial.ttf")) {
+                    if (in != null) {
+                        java.nio.file.Path temp = java.nio.file.Files.createTempFile("arial_", ".ttf");
+                        java.nio.file.Files.copy(in, temp, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+                        temp.toFile().deleteOnExit();
+                        return temp.toString();
+                    }
+                }
+            }
+        } catch (Exception ignored) {}
+        try {
+            java.io.File jar = new java.io.File(Gramatica.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+            java.io.File font = new java.io.File(jar.getParentFile(), relativeFont);
+            if (font.exists()) return font.getAbsolutePath();
+        } catch (Exception ignored) {}
+        return relativeFont;
+    }
+
     // Constructor con parámetros
     public Gramatica(String nombre, String descripcion) {
         this.nombre.set(nombre);
@@ -860,7 +890,7 @@ public class Gramatica {
             }
             try {
                 // Configuración inicial del documento - ESTILOS PROFESIONALES IDÉNTICOS
-                String fontPath = "fonts/arial.ttf";
+                String fontPath = resolveFontPath();
                 Document document = new Document(PageSize.A4, 50, 50, 80, 50);
 
                 // Crear el PdfWriter con gestión avanzada de páginas
@@ -994,7 +1024,7 @@ public class Gramatica {
                                          List<FuncionError> funcionesError, ResourceBundle bundle) throws DocumentException {
         try {
             // Configuración inicial del documento
-            String fontPath = "fonts/arial.ttf";
+            String fontPath = resolveFontPath();
             Document document = new Document(PageSize.A4, 50, 50, 80, 50);
             
             // Crear el PdfWriter con gestión avanzada de páginas
@@ -1358,7 +1388,7 @@ public class Gramatica {
                                          String estadoSimulacion, List<HistorialPaso> historialPasos) throws DocumentException {
         try {
             // Configuración inicial del documento
-            String fontPath = "fonts/arial.ttf";
+            String fontPath = resolveFontPath();
             Document document = new Document(PageSize.A4, 50, 50, 80, 50);
 
             // Crear el PdfWriter con gestión avanzada de páginas
