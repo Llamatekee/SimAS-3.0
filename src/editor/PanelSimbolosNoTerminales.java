@@ -82,8 +82,9 @@ public class PanelSimbolosNoTerminales extends VBox implements ActualizableTexto
     }
 
     private void agregarSimbolo(String simbolo) {
-        if (simbolosSet.add(simbolo)) {
-            simbolosTemporales.add(simbolo); // Agregamos solo a la lista temporal
+        String normalizado = simbolo.toUpperCase();
+        if (simbolosSet.add(normalizado)) {
+            simbolosTemporales.add(normalizado); // Agregamos solo a la lista temporal
         } else {
             panelPadre.panelPadre.mostrarAlerta(bundle.getString("simbolos.error.duplicado.titulo"), bundle.getString("simbolos.error.duplicado.mensaje"));
         }
@@ -91,7 +92,7 @@ public class PanelSimbolosNoTerminales extends VBox implements ActualizableTexto
 
     @FXML
     private void onInsertarAction() {
-        String nuevoSimbolo = txtSimboloNoTerminal.getText().trim();
+        String nuevoSimbolo = txtSimboloNoTerminal.getText().trim().toUpperCase();
         if (!nuevoSimbolo.isEmpty() && simbolosSet.add(nuevoSimbolo)) {
             simbolosTemporales.add(nuevoSimbolo); // Agregamos solo a la lista temporal
             txtSimboloNoTerminal.clear();
@@ -146,6 +147,7 @@ public class PanelSimbolosNoTerminales extends VBox implements ActualizableTexto
         if (simboloSeleccionado != null) {
             String nuevoSimbolo = mostrarDialogoModificarSimbolo(simboloSeleccionado);
             if (nuevoSimbolo != null) nuevoSimbolo = nuevoSimbolo.trim();
+            if (nuevoSimbolo != null) nuevoSimbolo = nuevoSimbolo.toUpperCase();
             if (nuevoSimbolo != null && !nuevoSimbolo.isEmpty() && !simbolosSet.contains(nuevoSimbolo)) {
                 simbolosSet.remove(simboloSeleccionado);
                 simbolosSet.add(nuevoSimbolo);
