@@ -29,3 +29,8 @@ bin/
 .DS_Store*.dmg
 *.dmg
 *.DS_Store
+
+
+apps/linux/openjfx-17.0.12_linux-x64_bin-sdk.zip
+apps/linux/SimAS/lib/runtime/lib/modules
+*libjfxwebkit.so
