@@ -672,6 +672,7 @@ public class SecondaryWindow extends EditorWindow {
                 bundle.getString("msg.confirmar.salir"),
                 ButtonType.YES, ButtonType.NO);
         confirm.setTitle(bundle.getString("title.menu"));
+        DialogUtils.centerDialog(confirm, stage);
         confirm.showAndWait().ifPresent(response -> {
             if (response == ButtonType.YES) {
                 System.exit(0);
@@ -733,6 +734,7 @@ public class SecondaryWindow extends EditorWindow {
                 });
             }
         } catch (Exception ignored) {}
+        DialogUtils.centerDialog(alert, stage);
         alert.showAndWait();
     }
 
@@ -744,6 +746,7 @@ public class SecondaryWindow extends EditorWindow {
         alert.setTitle(titulo);
         alert.setHeaderText(null);
         alert.setContentText(mensaje);
+        DialogUtils.centerDialog(alert, stage);
         alert.showAndWait();
     }
 } 

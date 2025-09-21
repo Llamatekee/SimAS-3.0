@@ -36,6 +36,7 @@ import javafx.application.Platform;
 import java.util.Map;
 import java.util.HashMap;
 import javafx.scene.control.Label;
+import utils.DialogUtils;
 
 public class SimulacionFinal extends BorderPane implements ActualizableTextos {
     @FXML private TextField campoEntrada;
@@ -667,6 +668,7 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         dialogPane.getStylesheets().add(getClass().getResource("/vistas/styles2.css").toExternalForm());
         dialogPane.getStyleClass().add("wizard-step");
         
+        DialogUtils.centerDialog(alert, this);
         alert.showAndWait();
     }
 
@@ -1829,12 +1831,14 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
                 alert.setTitle(bundle.getString("editor.informe.exito.titulo"));
                 alert.setHeaderText(null);
                 alert.setContentText(bundle.getString("editor.informe.exito.mensaje") + "\n" + archivo.getAbsolutePath());
+                DialogUtils.centerDialog(alert, this);
                 alert.showAndWait();
             } else {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle(bundle.getString("editor.informe.error.titulo"));
                 alert.setHeaderText(null);
                 alert.setContentText(bundle.getString("editor.informe.error.generacion"));
+                DialogUtils.centerDialog(alert, this);
                 alert.showAndWait();
             }
         } catch (Exception e) {
@@ -1842,6 +1846,7 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
             alert.setTitle(bundle.getString("editor.informe.error.titulo"));
             alert.setHeaderText(null);
             alert.setContentText(bundle.getString("editor.informe.error.generacion") + "\n" + e.getMessage());
+            DialogUtils.centerDialog(alert, this);
             alert.showAndWait();
             e.printStackTrace();
         }

@@ -15,6 +15,7 @@ import java.io.IOException;
 import javafx.stage.Stage;
 import utils.SecondaryWindow;
 import java.util.ResourceBundle;
+import utils.DialogUtils;
 
 public class PanelSimulacion extends VBox {
     @FXML private VBox root;
@@ -317,6 +318,7 @@ public class PanelSimulacion extends VBox {
         alert.setTitle(titulo);
         alert.setHeaderText(null);
         alert.setContentText(mensaje);
+        DialogUtils.centerDialog(alert, this);
         alert.showAndWait();
     }
     

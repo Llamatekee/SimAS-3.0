@@ -16,6 +16,7 @@ import javafx.stage.Stage;
 import java.util.ResourceBundle;
 import utils.TabManager;
 import utils.ActualizableTextos;
+import utils.DialogUtils;
 
 public class PanelCreacionGramatica extends BorderPane implements ActualizableTextos {
 
@@ -224,6 +225,7 @@ public class PanelCreacionGramatica extends BorderPane implements ActualizableTe
         confirm.getButtonTypes().setAll(btnNo, btnSi);
         Stage stage = (Stage) confirm.getDialogPane().getScene().getWindow();
         stage.toFront(); // Asegura que la alerta esté al frente
+        DialogUtils.centerDialog(confirm, this);
         confirm.showAndWait().ifPresent(result -> {
             if (result == btnSi) {
                 // Cerrar todas las pestañas hijas antes de cerrar la principal
@@ -261,6 +263,7 @@ public class PanelCreacionGramatica extends BorderPane implements ActualizableTe
         alert.setTitle(titulo);
         alert.setHeaderText(null);
         alert.setContentText(mensaje);
+        DialogUtils.centerDialog(alert, this);
         alert.showAndWait();
     }
 

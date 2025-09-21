@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.stream.Collectors;
 import java.util.ResourceBundle;
 import utils.ActualizableTextos;
+import utils.DialogUtils;
 
 /**
  * Panel para modificar las producciones de la gramática.
@@ -227,6 +228,7 @@ public class PanelProducciones extends VBox implements ActualizableTextos {
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION, bundle.getString("producciones.dialog.cancelar.mensaje"), btnSi, btnNo);
         confirm.setTitle(bundle.getString("producciones.dialog.cancelar.titulo"));
         confirm.setHeaderText(bundle.getString("producciones.dialog.cancelar.titulo"));
+        DialogUtils.centerDialog(confirm, this);
         confirm.showAndWait().ifPresent(response -> {
             if (response == btnSi) {
                 cerrarPestanaActual();
@@ -246,6 +248,7 @@ public class PanelProducciones extends VBox implements ActualizableTextos {
         alert.setTitle(bundle.getString("editor.dialog.error.titulo"));
         alert.setHeaderText(null);
         alert.setContentText(mensaje);
+        DialogUtils.centerDialog(alert, this);
         alert.showAndWait();
     }
 

@@ -17,6 +17,7 @@ import utils.ActualizableTextos;
 import java.util.ResourceBundle;
 import utils.TabManager;
 import java.util.MissingResourceException;
+import utils.DialogUtils;
 
 /**
  * Controlador para la simulación descendente en JavaFX.
@@ -345,6 +346,7 @@ public class PanelNuevaSimDescPaso6 extends BorderPane implements PanelNuevaSimD
             alert.setTitle(bundle.getString("editor.informe.error.titulo"));
             alert.setHeaderText(null);
             alert.setContentText(bundle.getString("editor.informe.error.sin.gramatica"));
+            DialogUtils.centerDialog(alert, this);
             alert.showAndWait();
             return;
         }
@@ -389,12 +391,14 @@ public class PanelNuevaSimDescPaso6 extends BorderPane implements PanelNuevaSimD
                 alert.setTitle(bundle.getString("editor.informe.exito.titulo"));
                 alert.setHeaderText(null);
                 alert.setContentText(bundle.getString("editor.informe.exito.mensaje") + "\n" + archivo.getAbsolutePath());
+                DialogUtils.centerDialog(alert, this);
                 alert.showAndWait();
             } else {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle(bundle.getString("editor.informe.error.titulo"));
                 alert.setHeaderText(null);
                 alert.setContentText(bundle.getString("editor.informe.error.generacion"));
+                DialogUtils.centerDialog(alert, this);
                 alert.showAndWait();
             }
         } catch (Exception e) {
@@ -402,6 +406,7 @@ public class PanelNuevaSimDescPaso6 extends BorderPane implements PanelNuevaSimD
             alert.setTitle(bundle.getString("editor.informe.error.titulo"));
             alert.setHeaderText(null);
             alert.setContentText(bundle.getString("editor.informe.error.generacion") + "\n" + e.getMessage());
+            DialogUtils.centerDialog(alert, this);
             alert.showAndWait();
             e.printStackTrace();
         }

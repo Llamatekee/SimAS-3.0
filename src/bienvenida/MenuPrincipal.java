@@ -25,6 +25,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import java.util.Map;
+import utils.DialogUtils;
 
 public class MenuPrincipal extends Application {
 
@@ -727,6 +728,7 @@ public class MenuPrincipal extends Application {
         Alert alerta = new Alert(Alert.AlertType.ERROR, mensaje, ButtonType.OK);
         alerta.setTitle("Error");
         alerta.setHeaderText("Error al abrir el archivo");
+        DialogUtils.centerDialog(alerta, tabPane);
         alerta.showAndWait();
     }
 
@@ -736,6 +738,7 @@ public class MenuPrincipal extends Application {
                 bundle.getString("msg.confirmar.salir"),
                 ButtonType.YES, ButtonType.NO);
         confirm.setTitle(bundle.getString("title.menu"));
+        DialogUtils.centerDialog(confirm, tabPane);
         confirm.showAndWait().ifPresent(response -> {
             if (response == ButtonType.YES) {
                 System.exit(0);

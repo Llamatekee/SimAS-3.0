@@ -13,6 +13,7 @@ import java.util.HashSet;
 import java.util.ResourceBundle;
 import java.util.Set;
 import utils.ActualizableTextos;
+import utils.DialogUtils;
 
 public class PanelSimbolosTerminales extends VBox implements ActualizableTextos {
 
@@ -123,6 +124,7 @@ public class PanelSimbolosTerminales extends VBox implements ActualizableTextos 
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION, bundle.getString("simbolos.dialog.cancelar.mensaje"), btnSi, btnNo);
         confirm.setTitle(bundle.getString("simbolos.dialog.cancelar.titulo"));
         confirm.setHeaderText(bundle.getString("simbolos.dialog.cancelar.titulo"));
+        DialogUtils.centerDialog(confirm, this);
         confirm.showAndWait().ifPresent(response -> {
             if (response == btnSi) {
                 cerrarPestanaActual();
@@ -135,6 +137,7 @@ public class PanelSimbolosTerminales extends VBox implements ActualizableTextos 
         dialog.setTitle(bundle.getString("simbolos.dialog.modificar.titulo"));
         dialog.setHeaderText(bundle.getString("simbolos.dialog.modificar.header.terminal"));
         dialog.setContentText(bundle.getString("simbolos.dialog.modificar.content"));
+        DialogUtils.centerDialog(dialog.getDialogPane().getScene() == null ? dialog : dialog, this);
         return dialog.showAndWait().orElse(null);
     }
 

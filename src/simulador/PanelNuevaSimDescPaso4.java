@@ -11,6 +11,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import utils.ActualizableTextos;
 import utils.TabManager;
+import utils.DialogUtils;
 
 import java.io.IOException;
 import java.util.List;
@@ -260,6 +261,7 @@ public class PanelNuevaSimDescPaso4 implements PanelNuevaSimDescPaso, Actualizab
                 alert.setTitle("Error");
                 alert.setHeaderText("No se puede eliminar");
                 alert.setContentText("No se pueden eliminar las funciones predefinidas (0 y 1).");
+                DialogUtils.centerDialog(alert, root);
                 alert.showAndWait();
                 return;
             }

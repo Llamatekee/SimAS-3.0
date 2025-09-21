@@ -10,6 +10,7 @@ import utils.ActualizableTextos;
 
 import java.io.IOException;
 import java.util.ResourceBundle;
+import utils.DialogUtils;
 
 /**
  * Panel de creación de gramática - Paso 1
@@ -137,6 +138,7 @@ public class PanelCreacionGramaticaPaso1 extends VBox implements ActualizableTex
             alert.setHeaderText(null);
             alert.setContentText("¿Está seguro que desea cancelar la edición? Los cambios no guardados se perderán.");
             
+            DialogUtils.centerDialog(alert, this);
             alert.showAndWait().ifPresent(response -> {
                 if (response == ButtonType.OK) {
                     panelPadre.cancelarEdicion();
@@ -216,6 +218,7 @@ public class PanelCreacionGramaticaPaso1 extends VBox implements ActualizableTex
         alert.setTitle(titulo);
         alert.setHeaderText(null);
         alert.setContentText(mensaje);
+        DialogUtils.centerDialog(alert, this);
         alert.showAndWait();
     }
 

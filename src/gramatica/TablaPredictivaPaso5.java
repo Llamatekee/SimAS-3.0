@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import javafx.scene.control.TableRow;
 import javafx.beans.property.SimpleStringProperty;
 import java.util.ResourceBundle;
+import utils.DialogUtils;
 
 /**
  * Versión extendida de TablaPredictiva específica para el paso 5,
@@ -369,6 +370,7 @@ public class TablaPredictivaPaso5 extends TablaPredictiva {
             alert.setHeaderText(header);
             alert.setContentText(contenido);
         }
+        DialogUtils.centerDialog(alert, panelPaso5 != null ? panelPaso5.getRoot() : null);
         alert.showAndWait();
     }
 

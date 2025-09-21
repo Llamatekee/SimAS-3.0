@@ -27,6 +27,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import utils.TabManager;
 import utils.ActualizableTextos;
+import utils.DialogUtils;
 
 public class Editor extends VBox implements ActualizableTextos {
 
@@ -275,6 +276,7 @@ public class Editor extends VBox implements ActualizableTextos {
             btnSi, btnNo);
         confirm.setTitle(bundle.getString("editor.dialog.eliminar.titulo"));
         confirm.setHeaderText(bundle.getString("editor.header.eliminar"));
+        DialogUtils.centerDialog(confirm, rootPane);
         Optional<ButtonType> result = confirm.showAndWait();
         if (result.isPresent() && result.get() == btnSi) {
             this.gramatica = new Gramatica();
@@ -318,6 +320,7 @@ public class Editor extends VBox implements ActualizableTextos {
                 alert.setTitle(bundle.getString("editor.simulador.existente.titulo"));
                 alert.setHeaderText(null);
                 alert.setContentText(bundle.getString("editor.simulador.existente.mensaje"));
+                DialogUtils.centerDialog(alert, rootPane);
                 alert.showAndWait();
                 tabPane.getSelectionModel().select(tab);
                 return;
@@ -358,6 +361,7 @@ public class Editor extends VBox implements ActualizableTextos {
                 btnSi, btnNo);
         confirm.setTitle(bundle.getString("editor.header.salir"));
         confirm.setHeaderText(bundle.getString("editor.header.salir"));
+        DialogUtils.centerDialog(confirm, rootPane);
         confirm.showAndWait().ifPresent(response -> {
             if (response == btnSi) {
                 Stage stage = (Stage) rootPane.getScene().getWindow();
@@ -396,6 +400,7 @@ public class Editor extends VBox implements ActualizableTextos {
         if (i == 1) {
             Alert alert = new Alert(AlertType.INFORMATION, bundle.getString("editor.msg.guardar.exito"), ButtonType.OK);
             alert.setTitle(bundle.getString("editor.dialog.guardar.titulo"));
+            DialogUtils.centerDialog(alert, rootPane);
             alert.showAndWait();
         }
     }
@@ -442,6 +447,7 @@ public class Editor extends VBox implements ActualizableTextos {
             alert.setTitle(bundle.getString("editor.dialog.validar.titulo"));
             alert.setHeaderText(null);
             alert.setContentText(bundle.getString("editor.msg.validar.exito"));
+            DialogUtils.centerDialog(alert, rootPane);
             alert.showAndWait();
         } else {
             gramatica.setEstado(-1);
@@ -503,6 +509,7 @@ public class Editor extends VBox implements ActualizableTextos {
                     });
                 }
             } catch (Exception ignored) {}
+            DialogUtils.centerDialog(alert, rootPane);
             alert.showAndWait();
         }
     }
@@ -512,6 +519,7 @@ public class Editor extends VBox implements ActualizableTextos {
         alert.setTitle(titulo);
         alert.setHeaderText(null);
         alert.setContentText(mensaje);
+        DialogUtils.centerDialog(alert, rootPane);
         alert.showAndWait();
     }
 
@@ -521,6 +529,7 @@ public class Editor extends VBox implements ActualizableTextos {
             alert.setTitle(bundle.getString("editor.informe.error.titulo"));
             alert.setHeaderText(null);
             alert.setContentText(bundle.getString("editor.informe.error.sin.gramatica"));
+            DialogUtils.centerDialog(alert, rootPane);
             alert.showAndWait();
             return;
         }
@@ -551,12 +560,14 @@ public class Editor extends VBox implements ActualizableTextos {
                 alert.setTitle(bundle.getString("editor.informe.exito.titulo"));
                 alert.setHeaderText(null);
                 alert.setContentText(bundle.getString("editor.informe.exito.mensaje") + "\n" + archivo.getAbsolutePath());
+                DialogUtils.centerDialog(alert, rootPane);
                 alert.showAndWait();
             } else {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle(bundle.getString("editor.informe.error.titulo"));
                 alert.setHeaderText(null);
                 alert.setContentText(bundle.getString("editor.informe.error.gramatica.no.validada"));
+                DialogUtils.centerDialog(alert, rootPane);
                 alert.showAndWait();
             }
         } catch (Exception e) {
@@ -564,6 +575,7 @@ public class Editor extends VBox implements ActualizableTextos {
             alert.setTitle(bundle.getString("editor.informe.error.titulo"));
             alert.setHeaderText(null);
             alert.setContentText(bundle.getString("editor.informe.error.generacion") + "\n" + e.getMessage());
+            DialogUtils.centerDialog(alert, rootPane);
             alert.showAndWait();
             e.printStackTrace();
         }
@@ -659,6 +671,7 @@ public class Editor extends VBox implements ActualizableTextos {
                     info.setHeaderText(null);
                     info.setTitle("");
                     info.setContentText(msg);
+                    DialogUtils.centerDialogNonModal(info, rootPane);
                     info.show();
                     javafx.animation.PauseTransition delay = new javafx.animation.PauseTransition(javafx.util.Duration.millis(2500));
                     delay.setOnFinished(e -> info.close());

@@ -13,6 +13,7 @@ import javafx.beans.binding.BooleanBinding;
 import java.io.IOException;
 import java.util.ResourceBundle;
 import utils.ActualizableTextos;
+import utils.DialogUtils;
 
 /**
  * Panel para seleccionar el símbolo inicial de la gramática.
@@ -161,6 +162,7 @@ public class PanelCreacionGramaticaPaso4 extends VBox implements ActualizableTex
                 });
             }
         } catch (Exception ignored) {}
+        DialogUtils.centerDialog(alert, this);
         alert.showAndWait();
     }
 
@@ -212,6 +214,7 @@ public class PanelCreacionGramaticaPaso4 extends VBox implements ActualizableTex
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION, bundle.getString("creacion.dialog.salir.mensaje"), btnSi, btnNo);
         confirm.setTitle(bundle.getString("creacion.dialog.salir.titulo"));
         confirm.setHeaderText(bundle.getString("creacion.dialog.salir.titulo"));
+        DialogUtils.centerDialog(confirm, this);
         confirm.showAndWait().ifPresent(response -> {
             if (response == btnSi) {
                 cerrarAsistente();

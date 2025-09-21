@@ -25,6 +25,7 @@ import gramatica.Gramatica;
 import gramatica.TablaPredictivaPaso5;
 import gramatica.Terminal;
 import utils.ActualizableTextos;
+import utils.DialogUtils;
 
 public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso, ActualizableTextos {
 
@@ -541,6 +542,7 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso, Actualizab
             alert.setTitle(bundle.getString("simulador.paso5.alert.error"));
             alert.setHeaderText(bundle.getString("simulador.paso5.alert.validacion.header"));
             alert.setContentText(bundle.getString("simulador.paso5.alert.validacion.content"));
+            DialogUtils.centerDialog(alert, root);
             alert.showAndWait();
         }
     }
@@ -585,6 +587,7 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso, Actualizab
                     alert.setTitle(bundle.getString("simulador.paso5.alert.error"));
                     alert.setHeaderText(bundle.getString("simulador.paso5.alert.celda.invalida.header"));
                     alert.setContentText(bundle.getString("simulador.paso5.alert.celda.invalida.content"));
+                    DialogUtils.centerDialog(alert, root);
                     alert.showAndWait();
                 }
             }
@@ -619,6 +622,7 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso, Actualizab
                         alert.setTitle(bundle.getString("simulador.paso5.alert.error"));
                         alert.setHeaderText(bundle.getString("simulador.paso5.alert.no.funcion.header"));
                         alert.setContentText(bundle.getString("simulador.paso5.alert.no.funcion.content"));
+                        DialogUtils.centerDialog(alert, root);
                         alert.showAndWait();
                     }
                 } else {
@@ -627,6 +631,7 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso, Actualizab
                     alert.setTitle(bundle.getString("simulador.paso5.alert.error"));
                     alert.setHeaderText(bundle.getString("simulador.paso5.alert.celda.no.vacia.header"));
                     alert.setContentText(bundle.getString("simulador.paso5.alert.celda.no.vacia.content"));
+                    DialogUtils.centerDialog(alert, root);
                     alert.showAndWait();
                 }
             }
@@ -680,6 +685,7 @@ public class PanelNuevaSimDescPaso5 implements PanelNuevaSimDescPaso, Actualizab
             alert.setTitle(bundle.getString("simulador.paso5.alert.error"));
             alert.setHeaderText(bundle.getString("simulador.paso5.alert.no.funcion.header"));
             alert.setContentText(bundle.getString("simulador.paso5.alert.no.funcion.content"));
+            DialogUtils.centerDialog(alert, root);
             alert.showAndWait();
             return;
         }

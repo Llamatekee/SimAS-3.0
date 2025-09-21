@@ -21,6 +21,7 @@ import javafx.scene.control.TextArea;
 import utils.TabPaneMonitor;
 import utils.TabManager;
 import utils.SecondaryWindow;
+import utils.DialogUtils;
 
 public class EditorWindow {
     private Stage stage;
@@ -539,6 +540,7 @@ public class EditorWindow {
                 "msg.confirmar.salir",
                 ButtonType.YES, ButtonType.NO);
         confirm.setTitle("title.menu");
+        DialogUtils.centerDialog(confirm, stage);
         confirm.showAndWait().ifPresent(response -> {
             if (response == ButtonType.YES) {
                 System.exit(0);
@@ -600,6 +602,7 @@ public class EditorWindow {
                 });
             }
         } catch (Exception ignored) {}
+        DialogUtils.centerDialog(alert, stage);
         alert.showAndWait();
     }
 
@@ -611,6 +614,7 @@ public class EditorWindow {
         alert.setTitle(titulo);
         alert.setHeaderText(null);
         alert.setContentText(mensaje);
+        DialogUtils.centerDialog(alert, stage);
         alert.showAndWait();
     }
 } 
