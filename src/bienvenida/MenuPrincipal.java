@@ -530,7 +530,7 @@ public class MenuPrincipal extends Application {
 
     @FXML
     private void onBtnAyudaAction() {
-        File manual = new File("ManualDeUsuario.pdf");
+        File manual = new File("Manual_de_Usuario.pdf");
         if (manual.exists()) {
             try {
                 if (Desktop.isDesktopSupported()) {

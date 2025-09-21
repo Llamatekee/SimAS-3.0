@@ -495,7 +495,7 @@ public class EditorWindow {
      * Abre el manual de ayuda
      */
     private void abrirAyuda() {
-        File manual = new File("ManualDeUsuario.pdf");
+        File manual = new File("Manual_de_Usuario.pdf");
         if (manual.exists()) {
             try {
                 if (Desktop.isDesktopSupported()) {
