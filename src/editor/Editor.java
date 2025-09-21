@@ -278,6 +278,8 @@ public class Editor extends VBox implements ActualizableTextos {
         Optional<ButtonType> result = confirm.showAndWait();
         if (result.isPresent() && result.get() == btnSi) {
             this.gramatica = new Gramatica();
+            // Cerrar simulador hijo si existe al cambiar la gramática
+            cerrarSimuladorHijoPorCambioGramatica();
             actualizarVisualizacion();
         }
     }
@@ -377,10 +379,14 @@ public class Editor extends VBox implements ActualizableTextos {
 
         if (gr != null) {
             this.gramatica = gr;
+            // Cerrar simulador hijo si existe al cambiar la gramática
+            cerrarSimuladorHijoPorCambioGramatica();
             actualizarVisualizacion();
             validarGramatica(gramatica);
         } else {
             this.gramatica = null; // Si no se carga una nueva gramática, aseguramos que quede en null
+            // Cerrar simulador hijo si existía
+            cerrarSimuladorHijoPorCambioGramatica();
             actualizarVisualizacion();
         }
     }
@@ -619,6 +625,47 @@ public class Editor extends VBox implements ActualizableTextos {
     public void setBundle(ResourceBundle bundle) {
         this.bundle = bundle;
         actualizarTextos(bundle);
+    }
+    
+    /**
+     * Cierra la pestaña del simulador hijo de este editor (y sus descendientes)
+     * si está abierta, para garantizar consistencia cuando cambia la gramática.
+     */
+    public void cerrarSimuladorHijoPorCambioGramatica() {
+        if (tabPane == null) return;
+        String simuladorId = "simulador_" + editorId.replace("editor_", "");
+        Tab simuladorTab = null;
+        for (Tab tab : tabPane.getTabs()) {
+            if (tab.getUserData() != null && tab.getUserData().toString().equals(simuladorId)) {
+                simuladorTab = tab;
+                break;
+            }
+        }
+        if (simuladorTab != null) {
+            // Cerrar descendientes del simulador (simulaciones, derivaciones, árboles)
+            TabManager.closeAllDescendantTabs(tabPane, simuladorId);
+            // Limpiar del grupo y eliminar la pestaña del simulador
+            String grupoId = TabManager.obtenerGrupoDeElemento(tabPane, simuladorId);
+            tabPane.getTabs().remove(simuladorTab);
+            TabManager.eliminarElementoDeGrupo(tabPane, simuladorId, grupoId);
+            TabManager.reasignarNumerosGruposGramatica(tabPane);
+            // Notificación no bloqueante (en hilo de UI)
+            try {
+                String msg = (bundle != null)
+                    ? bundle.getString("editor.simulador.cerrado.por.cambio")
+                    : "Se cerró el simulador porque la gramática cambió. Vuelve a abrirlo para reflejar los cambios.";
+                javafx.application.Platform.runLater(() -> {
+                    Alert info = new Alert(AlertType.INFORMATION);
+                    info.setHeaderText(null);
+                    info.setTitle("");
+                    info.setContentText(msg);
+                    info.show();
+                    javafx.animation.PauseTransition delay = new javafx.animation.PauseTransition(javafx.util.Duration.millis(2500));
+                    delay.setOnFinished(e -> info.close());
+                    delay.play();
+                });
+            } catch (Exception ignored) {}
+        }
     }
     
     /**

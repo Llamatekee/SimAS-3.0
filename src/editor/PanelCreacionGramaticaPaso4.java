@@ -235,6 +235,10 @@ public class PanelCreacionGramaticaPaso4 extends VBox implements ActualizableTex
                 .filter(tab -> tab.getContent() instanceof PanelCreacionGramatica)
                 .findFirst()
                 .ifPresent(tabActual -> tabPane.getTabs().remove(tabActual));
+        // Cerrar simulador hijo del editor porque la gramática ha cambiado al finalizar
+        if (panelPadre != null && panelPadre.getPanelPadre() != null) {
+            panelPadre.getPanelPadre().cerrarSimuladorHijoPorCambioGramatica();
+        }
     }
 
 
