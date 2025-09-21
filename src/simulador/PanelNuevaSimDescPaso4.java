@@ -258,9 +258,9 @@ public class PanelNuevaSimDescPaso4 implements PanelNuevaSimDescPaso, Actualizab
             // No permitir eliminar las funciones predefinidas (0 y 1)
             if (num == 0 || num == 1) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText("No se puede eliminar");
-                alert.setContentText("No se pueden eliminar las funciones predefinidas (0 y 1).");
+                alert.setTitle(bundle.getString("simulador.paso4.alert.titulo"));
+                alert.setHeaderText(bundle.getString("simulador.paso4.alert.no.eliminar.header"));
+                alert.setContentText(bundle.getString("simulador.paso4.alert.no.eliminar.contenido"));
                 DialogUtils.centerDialog(alert, root);
                 alert.showAndWait();
                 return;

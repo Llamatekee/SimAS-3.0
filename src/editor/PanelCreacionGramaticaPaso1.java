@@ -134,9 +134,9 @@ public class PanelCreacionGramaticaPaso1 extends VBox implements ActualizableTex
     private void onBtnCancelarAction() {
         if (hayDatosSinGuardar()) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Confirmar Cancelación");
+            alert.setTitle(bundle.getString("creacion1.cancelar.titulo"));
             alert.setHeaderText(null);
-            alert.setContentText("¿Está seguro que desea cancelar la edición? Los cambios no guardados se perderán.");
+            alert.setContentText(bundle.getString("creacion1.cancelar.contenido"));
             
             DialogUtils.centerDialog(alert, this);
             alert.showAndWait().ifPresent(response -> {
