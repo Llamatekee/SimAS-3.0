@@ -1336,8 +1336,11 @@ public class Gramatica {
                 // Escribir código DOT al archivo
                 java.nio.file.Files.write(dotFile, dotCode.getBytes());
 
-                // Ejecutar Graphviz para generar la imagen
-                ProcessBuilder pb = new ProcessBuilder("dot", "-Tpng", dotFile.toString(), "-o", imgFile.toString());
+                // Ejecutar Graphviz para generar la imagen (resolver 'dot' y extender PATH para ejecución desde Finder)
+                String dotExec = utils.GraphvizUtils.resolveDotExecutable();
+                ProcessBuilder pb = new ProcessBuilder(dotExec, "-Tpng", dotFile.toString(), "-o", imgFile.toString());
+                String currentPath = System.getenv("PATH");
+                pb.environment().put("PATH", utils.GraphvizUtils.extendedPathEnv(currentPath));
                 Process process = pb.start();
                 int exitCode = process.waitFor();
 

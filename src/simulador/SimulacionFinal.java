@@ -616,8 +616,11 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
                 // Crear un archivo temporal para la imagen
                 java.nio.file.Path imgFile = java.nio.file.Files.createTempFile("arbol_", ".png");
                 
-                // Ejecutar Graphviz para generar la imagen
-                ProcessBuilder pb = new ProcessBuilder("dot", "-Tpng", dotFile.toString(), "-o", imgFile.toString());
+                // Ejecutar Graphviz para generar la imagen (resolver 'dot' y extender PATH)
+                String dotExec = utils.GraphvizUtils.resolveDotExecutable();
+                ProcessBuilder pb = new ProcessBuilder(dotExec, "-Tpng", dotFile.toString(), "-o", imgFile.toString());
+                String currentPath = System.getenv("PATH");
+                pb.environment().put("PATH", utils.GraphvizUtils.extendedPathEnv(currentPath));
                 Process process = pb.start();
                 process.waitFor();
                 
@@ -1040,8 +1043,11 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
             // Crear un archivo temporal para la imagen
             java.nio.file.Path imgFile = java.nio.file.Files.createTempFile("arbol_", ".png");
             
-            // Ejecutar Graphviz para generar la imagen
-            ProcessBuilder pb = new ProcessBuilder("dot", "-Tpng", dotFile.toString(), "-o", imgFile.toString());
+            // Ejecutar Graphviz para generar la imagen (resolver 'dot' y extender PATH)
+            String dotExec = utils.GraphvizUtils.resolveDotExecutable();
+            ProcessBuilder pb = new ProcessBuilder(dotExec, "-Tpng", dotFile.toString(), "-o", imgFile.toString());
+            String currentPath = System.getenv("PATH");
+            pb.environment().put("PATH", utils.GraphvizUtils.extendedPathEnv(currentPath));
             Process process = pb.start();
             process.waitFor();
             
@@ -1235,8 +1241,11 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
             // Crear un archivo temporal para la imagen
             java.nio.file.Path imgFile = java.nio.file.Files.createTempFile("arbol_", ".png");
             
-            // Ejecutar Graphviz para generar la imagen
-            ProcessBuilder pb = new ProcessBuilder("dot", "-Tpng", dotFile.toString(), "-o", imgFile.toString());
+            // Ejecutar Graphviz para generar la imagen (resolver 'dot' y extender PATH)
+            String dotExec = utils.GraphvizUtils.resolveDotExecutable();
+            ProcessBuilder pb = new ProcessBuilder(dotExec, "-Tpng", dotFile.toString(), "-o", imgFile.toString());
+            String currentPath = System.getenv("PATH");
+            pb.environment().put("PATH", utils.GraphvizUtils.extendedPathEnv(currentPath));
             Process process = pb.start();
             process.waitFor();
             
