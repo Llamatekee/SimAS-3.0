@@ -139,6 +139,7 @@ jpackage --type deb \
 
 # 10) Post-process the .deb: install hicolor icons and set desktop Icon name
 DEB_PATH=$(ls -1 "$LINUX_DIR"/*.deb | sort | tail -n 1 || true)
+FINAL_DEB="$LINUX_DIR/SimAS-3.0.deb"
 if [ -n "$DEB_PATH" ]; then
   echo "Post-processing .deb for icon integration..."
   WORK_DIR="$LINUX_DIR/deb-work"
@@ -176,14 +177,16 @@ if [ -n "$DEB_PATH" ]; then
   done
 
   # Repack the deb with icons embedded
-  NEW_DEB="$LINUX_DIR/$(basename "$DEB_PATH")"
-  dpkg-deb -b "$WORK_DIR" "$NEW_DEB" >/dev/null
-  echo "Updated $NEW_DEB with themed icons."
+  # Repack using the fixed output name
+  dpkg-deb -b "$WORK_DIR" "$FINAL_DEB" >/dev/null
+  # Remove the original jpackage-produced deb if different
+  if [ "$DEB_PATH" != "$FINAL_DEB" ] && [ -f "$DEB_PATH" ]; then rm -f "$DEB_PATH"; fi
+  echo "Updated $FINAL_DEB with themed icons."
 fi
 
 echo "=== Done ==="
 echo "- App image: $APP_DIR"
 echo "- Run locally: $APP_DIR/bin/SimAS"
-echo "- Installer:  $LINUX_DIR/SimAS-3.0.deb"
+echo "- Installer:  $FINAL_DEB"
 
 
