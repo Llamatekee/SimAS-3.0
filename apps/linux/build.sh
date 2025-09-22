@@ -97,6 +97,20 @@ cp -r "$FX_SDK_DIR" "$INPUT_DIR/javafx"
 cp "$LINUX_DIR/${APP_NAME}.jar" "$INPUT_DIR/"
 cp "$LIBS_DIR/${ITEXT_JAR}" "$INPUT_DIR/"
 
+# Include user manual and tutorial resources so ResourceUtils can resolve them at runtime
+if [ -f "$ROOT_DIR/Manual_de_Usuario.pdf" ]; then
+  cp "$ROOT_DIR/Manual_de_Usuario.pdf" "$INPUT_DIR/"
+else
+  echo "Warning: Manual_de_Usuario.pdf not found at project root"
+fi
+
+if [ -d "$ROOT_DIR/src/centroayuda" ]; then
+  mkdir -p "$INPUT_DIR/src"
+  cp -r "$ROOT_DIR/src/centroayuda" "$INPUT_DIR/src/"
+else
+  echo "Warning: src/centroayuda not found; tutorial HTML/images will be missing"
+fi
+
 # 7) Prepare icon from src/resources/logo2.png
 ICON_SRC="$ROOT_DIR/src/resources/logo2.png"
 ICON_DST="$LINUX_DIR/icon.png"
