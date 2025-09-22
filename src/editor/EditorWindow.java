@@ -23,6 +23,7 @@ import utils.TabManager;
 import utils.SecondaryWindow;
 import utils.DialogUtils;
 import utils.ResourceUtils;
+import javafx.scene.image.Image;
 
 public class EditorWindow {
     private Stage stage;
@@ -48,6 +49,9 @@ public class EditorWindow {
         stage.setHeight(900);
         stage.setMinWidth(600);
         stage.setMinHeight(700);
+        try {
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/logo2.png")));
+        } catch (Exception ignored) {}
 
         // Crear la escena
         Scene scene = new Scene(rootContainer);

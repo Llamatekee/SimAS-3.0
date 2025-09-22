@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=SimAS
+Comment=SimAS
+Exec=/opt/simas/bin/SimAS
+Icon=simas
+Terminal=false
+Type=Application
+Categories=Education
+MimeType=

@@ -130,31 +130,60 @@ jpackage --type deb \
   --app-version "$APP_VERSION" \
   --vendor "$APP_VENDOR" \
   --app-image "$APP_DIR" \
+  --icon "$ICON_DST" \
   --linux-shortcut \
   --linux-menu-group "Education" \
   --linux-deb-maintainer "simas@example.com" \
   --linux-package-name simas \
   --dest "$LINUX_DIR"
 
-# 10) Optional post-process to add CLI symlink (disabled by default; set PACKAGE_SYMLINKS=1 to enable)
-if [ "${PACKAGE_SYMLINKS:-0}" = "1" ]; then
-  DEB_PATH=$(ls -1 "$LINUX_DIR"/simas_*_amd64.deb | tail -n 1 || true)
-  if [ -n "$DEB_PATH" ]; then
-    echo "Adjusting .deb (CLI symlink)..."
-    WORK_DIR="$LINUX_DIR/deb-work"
-    rm -rf "$WORK_DIR" && mkdir -p "$WORK_DIR"
-    dpkg-deb -R "$DEB_PATH" "$WORK_DIR"
-    mkdir -p "$WORK_DIR/usr/local/bin"
-    ln -sf /opt/simas/bin/SimAS "$WORK_DIR/usr/local/bin/simas"
-    NEW_DEB="$LINUX_DIR/simas_${APP_VERSION}-1_amd64.deb"
-    dpkg-deb -b "$WORK_DIR" "$NEW_DEB" >/dev/null
-    echo "Created $NEW_DEB"
+# 10) Post-process the .deb: install hicolor icons and set desktop Icon name
+DEB_PATH=$(ls -1 "$LINUX_DIR"/*.deb | sort | tail -n 1 || true)
+if [ -n "$DEB_PATH" ]; then
+  echo "Post-processing .deb for icon integration..."
+  WORK_DIR="$LINUX_DIR/deb-work"
+  rm -rf "$WORK_DIR" && mkdir -p "$WORK_DIR"
+  dpkg-deb -R "$DEB_PATH" "$WORK_DIR"
+
+  # Place icons into hicolor theme directories
+  for size in 64 128 256; do
+    ICON_DIR="$WORK_DIR/usr/share/icons/hicolor/${size}x${size}/apps"
+    mkdir -p "$ICON_DIR"
+    if command -v convert >/dev/null 2>&1; then
+      convert "$ICON_SRC" -resize ${size}x${size} -background none -gravity center -extent ${size}x${size} "$ICON_DIR/simas.png"
+    else
+      cp "$ICON_SRC" "$ICON_DIR/simas.png"
+    fi
+  done
+
+  # Ensure a 512x512 icon as well when supported
+  ICON_DIR_512="$WORK_DIR/usr/share/icons/hicolor/512x512/apps"
+  mkdir -p "$ICON_DIR_512"
+  if command -v convert >/dev/null 2>&1; then
+    convert "$ICON_SRC" -resize 512x512 -background none -gravity center -extent 512x512 "$ICON_DIR_512/simas.png"
+  else
+    cp "$ICON_SRC" "$ICON_DIR_512/simas.png"
   fi
+
+  # Update desktop file(s) to use theme icon name 'simas'
+  # jpackage typically writes under /usr/share/applications or /opt/.../lib
+  find "$WORK_DIR" -type f -name "*.desktop" -print0 | while IFS= read -r -d '' dfile; do
+    sed -i 's/^Icon=.*/Icon=simas/' "$dfile"
+    # Also ensure it is categorized
+    if ! grep -q '^Categories=' "$dfile"; then
+      echo 'Categories=Education;' >> "$dfile"
+    fi
+  done
+
+  # Repack the deb with icons embedded
+  NEW_DEB="$LINUX_DIR/$(basename "$DEB_PATH")"
+  dpkg-deb -b "$WORK_DIR" "$NEW_DEB" >/dev/null
+  echo "Updated $NEW_DEB with themed icons."
 fi
 
 echo "=== Done ==="
 echo "- App image: $APP_DIR"
 echo "- Run locally: $APP_DIR/bin/SimAS"
-echo "- Installer:  $LINUX_DIR/simas_${APP_VERSION}-1_amd64.deb"
+echo "- Installer:  $LINUX_DIR/SimAS-3.0.deb"
 
 

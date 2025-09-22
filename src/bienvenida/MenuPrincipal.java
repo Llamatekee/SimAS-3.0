@@ -27,6 +27,7 @@ import javafx.scene.input.KeyCombination;
 import java.util.Map;
 import utils.DialogUtils;
 import utils.ResourceUtils;
+import javafx.scene.image.Image;
 
 public class MenuPrincipal extends Application {
 
@@ -58,6 +59,10 @@ public class MenuPrincipal extends Application {
             Scene scene = new Scene(root);
             primaryStage.setTitle("SimAS 3.0");
             primaryStage.setScene(scene);
+            // Icono de la aplicación
+            try {
+                primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/logo2.png")));
+            } catch (Exception ignored) {}
             
             // Configurar el tamaño de la ventana
             primaryStage.setWidth(800);

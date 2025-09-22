@@ -20,7 +20,7 @@
         <!-- Logo con efectos modernos -->
         <ImageView fx:id="logoImage" fitWidth="260" fitHeight="180"
                    styleClass="welcome-logo">
-            <Image url="@../resources/logo.png"/>
+            <Image url="@../resources/logo2.png"/>
         </ImageView>
         
         <!-- Título principal -->

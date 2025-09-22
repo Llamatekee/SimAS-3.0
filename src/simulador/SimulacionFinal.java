@@ -37,6 +37,7 @@ import java.util.Map;
 import java.util.HashMap;
 import javafx.scene.control.Label;
 import utils.DialogUtils;
+import javafx.scene.image.Image;
 
 public class SimulacionFinal extends BorderPane implements ActualizableTextos {
     @FXML private TextField campoEntrada;
@@ -408,6 +409,9 @@ public class SimulacionFinal extends BorderPane implements ActualizableTextos {
         Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.setTitle(bundle != null ? bundle.getString("simulacionfinal.dialog.editar.titulo") : "Editar cadena de entrada");
+        try {
+            dialog.getIcons().add(new Image(getClass().getResourceAsStream("/resources/logo2.png")));
+        } catch (Exception ignored) {}
 
         // Crear contenedor principal con estilo moderno y tamaño más pequeño
         VBox mainContainer = new VBox(15);

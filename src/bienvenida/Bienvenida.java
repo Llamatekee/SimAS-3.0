@@ -6,6 +6,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
@@ -20,6 +21,10 @@ public class Bienvenida extends Application {
         // Configurar la ventana de bienvenida
         primaryStage.initStyle(StageStyle.UNDECORATED);
         primaryStage.setScene(scene);
+        // Icono de la aplicación
+        try {
+            primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/logo2.png")));
+        } catch (Exception ignored) {}
         primaryStage.setAlwaysOnTop(true);
         primaryStage.setWidth(700);
         primaryStage.setHeight(600);

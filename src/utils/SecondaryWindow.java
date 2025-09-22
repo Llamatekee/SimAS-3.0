@@ -28,6 +28,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextArea;
 import editor.EditorWindow;
 import editor.Editor;
+import javafx.scene.image.Image;
 
 public class SecondaryWindow extends EditorWindow {
     
@@ -80,6 +81,10 @@ public class SecondaryWindow extends EditorWindow {
         stage = new Stage();
         Scene scene = new Scene(rootContainer);
         stage.setScene(scene);
+        // Icono de la aplicación
+        try {
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/logo2.png")));
+        } catch (Exception ignored) {}
         
         // Configurar el título con el número de ventana
         updateWindowTitle(baseTitle);
