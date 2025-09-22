@@ -26,6 +26,7 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import java.util.Map;
 import utils.DialogUtils;
+import utils.ResourceUtils;
 
 public class MenuPrincipal extends Application {
 
@@ -531,7 +532,7 @@ public class MenuPrincipal extends Application {
 
     @FXML
     private void onBtnAyudaAction() {
-        File manual = new File("Manual_de_Usuario.pdf");
+        File manual = ResourceUtils.resolveAppResource("Manual_de_Usuario.pdf");
         if (manual.exists()) {
             try {
                 if (Desktop.isDesktopSupported()) {
@@ -549,7 +550,7 @@ public class MenuPrincipal extends Application {
 
     @FXML
     private void onBtnTutorialAction() {
-        File tutorial = new File("src/centroayuda/SimAS.html");
+        File tutorial = ResourceUtils.resolveAppResource("src/centroayuda/SimAS.html");
         if (tutorial.exists()) {
             try {
                 if (Desktop.isDesktopSupported()) {

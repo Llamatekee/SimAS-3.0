@@ -43,6 +43,15 @@ jpackage --type app-image \
   --dest "/Users/llamateke/Desktop/SimAS-3.0/apps/macos"
 ```
 
+### Incluir recursos (manual y ayuda)
+
+- Coloca `Manual_de_Usuario.pdf` en `apps/macos/app-resources/` antes de ejecutar `jpackage`.
+- El archivo HTML del tutorial debe estar en `apps/macos/app-resources/src/centroayuda/SimAS.html` (ya incluido en este repo).
+- En tiempo de ejecución dentro del bundle, las rutas esperadas serán:
+  - `SimAS.app/Contents/app/Manual_de_Usuario.pdf`
+  - `SimAS.app/Contents/app/src/centroayuda/SimAS.html`
+- La aplicación resuelve estas rutas automáticamente relativo al directorio del JAR (`Contents/app`).
+
 ## Construir el DMG
 ```bash
 jpackage --type dmg \

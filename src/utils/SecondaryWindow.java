@@ -628,7 +628,7 @@ public class SecondaryWindow extends EditorWindow {
      * Abre el manual de ayuda
      */
     private void abrirAyuda() {
-        File manual = new File("Manual_de_Usuario.pdf");
+        File manual = ResourceUtils.resolveAppResource("Manual_de_Usuario.pdf");
         if (manual.exists()) {
             try {
                 if (Desktop.isDesktopSupported()) {
@@ -648,7 +648,7 @@ public class SecondaryWindow extends EditorWindow {
      * Abre el tutorial
      */
     private void abrirTutorial() {
-        File tutorial = new File("src/centroayuda/SimAS.html");
+        File tutorial = ResourceUtils.resolveAppResource("src/centroayuda/SimAS.html");
         if (tutorial.exists()) {
             try {
                 if (Desktop.isDesktopSupported()) {
